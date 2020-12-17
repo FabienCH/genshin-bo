@@ -1,7 +1,7 @@
-import { helloWorld } from "./index";
+import { helloWorld } from './index';
 
-describe("helloWorld", () => {
-  it("should return Hello World", () => {
-    expect(helloWorld()).toEqual("Hello World");
+describe('helloWorld', () => {
+  it('should return Hello World', () => {
+    expect(helloWorld()).toEqual('Hello World');
   });
 });
