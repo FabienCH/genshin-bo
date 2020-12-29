@@ -7,15 +7,15 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     container: node:latest
-    uses: actions/checkout@master
     steps:
+      - uses: actions/checkout@master
       - run: npm install
       - run: npm run lint
   test:
     name: test
     runs-on: ubuntu-latest
     container: node:latest
-    uses: actions/checkout@master
     steps:
+      - uses: actions/checkout@master
       - run: npm install
       - run: npm test
