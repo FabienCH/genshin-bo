@@ -1,0 +1,19 @@
+name: Continuous Integration/Development
+
+on: [push]
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    container: node:latest
+    steps:
+      - run: npm install
+      - run: npm run lint
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    container: node:latest
+    steps:
+      - run: npm install
+      - run: npm test
