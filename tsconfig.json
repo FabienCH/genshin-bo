@@ -2,6 +2,8 @@
   "compilerOptions": {
     "target": "es6",
     "outDir": "dist",
+    "module": "esnext",
+    "moduleResolution": "node",
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
@@ -12,6 +14,4 @@
       "*": ["node_modules/"]
     }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts"]
 }
