@@ -6,7 +6,6 @@ jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
-    container: node:latest
     steps:
       - uses: actions/checkout@master
       - run: npm install
@@ -14,8 +13,10 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-    container: node:latest
+    env:
+      CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
     steps:
       - uses: actions/checkout@master
       - run: npm install
       - run: npm test
+      - run: bash <(curl -s https://codecov.io/bash)
