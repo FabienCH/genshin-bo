@@ -1,34 +1,32 @@
 import { Artifact } from '../domain/entities/artifact';
+import { StatisticsValues } from '../domain/models/available-statistics';
 import { BuildOptimizer } from './build-optimizer';
 
 describe('BuildOptimizer.computeBuildStats', () => {
-  describe('should compute build stats of 2 artifacts', () => {
-    it('with 100 and 120 HP', () => {
-      const artifact1 = new Artifact({ hp: 100 });
-      const artifact2 = new Artifact({ hp: 120 });
-      const buildOptimizer = new BuildOptimizer();
-      expect(buildOptimizer.computeBuildStats(artifact1, artifact2)).toEqual({ hp: 220 });
+  let buildOptimizer: BuildOptimizer;
+  let artifacts: Artifact[];
+  beforeEach(() => {
+    buildOptimizer = new BuildOptimizer();
+  });
+  describe('should compute build stats of 5 artifacts', () => {
+    it('with only HP', () => {
+      artifacts = getArtifactsWithValues([{ hp: 100 }, { hp: 120 }, { hp: 140 }, { hp: 115 }, { hp: 110 }]);
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({ hp: 585 });
+    });
+ 
+    it('with HP and ATK', () => {
+      artifacts = getArtifactsWithValues([{ hp: 100 }, { atk: 30  }, { hp: 140 }, { atk: 40  }, { hp: 110 }]);
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({ hp: 350, atk: 70 });
     });
 
-    it('with 90 and 115 HP', () => {
-      const artifact1 = new Artifact({ hp: 90 });
-      const artifact2 = new Artifact({ hp: 115 });
-      const buildOptimizer = new BuildOptimizer();
-      expect(buildOptimizer.computeBuildStats(artifact1, artifact2)).toEqual({ hp: 205 });
-    });
-
-    it('with 100 HP and 30 ATK', () => {
-      const artifact1 = new Artifact({ hp: 100 });
-      const artifact2 = new Artifact({ atk: 30 });
-      const buildOptimizer = new BuildOptimizer();
-      expect(buildOptimizer.computeBuildStats(artifact1, artifact2)).toEqual({ hp: 100, atk: 30 });
-    });
-
-    it('with 90 HP and 35 ATK and 20 DEF', () => {
-      const artifact1 = new Artifact({ hp: 90, atk: 35 });
-      const artifact2 = new Artifact({ def: 20 });
-      const buildOptimizer = new BuildOptimizer();
-      expect(buildOptimizer.computeBuildStats(artifact1, artifact2)).toEqual({ hp: 90, atk: 35, def: 20 });
+    it('with HP, ATK and DEF', () => {
+      artifacts = getArtifactsWithValues([{ hp: 100 , atk: 20}, { atk: 30  }, { hp: 140 ,def: 10}, { atk: 35  }, { def: 20 }]);
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({ hp: 240, atk: 85, def: 30 });
     });
   });
 });
+
+function getArtifactsWithValues(allValues: StatisticsValues[]) :Artifact[]{
+  return allValues.map(values =>new Artifact(values));
+}
+
