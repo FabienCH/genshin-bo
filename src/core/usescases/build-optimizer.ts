@@ -1,17 +1,22 @@
 import { Artifact } from '../domain/entities/artifact';
-import { AvailableStatistics, StatisticsValues } from '../domain/models/available-statistics';
+import { BuildStatisticsValues } from '../domain/models/available-statistics';
+import { PossibleMainStats } from '../domain/models/main-statistics';
+import { PossibleSubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
-  public computeBuildStats(artifacts: Artifact[]): StatisticsValues {
-    return Object.keys(AvailableStatistics).reduce((buildStats, key: AvailableStatistics) => {
-      artifacts.forEach((artifact) => {
-        const artifactStat = artifact.stats[key];
-        if (artifactStat) {
-          buildStats[key] = buildStats[key] ? buildStats[key] + artifactStat : artifactStat;
-        }
+  public computeBuildStats(artifacts: Artifact[]): BuildStatisticsValues {
+    return artifacts.reduce((buildStats, artifact: Artifact) => {
+      const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
+      buildStats[mainStatKey] = buildStats[mainStatKey]
+        ? buildStats[mainStatKey] + artifact.mainStat[mainStatKey]
+        : artifact.mainStat[mainStatKey];
+      Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
+        buildStats[subStatKey] = buildStats[subStatKey]
+          ? buildStats[subStatKey] + artifact.subStats[subStatKey]
+          : artifact.subStats[subStatKey];
       });
 
       return buildStats;
-    }, {} as StatisticsValues);
+    }, {} as BuildStatisticsValues);
   }
 }

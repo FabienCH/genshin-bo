@@ -1,9 +1,12 @@
-import { StatisticsValues } from '../models/available-statistics';
+import { MainStat } from '../models/main-statistics';
+import { SubStats } from '../models/sub-statistics';
 
 export class Artifact {
-  public stats: StatisticsValues;
+  public mainStat: MainStat;
+  public subStats: SubStats;
 
-  constructor(stats: StatisticsValues) {
-    this.stats = stats;
+  constructor(mainStat: MainStat, subStats: SubStats) {
+    this.mainStat = mainStat;
+    this.subStats = subStats;
   }
 }

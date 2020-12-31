@@ -1,31 +1,8 @@
-export enum AvailableStatistics {
-  hp = 'hp',
-  atk = 'atk',
-  def = 'def',
-  elementalMastery = 'elementalMastery',
-  critRate = 'critRate',
-  critDmg = 'critDmg',
-  healingBonus = 'healingBonus',
-  incomingHealingBonus = 'incomingHealingBonus',
-  energyRecharge = 'energyRecharge',
-  reduceCdr = 'reduceCdr',
-  powerfulShield = 'powerfulShield',
-  pyroDmg = 'pyroDmg',
-  pyroRes = 'pyroRes',
-  hydroDmg = 'hydroDmg',
-  hydroRes = 'hydroRes',
-  dendroDmg = 'dendroDmg',
-  dendroRes = 'dendroRes',
-  electroDmg = 'electroDmg',
-  electroRes = 'electroRes',
-  anemoDmg = 'anemoDmg',
-  anemoRes = 'anemoRes',
-  cryoDmg = 'cryoDmg',
-  cryoRes = 'cryoRes',
-  geoDmg = 'geoDmg',
-  geoRes = 'geoRes',
-  physicalDmg = 'physicalDmg',
-  physicalRes = 'physicalRes',
-}
+import { PossibleMainStats } from './main-statistics';
+import { PossibleSubStats } from './sub-statistics';
 
-export type StatisticsValues = Partial<{ [key in AvailableStatistics]: number }>;
+type AllPossibleStats = keyof typeof PossibleMainStats | keyof typeof PossibleSubStats;
+
+export const possibleBuildStats = { ...PossibleMainStats, ...PossibleSubStats };
+
+export type BuildStatisticsValues = Partial<{ [key in AllPossibleStats]: number }>;
