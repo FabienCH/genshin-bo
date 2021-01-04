@@ -1,8 +1,9 @@
 import { Artifact } from '../domain/entities/artifact';
-import { MainStat, PossibleMainStats } from '../domain/models/main-statistics';
+import { PossibleMainStats } from '../domain/models/main-statistics';
 import { PossibleSubStats, SubStats } from '../domain/models/sub-statistics';
 import { BuildOptimizer } from './build-optimizer';
 import { possibleBuildStats } from '../domain/models/available-statistics';
+import { ArtifactTypes } from '../domain/models/artifact-types';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
@@ -14,23 +15,26 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with only HP as main stat and multiple sub stat', () => {
       artifacts = getArtifactsWithValues([
         {
-          mainStat: { [PossibleMainStats.flatHp]: 100 },
+          type: 'flower',
           subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
         },
         {
-          mainStat: { [PossibleMainStats.flatHp]: 120 },
-          subStats: { [PossibleSubStats.flatAtk]: 7, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.elementalMastery]: 6 },
+          type: 'plume',
+          subStats: { [PossibleSubStats.percentAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.elementalMastery]: 6 },
         },
         {
-          mainStat: { [PossibleMainStats.flatHp]: 140 },
-          subStats: { [PossibleSubStats.percentDef]: 6, [PossibleSubStats.flatHp]: 40, [PossibleSubStats.critRate]: 2.5 },
+          type: 'sands',
+          mainStatType: PossibleMainStats.percentDef,
+          subStats: { [PossibleSubStats.flatDef]: 6, [PossibleSubStats.flatHp]: 40, [PossibleSubStats.critRate]: 2.5 },
         },
         {
-          mainStat: { [PossibleMainStats.flatHp]: 115 },
+          type: 'goblet',
+          mainStatType: PossibleMainStats.physicalDmg,
           subStats: { [PossibleSubStats.critRate]: 2.5, [PossibleSubStats.percentDef]: 4, [PossibleSubStats.critDmg]: 3.7 },
         },
         {
-          mainStat: { [PossibleMainStats.flatHp]: 110 },
+          type: 'circlet',
+          mainStatType: PossibleMainStats.percentAtk,
           subStats: {
             [PossibleSubStats.percentDef]: 4,
             [PossibleSubStats.critRate]: 2.5,
@@ -40,9 +44,12 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
-        [possibleBuildStats.flatHp]: 685,
-        [possibleBuildStats.flatAtk]: 15,
-        [possibleBuildStats.percentDef]: 26,
+        [possibleBuildStats.flatHp]: 817,
+        [possibleBuildStats.flatAtk]: 55,
+        [possibleBuildStats.percentAtk]: 12,
+        [possibleBuildStats.percentDef]: 28.7,
+        [possibleBuildStats.physicalDmg]: 8.7,
+        [possibleBuildStats.flatDef]: 6,
         [possibleBuildStats.critRate]: 11,
         [possibleBuildStats.elementalMastery]: 6,
         [possibleBuildStats.critDmg]: 3.7,
@@ -52,19 +59,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with HP, ATK and DEF and multiple sub stats', () => {
       artifacts = getArtifactsWithValues([
         {
-          mainStat: { [PossibleMainStats.flatHp]: 100 },
+          type: 'flower',
           subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.critRate]: 3.2, [PossibleSubStats.percentAtk]: 3 },
         },
         {
-          mainStat: { [PossibleMainStats.flatAtk]: 30 },
+          type: 'plume',
           subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
         },
         {
-          mainStat: { [PossibleMainStats.flatHp]: 140 },
-          subStats: { [PossibleSubStats.percentDef]: 6, [PossibleSubStats.flatAtk]: 4, [PossibleSubStats.critRate]: 3.2 },
+          type: 'sands',
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: { [PossibleSubStats.percentDef]: 6, [PossibleSubStats.elementalMastery]: 7, [PossibleSubStats.critRate]: 3.2 },
         },
         {
-          mainStat: { [PossibleMainStats.flatAtk]: 40 },
+          type: 'goblet',
+          mainStatType: PossibleMainStats.geoDmg,
           subStats: {
             [PossibleSubStats.critRate]: 2.5,
             [PossibleSubStats.percentHp]: 5.2,
@@ -73,25 +82,30 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
         {
-          mainStat: { [PossibleMainStats.flatHp]: 105 },
-          subStats: { [PossibleSubStats.percentDef]: 4, [PossibleSubStats.elementalMastery]: 7, [PossibleSubStats.critRate]: 3.2 },
+          type: 'circlet',
+          mainStatType: PossibleMainStats.elementalMastery,
+          subStats: { [PossibleSubStats.percentDef]: 4, [PossibleSubStats.flatAtk]: 4, [PossibleSubStats.critDmg]: 3.2 },
         },
       ]);
       expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
-        [possibleBuildStats.flatHp]: 345,
-        [possibleBuildStats.flatAtk]: 79,
-        [possibleBuildStats.critRate]: 14.8,
+        [possibleBuildStats.flatHp]: 717,
+        [possibleBuildStats.flatAtk]: 56,
+        [possibleBuildStats.critRate]: 11.6,
         [possibleBuildStats.energyRecharge]: 3,
         [possibleBuildStats.flatDef]: 7,
         [possibleBuildStats.percentDef]: 13,
         [possibleBuildStats.percentHp]: 5.2,
-        [possibleBuildStats.percentAtk]: 7,
-        [possibleBuildStats.elementalMastery]: 7,
+        [possibleBuildStats.percentAtk]: 14,
+        [possibleBuildStats.elementalMastery]: 35,
+        [possibleBuildStats.geoDmg]: 7,
+        [possibleBuildStats.critDmg]: 3.2,
       });
     });
   });
 });
 
-function getArtifactsWithValues(allArtifactsStats: { mainStat: MainStat; subStats: SubStats }[]): Artifact[] {
-  return allArtifactsStats.map((statValues) => new Artifact(statValues.mainStat, statValues.subStats));
+function getArtifactsWithValues(
+  allArtifactsData: { type: ArtifactTypes; subStats: SubStats; mainStatType?: PossibleMainStats }[],
+): Artifact[] {
+  return allArtifactsData.map((artifactData) => new Artifact(artifactData.type, artifactData.subStats, artifactData.mainStatType));
 }
