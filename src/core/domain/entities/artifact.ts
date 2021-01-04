@@ -62,22 +62,18 @@ export class Artifact {
     this.subStats = subStats;
 
     if (this.type === 'flower') {
-      this.mainStat = {
-        [PossibleMainStats.flatHp]: this.mainStatPossibleValues.find((mainStatPossibleValue) =>
-          mainStatPossibleValue.stats.includes(PossibleMainStats.flatHp),
-        ).values[this.level],
-      };
-    } else if (this.type === 'plume') {
-      this.mainStat = {
-        [PossibleMainStats.flatAtk]: this.mainStatPossibleValues.find((mainStatPossibleValue) =>
-          mainStatPossibleValue.stats.includes(PossibleMainStats.flatAtk),
-        ).values[this.level],
-      };
-    } else {
-      const mainStatValue: number = this.mainStatPossibleValues.find((mainStatPossibleValue) =>
-        mainStatPossibleValue.stats.includes(mainStatType),
-      ).values[this.level];
-      this.mainStat = { [mainStatType]: mainStatValue };
+      mainStatType = PossibleMainStats.flatHp;
     }
+    if (this.type === 'plume') {
+      mainStatType = PossibleMainStats.flatAtk;
+    }
+    this.setMainStat(mainStatType);
+  }
+
+  private setMainStat(mainStatType: PossibleMainStats) {
+    const mainStatValue: number = this.mainStatPossibleValues.find((mainStatPossibleValue) =>
+      mainStatPossibleValue.stats.includes(mainStatType),
+    ).values[this.level];
+    this.mainStat = { [mainStatType]: mainStatValue };
   }
 }
