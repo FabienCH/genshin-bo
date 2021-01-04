@@ -11,8 +11,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
   beforeEach(() => {
     buildOptimizer = new BuildOptimizer();
   });
-  describe('should compute build stats of 5 artifacts', () => {
-    it('with only HP as main stat and multiple sub stat', () => {
+  describe('should compute build stats of 5 lvl 0 artifacts', () => {
+    it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
       artifacts = getArtifactsWithValues([
         {
           type: 'flower',
@@ -56,7 +56,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       });
     });
 
-    it('with HP, ATK and DEF and multiple sub stats', () => {
+    it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
       artifacts = getArtifactsWithValues([
         {
           type: 'flower',
@@ -102,10 +102,77 @@ describe('BuildOptimizer.computeBuildStats', () => {
       });
     });
   });
+  it('should compute build stats of 5 artifacts with different levels', () => {
+    artifacts = getArtifactsWithValues([
+      {
+        type: 'flower',
+        level: 1,
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.critRate]: 3.2,
+          [PossibleSubStats.percentAtk]: 3,
+          [PossibleSubStats.critDmg]: 3.2,
+        },
+      },
+      {
+        type: 'plume',
+        level: 3,
+        subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
+      },
+      {
+        type: 'sands',
+        level: 4,
+        mainStatType: PossibleMainStats.percentAtk,
+        subStats: {
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.elementalMastery]: 7,
+          [PossibleSubStats.critRate]: 3.2,
+          [PossibleSubStats.critDmg]: 2.9,
+        },
+      },
+      {
+        type: 'goblet',
+        level: 8,
+        mainStatType: PossibleMainStats.geoDmg,
+        subStats: {
+          [PossibleSubStats.critRate]: 2.5,
+          [PossibleSubStats.percentHp]: 5.2,
+          [PossibleSubStats.percentAtk]: 4,
+          [PossibleSubStats.percentDef]: 3,
+        },
+      },
+      {
+        type: 'circlet',
+        level: 20,
+        mainStatType: PossibleMainStats.elementalMastery,
+        subStats: {
+          [PossibleSubStats.percentDef]: 4,
+          [PossibleSubStats.flatAtk]: 4,
+          [PossibleSubStats.critDmg]: 3.2,
+          [PossibleSubStats.percentHp]: 5,
+        },
+      },
+    ]);
+    expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
+      [possibleBuildStats.flatHp]: 717,
+      [possibleBuildStats.flatAtk]: 56,
+      [possibleBuildStats.critRate]: 11.6,
+      [possibleBuildStats.energyRecharge]: 3,
+      [possibleBuildStats.flatDef]: 7,
+      [possibleBuildStats.percentDef]: 13,
+      [possibleBuildStats.percentHp]: 10.2,
+      [possibleBuildStats.percentAtk]: 14,
+      [possibleBuildStats.elementalMastery]: 35,
+      [possibleBuildStats.geoDmg]: 7,
+      [possibleBuildStats.critDmg]: 9.3,
+    });
+  });
 });
 
 function getArtifactsWithValues(
-  allArtifactsData: { type: ArtifactTypes; subStats: SubStats; mainStatType?: PossibleMainStats }[],
+  allArtifactsData: { type: ArtifactTypes; level?: number; subStats: SubStats; mainStatType?: PossibleMainStats }[],
 ): Artifact[] {
-  return allArtifactsData.map((artifactData) => new Artifact(artifactData.type, artifactData.subStats, artifactData.mainStatType));
+  return allArtifactsData.map(
+    (artifactData) => new Artifact(artifactData.type, artifactData.subStats, artifactData.level, artifactData.mainStatType),
+  );
 }

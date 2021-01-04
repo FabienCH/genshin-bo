@@ -4,6 +4,7 @@ import { SubStats } from '../models/sub-statistics';
 
 export class Artifact {
   public type: ArtifactTypes;
+  public level: number;
   public mainStat: MainStat;
   public subStats: SubStats;
 
@@ -47,8 +48,9 @@ export class Artifact {
     },
   ];
 
-  constructor(type: ArtifactTypes, subStats: SubStats, mainStatType?: PossibleMainStats) {
+  constructor(type: ArtifactTypes, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
     this.type = type;
+    this.level = level ? level : 0;
     this.subStats = subStats;
 
     if (this.type === 'flower') {
