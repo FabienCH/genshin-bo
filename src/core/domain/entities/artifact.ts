@@ -7,6 +7,46 @@ export class Artifact {
   public mainStat: MainStat;
   public subStats: SubStats;
 
+  private readonly mainStatPossibleValues = [
+    {
+      stats: [
+        PossibleMainStats.percentAtk,
+        PossibleMainStats.percentHp,
+        PossibleMainStats.pyroDmg,
+        PossibleMainStats.dendroDmg,
+        PossibleMainStats.electroDmg,
+        PossibleMainStats.anemoDmg,
+        PossibleMainStats.cryoDmg,
+        PossibleMainStats.geoDmg,
+      ],
+      value: 7,
+    },
+    {
+      stats: [PossibleMainStats.percentDef, PossibleMainStats.physicalDmg],
+      value: 8.7,
+    },
+    {
+      stats: [PossibleMainStats.elementalMastery],
+      value: 28,
+    },
+    {
+      stats: [PossibleMainStats.energyRecharge],
+      value: 7.8,
+    },
+    {
+      stats: [PossibleMainStats.critRate],
+      value: 4.7,
+    },
+    {
+      stats: [PossibleMainStats.cryoDmg],
+      value: 9.3,
+    },
+    {
+      stats: [PossibleMainStats.healingBonus],
+      value: 5.4,
+    },
+  ];
+
   constructor(type: ArtifactTypes, subStats: SubStats, mainStatType?: PossibleMainStats) {
     this.type = type;
     this.subStats = subStats;
@@ -16,14 +56,9 @@ export class Artifact {
     } else if (this.type === 'plume') {
       this.mainStat = { [PossibleMainStats.flatAtk]: 47 };
     } else {
-      let mainStatValue: number;
-      if (mainStatType === PossibleMainStats.percentAtk || mainStatType === PossibleMainStats.geoDmg) {
-        mainStatValue = 7;
-      } else if (mainStatType === PossibleMainStats.elementalMastery) {
-        mainStatValue = 28;
-      } else {
-        mainStatValue = 8.7;
-      }
+      const mainStatValue: number = this.mainStatPossibleValues.find((mainStatPossibleValue) =>
+        mainStatPossibleValue.stats.includes(mainStatType),
+      ).value;
       this.mainStat = { [mainStatType]: mainStatValue };
     }
   }
