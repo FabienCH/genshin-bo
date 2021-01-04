@@ -20,31 +20,39 @@ export class Artifact {
         PossibleMainStats.cryoDmg,
         PossibleMainStats.geoDmg,
       ],
-      value: 7,
+      values: [7, 9, 11, 12.9, 14.9, 16.9, 18.9, 20.9, 22.8, 24, 26.8, 28.8, 30.8, 32.8, 34.7, 36.7, 38.7, 40.7, 42.7, 44.6, 46.6],
     },
     {
       stats: [PossibleMainStats.percentDef, PossibleMainStats.physicalDmg],
-      value: 8.7,
+      values: [8.7, 11.2, 13.7, 16.2, 28.6, 21.1, 23.6, 26.1, 28.6, 31, 33.5, 36, 38.5, 40.9, 43.4, 45.9, 48.4, 50.8, 53.3, 55.8, 58.3],
     },
     {
       stats: [PossibleMainStats.elementalMastery],
-      value: 28,
+      values: [28, 36, 44, 52, 60, 68, 76, 84, 91, 99, 107, 115, 123, 131, 139, 147, 155, 163, 171, 179, 187],
     },
     {
       stats: [PossibleMainStats.energyRecharge],
-      value: 7.8,
+      values: [7.8, 10, 12.2, 14.4, 16.6, 18.8, 21, 23.2, 25.4, 27.6, 29.8, 32, 34.2, 36.4, 38.6, 40.8, 43, 45.2, 47.4, 49.6, 51.8],
     },
     {
       stats: [PossibleMainStats.critRate],
-      value: 4.7,
+      values: [4.7, 6, 7.4, 8.7, 10.0, 11.4, 12.7, 14, 15.4, 16.7, 18, 19.3, 20.7, 22, 23.3, 24.7, 26, 27.3, 28.7, 30, 31.1],
     },
     {
-      stats: [PossibleMainStats.cryoDmg],
-      value: 9.3,
+      stats: [PossibleMainStats.critDmg],
+      values: [9.3, 11.9, 14.6, 17.2, 19.9, 22.5, 25.5, 27.8, 30.5, 33.1, 35.8, 38.4, 41.1, 43.7, 46.3, 49, 51.6, 54.3, 56.9, 59.6, 62.2],
     },
     {
       stats: [PossibleMainStats.healingBonus],
-      value: 5.4,
+      values: [5.4, 6.9, 8.4, 10, 11.5, 13, 14.5, 16.1, 17.6, 19.1, 20.6, 22.2, 23.7, 25.2, 26.7, 28.3, 29.8, 31.3, 32.8, 34.4, 35.9],
+    },
+    {
+      stats: [PossibleMainStats.flatHp],
+      values: [717, 920, 1123, 1326, 1530, 1733, 1936, 2139, 2342, 2545, 2749, 2952, 3155, 3358, 3561, 3764, 3967, 4171, 4374, 4577],
+    },
+    {
+      stats: [PossibleMainStats.flatAtk],
+      values: [47, 60, 73, 86, 100, 113, 126, 139, 152, 166, 179, 192, 205, 219, 232, 245, 258, 272, 285, 298, 311],
     },
   ];
 
@@ -54,13 +62,21 @@ export class Artifact {
     this.subStats = subStats;
 
     if (this.type === 'flower') {
-      this.mainStat = { [PossibleMainStats.flatHp]: 717 };
+      this.mainStat = {
+        [PossibleMainStats.flatHp]: this.mainStatPossibleValues.find((mainStatPossibleValue) =>
+          mainStatPossibleValue.stats.includes(PossibleMainStats.flatHp),
+        ).values[this.level],
+      };
     } else if (this.type === 'plume') {
-      this.mainStat = { [PossibleMainStats.flatAtk]: 47 };
+      this.mainStat = {
+        [PossibleMainStats.flatAtk]: this.mainStatPossibleValues.find((mainStatPossibleValue) =>
+          mainStatPossibleValue.stats.includes(PossibleMainStats.flatAtk),
+        ).values[this.level],
+      };
     } else {
       const mainStatValue: number = this.mainStatPossibleValues.find((mainStatPossibleValue) =>
         mainStatPossibleValue.stats.includes(mainStatType),
-      ).value;
+      ).values[this.level];
       this.mainStat = { [mainStatType]: mainStatValue };
     }
   }
