@@ -17,6 +17,6 @@ export class BuildOptimizer {
   }
 
   private getUpdatedBuildStat(buildStat: number, artifactStat: number): number {
-    return buildStat ? buildStat + artifactStat : artifactStat;
+    return buildStat ? Math.round((buildStat + artifactStat) * 10) / 10 : artifactStat;
   }
 }
