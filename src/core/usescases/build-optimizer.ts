@@ -1,11 +1,15 @@
 import { Artifact } from '../domain/entities/artifact';
-import { BuildStatisticsValues } from '../domain/models/available-statistics';
+import { BuildStatisticsValues, possibleBuildStats } from '../domain/models/available-statistics';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
   public computeBuildStats(artifacts: Artifact[]): BuildStatisticsValues {
-    return artifacts.reduce((buildStats, artifact: Artifact) => {
+    const buildSets: { [setName: string]: number } = {};
+    const artifactsStats = artifacts.reduce((buildStats, artifact: Artifact) => {
+      if (artifact.set) {
+        buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
+      }
       const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
       buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
       Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
@@ -14,6 +18,28 @@ export class BuildOptimizer {
 
       return buildStats;
     }, {} as BuildStatisticsValues);
+
+    artifactsStats[possibleBuildStats.percentAtk] = this.addSetEffect(
+      'gladiatorsFinale',
+      buildSets,
+      artifactsStats[possibleBuildStats.percentAtk],
+      18,
+    );
+    artifactsStats[possibleBuildStats.electroDmg] = this.addSetEffect(
+      'thunderingFury',
+      buildSets,
+      artifactsStats[possibleBuildStats.electroDmg],
+      15,
+    );
+
+    return artifactsStats;
+  }
+
+  private addSetEffect(set: string, buildSets: { [setName: string]: number }, artifactsStat: number, effectValue: number): number {
+    if (buildSets[set] >= 2) {
+      return artifactsStat ? artifactsStat + effectValue : effectValue;
+    }
+    return artifactsStat;
   }
 
   private getUpdatedBuildStat(buildStat: number, artifactStat: number): number {
