@@ -32,6 +32,14 @@ export class BuildOptimizer {
       15,
     );
 
+    artifactsStats[possibleBuildStats.powerfulShield] = this.addSetEffect(
+      'retracingBolide',
+      buildSets,
+      artifactsStats[possibleBuildStats.powerfulShield],
+      35,
+    );
+    artifactsStats[possibleBuildStats.pyroRes] = this.addSetEffect('lavawalker', buildSets, artifactsStats[possibleBuildStats.pyroRes], 40);
+
     return artifactsStats;
   }
 
