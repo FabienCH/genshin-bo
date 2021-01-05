@@ -1,11 +1,29 @@
 import { Artifact } from '../domain/entities/artifact';
-import { BuildStatisticsValues, possibleBuildStats } from '../domain/models/available-statistics';
+import { BuildStatisticsValues } from '../domain/models/available-statistics';
 import { PossibleMainStats } from '../domain/models/main-statistics';
+import { SetStats } from '../domain/models/set-statistics';
+import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
+  private readonly setsWithEffects: SetWithEffect[] = [
+    { name: SetNames.gladiatorsFinale, stat: SetStats.percentAtk, value: 18 },
+    { name: SetNames.wanderersTroupe, stat: SetStats.elementalMastery, value: 80 },
+    { name: SetNames.maidenBeloved, stat: SetStats.healingBonus, value: 15 },
+    { name: SetNames.retracingBolide, stat: SetStats.powerfulShield, value: 35 },
+    { name: SetNames.crimsonWitchOfFlames, stat: SetStats.pyroDmg, value: 15 },
+    { name: SetNames.lavawalker, stat: SetStats.pyroRes, value: 40 },
+    { name: SetNames.heartOfDepth, stat: SetStats.hydroDmg, value: 15 },
+    { name: SetNames.thunderingFury, stat: SetStats.electroDmg, value: 15 },
+    { name: SetNames.thundersoother, stat: SetStats.electroRes, value: 40 },
+    { name: SetNames.viridescentVenerer, stat: SetStats.anemoDmg, value: 15 },
+    { name: SetNames.blizzardStrayer, stat: SetStats.cryoDmg, value: 15 },
+    { name: SetNames.archaicPetra, stat: SetStats.geoDmg, value: 15 },
+    { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
+  ];
+
   public computeBuildStats(artifacts: Artifact[]): BuildStatisticsValues {
-    const buildSets: { [setName: string]: number } = {};
+    const buildSets: Partial<{ [key in SetNames]: number }> = {};
     const artifactsStats = artifacts.reduce((buildStats, artifact: Artifact) => {
       if (artifact.set) {
         buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
@@ -19,33 +37,17 @@ export class BuildOptimizer {
       return buildStats;
     }, {} as BuildStatisticsValues);
 
-    artifactsStats[possibleBuildStats.percentAtk] = this.addSetEffect(
-      'gladiatorsFinale',
-      buildSets,
-      artifactsStats[possibleBuildStats.percentAtk],
-      18,
-    );
-    artifactsStats[possibleBuildStats.electroDmg] = this.addSetEffect(
-      'thunderingFury',
-      buildSets,
-      artifactsStats[possibleBuildStats.electroDmg],
-      15,
-    );
-
-    artifactsStats[possibleBuildStats.powerfulShield] = this.addSetEffect(
-      'retracingBolide',
-      buildSets,
-      artifactsStats[possibleBuildStats.powerfulShield],
-      35,
-    );
-    artifactsStats[possibleBuildStats.pyroRes] = this.addSetEffect('lavawalker', buildSets, artifactsStats[possibleBuildStats.pyroRes], 40);
+    Object.keys(buildSets).forEach((setName) => {
+      const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName);
+      artifactsStats[setWithEffect.stat] = this.addSetEffect(setWithEffect, buildSets, artifactsStats[setWithEffect.stat]);
+    });
 
     return artifactsStats;
   }
 
-  private addSetEffect(set: string, buildSets: { [setName: string]: number }, artifactsStat: number, effectValue: number): number {
-    if (buildSets[set] >= 2) {
-      return artifactsStat ? artifactsStat + effectValue : effectValue;
+  private addSetEffect(setWithEffect: SetWithEffect, buildSets: { [setName: string]: number }, artifactsStat: number): number {
+    if (buildSets[setWithEffect.name] >= 2) {
+      return artifactsStat ? artifactsStat + setWithEffect.value : setWithEffect.value;
     }
     return artifactsStat;
   }

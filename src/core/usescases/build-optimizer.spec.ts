@@ -4,6 +4,7 @@ import { PossibleSubStats, SubStats } from '../domain/models/sub-statistics';
 import { BuildOptimizer } from './build-optimizer';
 import { possibleBuildStats } from '../domain/models/available-statistics';
 import { ArtifactTypes } from '../domain/models/artifact-types';
+import { SetNames } from '../domain/models/sets-with-effects';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
@@ -240,7 +241,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       artifacts = getArtifactsWithValues([
         {
           type: 'flower',
-          set: 'gladiatorsFinale',
+          set: SetNames.gladiatorsFinale,
           level: 2,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
@@ -251,13 +252,13 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
         {
           type: 'plume',
-          set: 'retracingBolide',
+          set: SetNames.retracingBolide,
           level: 7,
           subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
         },
         {
           type: 'sands',
-          set: 'thunderingFury',
+          set: SetNames.thunderingFury,
           level: 12,
           mainStatType: PossibleMainStats.percentHp,
           subStats: {
@@ -269,7 +270,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
         {
           type: 'goblet',
-          set: 'thunderingFury',
+          set: SetNames.thunderingFury,
           level: 15,
           mainStatType: PossibleMainStats.percentDef,
           subStats: {
@@ -281,7 +282,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
         {
           type: 'circlet',
-          set: 'gladiatorsFinale',
+          set: SetNames.gladiatorsFinale,
           level: 17,
           mainStatType: PossibleMainStats.healingBonus,
           subStats: {
@@ -312,7 +313,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       artifacts = getArtifactsWithValues([
         {
           type: 'flower',
-          set: 'lavawalker',
+          set: SetNames.lavawalker,
           level: 2,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
@@ -323,13 +324,13 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
         {
           type: 'plume',
-          set: 'retracingBolide',
+          set: SetNames.retracingBolide,
           level: 7,
           subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
         },
         {
           type: 'sands',
-          set: 'thunderingFury',
+          set: SetNames.thunderingFury,
           level: 12,
           mainStatType: PossibleMainStats.percentHp,
           subStats: {
@@ -341,7 +342,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
         {
           type: 'goblet',
-          set: 'lavawalker',
+          set: SetNames.lavawalker,
           level: 15,
           mainStatType: PossibleMainStats.percentDef,
           subStats: {
@@ -353,7 +354,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
         {
           type: 'circlet',
-          set: 'retracingBolide',
+          set: SetNames.retracingBolide,
           level: 17,
           mainStatType: PossibleMainStats.healingBonus,
           subStats: {
@@ -383,7 +384,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 });
 function getArtifactsWithValues(
-  allArtifactsData: { type: ArtifactTypes; set?: string; level?: number; subStats: SubStats; mainStatType?: PossibleMainStats }[],
+  allArtifactsData: { type: ArtifactTypes; set?: SetNames; level?: number; subStats: SubStats; mainStatType?: PossibleMainStats }[],
 ): Artifact[] {
   return allArtifactsData.map(
     (artifactData) =>
