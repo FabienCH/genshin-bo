@@ -44,17 +44,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
-        [possibleBuildStats.flatHp]: 817,
-        [possibleBuildStats.flatAtk]: 55,
-        [possibleBuildStats.percentAtk]: 12,
-        [possibleBuildStats.percentDef]: 28.7,
-        [possibleBuildStats.physicalDmg]: 8.7,
-        [possibleBuildStats.flatDef]: 6,
-        [possibleBuildStats.critRate]: 11,
-        [possibleBuildStats.elementalMastery]: 6,
-        [possibleBuildStats.critDmg]: 3.7,
-      });
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+        {
+          [possibleBuildStats.flatHp]: 817,
+          [possibleBuildStats.flatAtk]: 55,
+          [possibleBuildStats.percentAtk]: 12,
+          [possibleBuildStats.percentDef]: 28.7,
+          [possibleBuildStats.physicalDmg]: 8.7,
+          [possibleBuildStats.flatDef]: 6,
+          [possibleBuildStats.critRate]: 11,
+          [possibleBuildStats.elementalMastery]: 6,
+          [possibleBuildStats.critDmg]: 3.7,
+        },
+      ]);
     });
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
@@ -88,19 +90,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
           subStats: { [PossibleSubStats.percentDef]: 4, [PossibleSubStats.flatAtk]: 4, [PossibleSubStats.critDmg]: 3.2 },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
-        [possibleBuildStats.flatHp]: 717,
-        [possibleBuildStats.flatAtk]: 56,
-        [possibleBuildStats.critRate]: 11.6,
-        [possibleBuildStats.energyRecharge]: 3,
-        [possibleBuildStats.flatDef]: 7,
-        [possibleBuildStats.percentDef]: 13,
-        [possibleBuildStats.percentHp]: 5.2,
-        [possibleBuildStats.percentAtk]: 14,
-        [possibleBuildStats.elementalMastery]: 35,
-        [possibleBuildStats.geoDmg]: 7,
-        [possibleBuildStats.critDmg]: 3.2,
-      });
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+        {
+          [possibleBuildStats.flatHp]: 717,
+          [possibleBuildStats.flatAtk]: 56,
+          [possibleBuildStats.critRate]: 11.6,
+          [possibleBuildStats.energyRecharge]: 3,
+          [possibleBuildStats.flatDef]: 7,
+          [possibleBuildStats.percentDef]: 13,
+          [possibleBuildStats.percentHp]: 5.2,
+          [possibleBuildStats.percentAtk]: 14,
+          [possibleBuildStats.elementalMastery]: 35,
+          [possibleBuildStats.geoDmg]: 7,
+          [possibleBuildStats.critDmg]: 3.2,
+        },
+      ]);
     });
   });
 
@@ -156,19 +160,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
-        [possibleBuildStats.flatHp]: 920,
-        [possibleBuildStats.flatAtk]: 95,
-        [possibleBuildStats.critRate]: 11.6,
-        [possibleBuildStats.energyRecharge]: 3,
-        [possibleBuildStats.flatDef]: 7,
-        [possibleBuildStats.percentDef]: 13,
-        [possibleBuildStats.percentHp]: 10.2,
-        [possibleBuildStats.percentAtk]: 21.9,
-        [possibleBuildStats.elementalMastery]: 194,
-        [possibleBuildStats.geoDmg]: 22.8,
-        [possibleBuildStats.critDmg]: 9.3,
-      });
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+        {
+          [possibleBuildStats.flatHp]: 920,
+          [possibleBuildStats.flatAtk]: 95,
+          [possibleBuildStats.critRate]: 11.6,
+          [possibleBuildStats.energyRecharge]: 3,
+          [possibleBuildStats.flatDef]: 7,
+          [possibleBuildStats.percentDef]: 13,
+          [possibleBuildStats.percentHp]: 10.2,
+          [possibleBuildStats.percentAtk]: 21.9,
+          [possibleBuildStats.elementalMastery]: 194,
+          [possibleBuildStats.geoDmg]: 22.8,
+          [possibleBuildStats.critDmg]: 9.3,
+        },
+      ]);
     });
 
     it('with levels 2, 7, 12, 15, 17', () => {
@@ -222,19 +228,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
-        [possibleBuildStats.flatHp]: 1126,
-        [possibleBuildStats.flatAtk]: 148,
-        [possibleBuildStats.critRate]: 11.6,
-        [possibleBuildStats.energyRecharge]: 3,
-        [possibleBuildStats.flatDef]: 7,
-        [possibleBuildStats.percentDef]: 55.9,
-        [possibleBuildStats.percentHp]: 41,
-        [possibleBuildStats.percentAtk]: 7,
-        [possibleBuildStats.elementalMastery]: 7,
-        [possibleBuildStats.healingBonus]: 31.3,
-        [possibleBuildStats.critDmg]: 9.3,
-      });
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+        {
+          [possibleBuildStats.flatHp]: 1126,
+          [possibleBuildStats.flatAtk]: 148,
+          [possibleBuildStats.critRate]: 11.6,
+          [possibleBuildStats.energyRecharge]: 3,
+          [possibleBuildStats.flatDef]: 7,
+          [possibleBuildStats.percentDef]: 55.9,
+          [possibleBuildStats.percentHp]: 41,
+          [possibleBuildStats.percentAtk]: 7,
+          [possibleBuildStats.elementalMastery]: 7,
+          [possibleBuildStats.healingBonus]: 31.3,
+          [possibleBuildStats.critDmg]: 9.3,
+        },
+      ]);
     });
 
     it('with gladiator and thundering sets effects', () => {
@@ -293,20 +301,22 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
-        [possibleBuildStats.flatHp]: 1126,
-        [possibleBuildStats.flatAtk]: 148,
-        [possibleBuildStats.critRate]: 11.6,
-        [possibleBuildStats.energyRecharge]: 3,
-        [possibleBuildStats.flatDef]: 7,
-        [possibleBuildStats.percentDef]: 55.9,
-        [possibleBuildStats.percentHp]: 41,
-        [possibleBuildStats.percentAtk]: 25,
-        [possibleBuildStats.elementalMastery]: 7,
-        [possibleBuildStats.healingBonus]: 31.3,
-        [possibleBuildStats.critDmg]: 9.3,
-        [possibleBuildStats.electroDmg]: 15,
-      });
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+        {
+          [possibleBuildStats.flatHp]: 1126,
+          [possibleBuildStats.flatAtk]: 148,
+          [possibleBuildStats.critRate]: 11.6,
+          [possibleBuildStats.energyRecharge]: 3,
+          [possibleBuildStats.flatDef]: 7,
+          [possibleBuildStats.percentDef]: 55.9,
+          [possibleBuildStats.percentHp]: 41,
+          [possibleBuildStats.percentAtk]: 25,
+          [possibleBuildStats.elementalMastery]: 7,
+          [possibleBuildStats.healingBonus]: 31.3,
+          [possibleBuildStats.critDmg]: 9.3,
+          [possibleBuildStats.electroDmg]: 15,
+        },
+      ]);
     });
 
     it('with bolide and Lavawalker sets effects', () => {
@@ -365,7 +375,93 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+        {
+          [possibleBuildStats.flatHp]: 1126,
+          [possibleBuildStats.flatAtk]: 148,
+          [possibleBuildStats.critRate]: 11.6,
+          [possibleBuildStats.energyRecharge]: 3,
+          [possibleBuildStats.flatDef]: 7,
+          [possibleBuildStats.percentDef]: 55.9,
+          [possibleBuildStats.percentHp]: 41,
+          [possibleBuildStats.percentAtk]: 7,
+          [possibleBuildStats.elementalMastery]: 7,
+          [possibleBuildStats.healingBonus]: 31.3,
+          [possibleBuildStats.critDmg]: 9.3,
+          [possibleBuildStats.powerfulShield]: 35,
+          [possibleBuildStats.pyroRes]: 40,
+        },
+      ]);
+    });
+  });
+
+  it('should compute build stats of multiple artifacts for each type', () => {
+    const flowerArtifacts = getArtifactsWithValues([
+      {
+        type: 'flower',
+        set: SetNames.lavawalker,
+        level: 2,
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.critRate]: 3.2,
+          [PossibleSubStats.percentAtk]: 3,
+          [PossibleSubStats.critDmg]: 3.2,
+        },
+      },
+      {
+        type: 'flower',
+        set: SetNames.thunderingFury,
+        level: 7,
+        subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatHp]: 6, [PossibleSubStats.critDmg]: 3.9 },
+      },
+    ]);
+
+    artifacts = getArtifactsWithValues([
+      {
+        type: 'plume',
+        set: SetNames.retracingBolide,
+        level: 7,
+        subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
+      },
+      {
+        type: 'sands',
+        set: SetNames.thunderingFury,
+        level: 12,
+        mainStatType: PossibleMainStats.percentHp,
+        subStats: {
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.elementalMastery]: 7,
+          [PossibleSubStats.critRate]: 3.2,
+          [PossibleSubStats.critDmg]: 2.9,
+        },
+      },
+      {
+        type: 'goblet',
+        set: SetNames.lavawalker,
+        level: 15,
+        mainStatType: PossibleMainStats.percentDef,
+        subStats: {
+          [PossibleSubStats.critRate]: 2.5,
+          [PossibleSubStats.percentHp]: 5.2,
+          [PossibleSubStats.percentAtk]: 4,
+          [PossibleSubStats.flatHp]: 3,
+        },
+      },
+      {
+        type: 'circlet',
+        set: SetNames.retracingBolide,
+        level: 17,
+        mainStatType: PossibleMainStats.healingBonus,
+        subStats: {
+          [PossibleSubStats.percentDef]: 4,
+          [PossibleSubStats.flatAtk]: 4,
+          [PossibleSubStats.critDmg]: 3.2,
+          [PossibleSubStats.percentHp]: 5,
+        },
+      },
+    ]);
+    expect(buildOptimizer.computeBuildStats(artifacts, flowerArtifacts)).toEqual([
+      {
         [possibleBuildStats.flatHp]: 1126,
         [possibleBuildStats.flatAtk]: 148,
         [possibleBuildStats.critRate]: 11.6,
@@ -379,10 +475,26 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [possibleBuildStats.critDmg]: 9.3,
         [possibleBuildStats.powerfulShield]: 35,
         [possibleBuildStats.pyroRes]: 40,
-      });
-    });
+      },
+      {
+        [possibleBuildStats.flatHp]: 2148,
+        [possibleBuildStats.flatAtk]: 143,
+        [possibleBuildStats.critRate]: 8.4,
+        [possibleBuildStats.energyRecharge]: 6,
+        [possibleBuildStats.flatDef]: 7,
+        [possibleBuildStats.percentDef]: 55.9,
+        [possibleBuildStats.percentHp]: 41,
+        [possibleBuildStats.percentAtk]: 4,
+        [possibleBuildStats.elementalMastery]: 7,
+        [possibleBuildStats.healingBonus]: 31.3,
+        [possibleBuildStats.critDmg]: 10,
+        [possibleBuildStats.powerfulShield]: 35,
+        [possibleBuildStats.electroDmg]: 15,
+      },
+    ]);
   });
 });
+
 function getArtifactsWithValues(
   allArtifactsData: { type: ArtifactTypes; set?: SetNames; level?: number; subStats: SubStats; mainStatType?: PossibleMainStats }[],
 ): Artifact[] {

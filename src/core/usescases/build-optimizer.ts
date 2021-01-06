@@ -22,34 +22,61 @@ export class BuildOptimizer {
     { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
   ];
 
-  public computeBuildStats(artifacts: Artifact[]): BuildStatisticsValues {
-    const buildSets: Partial<{ [key in SetNames]: number }> = {};
-    const artifactsStats = artifacts.reduce((buildStats, artifact: Artifact) => {
-      if (artifact.set) {
-        buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
-      }
-      const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
-      buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
-      Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
-        buildStats[subStatKey] = this.getUpdatedBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
+  public computeBuildStats(artifacts: Artifact[], flowerArtifacts?: Artifact[]): BuildStatisticsValues[] {
+    if (flowerArtifacts) {
+      return flowerArtifacts.map((flowerArtifact) => {
+        const buildSets: Partial<{ [key in SetNames]: number }> = {};
+
+        const artifactsStats = [...artifacts, flowerArtifact].reduce((buildStats, artifact: Artifact) => {
+          if (artifact.set) {
+            buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
+          }
+          const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
+          buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
+          Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
+            buildStats[subStatKey] = this.getUpdatedBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
+          });
+
+          return buildStats;
+        }, {} as BuildStatisticsValues);
+
+        Object.keys(buildSets).forEach((setName) => {
+          const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName && buildSets[setName] >= 2);
+          if (setWithEffect) {
+            artifactsStats[setWithEffect.stat] = this.addSetEffect(setWithEffect, artifactsStats[setWithEffect.stat]);
+          }
+        });
+
+        return artifactsStats;
+      });
+    } else {
+      const buildSets: Partial<{ [key in SetNames]: number }> = {};
+      const artifactsStats = artifacts.reduce((buildStats, artifact: Artifact) => {
+        if (artifact.set) {
+          buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
+        }
+        const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
+        buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
+        Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
+          buildStats[subStatKey] = this.getUpdatedBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
+        });
+
+        return buildStats;
+      }, {} as BuildStatisticsValues);
+
+      Object.keys(buildSets).forEach((setName) => {
+        const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName && buildSets[setName] >= 2);
+        if (setWithEffect) {
+          artifactsStats[setWithEffect.stat] = this.addSetEffect(setWithEffect, artifactsStats[setWithEffect.stat]);
+        }
       });
 
-      return buildStats;
-    }, {} as BuildStatisticsValues);
-
-    Object.keys(buildSets).forEach((setName) => {
-      const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName);
-      artifactsStats[setWithEffect.stat] = this.addSetEffect(setWithEffect, buildSets, artifactsStats[setWithEffect.stat]);
-    });
-
-    return artifactsStats;
+      return [artifactsStats];
+    }
   }
 
-  private addSetEffect(setWithEffect: SetWithEffect, buildSets: { [setName: string]: number }, artifactsStat: number): number {
-    if (buildSets[setWithEffect.name] >= 2) {
-      return artifactsStat ? artifactsStat + setWithEffect.value : setWithEffect.value;
-    }
-    return artifactsStat;
+  private addSetEffect(setWithEffect: SetWithEffect, artifactsStat: number): number {
+    return artifactsStat ? artifactsStat + setWithEffect.value : setWithEffect.value;
   }
 
   private getUpdatedBuildStat(buildStat: number, artifactStat: number): number {
