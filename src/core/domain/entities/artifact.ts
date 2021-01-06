@@ -1,9 +1,11 @@
 import { ArtifactTypes } from '../models/artifact-types';
 import { MainStat, PossibleMainStats } from '../models/main-statistics';
+import { SetNames } from '../models/sets-with-effects';
 import { SubStats } from '../models/sub-statistics';
 
 export class Artifact {
   public type: ArtifactTypes;
+  public set: SetNames;
   public level: number;
   public mainStat: MainStat;
   public subStats: SubStats;
@@ -56,8 +58,9 @@ export class Artifact {
     },
   ];
 
-  constructor(type: ArtifactTypes, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
+  constructor(type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
     this.type = type;
+    this.set = set;
     this.level = level ? level : 0;
     this.subStats = subStats;
 

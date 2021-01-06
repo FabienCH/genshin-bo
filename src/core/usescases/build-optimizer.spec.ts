@@ -4,6 +4,7 @@ import { PossibleSubStats, SubStats } from '../domain/models/sub-statistics';
 import { BuildOptimizer } from './build-optimizer';
 import { possibleBuildStats } from '../domain/models/available-statistics';
 import { ArtifactTypes } from '../domain/models/artifact-types';
+import { SetNames } from '../domain/models/sets-with-effects';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
@@ -235,12 +236,158 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [possibleBuildStats.critDmg]: 9.3,
       });
     });
+
+    it('with gladiator and thundering sets effects', () => {
+      artifacts = getArtifactsWithValues([
+        {
+          type: 'flower',
+          set: SetNames.gladiatorsFinale,
+          level: 2,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.critRate]: 3.2,
+            [PossibleSubStats.percentAtk]: 3,
+            [PossibleSubStats.critDmg]: 3.2,
+          },
+        },
+        {
+          type: 'plume',
+          set: SetNames.retracingBolide,
+          level: 7,
+          subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
+        },
+        {
+          type: 'sands',
+          set: SetNames.thunderingFury,
+          level: 12,
+          mainStatType: PossibleMainStats.percentHp,
+          subStats: {
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.elementalMastery]: 7,
+            [PossibleSubStats.critRate]: 3.2,
+            [PossibleSubStats.critDmg]: 2.9,
+          },
+        },
+        {
+          type: 'goblet',
+          set: SetNames.thunderingFury,
+          level: 15,
+          mainStatType: PossibleMainStats.percentDef,
+          subStats: {
+            [PossibleSubStats.critRate]: 2.5,
+            [PossibleSubStats.percentHp]: 5.2,
+            [PossibleSubStats.percentAtk]: 4,
+            [PossibleSubStats.flatHp]: 3,
+          },
+        },
+        {
+          type: 'circlet',
+          set: SetNames.gladiatorsFinale,
+          level: 17,
+          mainStatType: PossibleMainStats.healingBonus,
+          subStats: {
+            [PossibleSubStats.percentDef]: 4,
+            [PossibleSubStats.flatAtk]: 4,
+            [PossibleSubStats.critDmg]: 3.2,
+            [PossibleSubStats.percentHp]: 5,
+          },
+        },
+      ]);
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
+        [possibleBuildStats.flatHp]: 1126,
+        [possibleBuildStats.flatAtk]: 148,
+        [possibleBuildStats.critRate]: 11.6,
+        [possibleBuildStats.energyRecharge]: 3,
+        [possibleBuildStats.flatDef]: 7,
+        [possibleBuildStats.percentDef]: 55.9,
+        [possibleBuildStats.percentHp]: 41,
+        [possibleBuildStats.percentAtk]: 25,
+        [possibleBuildStats.elementalMastery]: 7,
+        [possibleBuildStats.healingBonus]: 31.3,
+        [possibleBuildStats.critDmg]: 9.3,
+        [possibleBuildStats.electroDmg]: 15,
+      });
+    });
+
+    it('with bolide and Lavawalker sets effects', () => {
+      artifacts = getArtifactsWithValues([
+        {
+          type: 'flower',
+          set: SetNames.lavawalker,
+          level: 2,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.critRate]: 3.2,
+            [PossibleSubStats.percentAtk]: 3,
+            [PossibleSubStats.critDmg]: 3.2,
+          },
+        },
+        {
+          type: 'plume',
+          set: SetNames.retracingBolide,
+          level: 7,
+          subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
+        },
+        {
+          type: 'sands',
+          set: SetNames.thunderingFury,
+          level: 12,
+          mainStatType: PossibleMainStats.percentHp,
+          subStats: {
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.elementalMastery]: 7,
+            [PossibleSubStats.critRate]: 3.2,
+            [PossibleSubStats.critDmg]: 2.9,
+          },
+        },
+        {
+          type: 'goblet',
+          set: SetNames.lavawalker,
+          level: 15,
+          mainStatType: PossibleMainStats.percentDef,
+          subStats: {
+            [PossibleSubStats.critRate]: 2.5,
+            [PossibleSubStats.percentHp]: 5.2,
+            [PossibleSubStats.percentAtk]: 4,
+            [PossibleSubStats.flatHp]: 3,
+          },
+        },
+        {
+          type: 'circlet',
+          set: SetNames.retracingBolide,
+          level: 17,
+          mainStatType: PossibleMainStats.healingBonus,
+          subStats: {
+            [PossibleSubStats.percentDef]: 4,
+            [PossibleSubStats.flatAtk]: 4,
+            [PossibleSubStats.critDmg]: 3.2,
+            [PossibleSubStats.percentHp]: 5,
+          },
+        },
+      ]);
+      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual({
+        [possibleBuildStats.flatHp]: 1126,
+        [possibleBuildStats.flatAtk]: 148,
+        [possibleBuildStats.critRate]: 11.6,
+        [possibleBuildStats.energyRecharge]: 3,
+        [possibleBuildStats.flatDef]: 7,
+        [possibleBuildStats.percentDef]: 55.9,
+        [possibleBuildStats.percentHp]: 41,
+        [possibleBuildStats.percentAtk]: 7,
+        [possibleBuildStats.elementalMastery]: 7,
+        [possibleBuildStats.healingBonus]: 31.3,
+        [possibleBuildStats.critDmg]: 9.3,
+        [possibleBuildStats.powerfulShield]: 35,
+        [possibleBuildStats.pyroRes]: 40,
+      });
+    });
   });
 });
 function getArtifactsWithValues(
-  allArtifactsData: { type: ArtifactTypes; level?: number; subStats: SubStats; mainStatType?: PossibleMainStats }[],
+  allArtifactsData: { type: ArtifactTypes; set?: SetNames; level?: number; subStats: SubStats; mainStatType?: PossibleMainStats }[],
 ): Artifact[] {
   return allArtifactsData.map(
-    (artifactData) => new Artifact(artifactData.type, artifactData.subStats, artifactData.level, artifactData.mainStatType),
+    (artifactData) =>
+      new Artifact(artifactData.type, artifactData.set, artifactData.subStats, artifactData.level, artifactData.mainStatType),
   );
 }
