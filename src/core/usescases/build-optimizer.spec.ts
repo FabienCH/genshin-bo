@@ -44,7 +44,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(artifacts)).toEqual([
         {
           [possibleBuildStats.flatHp]: 817,
           [possibleBuildStats.flatAtk]: 55,
@@ -90,7 +90,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           subStats: { [PossibleSubStats.percentDef]: 4, [PossibleSubStats.flatAtk]: 4, [PossibleSubStats.critDmg]: 3.2 },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(artifacts)).toEqual([
         {
           [possibleBuildStats.flatHp]: 717,
           [possibleBuildStats.flatAtk]: 56,
@@ -160,7 +160,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(artifacts)).toEqual([
         {
           [possibleBuildStats.flatHp]: 920,
           [possibleBuildStats.flatAtk]: 95,
@@ -228,7 +228,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(artifacts)).toEqual([
         {
           [possibleBuildStats.flatHp]: 1126,
           [possibleBuildStats.flatAtk]: 148,
@@ -301,7 +301,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(artifacts)).toEqual([
         {
           [possibleBuildStats.flatHp]: 1126,
           [possibleBuildStats.flatAtk]: 148,
@@ -375,7 +375,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildStats(artifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(artifacts)).toEqual([
         {
           [possibleBuildStats.flatHp]: 1126,
           [possibleBuildStats.flatAtk]: 148,
@@ -460,7 +460,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       },
     ]);
-    expect(buildOptimizer.computeBuildStats(artifacts, flowerArtifacts)).toEqual([
+    expect(buildOptimizer.computeBuildsStats(artifacts, flowerArtifacts)).toEqual([
       {
         [possibleBuildStats.flatHp]: 1126,
         [possibleBuildStats.flatAtk]: 148,

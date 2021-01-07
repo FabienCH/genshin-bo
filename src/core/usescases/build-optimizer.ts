@@ -1,5 +1,5 @@
 import { Artifact } from '../domain/entities/artifact';
-import { BuildStatisticsValues } from '../domain/models/available-statistics';
+import { AllPossibleStats, BuildStatisticsValues } from '../domain/models/available-statistics';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetStats } from '../domain/models/set-statistics';
 import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
@@ -22,61 +22,62 @@ export class BuildOptimizer {
     { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
   ];
 
-  public computeBuildStats(artifacts: Artifact[], flowerArtifacts?: Artifact[]): BuildStatisticsValues[] {
+  public computeBuildsStats(artifacts: Artifact[], flowerArtifacts?: Artifact[]): BuildStatisticsValues[] {
     if (flowerArtifacts) {
       return flowerArtifacts.map((flowerArtifact) => {
-        const buildSets: Partial<{ [key in SetNames]: number }> = {};
-
-        const artifactsStats = [...artifacts, flowerArtifact].reduce((buildStats, artifact: Artifact) => {
-          if (artifact.set) {
-            buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
-          }
-          const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
-          buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
-          Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
-            buildStats[subStatKey] = this.getUpdatedBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
-          });
-
-          return buildStats;
-        }, {} as BuildStatisticsValues);
-
-        Object.keys(buildSets).forEach((setName) => {
-          const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName && buildSets[setName] >= 2);
-          if (setWithEffect) {
-            artifactsStats[setWithEffect.stat] = this.addSetEffect(setWithEffect, artifactsStats[setWithEffect.stat]);
-          }
-        });
-
-        return artifactsStats;
+        const artifactsStats = this.computeArtifactsStats([...artifacts, flowerArtifact]);
+        const setsStats = this.computeSetsStats([...artifacts, flowerArtifact]);
+        return this.reduceToBuildStats(artifactsStats, setsStats);
       });
     } else {
-      const buildSets: Partial<{ [key in SetNames]: number }> = {};
-      const artifactsStats = artifacts.reduce((buildStats, artifact: Artifact) => {
-        if (artifact.set) {
-          buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
-        }
-        const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
-        buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
-        Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
-          buildStats[subStatKey] = this.getUpdatedBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
-        });
-
-        return buildStats;
-      }, {} as BuildStatisticsValues);
-
-      Object.keys(buildSets).forEach((setName) => {
-        const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName && buildSets[setName] >= 2);
-        if (setWithEffect) {
-          artifactsStats[setWithEffect.stat] = this.addSetEffect(setWithEffect, artifactsStats[setWithEffect.stat]);
-        }
-      });
-
-      return [artifactsStats];
+      const artifactsStats = this.computeArtifactsStats(artifacts);
+      const setsStats = this.computeSetsStats(artifacts);
+      return [this.reduceToBuildStats(artifactsStats, setsStats)];
     }
   }
 
-  private addSetEffect(setWithEffect: SetWithEffect, artifactsStat: number): number {
-    return artifactsStat ? artifactsStat + setWithEffect.value : setWithEffect.value;
+  private computeArtifactsStats(artifacts: Artifact[]): BuildStatisticsValues {
+    return artifacts.reduce((buildStats, artifact: Artifact) => {
+      const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
+      buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
+      Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
+        buildStats[subStatKey] = this.getUpdatedBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
+      });
+
+      return buildStats;
+    }, {} as BuildStatisticsValues);
+  }
+
+  private computeSetsStats(artifacts: Artifact[]): BuildStatisticsValues {
+    const buildSets: Partial<{ [key in SetNames]: number }> = artifacts.reduce((buildSetsAcc, artifact: Artifact) => {
+      if (artifact.set) {
+        buildSetsAcc[artifact.set] = buildSetsAcc[artifact.set] ? buildSetsAcc[artifact.set] + 1 : 1;
+      }
+
+      return buildSetsAcc;
+    }, {} as Partial<{ [key in SetNames]: number }>);
+
+    return Object.keys(buildSets).reduce((buildStats, setName) => {
+      const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName && buildSets[setName] >= 2);
+      if (setWithEffect) {
+        buildStats[setWithEffect.stat] = setWithEffect.value;
+      }
+      return buildStats;
+    }, {} as BuildStatisticsValues);
+  }
+
+  private reduceToBuildStats(artifactsStats: BuildStatisticsValues, setsStats: BuildStatisticsValues): BuildStatisticsValues {
+    return Object.keys({ ...artifactsStats, ...setsStats }).reduce((buildStats, statName: AllPossibleStats) => {
+      if (artifactsStats[statName] && setsStats[statName]) {
+        buildStats[statName] = artifactsStats[statName] + setsStats[statName];
+      } else if (artifactsStats[statName]) {
+        buildStats[statName] = artifactsStats[statName];
+      } else {
+        buildStats[statName] = setsStats[statName];
+      }
+
+      return buildStats;
+    }, {} as BuildStatisticsValues);
   }
 
   private getUpdatedBuildStat(buildStat: number, artifactStat: number): number {
