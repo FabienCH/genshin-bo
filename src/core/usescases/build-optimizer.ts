@@ -22,13 +22,20 @@ export class BuildOptimizer {
     { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
   ];
 
-  public computeBuildsStats(artifacts: Artifact[], flowerArtifacts?: Artifact[]): BuildStatisticsValues[] {
-    if (flowerArtifacts) {
-      return flowerArtifacts.map((flowerArtifact) => {
-        const artifactsStats = this.computeArtifactsStats([...artifacts, flowerArtifact]);
-        const setsStats = this.computeSetsStats([...artifacts, flowerArtifact]);
-        return this.reduceToBuildStats(artifactsStats, setsStats);
+  public computeBuildsStats(
+    artifacts: Artifact[],
+    allArtifacts?: { flowerArtifacts: Artifact[]; plumeArtifacts: Artifact[] },
+  ): BuildStatisticsValues[] {
+    if (allArtifacts) {
+      const { flowerArtifacts, plumeArtifacts } = allArtifacts;
+      const allBuilds = flowerArtifacts.map((flowerArtifact) => {
+        return plumeArtifacts.map((plumeArtifact) => {
+          const artifactsStats = this.computeArtifactsStats([...artifacts, flowerArtifact, plumeArtifact]);
+          const setsStats = this.computeSetsStats([...artifacts, flowerArtifact, plumeArtifact]);
+          return this.reduceToBuildStats(artifactsStats, setsStats);
+        });
       });
+      return [].concat(...allBuilds);
     } else {
       const artifactsStats = this.computeArtifactsStats(artifacts);
       const setsStats = this.computeSetsStats(artifacts);

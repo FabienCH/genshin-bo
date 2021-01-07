@@ -416,13 +416,22 @@ describe('BuildOptimizer.computeBuildStats', () => {
       },
     ]);
 
-    artifacts = getArtifactsWithValues([
+    const plumeArtifacts = getArtifactsWithValues([
       {
         type: 'plume',
         set: SetNames.retracingBolide,
         level: 7,
-        subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
+        subStats: { [PossibleSubStats.energyRecharge]: 4, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
       },
+      {
+        type: 'plume',
+        set: SetNames.blizzardStrayer,
+        level: 12,
+        subStats: { [PossibleSubStats.percentAtk]: 5, [PossibleSubStats.flatHp]: 12, [PossibleSubStats.flatDef]: 6 },
+      },
+    ]);
+
+    artifacts = getArtifactsWithValues([
       {
         type: 'sands',
         set: SetNames.thunderingFury,
@@ -460,12 +469,12 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       },
     ]);
-    expect(buildOptimizer.computeBuildsStats(artifacts, flowerArtifacts)).toEqual([
+    expect(buildOptimizer.computeBuildsStats(artifacts, { flowerArtifacts, plumeArtifacts })).toEqual([
       {
         [possibleBuildStats.flatHp]: 1126,
         [possibleBuildStats.flatAtk]: 148,
         [possibleBuildStats.critRate]: 11.6,
-        [possibleBuildStats.energyRecharge]: 3,
+        [possibleBuildStats.energyRecharge]: 4,
         [possibleBuildStats.flatDef]: 7,
         [possibleBuildStats.percentDef]: 55.9,
         [possibleBuildStats.percentHp]: 41,
@@ -477,10 +486,23 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [possibleBuildStats.pyroRes]: 40,
       },
       {
+        [possibleBuildStats.flatHp]: 1138,
+        [possibleBuildStats.flatAtk]: 214,
+        [possibleBuildStats.critRate]: 8.9,
+        [possibleBuildStats.flatDef]: 6,
+        [possibleBuildStats.percentDef]: 55.9,
+        [possibleBuildStats.percentHp]: 41,
+        [possibleBuildStats.percentAtk]: 12,
+        [possibleBuildStats.elementalMastery]: 7,
+        [possibleBuildStats.healingBonus]: 31.3,
+        [possibleBuildStats.critDmg]: 9.3,
+        [possibleBuildStats.pyroRes]: 40,
+      },
+      {
         [possibleBuildStats.flatHp]: 2148,
         [possibleBuildStats.flatAtk]: 143,
         [possibleBuildStats.critRate]: 8.4,
-        [possibleBuildStats.energyRecharge]: 6,
+        [possibleBuildStats.energyRecharge]: 7,
         [possibleBuildStats.flatDef]: 7,
         [possibleBuildStats.percentDef]: 55.9,
         [possibleBuildStats.percentHp]: 41,
@@ -489,6 +511,20 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [possibleBuildStats.healingBonus]: 31.3,
         [possibleBuildStats.critDmg]: 10,
         [possibleBuildStats.powerfulShield]: 35,
+        [possibleBuildStats.electroDmg]: 15,
+      },
+      {
+        [possibleBuildStats.flatHp]: 2160,
+        [possibleBuildStats.flatAtk]: 209,
+        [possibleBuildStats.critRate]: 5.7,
+        [possibleBuildStats.energyRecharge]: 3,
+        [possibleBuildStats.flatDef]: 6,
+        [possibleBuildStats.percentDef]: 55.9,
+        [possibleBuildStats.percentHp]: 41,
+        [possibleBuildStats.percentAtk]: 9,
+        [possibleBuildStats.elementalMastery]: 7,
+        [possibleBuildStats.healingBonus]: 31.3,
+        [possibleBuildStats.critDmg]: 10,
         [possibleBuildStats.electroDmg]: 15,
       },
     ]);
