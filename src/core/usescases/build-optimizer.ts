@@ -23,24 +23,33 @@ export class BuildOptimizer {
   ];
 
   public computeBuildsStats(
-    artifacts: Artifact[],
-    allArtifacts?: { flowerArtifacts: Artifact[]; plumeArtifacts: Artifact[] },
+    flowerArtifacts: Artifact[],
+    plumeArtifacts: Artifact[],
+    sandsArtifacts: Artifact[],
+    gobletArtifacts: Artifact[],
+    circletArtifacts: Artifact[],
   ): BuildStatisticsValues[] {
-    if (allArtifacts) {
-      const { flowerArtifacts, plumeArtifacts } = allArtifacts;
-      const allBuilds = flowerArtifacts.map((flowerArtifact) => {
-        return plumeArtifacts.map((plumeArtifact) => {
-          const artifactsStats = this.computeArtifactsStats([...artifacts, flowerArtifact, plumeArtifact]);
-          const setsStats = this.computeSetsStats([...artifacts, flowerArtifact, plumeArtifact]);
-          return this.reduceToBuildStats(artifactsStats, setsStats);
+    const allBuilds: BuildStatisticsValues[] = [];
+    flowerArtifacts.forEach((flowerArtifact) => {
+      plumeArtifacts.forEach((plumeArtifact) => {
+        sandsArtifacts.forEach((sandsArtifact) => {
+          gobletArtifacts.forEach((gobletArtifact) => {
+            circletArtifacts.forEach((circletArtifact) => {
+              const artifactsStats = this.computeArtifactsStats([
+                flowerArtifact,
+                plumeArtifact,
+                sandsArtifact,
+                gobletArtifact,
+                circletArtifact,
+              ]);
+              const setsStats = this.computeSetsStats([flowerArtifact, plumeArtifact, sandsArtifact, gobletArtifact, circletArtifact]);
+              allBuilds.push(this.reduceToBuildStats(artifactsStats, setsStats));
+            });
+          });
         });
       });
-      return [].concat(...allBuilds);
-    } else {
-      const artifactsStats = this.computeArtifactsStats(artifacts);
-      const setsStats = this.computeSetsStats(artifacts);
-      return [this.reduceToBuildStats(artifactsStats, setsStats)];
-    }
+    });
+    return allBuilds;
   }
 
   private computeArtifactsStats(artifacts: Artifact[]): BuildStatisticsValues {
