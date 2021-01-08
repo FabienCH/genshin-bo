@@ -30,25 +30,24 @@ export class BuildOptimizer {
     circletArtifacts: Artifact[],
   ): BuildStatisticsValues[] {
     const allBuilds: BuildStatisticsValues[] = [];
-    flowerArtifacts.forEach((flowerArtifact) => {
-      plumeArtifacts.forEach((plumeArtifact) => {
-        sandsArtifacts.forEach((sandsArtifact) => {
-          gobletArtifacts.forEach((gobletArtifact) => {
-            circletArtifacts.forEach((circletArtifact) => {
-              const artifactsStats = this.computeArtifactsStats([
-                flowerArtifact,
-                plumeArtifact,
-                sandsArtifact,
-                gobletArtifact,
-                circletArtifact,
-              ]);
-              const setsStats = this.computeSetsStats([flowerArtifact, plumeArtifact, sandsArtifact, gobletArtifact, circletArtifact]);
-              allBuilds.push(this.reduceToBuildStats(artifactsStats, setsStats));
-            });
-          });
-        });
+    const allArtifacts = [flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts];
+    const max = allArtifacts.length - 1;
+
+    const addArtifactsToCompute = (artifacts: Artifact[], i: number) => {
+      allArtifacts[i].forEach((artifact) => {
+        const artifactsToCompute = [...artifacts];
+        artifactsToCompute.push(artifact);
+        if (i === max) {
+          const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
+          const setsStats = this.computeSetsStats(artifactsToCompute);
+          allBuilds.push(this.reduceToBuildStats(artifactsStats, setsStats));
+          return;
+        }
+        addArtifactsToCompute(artifactsToCompute, i + 1);
       });
-    });
+    };
+
+    addArtifactsToCompute([], 0);
     return allBuilds;
   }
 
