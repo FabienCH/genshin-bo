@@ -1,5 +1,5 @@
 import { Artifact } from '../domain/entities/artifact';
-import { BuildStatisticsValues } from '../domain/models/available-statistics';
+import { AllPossibleStats, BuildStatisticsValues } from '../domain/models/available-statistics';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetStats } from '../domain/models/set-statistics';
 import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
@@ -22,12 +22,37 @@ export class BuildOptimizer {
     { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
   ];
 
-  public computeBuildStats(artifacts: Artifact[]): BuildStatisticsValues {
-    const buildSets: Partial<{ [key in SetNames]: number }> = {};
-    const artifactsStats = artifacts.reduce((buildStats, artifact: Artifact) => {
-      if (artifact.set) {
-        buildSets[artifact.set] = buildSets[artifact.set] ? buildSets[artifact.set] + 1 : 1;
-      }
+  public computeBuildsStats(
+    flowerArtifacts: Artifact[],
+    plumeArtifacts: Artifact[],
+    sandsArtifacts: Artifact[],
+    gobletArtifacts: Artifact[],
+    circletArtifacts: Artifact[],
+  ): BuildStatisticsValues[] {
+    const allBuilds: BuildStatisticsValues[] = [];
+    const allArtifacts = [flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts];
+    const max = allArtifacts.length - 1;
+
+    const addArtifactsToCompute = (artifacts: Artifact[], i: number) => {
+      allArtifacts[i].forEach((artifact) => {
+        const artifactsToCompute = [...artifacts];
+        artifactsToCompute.push(artifact);
+        if (i === max) {
+          const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
+          const setsStats = this.computeSetsStats(artifactsToCompute);
+          allBuilds.push(this.reduceToBuildStats(artifactsStats, setsStats));
+          return;
+        }
+        addArtifactsToCompute(artifactsToCompute, i + 1);
+      });
+    };
+
+    addArtifactsToCompute([], 0);
+    return allBuilds;
+  }
+
+  private computeArtifactsStats(artifacts: Artifact[]): BuildStatisticsValues {
+    return artifacts.reduce((buildStats, artifact: Artifact) => {
       const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
       buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
       Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
@@ -36,20 +61,38 @@ export class BuildOptimizer {
 
       return buildStats;
     }, {} as BuildStatisticsValues);
-
-    Object.keys(buildSets).forEach((setName) => {
-      const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName);
-      artifactsStats[setWithEffect.stat] = this.addSetEffect(setWithEffect, buildSets, artifactsStats[setWithEffect.stat]);
-    });
-
-    return artifactsStats;
   }
 
-  private addSetEffect(setWithEffect: SetWithEffect, buildSets: { [setName: string]: number }, artifactsStat: number): number {
-    if (buildSets[setWithEffect.name] >= 2) {
-      return artifactsStat ? artifactsStat + setWithEffect.value : setWithEffect.value;
-    }
-    return artifactsStat;
+  private computeSetsStats(artifacts: Artifact[]): BuildStatisticsValues {
+    const buildSets: Partial<{ [key in SetNames]: number }> = artifacts.reduce((buildSetsAcc, artifact: Artifact) => {
+      if (artifact.set) {
+        buildSetsAcc[artifact.set] = buildSetsAcc[artifact.set] ? buildSetsAcc[artifact.set] + 1 : 1;
+      }
+
+      return buildSetsAcc;
+    }, {} as Partial<{ [key in SetNames]: number }>);
+
+    return Object.keys(buildSets).reduce((buildStats, setName) => {
+      const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName && buildSets[setName] >= 2);
+      if (setWithEffect) {
+        buildStats[setWithEffect.stat] = setWithEffect.value;
+      }
+      return buildStats;
+    }, {} as BuildStatisticsValues);
+  }
+
+  private reduceToBuildStats(artifactsStats: BuildStatisticsValues, setsStats: BuildStatisticsValues): BuildStatisticsValues {
+    return Object.keys({ ...artifactsStats, ...setsStats }).reduce((buildStats, statName: AllPossibleStats) => {
+      if (artifactsStats[statName] && setsStats[statName]) {
+        buildStats[statName] = artifactsStats[statName] + setsStats[statName];
+      } else if (artifactsStats[statName]) {
+        buildStats[statName] = artifactsStats[statName];
+      } else {
+        buildStats[statName] = setsStats[statName];
+      }
+
+      return buildStats;
+    }, {} as BuildStatisticsValues);
   }
 
   private getUpdatedBuildStat(buildStat: number, artifactStat: number): number {
