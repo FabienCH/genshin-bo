@@ -61,7 +61,13 @@ export class Artifact {
 
   private readonly invalidMainStats = {
     sands: [
+      PossibleMainStats.anemoDmg,
       PossibleMainStats.cryoDmg,
+      PossibleMainStats.pyroDmg,
+      PossibleMainStats.hydroDmg,
+      PossibleMainStats.dendroDmg,
+      PossibleMainStats.electroDmg,
+      PossibleMainStats.geoDmg,
       PossibleMainStats.physicalDmg,
       PossibleMainStats.critRate,
       PossibleMainStats.critDmg,

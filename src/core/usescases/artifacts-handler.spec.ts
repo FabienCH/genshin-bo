@@ -208,7 +208,13 @@ describe('ArtifactsHandler.addArtifact', () => {
     it('should failed if it has invalid main stat', () => {
       const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const invalidMainStats = [
+        PossibleMainStats.anemoDmg,
         PossibleMainStats.cryoDmg,
+        PossibleMainStats.pyroDmg,
+        PossibleMainStats.hydroDmg,
+        PossibleMainStats.dendroDmg,
+        PossibleMainStats.electroDmg,
+        PossibleMainStats.geoDmg,
         PossibleMainStats.physicalDmg,
         PossibleMainStats.critRate,
         PossibleMainStats.critDmg,
