@@ -59,6 +59,16 @@ export class Artifact {
     },
   ];
 
+  private readonly invalidMainStats = {
+    sands: [
+      PossibleMainStats.cryoDmg,
+      PossibleMainStats.physicalDmg,
+      PossibleMainStats.critRate,
+      PossibleMainStats.critDmg,
+      PossibleMainStats.healingBonus,
+    ],
+  };
+
   constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
     this.id = id;
     this.type = type;
@@ -77,6 +87,12 @@ export class Artifact {
         throw new Error("you can't specify a main stat for plume artifact");
       }
       mainStatType = PossibleMainStats.flatAtk;
+    }
+    if (!mainStatType) {
+      throw new Error('main stat is mandatory');
+    }
+    if (this.type === 'sands' && this.invalidMainStats.sands.includes(mainStatType)) {
+      throw new Error(`invalid main stat for sands : ${mainStatType}`);
     }
     this.setMainStat(mainStatType);
   }
