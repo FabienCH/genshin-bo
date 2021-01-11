@@ -67,6 +67,7 @@ export class Artifact {
       PossibleMainStats.critDmg,
       PossibleMainStats.healingBonus,
     ],
+    goblet: [PossibleMainStats.energyRecharge, PossibleMainStats.critRate, PossibleMainStats.critDmg, PossibleMainStats.healingBonus],
   };
 
   constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
@@ -93,6 +94,9 @@ export class Artifact {
     }
     if (this.type === 'sands' && this.invalidMainStats.sands.includes(mainStatType)) {
       throw new Error(`invalid main stat for sands : ${mainStatType}`);
+    }
+    if (this.type === 'goblet' && this.invalidMainStats.goblet.includes(mainStatType)) {
+      throw new Error(`invalid main stat for goblet : ${mainStatType}`);
     }
     this.setMainStat(mainStatType);
   }
