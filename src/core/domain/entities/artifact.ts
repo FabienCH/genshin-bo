@@ -68,6 +68,17 @@ export class Artifact {
       PossibleMainStats.healingBonus,
     ],
     goblet: [PossibleMainStats.energyRecharge, PossibleMainStats.critRate, PossibleMainStats.critDmg, PossibleMainStats.healingBonus],
+    circlet: [
+      PossibleMainStats.anemoDmg,
+      PossibleMainStats.cryoDmg,
+      PossibleMainStats.pyroDmg,
+      PossibleMainStats.hydroDmg,
+      PossibleMainStats.dendroDmg,
+      PossibleMainStats.electroDmg,
+      PossibleMainStats.geoDmg,
+      PossibleMainStats.physicalDmg,
+      PossibleMainStats.energyRecharge,
+    ],
   };
 
   constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
@@ -97,6 +108,9 @@ export class Artifact {
     }
     if (this.type === 'goblet' && this.invalidMainStats.goblet.includes(mainStatType)) {
       throw new Error(`invalid main stat for goblet : ${mainStatType}`);
+    }
+    if (this.type === 'circlet' && this.invalidMainStats.circlet.includes(mainStatType)) {
+      throw new Error(`invalid main stat for circlet : ${mainStatType}`);
     }
     this.setMainStat(mainStatType);
   }

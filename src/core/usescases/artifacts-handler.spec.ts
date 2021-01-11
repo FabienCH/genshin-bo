@@ -347,4 +347,127 @@ describe('ArtifactsHandler.addArtifact', () => {
       });
     });
   });
+
+  describe('Adding a circlet artifact', () => {
+    it('should succeed with percent HP, percent def, percent atk, elemental mastery, crit rate, crit damage or healing bonus in main stat', () => {
+      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
+      const artifactsValues = [
+        {
+          id: '1',
+          set: SetNames.thundersoother,
+          level: 12,
+          type: 'circlet',
+          mainStatType: PossibleMainStats.percentHp,
+          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        },
+        {
+          id: '2',
+          set: SetNames.thundersoother,
+          level: 12,
+          type: 'circlet',
+          mainStatType: PossibleMainStats.percentDef,
+          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        },
+        {
+          id: '3',
+          set: SetNames.thundersoother,
+          level: 12,
+          type: 'circlet',
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        },
+        {
+          id: '4',
+          set: SetNames.thundersoother,
+          level: 12,
+          type: 'circlet',
+          mainStatType: PossibleMainStats.elementalMastery,
+          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        },
+        {
+          id: '5',
+          set: SetNames.thundersoother,
+          level: 12,
+          type: 'circlet',
+          mainStatType: PossibleMainStats.critRate,
+          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        },
+        {
+          id: '6',
+          set: SetNames.thundersoother,
+          level: 12,
+          type: 'circlet',
+          mainStatType: PossibleMainStats.critDmg,
+          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        },
+        {
+          id: '7',
+          set: SetNames.thundersoother,
+          level: 12,
+          type: 'circlet',
+          mainStatType: PossibleMainStats.healingBonus,
+          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        },
+      ];
+      artifactsValues.forEach((artifactValues) => {
+        artifactsHandler.add(
+          artifactValues.id,
+          artifactValues.type as ArtifactTypes,
+          artifactValues.set,
+          artifactValues.subStats,
+          artifactValues.level,
+          artifactValues.mainStatType,
+        );
+      });
+      artifactsHandler.getAll().forEach((storedArtifact) => {
+        const expectedArtifact = artifactsValues.find((artifactValues) => storedArtifact.id === artifactValues.id);
+        expect(storedArtifact).toEqual(
+          new Artifact(
+            expectedArtifact.id,
+            expectedArtifact.type as ArtifactTypes,
+            expectedArtifact.set,
+            expectedArtifact.subStats,
+            expectedArtifact.level,
+            expectedArtifact.mainStatType,
+          ),
+        );
+      });
+    });
+
+    it('should failed if it has invalid main stat', () => {
+      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
+      const invalidMainStats = [
+        PossibleMainStats.energyRecharge,
+        PossibleMainStats.anemoDmg,
+        PossibleMainStats.cryoDmg,
+        PossibleMainStats.pyroDmg,
+        PossibleMainStats.hydroDmg,
+        PossibleMainStats.dendroDmg,
+        PossibleMainStats.electroDmg,
+        PossibleMainStats.geoDmg,
+        PossibleMainStats.physicalDmg,
+      ];
+      const artifactsValues = invalidMainStats.map((invalidMainStat) => ({
+        id: '1',
+        set: SetNames.thundersoother,
+        level: 8,
+        type: 'circlet',
+        mainStatType: invalidMainStat,
+        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+      }));
+
+      artifactsValues.forEach((artifactValues) => {
+        expect(() =>
+          artifactsHandler.add(
+            artifactValues.id,
+            artifactValues.type as ArtifactTypes,
+            artifactValues.set,
+            artifactValues.subStats,
+            artifactValues.level,
+            artifactValues.mainStatType,
+          ),
+        ).toThrowError(`invalid main stat for circlet : ${artifactValues.mainStatType}`);
+      });
+    });
+  });
 });
