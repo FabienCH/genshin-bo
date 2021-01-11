@@ -4,6 +4,7 @@ import { SetNames } from '../models/sets-with-effects';
 import { SubStats } from '../models/sub-statistics';
 
 export class Artifact {
+  public id: string;
   public type: ArtifactTypes;
   public set: SetNames;
   public level: number;
@@ -58,16 +59,23 @@ export class Artifact {
     },
   ];
 
-  constructor(type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
+  constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
+    this.id = id;
     this.type = type;
     this.set = set;
     this.level = level ? level : 0;
     this.subStats = subStats;
 
     if (this.type === 'flower') {
+      if (mainStatType) {
+        throw new Error("you can't specify a main stat for flower artifact");
+      }
       mainStatType = PossibleMainStats.flatHp;
     }
     if (this.type === 'plume') {
+      if (mainStatType) {
+        throw new Error("you can't specify a main stat for plume artifact");
+      }
       mainStatType = PossibleMainStats.flatAtk;
     }
     this.setMainStat(mainStatType);
