@@ -105,12 +105,6 @@ export class Artifact {
     this.set = set;
     this.subStats = subStats;
 
-    if (this.type === 'plume') {
-      if (mainStatType) {
-        throw new Error("you can't specify a main stat for plume artifact");
-      }
-      mainStatType = PossibleMainStats.flatAtk;
-    }
     if (!mainStatType) {
       throw new Error('main stat is mandatory');
     }

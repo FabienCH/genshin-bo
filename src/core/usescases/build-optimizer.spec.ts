@@ -6,7 +6,7 @@ import { possibleBuildStats } from '../domain/models/available-statistics';
 import { ArtifactTypes } from '../domain/models/artifact-types';
 import { SetNames } from '../domain/models/sets-with-effects';
 
-describe('BuildOptimizer.computeBuildStats', () => {
+xdescribe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
   let flowerArtifacts: Artifact[];
   let plumeArtifacts: Artifact[];

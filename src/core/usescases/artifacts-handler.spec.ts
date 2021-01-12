@@ -1,12 +1,13 @@
 import { Artifact } from '../domain/entities/artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
+import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { ArtifactTypes } from '../domain/models/artifact-types';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
 
-describe('ArtifactsHandler.addArtifact', () => {
+fdescribe('ArtifactsHandler.addArtifact', () => {
   describe('Adding a flower artifact', () => {
     it('should succeed with flat HP in main stat if main stat is not specified', () => {
       const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
@@ -33,7 +34,6 @@ describe('ArtifactsHandler.addArtifact', () => {
         id: '1',
         set: SetNames.thundersoother,
         level: 8,
-        type: 'plume',
         subStats: {
           [PossibleSubStats.flatAtk]: 5,
           [PossibleSubStats.percentDef]: 6,
@@ -41,52 +41,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           [PossibleSubStats.elementalMastery]: 8,
         },
       };
-      artifactsHandler.add(
-        artifactValues.id,
-        artifactValues.type as ArtifactTypes,
-        artifactValues.set,
-        artifactValues.subStats,
-        artifactValues.level,
-      );
+      artifactsHandler.addPlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level);
       const addedArtifact = artifactsHandler.getAll().find((storedArtifact) => storedArtifact.id === artifactValues.id);
       expect(addedArtifact).toEqual(
-        new Artifact(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          null,
-        ),
+        new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
       );
       expect(addedArtifact.mainStat).toEqual({ [PossibleMainStats.flatAtk]: 152 });
-    });
-
-    it('should failed if it has a main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
-      const artifactValues = {
-        id: '1',
-        set: SetNames.thundersoother,
-        level: 8,
-        type: 'plume',
-        mainStatType: PossibleMainStats.critRate,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.elementalMastery]: 8,
-        },
-      };
-      expect(() =>
-        artifactsHandler.add(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          artifactValues.mainStatType,
-        ),
-      ).toThrowError("you can't specify a main stat for plume artifact");
     });
   });
 
