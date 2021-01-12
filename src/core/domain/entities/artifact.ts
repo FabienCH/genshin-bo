@@ -88,10 +88,21 @@ export class Artifact {
   };
 
   constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
+    this.level = level ? level : 0;
+
+    if (Object.values(subStats).length < 3) {
+      throw new Error('an artifact can not have less than 3 substats');
+    }
+    if (this.level > 3 && Object.values(subStats).length === 3) {
+      throw new Error('an artifact with level higher than 3 must have 4 substats');
+    }
+    if (Object.values(subStats).length > 4) {
+      throw new Error('an artifact can not have more than 4 substats');
+    }
+
     this.id = id;
     this.type = type;
     this.set = set;
-    this.level = level ? level : 0;
     this.subStats = subStats;
 
     if (this.type === 'flower') {

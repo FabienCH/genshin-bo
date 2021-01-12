@@ -68,7 +68,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         set: SetNames.thundersoother,
         level: 8,
         type: 'plume',
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.elementalMastery]: 8,
+        },
       };
       artifactsHandler.add(
         artifactValues.id,
@@ -99,7 +104,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         level: 8,
         type: 'plume',
         mainStatType: PossibleMainStats.critRate,
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.elementalMastery]: 8,
+        },
       };
       expect(() =>
         artifactsHandler.add(
@@ -124,7 +134,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'sands',
           mainStatType: PossibleMainStats.percentHp,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '2',
@@ -132,7 +147,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'sands',
           mainStatType: PossibleMainStats.percentDef,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '3',
@@ -140,7 +160,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'sands',
           mainStatType: PossibleMainStats.percentAtk,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '4',
@@ -148,7 +173,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'sands',
           mainStatType: PossibleMainStats.elementalMastery,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '5',
@@ -156,7 +186,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'sands',
           mainStatType: PossibleMainStats.energyRecharge,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
       ];
       artifactsValues.forEach((artifactValues) => {
@@ -191,7 +226,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         set: SetNames.thundersoother,
         level: 8,
         type: 'sands',
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.elementalMastery]: 8,
+        },
       };
       expect(() =>
         artifactsHandler.add(
@@ -226,7 +266,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         level: 8,
         type: 'sands',
         mainStatType: invalidMainStat,
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.elementalMastery]: 8,
+        },
       }));
 
       artifactsValues.forEach((artifactValues) => {
@@ -254,7 +299,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'goblet',
           mainStatType: PossibleMainStats.percentHp,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '2',
@@ -262,7 +312,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'goblet',
           mainStatType: PossibleMainStats.percentDef,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '3',
@@ -270,7 +325,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'goblet',
           mainStatType: PossibleMainStats.percentAtk,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '4',
@@ -278,7 +338,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'goblet',
           mainStatType: PossibleMainStats.elementalMastery,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '5',
@@ -286,7 +351,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'goblet',
           mainStatType: PossibleMainStats.electroDmg,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '6',
@@ -294,7 +364,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'goblet',
           mainStatType: PossibleMainStats.physicalDmg,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
       ];
       artifactsValues.forEach((artifactValues) => {
@@ -336,7 +411,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         level: 8,
         type: 'goblet',
         mainStatType: invalidMainStat,
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.elementalMastery]: 8,
+        },
       }));
 
       artifactsValues.forEach((artifactValues) => {
@@ -364,7 +444,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'circlet',
           mainStatType: PossibleMainStats.percentHp,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '2',
@@ -372,7 +457,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'circlet',
           mainStatType: PossibleMainStats.percentDef,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '3',
@@ -380,7 +470,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'circlet',
           mainStatType: PossibleMainStats.percentAtk,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '4',
@@ -388,7 +483,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'circlet',
           mainStatType: PossibleMainStats.elementalMastery,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '5',
@@ -396,7 +496,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'circlet',
           mainStatType: PossibleMainStats.critRate,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '6',
@@ -404,7 +509,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'circlet',
           mainStatType: PossibleMainStats.critDmg,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
         {
           id: '7',
@@ -412,7 +522,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           level: 12,
           type: 'circlet',
           mainStatType: PossibleMainStats.healingBonus,
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.elementalMastery]: 8,
+          },
         },
       ];
       artifactsValues.forEach((artifactValues) => {
@@ -459,7 +574,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         level: 8,
         type: 'circlet',
         mainStatType: invalidMainStat,
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.elementalMastery]: 8,
+        },
       }));
 
       artifactsValues.forEach((artifactValues) => {
@@ -474,6 +594,132 @@ describe('ArtifactsHandler.addArtifact', () => {
           ),
         ).toThrowError(`invalid main stat for circlet : ${artifactValues.mainStatType}`);
       });
+    });
+  });
+
+  describe('Adding an artifact', () => {
+    it('should succeed if it has 4 substats', () => {
+      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
+      const artifactsValues = [
+        {
+          id: '1',
+          set: SetNames.thundersoother,
+          level: 3,
+          type: 'goblet',
+          mainStatType: PossibleMainStats.percentHp,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.percentAtk]: 7,
+          },
+        },
+        {
+          id: '2',
+          set: SetNames.thundersoother,
+          level: 4,
+          type: 'goblet',
+          mainStatType: PossibleMainStats.percentDef,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 5,
+            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.percentHp]: 9,
+          },
+        },
+      ];
+      artifactsValues.forEach((artifactValues) => {
+        artifactsHandler.add(
+          artifactValues.id,
+          artifactValues.type as ArtifactTypes,
+          artifactValues.set,
+          artifactValues.subStats,
+          artifactValues.level,
+          artifactValues.mainStatType,
+        );
+      });
+      artifactsHandler.getAll().forEach((storedArtifact) => {
+        const expectedArtifact = artifactsValues.find((artifactValues) => storedArtifact.id === artifactValues.id);
+        expect(storedArtifact).toEqual(
+          new Artifact(
+            expectedArtifact.id,
+            expectedArtifact.type as ArtifactTypes,
+            expectedArtifact.set,
+            expectedArtifact.subStats,
+            expectedArtifact.level,
+            expectedArtifact.mainStatType,
+          ),
+        );
+      });
+    });
+
+    it('should failed if it has more than 4 substat', () => {
+      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
+      const artifactValues = {
+        id: '1',
+        set: SetNames.gladiatorsFinale,
+        level: 4,
+        type: 'flower',
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.percentHp]: 8,
+          [PossibleSubStats.critDmg]: 5.2,
+        },
+      };
+      expect(() =>
+        artifactsHandler.add(
+          artifactValues.id,
+          artifactValues.type as ArtifactTypes,
+          artifactValues.set,
+          artifactValues.subStats,
+          artifactValues.level,
+          null,
+        ),
+      ).toThrowError('an artifact can not have more than 4 substats');
+    });
+
+    it('should failed if it has les than 3 substats', () => {
+      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
+      const artifactValues = {
+        id: '1',
+        set: SetNames.gladiatorsFinale,
+        level: 4,
+        type: 'flower',
+        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6 },
+      };
+      expect(() =>
+        artifactsHandler.add(
+          artifactValues.id,
+          artifactValues.type as ArtifactTypes,
+          artifactValues.set,
+          artifactValues.subStats,
+          artifactValues.level,
+          null,
+        ),
+      ).toThrowError('an artifact can not have less than 3 substats');
+    });
+
+    it('should failed if it has 3 substats and level higher than 3', () => {
+      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
+      const artifactValues = {
+        id: '1',
+        set: SetNames.gladiatorsFinale,
+        level: 4,
+        type: 'flower',
+        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+      };
+      expect(() =>
+        artifactsHandler.add(
+          artifactValues.id,
+          artifactValues.type as ArtifactTypes,
+          artifactValues.set,
+          artifactValues.subStats,
+          artifactValues.level,
+          null,
+        ),
+      ).toThrowError('an artifact with level higher than 3 must have 4 substat');
     });
   });
 });
