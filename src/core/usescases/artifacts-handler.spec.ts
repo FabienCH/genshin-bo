@@ -1,4 +1,5 @@
 import { Artifact } from '../domain/entities/artifact';
+import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { ArtifactTypes } from '../domain/models/artifact-types';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
@@ -16,47 +17,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         type: 'flower',
         subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
       };
-      artifactsHandler.add(
-        artifactValues.id,
-        artifactValues.type as ArtifactTypes,
-        artifactValues.set,
-        artifactValues.subStats,
-        artifactValues.level,
-      );
+      artifactsHandler.addFlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level);
       const addedArtifact = artifactsHandler.getAll().find((storedArtifact) => storedArtifact.id === artifactValues.id);
       expect(addedArtifact).toEqual(
-        new Artifact(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          null,
-        ),
+        new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
       );
       expect(addedArtifact.mainStat).toEqual({ [PossibleMainStats.flatHp]: 1123 });
-    });
-
-    it('should failed if main stat is specified', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
-      const artifactValues = {
-        id: '1',
-        set: SetNames.gladiatorsFinale,
-        level: 2,
-        type: 'flower',
-        mainStatType: PossibleMainStats.percentHp,
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
-      };
-      expect(() =>
-        artifactsHandler.add(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          artifactValues.mainStatType,
-        ),
-      ).toThrowError("you can't specify a main stat for flower artifact");
     });
   });
 

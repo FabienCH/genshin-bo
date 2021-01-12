@@ -11,7 +11,7 @@ export class Artifact {
   public mainStat: MainStat;
   public subStats: SubStats;
 
-  private readonly mainStatPossibleValues = [
+  protected readonly mainStatPossibleValues = [
     {
       stats: [
         PossibleMainStats.percentAtk,
@@ -87,7 +87,7 @@ export class Artifact {
     ],
   };
 
-  constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
+  constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level: number, mainStatType: PossibleMainStats) {
     this.level = level ? level : 0;
 
     if (Object.values(subStats).length < 3) {
@@ -105,12 +105,6 @@ export class Artifact {
     this.set = set;
     this.subStats = subStats;
 
-    if (this.type === 'flower') {
-      if (mainStatType) {
-        throw new Error("you can't specify a main stat for flower artifact");
-      }
-      mainStatType = PossibleMainStats.flatHp;
-    }
     if (this.type === 'plume') {
       if (mainStatType) {
         throw new Error("you can't specify a main stat for plume artifact");
@@ -132,7 +126,7 @@ export class Artifact {
     this.setMainStat(mainStatType);
   }
 
-  private setMainStat(mainStatType: PossibleMainStats) {
+  private setMainStat(mainStatType: PossibleMainStats): void {
     const mainStatValue: number = this.mainStatPossibleValues.find((mainStatPossibleValue) =>
       mainStatPossibleValue.stats.includes(mainStatType),
     ).values[this.level];
