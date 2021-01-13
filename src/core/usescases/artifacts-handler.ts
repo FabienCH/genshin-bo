@@ -1,5 +1,6 @@
 import { Artifact } from '../domain/entities/artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
+import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
 import { ArtifactTypes } from '../domain/models/artifact-types';
@@ -23,6 +24,10 @@ export class ArtifactsHandler {
 
   public addSandsArtifact(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: SandsMainStatType): void {
     this.artifacts = [...this.artifacts, new SandsArtifact(id, set, subStats, level, mainStatType)];
+  }
+
+  public addGobletArtifact(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: GobletMainStatType): void {
+    this.artifacts = [...this.artifacts, new GobletArtifact(id, set, subStats, level, mainStatType)];
   }
 
   public getAll(): Artifact[] {
