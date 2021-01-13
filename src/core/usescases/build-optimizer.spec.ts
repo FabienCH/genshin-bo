@@ -757,14 +757,6 @@ function getArtifactsWithValues(
   }[],
 ): Artifact[] {
   return allArtifactsData.map(
-    (artifactData) =>
-      new Artifact(
-        artifactData.id,
-        artifactData.type,
-        artifactData.set,
-        artifactData.subStats,
-        artifactData.level,
-        artifactData.mainStatType,
-      ),
+    (artifactData) => new Artifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, artifactData.mainStatType),
   );
 }

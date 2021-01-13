@@ -4,16 +4,11 @@ import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
-import { ArtifactTypes } from '../domain/models/artifact-types';
-import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStats } from '../domain/models/sub-statistics';
 
 export class ArtifactsHandler {
   private artifacts: Artifact[] = [];
-  public add(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level: number, mainStatType?: PossibleMainStats): void {
-    this.artifacts = [...this.artifacts, new Artifact(id, type, set, subStats, level, mainStatType)];
-  }
 
   public addFlowerArtifact(id: string, set: SetNames, subStats: SubStats, level: number): void {
     this.artifacts = [...this.artifacts, new FlowerArtifact(id, set, subStats, level)];

@@ -4,7 +4,6 @@ import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
-import { ArtifactTypes } from '../domain/models/artifact-types';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
@@ -327,7 +326,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.thundersoother,
           level: 3,
-          type: 'goblet',
           mainStatType: PossibleMainStats.percentHp,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
@@ -340,7 +338,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '2',
           set: SetNames.thundersoother,
           level: 4,
-          type: 'goblet',
           mainStatType: PossibleMainStats.percentDef,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
@@ -351,21 +348,13 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         },
       ];
       artifactsValues.forEach((artifactValues) => {
-        artifactsHandler.add(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          artifactValues.mainStatType,
-        );
+        new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, artifactValues.mainStatType);
       });
       artifactsHandler.getAll().forEach((storedArtifact) => {
         const expectedArtifact = artifactsValues.find((artifactValues) => storedArtifact.id === artifactValues.id);
         expect(storedArtifact).toEqual(
           new Artifact(
             expectedArtifact.id,
-            expectedArtifact.type as ArtifactTypes,
             expectedArtifact.set,
             expectedArtifact.subStats,
             expectedArtifact.level,
@@ -389,16 +378,9 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           [PossibleSubStats.critDmg]: 5.2,
         },
       };
-      expect(() =>
-        artifactsHandler.add(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          null,
-        ),
-      ).toThrowError('an artifact can not have more than 4 substats');
+      expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
+        'an artifact can not have more than 4 substats',
+      );
     });
 
     it('should failed if it has les than 3 substats', () => {
@@ -409,16 +391,9 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         type: 'flower',
         subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6 },
       };
-      expect(() =>
-        artifactsHandler.add(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          null,
-        ),
-      ).toThrowError('an artifact can not have less than 3 substats');
+      expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
+        'an artifact can not have less than 3 substats',
+      );
     });
 
     it('should failed if it has 3 substats and level higher than 3', () => {
@@ -429,16 +404,9 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         type: 'flower',
         subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
       };
-      expect(() =>
-        artifactsHandler.add(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          null,
-        ),
-      ).toThrowError('an artifact with level higher than 3 must have 4 substat');
+      expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
+        'an artifact with level higher than 3 must have 4 substat',
+      );
     });
 
     it('should failed if 1 of the substats is the same than the main stat', () => {
@@ -456,14 +424,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
       };
       expect(
         () =>
-          new Artifact(
-            artifactValues.id,
-            artifactValues.type as ArtifactTypes,
-            artifactValues.set,
-            artifactValues.subStats,
-            artifactValues.level,
-            PossibleMainStats.percentDef,
-          ),
+          new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, PossibleMainStats.percentDef),
       ).toThrowError('main stat can not be the same as one of the substats');
     });
   });

@@ -7,6 +7,6 @@ export class FlowerArtifact extends Artifact {
   public mainStat: { [PossibleMainStats.flatHp]: number };
 
   constructor(id: string, set: SetNames, subStats: SubStats, level: number) {
-    super(id, null, set, subStats, level, PossibleMainStats.flatHp);
+    super(id, set, subStats, level, PossibleMainStats.flatHp);
   }
 }

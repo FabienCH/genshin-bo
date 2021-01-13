@@ -14,6 +14,6 @@ export class SandsArtifact extends Artifact {
   public mainStat: MainStat;
 
   constructor(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: SandsMainStatType) {
-    super(id, null, set, subStats, level, mainStatType);
+    super(id, set, subStats, level, mainStatType);
   }
 }
