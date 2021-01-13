@@ -1,4 +1,5 @@
 import { Artifact } from '../domain/entities/artifact';
+import { CircletArtifact, CircletMainStatType } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
@@ -285,8 +286,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'circlet',
-          mainStatType: PossibleMainStats.percentHp,
+          mainStatType: 'percentHp' as CircletMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -298,8 +298,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '2',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'circlet',
-          mainStatType: PossibleMainStats.percentDef,
+          mainStatType: 'percentDef' as CircletMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -311,8 +310,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '3',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'circlet',
-          mainStatType: PossibleMainStats.percentAtk,
+          mainStatType: 'percentAtk' as CircletMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -324,8 +322,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '4',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'circlet',
-          mainStatType: PossibleMainStats.elementalMastery,
+          mainStatType: 'elementalMastery' as CircletMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -337,8 +334,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '5',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'circlet',
-          mainStatType: PossibleMainStats.critRate,
+          mainStatType: 'critRate' as CircletMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -350,8 +346,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '6',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'circlet',
-          mainStatType: PossibleMainStats.critDmg,
+          mainStatType: 'critDmg' as CircletMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -363,8 +358,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '7',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'circlet',
-          mainStatType: PossibleMainStats.healingBonus,
+          mainStatType: 'healingBonus' as CircletMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -374,9 +368,8 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         },
       ];
       artifactsValues.forEach((artifactValues) => {
-        artifactsHandler.add(
+        artifactsHandler.addCircletArtifact(
           artifactValues.id,
-          artifactValues.type as ArtifactTypes,
           artifactValues.set,
           artifactValues.subStats,
           artifactValues.level,
@@ -386,9 +379,8 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
       artifactsHandler.getAll().forEach((storedArtifact) => {
         const expectedArtifact = artifactsValues.find((artifactValues) => storedArtifact.id === artifactValues.id);
         expect(storedArtifact).toEqual(
-          new Artifact(
+          new CircletArtifact(
             expectedArtifact.id,
-            expectedArtifact.type as ArtifactTypes,
             expectedArtifact.set,
             expectedArtifact.subStats,
             expectedArtifact.level,
@@ -398,45 +390,22 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
       });
     });
 
-    it('should failed if it has invalid main stat', () => {
+    it('should failed if it has a no main stat', () => {
       const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
-      const invalidMainStats = [
-        PossibleMainStats.energyRecharge,
-        PossibleMainStats.anemoDmg,
-        PossibleMainStats.cryoDmg,
-        PossibleMainStats.pyroDmg,
-        PossibleMainStats.hydroDmg,
-        PossibleMainStats.dendroDmg,
-        PossibleMainStats.electroDmg,
-        PossibleMainStats.geoDmg,
-        PossibleMainStats.physicalDmg,
-      ];
-      const artifactsValues = invalidMainStats.map((invalidMainStat) => ({
+      const artifactValues = {
         id: '1',
         set: SetNames.thundersoother,
         level: 8,
-        type: 'circlet',
-        mainStatType: invalidMainStat,
         subStats: {
           [PossibleSubStats.flatAtk]: 5,
           [PossibleSubStats.percentDef]: 6,
           [PossibleSubStats.critRate]: 3.5,
           [PossibleSubStats.elementalMastery]: 8,
         },
-      }));
-
-      artifactsValues.forEach((artifactValues) => {
-        expect(() =>
-          artifactsHandler.add(
-            artifactValues.id,
-            artifactValues.type as ArtifactTypes,
-            artifactValues.set,
-            artifactValues.subStats,
-            artifactValues.level,
-            artifactValues.mainStatType,
-          ),
-        ).toThrowError(`invalid main stat for circlet : ${artifactValues.mainStatType}`);
-      });
+      };
+      expect(() =>
+        artifactsHandler.addCircletArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null),
+      ).toThrowError('main stat is mandatory');
     });
   });
 
