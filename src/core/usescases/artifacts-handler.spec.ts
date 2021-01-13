@@ -11,9 +11,14 @@ import { PossibleSubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
 
 fdescribe('ArtifactsHandler.addArtifact', () => {
+  let artifactsHandler: ArtifactsHandler;
+
+  beforeEach(() => {
+    artifactsHandler = new ArtifactsHandler();
+  });
+
   describe('Adding a flower artifact', () => {
     it('should succeed with flat HP in main stat if main stat is not specified', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.gladiatorsFinale,
@@ -31,13 +36,12 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
 
   describe('Adding a plume artifact', () => {
     it('should succeed with flat atk in main stat if main stat is not specified', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.thundersoother,
         level: 8,
         subStats: {
-          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentAtk]: 5,
           [PossibleSubStats.percentDef]: 6,
           [PossibleSubStats.critRate]: 3.5,
           [PossibleSubStats.elementalMastery]: 8,
@@ -53,68 +57,48 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
   });
 
   describe('Adding a sands artifact', () => {
+    const subStats = {
+      [PossibleSubStats.flatAtk]: 5,
+      [PossibleSubStats.flatHp]: 6,
+      [PossibleSubStats.critRate]: 3.5,
+      [PossibleSubStats.energyRecharge]: 8,
+    };
     it('should succeed with percent HP, percent def, percent atk, elemental mastery or energy recharge in main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactsValues = [
         {
           id: '1',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentHp' as SandsMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '2',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentDef' as SandsMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '3',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentAtk' as SandsMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '4',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'elementalMastery' as SandsMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '5',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'energyRecharge' as SandsMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
       ];
       artifactsValues.forEach((artifactValues) => {
@@ -141,17 +125,11 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
     });
 
     it('should failed if it has a no main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.thundersoother,
         level: 8,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.elementalMastery]: 8,
-        },
+        subStats,
       };
       expect(() =>
         artifactsHandler.addSandsArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null),
@@ -160,80 +138,55 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
   });
 
   describe('Adding a goblet artifact', () => {
+    const subStats = {
+      [PossibleSubStats.flatAtk]: 5,
+      [PossibleSubStats.flatHp]: 6,
+      [PossibleSubStats.critRate]: 3.5,
+      [PossibleSubStats.energyRecharge]: 8,
+    };
     it('should succeed with percent HP, percent def, percent atk, elemental mastery, elemental damage or physical damage in main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactsValues = [
         {
           id: '1',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentHp' as GobletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '2',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentDef' as GobletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '3',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentAtk' as GobletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '4',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'elementalMastery' as GobletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '5',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'electroDmg' as GobletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '6',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'physicalDmg' as GobletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
       ];
       artifactsValues.forEach((artifactValues) => {
@@ -260,17 +213,11 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
     });
 
     it('should failed if it has a no main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.thundersoother,
         level: 8,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.elementalMastery]: 8,
-        },
+        subStats,
       };
       expect(() =>
         artifactsHandler.addGobletArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null),
@@ -279,92 +226,62 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
   });
 
   describe('Adding a circlet artifact', () => {
+    const subStats = {
+      [PossibleSubStats.flatAtk]: 5,
+      [PossibleSubStats.flatHp]: 6,
+      [PossibleSubStats.energyRecharge]: 3.5,
+      [PossibleSubStats.flatDef]: 8,
+    };
     it('should succeed with percent HP, percent def, percent atk, elemental mastery, crit rate, crit damage or healing bonus in main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactsValues = [
         {
           id: '1',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentHp' as CircletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '2',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentDef' as CircletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '3',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'percentAtk' as CircletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '4',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'elementalMastery' as CircletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '5',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'critRate' as CircletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '6',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'critDmg' as CircletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
         {
           id: '7',
           set: SetNames.thundersoother,
           level: 12,
           mainStatType: 'healingBonus' as CircletMainStatType,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.elementalMastery]: 8,
-          },
+          subStats,
         },
       ];
       artifactsValues.forEach((artifactValues) => {
@@ -391,17 +308,11 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
     });
 
     it('should failed if it has a no main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.thundersoother,
         level: 8,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.elementalMastery]: 8,
-        },
+        subStats,
       };
       expect(() =>
         artifactsHandler.addCircletArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null),
@@ -411,7 +322,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
 
   describe('Adding an artifact', () => {
     it('should succeed if it has 4 substats', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactsValues = [
         {
           id: '1',
@@ -466,7 +376,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
     });
 
     it('should failed if it has more than 4 substat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.gladiatorsFinale,
@@ -493,7 +402,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
     });
 
     it('should failed if it has les than 3 substats', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.gladiatorsFinale,
@@ -514,7 +422,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
     });
 
     it('should failed if it has 3 substats and level higher than 3', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
       const artifactValues = {
         id: '1',
         set: SetNames.gladiatorsFinale,
