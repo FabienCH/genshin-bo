@@ -74,6 +74,10 @@ export class Artifact {
       throw new Error('main stat is mandatory');
     }
 
+    if (Object.keys(subStats).find((subStat) => subStat === mainStatType)) {
+      throw new Error('main stat can not be the same as one of the substats');
+    }
+
     this.id = id;
     this.type = type;
     this.set = set;

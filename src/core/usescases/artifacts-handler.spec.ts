@@ -61,7 +61,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
       [PossibleSubStats.flatAtk]: 5,
       [PossibleSubStats.flatHp]: 6,
       [PossibleSubStats.critRate]: 3.5,
-      [PossibleSubStats.energyRecharge]: 8,
+      [PossibleSubStats.critDmg]: 8,
     };
     it('should succeed with percent HP, percent def, percent atk, elemental mastery or energy recharge in main stat', () => {
       const artifactsValues = [
@@ -344,9 +344,9 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           mainStatType: PossibleMainStats.percentDef,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
+            [PossibleSubStats.percentHp]: 6,
             [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.percentHp]: 9,
+            [PossibleSubStats.percentAtk]: 9,
           },
         },
       ];
@@ -439,6 +439,32 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           null,
         ),
       ).toThrowError('an artifact with level higher than 3 must have 4 substat');
+    });
+
+    it('should failed if 1 of the substats is the same than the main stat', () => {
+      const artifactValues = {
+        id: '1',
+        set: SetNames.gladiatorsFinale,
+        level: 4,
+        type: 'goblet',
+        subStats: {
+          [PossibleSubStats.flatAtk]: 5,
+          [PossibleSubStats.percentDef]: 6,
+          [PossibleSubStats.critRate]: 3.5,
+          [PossibleSubStats.energyRecharge]: 3.5,
+        },
+      };
+      expect(
+        () =>
+          new Artifact(
+            artifactValues.id,
+            artifactValues.type as ArtifactTypes,
+            artifactValues.set,
+            artifactValues.subStats,
+            artifactValues.level,
+            PossibleMainStats.percentDef,
+          ),
+      ).toThrowError('main stat can not be the same as one of the substats');
     });
   });
 });
