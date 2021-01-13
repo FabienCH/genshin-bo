@@ -1,6 +1,7 @@
 import { Artifact } from '../domain/entities/artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
+import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
 import { ArtifactTypes } from '../domain/models/artifact-types';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
@@ -15,7 +16,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         id: '1',
         set: SetNames.gladiatorsFinale,
         level: 2,
-        type: 'flower',
         subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
       };
       artifactsHandler.addFlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level);
@@ -58,8 +58,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'sands',
-          mainStatType: PossibleMainStats.percentHp,
+          mainStatType: 'percentHp' as SandsMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -71,8 +70,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '2',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'sands',
-          mainStatType: PossibleMainStats.percentDef,
+          mainStatType: 'percentDef' as SandsMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -84,8 +82,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '3',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'sands',
-          mainStatType: PossibleMainStats.percentAtk,
+          mainStatType: 'percentAtk' as SandsMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -97,8 +94,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '4',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'sands',
-          mainStatType: PossibleMainStats.elementalMastery,
+          mainStatType: 'elementalMastery' as SandsMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -110,8 +106,7 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
           id: '5',
           set: SetNames.thundersoother,
           level: 12,
-          type: 'sands',
-          mainStatType: PossibleMainStats.energyRecharge,
+          mainStatType: 'energyRecharge' as SandsMainStatType,
           subStats: {
             [PossibleSubStats.flatAtk]: 5,
             [PossibleSubStats.percentDef]: 6,
@@ -121,9 +116,8 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         },
       ];
       artifactsValues.forEach((artifactValues) => {
-        artifactsHandler.add(
+        artifactsHandler.addSandsArtifact(
           artifactValues.id,
-          artifactValues.type as ArtifactTypes,
           artifactValues.set,
           artifactValues.subStats,
           artifactValues.level,
@@ -133,9 +127,8 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
       artifactsHandler.getAll().forEach((storedArtifact) => {
         const expectedArtifact = artifactsValues.find((artifactValues) => storedArtifact.id === artifactValues.id);
         expect(storedArtifact).toEqual(
-          new Artifact(
+          new SandsArtifact(
             expectedArtifact.id,
-            expectedArtifact.type as ArtifactTypes,
             expectedArtifact.set,
             expectedArtifact.subStats,
             expectedArtifact.level,
@@ -151,7 +144,6 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         id: '1',
         set: SetNames.thundersoother,
         level: 8,
-        type: 'sands',
         subStats: {
           [PossibleSubStats.flatAtk]: 5,
           [PossibleSubStats.percentDef]: 6,
@@ -160,58 +152,8 @@ fdescribe('ArtifactsHandler.addArtifact', () => {
         },
       };
       expect(() =>
-        artifactsHandler.add(
-          artifactValues.id,
-          artifactValues.type as ArtifactTypes,
-          artifactValues.set,
-          artifactValues.subStats,
-          artifactValues.level,
-          null,
-        ),
+        artifactsHandler.addSandsArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null),
       ).toThrowError('main stat is mandatory');
-    });
-
-    it('should failed if it has invalid main stat', () => {
-      const artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
-      const invalidMainStats = [
-        PossibleMainStats.anemoDmg,
-        PossibleMainStats.cryoDmg,
-        PossibleMainStats.pyroDmg,
-        PossibleMainStats.hydroDmg,
-        PossibleMainStats.dendroDmg,
-        PossibleMainStats.electroDmg,
-        PossibleMainStats.geoDmg,
-        PossibleMainStats.physicalDmg,
-        PossibleMainStats.critRate,
-        PossibleMainStats.critDmg,
-        PossibleMainStats.healingBonus,
-      ];
-      const artifactsValues = invalidMainStats.map((invalidMainStat) => ({
-        id: '1',
-        set: SetNames.thundersoother,
-        level: 8,
-        type: 'sands',
-        mainStatType: invalidMainStat,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.elementalMastery]: 8,
-        },
-      }));
-
-      artifactsValues.forEach((artifactValues) => {
-        expect(() =>
-          artifactsHandler.add(
-            artifactValues.id,
-            artifactValues.type as ArtifactTypes,
-            artifactValues.set,
-            artifactValues.subStats,
-            artifactValues.level,
-            artifactValues.mainStatType,
-          ),
-        ).toThrowError(`invalid main stat for sands : ${artifactValues.mainStatType}`);
-      });
     });
   });
 

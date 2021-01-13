@@ -1,5 +1,5 @@
 import { ArtifactTypes } from '../models/artifact-types';
-import { MainStat, PossibleMainStats } from '../models/main-statistics';
+import { MainStat, PossibleMainStats, PossibleMainStatTypes } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
 import { SubStats } from '../models/sub-statistics';
 
@@ -11,7 +11,7 @@ export class Artifact {
   public mainStat: MainStat;
   public subStats: SubStats;
 
-  protected readonly mainStatPossibleValues = [
+  protected readonly mainStatPossibleValues: { stats: Array<PossibleMainStatTypes>; values: number[] }[] = [
     {
       stats: [
         PossibleMainStats.percentAtk,
@@ -59,68 +59,30 @@ export class Artifact {
     },
   ];
 
-  private readonly invalidMainStats = {
-    sands: [
-      PossibleMainStats.anemoDmg,
-      PossibleMainStats.cryoDmg,
-      PossibleMainStats.pyroDmg,
-      PossibleMainStats.hydroDmg,
-      PossibleMainStats.dendroDmg,
-      PossibleMainStats.electroDmg,
-      PossibleMainStats.geoDmg,
-      PossibleMainStats.physicalDmg,
-      PossibleMainStats.critRate,
-      PossibleMainStats.critDmg,
-      PossibleMainStats.healingBonus,
-    ],
-    goblet: [PossibleMainStats.energyRecharge, PossibleMainStats.critRate, PossibleMainStats.critDmg, PossibleMainStats.healingBonus],
-    circlet: [
-      PossibleMainStats.anemoDmg,
-      PossibleMainStats.cryoDmg,
-      PossibleMainStats.pyroDmg,
-      PossibleMainStats.hydroDmg,
-      PossibleMainStats.dendroDmg,
-      PossibleMainStats.electroDmg,
-      PossibleMainStats.geoDmg,
-      PossibleMainStats.physicalDmg,
-      PossibleMainStats.energyRecharge,
-    ],
-  };
-
-  constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level: number, mainStatType: PossibleMainStats) {
-    this.level = level ? level : 0;
-
+  constructor(id: string, type: ArtifactTypes, set: SetNames, subStats: SubStats, level: number, mainStatType: PossibleMainStatTypes) {
     if (Object.values(subStats).length < 3) {
       throw new Error('an artifact can not have less than 3 substats');
     }
-    if (this.level > 3 && Object.values(subStats).length === 3) {
+    if (level > 3 && Object.values(subStats).length === 3) {
       throw new Error('an artifact with level higher than 3 must have 4 substats');
     }
     if (Object.values(subStats).length > 4) {
       throw new Error('an artifact can not have more than 4 substats');
     }
 
-    this.id = id;
-    this.type = type;
-    this.set = set;
-    this.subStats = subStats;
-
     if (!mainStatType) {
       throw new Error('main stat is mandatory');
     }
-    if (this.type === 'sands' && this.invalidMainStats.sands.includes(mainStatType)) {
-      throw new Error(`invalid main stat for sands : ${mainStatType}`);
-    }
-    if (this.type === 'goblet' && this.invalidMainStats.goblet.includes(mainStatType)) {
-      throw new Error(`invalid main stat for goblet : ${mainStatType}`);
-    }
-    if (this.type === 'circlet' && this.invalidMainStats.circlet.includes(mainStatType)) {
-      throw new Error(`invalid main stat for circlet : ${mainStatType}`);
-    }
+
+    this.id = id;
+    this.type = type;
+    this.set = set;
+    this.level = level;
+    this.subStats = subStats;
     this.setMainStat(mainStatType);
   }
 
-  private setMainStat(mainStatType: PossibleMainStats): void {
+  private setMainStat(mainStatType: PossibleMainStatTypes): void {
     const mainStatValue: number = this.mainStatPossibleValues.find((mainStatPossibleValue) =>
       mainStatPossibleValue.stats.includes(mainStatType),
     ).values[this.level];

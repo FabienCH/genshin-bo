@@ -1,6 +1,7 @@
 import { Artifact } from '../domain/entities/artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
+import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
 import { ArtifactTypes } from '../domain/models/artifact-types';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
@@ -18,6 +19,10 @@ export class ArtifactsHandler {
 
   public addPlumeArtifact(id: string, set: SetNames, subStats: SubStats, level: number): void {
     this.artifacts = [...this.artifacts, new PlumeArtifact(id, set, subStats, level)];
+  }
+
+  public addSandsArtifact(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: SandsMainStatType): void {
+    this.artifacts = [...this.artifacts, new SandsArtifact(id, set, subStats, level, mainStatType)];
   }
 
   public getAll(): Artifact[] {
