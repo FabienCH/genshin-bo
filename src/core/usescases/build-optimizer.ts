@@ -65,9 +65,7 @@ export class BuildOptimizer {
 
   private computeSetsStats(artifacts: Artifact[]): BuildStatisticsValues {
     const buildSets: Partial<{ [key in SetNames]: number }> = artifacts.reduce((buildSetsAcc, artifact: Artifact) => {
-      if (artifact.set) {
-        buildSetsAcc[artifact.set] = buildSetsAcc[artifact.set] ? buildSetsAcc[artifact.set] + 1 : 1;
-      }
+      buildSetsAcc[artifact.set] = buildSetsAcc[artifact.set] ? buildSetsAcc[artifact.set] + 1 : 1;
 
       return buildSetsAcc;
     }, {} as Partial<{ [key in SetNames]: number }>);

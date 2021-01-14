@@ -9,7 +9,7 @@ import { SetNames } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
 
-fdescribe('ArtifactsHandler.addArtifact', () => {
+describe('ArtifactsHandler.addArtifact', () => {
   let artifactsHandler: ArtifactsHandler;
 
   beforeEach(() => {
