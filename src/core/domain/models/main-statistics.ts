@@ -19,6 +19,8 @@ export enum PossibleMainStats {
   healingBonus = 'healingBonus',
 }
 
+export type PossibleMainStatTypes = keyof typeof PossibleMainStats;
+
 export interface MainStat {
   [statName: string]: number;
 }

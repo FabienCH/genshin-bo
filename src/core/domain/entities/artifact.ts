@@ -1,16 +1,15 @@
-import { ArtifactTypes } from '../models/artifact-types';
-import { MainStat, PossibleMainStats } from '../models/main-statistics';
+import { MainStat, PossibleMainStats, PossibleMainStatTypes } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
 import { SubStats } from '../models/sub-statistics';
 
 export class Artifact {
-  public type: ArtifactTypes;
+  public id: string;
   public set: SetNames;
   public level: number;
   public mainStat: MainStat;
   public subStats: SubStats;
 
-  private readonly mainStatPossibleValues = [
+  protected readonly mainStatPossibleValues: { stats: Array<PossibleMainStatTypes>; values: number[] }[] = [
     {
       stats: [
         PossibleMainStats.percentAtk,
@@ -58,22 +57,33 @@ export class Artifact {
     },
   ];
 
-  constructor(type: ArtifactTypes, set: SetNames, subStats: SubStats, level?: number, mainStatType?: PossibleMainStats) {
-    this.type = type;
-    this.set = set;
-    this.level = level ? level : 0;
-    this.subStats = subStats;
+  constructor(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: PossibleMainStatTypes) {
+    if (Object.keys(subStats).length < 3) {
+      throw new Error('an artifact can not have less than 3 substats');
+    }
+    if (level > 3 && Object.keys(subStats).length === 3) {
+      throw new Error('an artifact with level higher than 3 must have 4 substats');
+    }
+    if (Object.keys(subStats).length > 4) {
+      throw new Error('an artifact can not have more than 4 substats');
+    }
 
-    if (this.type === 'flower') {
-      mainStatType = PossibleMainStats.flatHp;
+    if (!mainStatType) {
+      throw new Error('main stat is mandatory');
     }
-    if (this.type === 'plume') {
-      mainStatType = PossibleMainStats.flatAtk;
+
+    if (Object.keys(subStats).find((subStat) => subStat === mainStatType)) {
+      throw new Error('main stat can not be the same as one of the substats');
     }
+
+    this.id = id;
+    this.set = set;
+    this.level = level;
+    this.subStats = subStats;
     this.setMainStat(mainStatType);
   }
 
-  private setMainStat(mainStatType: PossibleMainStats) {
+  private setMainStat(mainStatType: PossibleMainStatTypes): void {
     const mainStatValue: number = this.mainStatPossibleValues.find((mainStatPossibleValue) =>
       mainStatPossibleValue.stats.includes(mainStatType),
     ).values[this.level];
