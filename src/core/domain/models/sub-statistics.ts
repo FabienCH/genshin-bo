@@ -11,4 +11,6 @@ export enum PossibleSubStats {
   critDmg = 'critDmg',
 }
 
-export type SubStats = { [key in PossibleSubStats]?: number };
+export type PossibleSubStatTypes = keyof typeof PossibleSubStats;
+
+export type SubStatsValues = Partial<{ [key in PossibleSubStats]: number }>;

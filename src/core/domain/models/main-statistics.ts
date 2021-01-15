@@ -1,3 +1,5 @@
+import { PossibleSubStatTypes, SubStatsValues } from './sub-statistics';
+
 export enum PossibleMainStats {
   flatHp = 'flatHp',
   percentHp = 'percentHp',
@@ -24,3 +26,9 @@ export type PossibleMainStatTypes = keyof typeof PossibleMainStats;
 export interface MainStat {
   [statName: string]: number;
 }
+
+export type MainStatsValues = Partial<{ [key in PossibleMainStats]: number }>;
+
+export type ArtifactStatsValues = MainStatsValues & SubStatsValues;
+
+export type ArtifactStatsTypes = PossibleMainStatTypes | PossibleSubStatTypes;

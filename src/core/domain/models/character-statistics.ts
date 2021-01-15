@@ -1,7 +1,9 @@
-export enum PossibleSetStats {
-  percentAtk = 'percentAtk',
+export enum PossibleCharacterStats {
+  hp = 'hp',
+  atk = 'atk',
+  def = 'def',
   elementalMastery = 'elementalMastery',
-  healingBonus = 'healingBonus',
+  energyRecharge = 'energyRecharge',
   pyroDmg = 'pyroDmg',
   hydroDmg = 'hydroDmg',
   dendroDmg = 'dendroDmg',
@@ -10,7 +12,8 @@ export enum PossibleSetStats {
   cryoDmg = 'cryoDmg',
   geoDmg = 'geoDmg',
   physicalDmg = 'physicalDmg',
-  powerfulShield = 'powerfulShield',
+  critRate = 'critRate',
+  critDmg = 'critDmg',
   pyroRes = 'pyroRes',
   hydroRes = 'hydroRes',
   dendroRes = 'dendroRes',
@@ -18,8 +21,10 @@ export enum PossibleSetStats {
   anemoRes = 'anemoRes',
   cryoRes = 'cryoRes',
   geoRes = 'geoRes',
+  healingBonus = 'healingBonus',
+  powerfulShield = 'powerfulShield',
 }
 
-export type PossibleSetStatTypes = keyof typeof PossibleSetStats;
+export type CharacterStatTypes = keyof typeof PossibleCharacterStats;
 
-export type SetStatsValues = Partial<{ [key in PossibleSetStats]: number }>;
+export type CharacterStatsValues = Partial<{ [key in PossibleCharacterStats]: number }>;

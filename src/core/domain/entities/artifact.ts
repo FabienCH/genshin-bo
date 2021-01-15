@@ -1,13 +1,13 @@
 import { MainStat, PossibleMainStats, PossibleMainStatTypes } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
-import { SubStats } from '../models/sub-statistics';
+import { SubStatsValues } from '../models/sub-statistics';
 
 export class Artifact {
   public id: string;
   public set: SetNames;
   public level: number;
   public mainStat: MainStat;
-  public subStats: SubStats;
+  public subStats: SubStatsValues;
 
   protected readonly mainStatPossibleValues: { stats: Array<PossibleMainStatTypes>; values: number[] }[] = [
     {
@@ -57,7 +57,7 @@ export class Artifact {
     },
   ];
 
-  constructor(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: PossibleMainStatTypes) {
+  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: PossibleMainStatTypes) {
     if (Object.keys(subStats).length < 3) {
       throw new Error('an artifact can not have less than 3 substats');
     }

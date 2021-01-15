@@ -1,4 +1,4 @@
-import { SetStats } from './set-statistics';
+import { PossibleSetStats } from './set-statistics';
 
 export enum SetNames {
   gladiatorsFinale = 'gladiatorsFinale',
@@ -18,6 +18,6 @@ export enum SetNames {
 
 export interface SetWithEffect {
   name: SetNames;
-  stat: SetStats;
+  stat: PossibleSetStats;
   value: number;
 }
