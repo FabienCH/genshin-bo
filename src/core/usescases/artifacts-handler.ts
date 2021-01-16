@@ -5,28 +5,28 @@ import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-ar
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { SubStats } from '../domain/models/sub-statistics';
+import { SubStatsValues } from '../domain/models/sub-statistics';
 
 export class ArtifactsHandler {
   private artifacts: Artifact[] = [];
 
-  public addFlowerArtifact(id: string, set: SetNames, subStats: SubStats, level: number): void {
+  public addFlowerArtifact(id: string, set: SetNames, subStats: SubStatsValues, level: number): void {
     this.artifacts = [...this.artifacts, new FlowerArtifact(id, set, subStats, level)];
   }
 
-  public addPlumeArtifact(id: string, set: SetNames, subStats: SubStats, level: number): void {
+  public addPlumeArtifact(id: string, set: SetNames, subStats: SubStatsValues, level: number): void {
     this.artifacts = [...this.artifacts, new PlumeArtifact(id, set, subStats, level)];
   }
 
-  public addSandsArtifact(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: SandsMainStatType): void {
+  public addSandsArtifact(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: SandsMainStatType): void {
     this.artifacts = [...this.artifacts, new SandsArtifact(id, set, subStats, level, mainStatType)];
   }
 
-  public addGobletArtifact(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: GobletMainStatType): void {
+  public addGobletArtifact(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: GobletMainStatType): void {
     this.artifacts = [...this.artifacts, new GobletArtifact(id, set, subStats, level, mainStatType)];
   }
 
-  public addCircletArtifact(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: CircletMainStatType): void {
+  public addCircletArtifact(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: CircletMainStatType): void {
     this.artifacts = [...this.artifacts, new CircletArtifact(id, set, subStats, level, mainStatType)];
   }
 

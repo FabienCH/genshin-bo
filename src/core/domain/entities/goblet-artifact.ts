@@ -1,6 +1,6 @@
 import { MainStat, PossibleMainStats } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
-import { SubStats } from '../models/sub-statistics';
+import { SubStatsValues } from '../models/sub-statistics';
 import { Artifact } from './artifact';
 
 export type GobletMainStatType =
@@ -19,7 +19,7 @@ export type GobletMainStatType =
 
 export class GobletArtifact extends Artifact {
   public mainStat: MainStat;
-  constructor(id: string, set: SetNames, subStats: SubStats, level: number, mainStatType: GobletMainStatType) {
+  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: GobletMainStatType) {
     super(id, set, subStats, level, mainStatType);
   }
 }
