@@ -1,5 +1,11 @@
 import { Artifact } from '../domain/entities/artifact';
-import { CharacterStatsValues, CharacterStatTypes } from '../domain/models/character-statistics';
+import {
+  AllBuildStatTypes,
+  CharacterStatsValues,
+  CharacterStatTypes,
+  possibleBuildStats,
+  PossibleCharacterStats,
+} from '../domain/models/character-statistics';
 import { ArtifactStatsTypes, ArtifactStatsValues, PossibleMainStats } from '../domain/models/main-statistics';
 import { PossibleSetStats, PossibleSetStatTypes, SetStatsValues } from '../domain/models/set-statistics';
 import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
@@ -80,27 +86,14 @@ export class BuildOptimizer {
   }
 
   private reduceToBuildStats(artifactsStats: ArtifactStatsValues, setsStats: SetStatsValues): CharacterStatsValues {
+    const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
+
     return Object.keys({ ...artifactsStats, ...setsStats }).reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
-      let buildStatName = statName as CharacterStatTypes;
-
-      if (statName.includes('percent')) {
-        buildStatName = statName.split('percent')[1].toLowerCase() as CharacterStatTypes;
-      }
-
-      if (statName.includes('flat')) {
-        buildStatName = statName.split('flat')[1].toLowerCase() as CharacterStatTypes;
-      }
-
-      if (artifactsStats[statName as ArtifactStatsTypes] && setsStats[statName as PossibleSetStatTypes]) {
-        buildStats[buildStatName] = this.getUpdatedBuildStat(
-          buildStats[buildStatName],
-          artifactsStats[statName as ArtifactStatsTypes] + setsStats[statName as PossibleSetStatTypes],
-        );
-      } else if (artifactsStats[statName as ArtifactStatsTypes]) {
-        buildStats[buildStatName] = this.getUpdatedBuildStat(buildStats[buildStatName], artifactsStats[statName as ArtifactStatsTypes]);
-      } else {
-        buildStats[buildStatName] = this.getUpdatedBuildStat(buildStats[buildStatName], setsStats[statName as PossibleSetStatTypes]);
-      }
+      const buildStatName = this.getBuildStatName(statName);
+      buildStats[buildStatName] = this.getUpdatedBuildStat(
+        buildStats[buildStatName],
+        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) + getStatValue(setsStats[statName as PossibleSetStatTypes]),
+      );
 
       return buildStats;
     }, {} as CharacterStatsValues);
@@ -108,5 +101,16 @@ export class BuildOptimizer {
 
   private getUpdatedBuildStat(buildStat: number, statToAdd: number): number {
     return buildStat ? Math.round((buildStat + statToAdd) * 10) / 10 : statToAdd;
+  }
+
+  private getBuildStatName(statName: ArtifactStatsTypes | PossibleSetStatTypes): CharacterStatTypes {
+    const statNameMap: { buildStatName: PossibleCharacterStats; match: AllBuildStatTypes[] }[] = [
+      { buildStatName: PossibleCharacterStats.atk, match: [possibleBuildStats.flatAtk, possibleBuildStats.percentAtk] },
+      { buildStatName: PossibleCharacterStats.def, match: [possibleBuildStats.flatDef, possibleBuildStats.percentDef] },
+      { buildStatName: PossibleCharacterStats.hp, match: [possibleBuildStats.flatHp, possibleBuildStats.percentHp] },
+    ];
+
+    const mappedStateName = statNameMap.find((statNameItem) => statNameItem.match.includes(statName));
+    return mappedStateName ? mappedStateName.buildStatName : (statName as CharacterStatTypes);
   }
 }

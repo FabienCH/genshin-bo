@@ -1,3 +1,6 @@
+import { PossibleMainStats } from './main-statistics';
+import { PossibleSubStats } from './sub-statistics';
+
 export enum PossibleCharacterStats {
   hp = 'hp',
   atk = 'atk',
@@ -28,3 +31,7 @@ export enum PossibleCharacterStats {
 export type CharacterStatTypes = keyof typeof PossibleCharacterStats;
 
 export type CharacterStatsValues = Partial<{ [key in PossibleCharacterStats]: number }>;
+
+export const possibleBuildStats = { ...PossibleCharacterStats, ...PossibleMainStats, ...PossibleSubStats, ...PossibleSubStats };
+
+export type AllBuildStatTypes = keyof typeof possibleBuildStats;
