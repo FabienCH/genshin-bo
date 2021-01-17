@@ -29,6 +29,7 @@ export class BuildOptimizer {
   ];
 
   public computeBuildsStats(
+    character: { name: string; level: number },
     flowerArtifacts: Artifact[],
     plumeArtifacts: Artifact[],
     sandsArtifacts: Artifact[],
@@ -46,7 +47,7 @@ export class BuildOptimizer {
         if (i === max) {
           const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
           const setsStats = this.computeSetsStats(artifactsToCompute);
-          allBuilds.push(this.reduceToBuildStats(artifactsStats, setsStats));
+          allBuilds.push(this.reduceToBuildStats(character, artifactsStats, setsStats));
           return;
         }
         addArtifactsToCompute(artifactsToCompute, i + 1);
@@ -85,22 +86,57 @@ export class BuildOptimizer {
     }, {} as SetStatsValues);
   }
 
-  private reduceToBuildStats(artifactsStats: ArtifactStatsValues, setsStats: SetStatsValues): CharacterStatsValues {
+  private reduceToBuildStats(
+    character: { name: string; level: number },
+    artifactsStats: ArtifactStatsValues,
+    setsStats: SetStatsValues,
+  ): CharacterStatsValues {
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
+    const baseStats: CharacterStatsValues = character
+      ? {
+          [PossibleCharacterStats.hp]: 793,
+          [PossibleCharacterStats.atk]: 19,
+          [PossibleCharacterStats.def]: 50,
+          [PossibleCharacterStats.critRate]: 5,
+          [PossibleCharacterStats.critDmg]: 50,
+          [PossibleCharacterStats.energyRecharge]: 100,
+        }
+      : {};
+    const percentStats = Object.keys({ ...artifactsStats, ...setsStats }).filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) =>
+      statName.includes('percent'),
+    );
+    const otherStats = Object.keys({ ...artifactsStats, ...setsStats }).filter(
+      (statName: ArtifactStatsTypes | PossibleSetStatTypes) => !statName.includes('percent'),
+    );
 
-    return Object.keys({ ...artifactsStats, ...setsStats }).reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
+    const statsUpdatedWithPercent = percentStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
+      buildStats[buildStatName] = this.updateBuildStatByPercent(
+        buildStats[buildStatName],
+        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) + getStatValue(setsStats[statName as PossibleSetStatTypes]),
+      );
+
+      return buildStats;
+    }, baseStats);
+
+    return otherStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
+      const buildStatName = this.getBuildStatName(statName);
+
       buildStats[buildStatName] = this.getUpdatedBuildStat(
         buildStats[buildStatName],
         getStatValue(artifactsStats[statName as ArtifactStatsTypes]) + getStatValue(setsStats[statName as PossibleSetStatTypes]),
       );
 
       return buildStats;
-    }, {} as CharacterStatsValues);
+    }, statsUpdatedWithPercent);
   }
 
   private getUpdatedBuildStat(buildStat: number, statToAdd: number): number {
     return buildStat ? Math.round((buildStat + statToAdd) * 10) / 10 : statToAdd;
+  }
+
+  private updateBuildStatByPercent(buildStat: number, statValue: number): number {
+    return Math.round(buildStat * (1 + statValue / 100));
   }
 
   private getBuildStatName(statName: ArtifactStatsTypes | PossibleSetStatTypes): CharacterStatTypes {
