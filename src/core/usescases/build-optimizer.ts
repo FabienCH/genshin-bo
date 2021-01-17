@@ -61,9 +61,9 @@ export class BuildOptimizer {
   private computeArtifactsStats(artifacts: Artifact[]): ArtifactStatsValues {
     return artifacts.reduce((buildStats, artifact: Artifact) => {
       const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
-      buildStats[mainStatKey] = this.getUpdatedBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
+      buildStats[mainStatKey] = this.updateFlatBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
       Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
-        buildStats[subStatKey] = this.getUpdatedBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
+        buildStats[subStatKey] = this.updateFlatBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
       });
 
       return buildStats;
@@ -102,16 +102,13 @@ export class BuildOptimizer {
           [PossibleCharacterStats.energyRecharge]: 100,
         }
       : {};
+
     const percentStats = Object.keys({ ...artifactsStats, ...setsStats }).filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) =>
       statName.includes('percent'),
     );
-    const otherStats = Object.keys({ ...artifactsStats, ...setsStats }).filter(
-      (statName: ArtifactStatsTypes | PossibleSetStatTypes) => !statName.includes('percent'),
-    );
-
     const statsUpdatedWithPercent = percentStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
-      buildStats[buildStatName] = this.updateBuildStatByPercent(
+      buildStats[buildStatName] = this.updatePercentBuildStat(
         buildStats[buildStatName],
         getStatValue(artifactsStats[statName as ArtifactStatsTypes]) + getStatValue(setsStats[statName as PossibleSetStatTypes]),
       );
@@ -119,10 +116,13 @@ export class BuildOptimizer {
       return buildStats;
     }, baseStats);
 
+    const otherStats = Object.keys({ ...artifactsStats, ...setsStats }).filter(
+      (statName: ArtifactStatsTypes | PossibleSetStatTypes) => !percentStats.includes(statName),
+    );
     return otherStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
 
-      buildStats[buildStatName] = this.getUpdatedBuildStat(
+      buildStats[buildStatName] = this.updateFlatBuildStat(
         buildStats[buildStatName],
         getStatValue(artifactsStats[statName as ArtifactStatsTypes]) + getStatValue(setsStats[statName as PossibleSetStatTypes]),
       );
@@ -131,11 +131,11 @@ export class BuildOptimizer {
     }, statsUpdatedWithPercent);
   }
 
-  private getUpdatedBuildStat(buildStat: number, statToAdd: number): number {
+  private updateFlatBuildStat(buildStat: number, statToAdd: number): number {
     return buildStat ? Math.round((buildStat + statToAdd) * 10) / 10 : statToAdd;
   }
 
-  private updateBuildStatByPercent(buildStat: number, statValue: number): number {
+  private updatePercentBuildStat(buildStat: number, statValue: number): number {
     return Math.round(buildStat * (1 + statValue / 100));
   }
 
