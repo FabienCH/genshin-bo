@@ -29,7 +29,7 @@ export class BuildOptimizer {
   ];
 
   public computeBuildsStats(
-    character: { name: string; level: number },
+    character: { name: string; level: string },
     flowerArtifacts: Artifact[],
     plumeArtifacts: Artifact[],
     sandsArtifacts: Artifact[],
@@ -87,30 +87,58 @@ export class BuildOptimizer {
   }
 
   private reduceToBuildStats(
-    character: { name: string; level: number },
+    character: { name: string; level: string },
     artifactsStats: ArtifactStatsValues,
     setsStats: SetStatsValues,
   ): CharacterStatsValues {
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
-    const baseStats: CharacterStatsValues = character
-      ? {
-          [PossibleCharacterStats.hp]: 793,
-          [PossibleCharacterStats.atk]: 19,
-          [PossibleCharacterStats.def]: 50,
+    let characterBonus: Partial<{ [key in AllBuildStatTypes]: number }> = {};
+    let baseStats: CharacterStatsValues = {
+      [PossibleCharacterStats.hp]: 793,
+      [PossibleCharacterStats.atk]: 19,
+      [PossibleCharacterStats.def]: 50,
+      [PossibleCharacterStats.critRate]: 5,
+      [PossibleCharacterStats.critDmg]: 50,
+      [PossibleCharacterStats.energyRecharge]: 100,
+    };
+
+    if (character) {
+      if (character.level === '20a') {
+        baseStats = {
+          [PossibleCharacterStats.hp]: 2630,
+          [PossibleCharacterStats.atk]: 62,
+          [PossibleCharacterStats.def]: 167,
           [PossibleCharacterStats.critRate]: 5,
           [PossibleCharacterStats.critDmg]: 50,
           [PossibleCharacterStats.energyRecharge]: 100,
-        }
-      : {};
+        };
+      }
 
-    const percentStats = Object.keys({ ...artifactsStats, ...setsStats }).filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) =>
-      statName.includes('percent'),
-    );
+      if (character.level === '50') {
+        baseStats = {
+          [PossibleCharacterStats.hp]: 5016,
+          [PossibleCharacterStats.atk]: 118,
+          [PossibleCharacterStats.def]: 318,
+          [PossibleCharacterStats.critRate]: 5,
+          [PossibleCharacterStats.critDmg]: 50,
+          [PossibleCharacterStats.energyRecharge]: 100,
+        };
+        characterBonus = { [possibleBuildStats.percentAtk]: 6 };
+      }
+    }
+
+    const percentStats = Object.keys({
+      ...characterBonus,
+      ...artifactsStats,
+      ...setsStats,
+    }).filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => statName.includes('percent'));
     const statsUpdatedWithPercent = percentStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
       buildStats[buildStatName] = this.updatePercentBuildStat(
         buildStats[buildStatName],
-        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) + getStatValue(setsStats[statName as PossibleSetStatTypes]),
+        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
+          getStatValue(setsStats[statName as PossibleSetStatTypes]) +
+          getStatValue(characterBonus[statName as PossibleSetStatTypes]),
       );
 
       return buildStats;

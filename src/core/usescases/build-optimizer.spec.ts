@@ -479,7 +479,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });*/
 
     it('with level 1 Amber', () => {
-      const amber = { name: 'Amber', level: 1 };
+      const amber = { name: 'Amber', level: '1' };
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -565,74 +565,74 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
     });
-    /*
-    it('with level 40 Amber', () => {
-      const amber = { name: 'Amber', level: 40 };
+
+    it('with level 20 ascended Amber', () => {
+      const amber = { name: 'Amber', level: '20a' };
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
-          set: SetNames.lavawalker,
-          level: 2,
+          set: SetNames.gladiatorsFinale,
+          level: 8,
           subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.percentAtk]: 3,
-            [PossibleSubStats.critDmg]: 3.2,
+            [PossibleSubStats.flatAtk]: 16,
+            [PossibleSubStats.percentAtk]: 4.7,
+            [PossibleSubStats.critDmg]: 11.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
           },
         },
       ]);
       plumeArtifacts = getArtifactsWithValues('plume', [
         {
           id: '1',
-          set: SetNames.retracingBolide,
-          level: 7,
+          set: SetNames.crimsonWitchOfFlames,
+          level: 8,
           subStats: {
-            [PossibleSubStats.energyRecharge]: 3,
-            [PossibleSubStats.flatDef]: 7,
-            [PossibleSubStats.critRate]: 2.7,
-            [PossibleSubStats.critDmg]: 3.9,
+            [PossibleSubStats.flatHp]: 478,
+            [PossibleSubStats.critDmg]: 7.8,
+            [PossibleSubStats.critRate]: 3.1,
+            [PossibleSubStats.energyRecharge]: 5.8,
           },
         },
       ]);
       sandsArtifacts = getArtifactsWithValues('sands', [
         {
           id: '2',
-          set: SetNames.thunderingFury,
-          level: 12,
-          mainStatType: PossibleMainStats.percentHp,
+          set: SetNames.archaicPetra,
+          level: 8,
+          mainStatType: PossibleMainStats.percentAtk,
           subStats: {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
+            [PossibleSubStats.elementalMastery]: 16,
+            [PossibleSubStats.flatHp]: 538,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.energyRecharge]: 5.2,
           },
         },
       ]);
       gobletArtifacts = getArtifactsWithValues('goblet', [
         {
           id: '3',
-          set: SetNames.lavawalker,
-          level: 15,
-          mainStatType: PossibleMainStats.percentDef,
+          set: SetNames.bloodstainedChivalry,
+          level: 0,
+          mainStatType: PossibleMainStats.pyroDmg,
           subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
+            [PossibleSubStats.elementalMastery]: 21,
+            [PossibleSubStats.percentHp]: 4.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+            [PossibleSubStats.flatAtk]: 19,
           },
         },
       ]);
       circletArtifacts = getArtifactsWithValues('circlet', [
         {
           id: '4',
-          set: SetNames.retracingBolide,
-          level: 17,
-          mainStatType: PossibleMainStats.healingBonus,
+          set: SetNames.gladiatorsFinale,
+          level: 16,
+          mainStatType: PossibleMainStats.percentAtk,
           subStats: {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.percentHp]: 5,
+            [PossibleSubStats.flatAtk]: 53,
+            [PossibleSubStats.flatDef]: 37,
+            [PossibleSubStats.elementalMastery]: 19,
+            [PossibleSubStats.percentDef]: 7.6,
           },
         },
       ]);
@@ -640,19 +640,103 @@ describe('BuildOptimizer.computeBuildStats', () => {
         buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
-          [PossibleCharacterStats.hp]: 1960,
-          [PossibleCharacterStats.atk]: 174,
-          [PossibleCharacterStats.critRate]: 16.6,
-          [PossibleCharacterStats.energyRecharge]: 103,
-          [PossibleCharacterStats.def]: 112.9,
-          [PossibleCharacterStats.elementalMastery]: 7,
-          [PossibleCharacterStats.healingBonus]: 31.3,
-          [PossibleCharacterStats.critDmg]: 63.2,
-          [PossibleCharacterStats.powerfulShield]: 35,
-          [PossibleCharacterStats.pyroRes]: 40,
+          [PossibleCharacterStats.hp]: 6112,
+          [PossibleCharacterStats.atk]: 354,
+          [PossibleCharacterStats.def]: 217,
+          [PossibleCharacterStats.elementalMastery]: 56,
+          [PossibleCharacterStats.critRate]: 11.6,
+          [PossibleCharacterStats.critDmg]: 69.5,
+          [PossibleCharacterStats.energyRecharge]: 120,
+          [PossibleCharacterStats.pyroDmg]: 7,
         },
       ]);
-    });*/
+    });
+
+    it('with level 50 Amber', () => {
+      const amber = { name: 'Amber', level: '50' };
+      flowerArtifacts = getArtifactsWithValues('flower', [
+        {
+          id: '0',
+          set: SetNames.gladiatorsFinale,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 16,
+            [PossibleSubStats.percentAtk]: 4.7,
+            [PossibleSubStats.critDmg]: 11.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+          },
+        },
+      ]);
+      plumeArtifacts = getArtifactsWithValues('plume', [
+        {
+          id: '1',
+          set: SetNames.crimsonWitchOfFlames,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatHp]: 478,
+            [PossibleSubStats.critDmg]: 7.8,
+            [PossibleSubStats.critRate]: 3.1,
+            [PossibleSubStats.energyRecharge]: 5.8,
+          },
+        },
+      ]);
+      sandsArtifacts = getArtifactsWithValues('sands', [
+        {
+          id: '2',
+          set: SetNames.archaicPetra,
+          level: 8,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 16,
+            [PossibleSubStats.flatHp]: 538,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.energyRecharge]: 5.2,
+          },
+        },
+      ]);
+      gobletArtifacts = getArtifactsWithValues('goblet', [
+        {
+          id: '3',
+          set: SetNames.bloodstainedChivalry,
+          level: 0,
+          mainStatType: PossibleMainStats.pyroDmg,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 21,
+            [PossibleSubStats.percentHp]: 4.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+            [PossibleSubStats.flatAtk]: 19,
+          },
+        },
+      ]);
+      circletArtifacts = getArtifactsWithValues('circlet', [
+        {
+          id: '4',
+          set: SetNames.gladiatorsFinale,
+          level: 16,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 53,
+            [PossibleSubStats.flatDef]: 37,
+            [PossibleSubStats.elementalMastery]: 19,
+            [PossibleSubStats.percentDef]: 7.6,
+          },
+        },
+      ]);
+      expect(
+        buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 8610,
+          [PossibleCharacterStats.atk]: 464,
+          [PossibleCharacterStats.def]: 379,
+          [PossibleCharacterStats.elementalMastery]: 56,
+          [PossibleCharacterStats.critRate]: 11.6,
+          [PossibleCharacterStats.critDmg]: 69.5,
+          [PossibleCharacterStats.energyRecharge]: 120,
+          [PossibleCharacterStats.pyroDmg]: 7,
+        },
+      ]);
+    });
   });
 
   /*
