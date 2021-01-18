@@ -17,10 +17,13 @@ describe('BuildOptimizer.computeBuildStats', () => {
   let sandsArtifacts: Artifact[];
   let gobletArtifacts: Artifact[];
   let circletArtifacts: Artifact[];
+  let razor: { name: string; level: string };
+
   beforeEach(() => {
     buildOptimizer = new BuildOptimizer();
+    razor = { name: 'Razor', level: '80a' };
   });
-  /*
+
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
       flowerArtifacts = getArtifactsWithValues('flower', [
@@ -72,20 +75,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildsStats(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts)).toEqual(
-        [
-          {
-            [PossibleCharacterStats.hp]: 817,
-            [PossibleCharacterStats.atk]: 67,
-            [PossibleCharacterStats.def]: 34.7,
-            [PossibleCharacterStats.physicalDmg]: 8.7,
-            [PossibleCharacterStats.critRate]: 11,
-            [PossibleCharacterStats.elementalMastery]: 6,
-            [PossibleCharacterStats.critDmg]: 3.7,
-            [PossibleCharacterStats.powerfulShield]: 35,
-          },
-        ],
-      );
+      expect(
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 11951,
+          [PossibleCharacterStats.atk]: 298,
+          [PossibleCharacterStats.def]: 906,
+          [PossibleCharacterStats.physicalDmg]: 38.7,
+          [PossibleCharacterStats.critRate]: 16,
+          [PossibleCharacterStats.elementalMastery]: 6,
+          [PossibleCharacterStats.critDmg]: 53.7,
+          [PossibleCharacterStats.energyRecharge]: 100,
+          [PossibleCharacterStats.powerfulShield]: 35,
+        },
+      ]);
     });
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
@@ -128,26 +132,26 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
 
-      expect(buildOptimizer.computeBuildsStats(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts)).toEqual(
-        [
-          {
-            [PossibleCharacterStats.hp]: 722.2,
-            [PossibleCharacterStats.atk]: 70,
-            [PossibleCharacterStats.critRate]: 11.6,
-            [PossibleCharacterStats.energyRecharge]: 3,
-            [PossibleCharacterStats.def]: 20,
-            [PossibleCharacterStats.elementalMastery]: 35,
-            [PossibleCharacterStats.geoDmg]: 7,
-            [PossibleCharacterStats.critDmg]: 3.2,
-            [PossibleCharacterStats.powerfulShield]: 35,
-          },
-        ],
-      );
+      expect(
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 12430,
+          [PossibleCharacterStats.atk]: 303,
+          [PossibleCharacterStats.critRate]: 16.6,
+          [PossibleCharacterStats.energyRecharge]: 103,
+          [PossibleCharacterStats.def]: 797,
+          [PossibleCharacterStats.elementalMastery]: 35,
+          [PossibleCharacterStats.geoDmg]: 7,
+          [PossibleCharacterStats.critDmg]: 53.2,
+          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.powerfulShield]: 35,
+        },
+      ]);
     });
   });
-*/
+
   describe('should compute build stats of 5 artifacts', () => {
-    /*
     it('with levels 1, 3, 4, 8, 20', () => {
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -207,21 +211,22 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildsStats(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts)).toEqual(
-        [
-          {
-            [PossibleCharacterStats.hp]: 930.2,
-            [PossibleCharacterStats.atk]: 116.9,
-            [PossibleCharacterStats.critRate]: 11.6,
-            [PossibleCharacterStats.energyRecharge]: 3,
-            [PossibleCharacterStats.def]: 20,
-            [PossibleCharacterStats.elementalMastery]: 194,
-            [PossibleCharacterStats.geoDmg]: 22.8,
-            [PossibleCharacterStats.critDmg]: 9.3,
-            [PossibleCharacterStats.powerfulShield]: 35,
-          },
-        ],
-      );
+      expect(
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 13190,
+          [PossibleCharacterStats.atk]: 360,
+          [PossibleCharacterStats.critRate]: 16.6,
+          [PossibleCharacterStats.energyRecharge]: 103,
+          [PossibleCharacterStats.def]: 797,
+          [PossibleCharacterStats.elementalMastery]: 194,
+          [PossibleCharacterStats.geoDmg]: 22.8,
+          [PossibleCharacterStats.critDmg]: 59.3,
+          [PossibleCharacterStats.powerfulShield]: 35,
+          [PossibleCharacterStats.physicalDmg]: 30,
+        },
+      ]);
     });
 
     it('with levels 2, 7, 12, 15, 17', () => {
@@ -288,21 +293,22 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildsStats(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts)).toEqual(
-        [
-          {
-            [PossibleCharacterStats.hp]: 1167,
-            [PossibleCharacterStats.atk]: 160,
-            [PossibleCharacterStats.critRate]: 11.6,
-            [PossibleCharacterStats.energyRecharge]: 3,
-            [PossibleCharacterStats.def]: 62.9,
-            [PossibleCharacterStats.elementalMastery]: 7,
-            [PossibleCharacterStats.healingBonus]: 31.3,
-            [PossibleCharacterStats.critDmg]: 9.3,
-            [PossibleCharacterStats.powerfulShield]: 35,
-          },
-        ],
-      );
+      expect(
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 16825,
+          [PossibleCharacterStats.atk]: 391,
+          [PossibleCharacterStats.critRate]: 16.6,
+          [PossibleCharacterStats.energyRecharge]: 103,
+          [PossibleCharacterStats.def]: 1097,
+          [PossibleCharacterStats.elementalMastery]: 7,
+          [PossibleCharacterStats.healingBonus]: 31.3,
+          [PossibleCharacterStats.critDmg]: 59.3,
+          [PossibleCharacterStats.powerfulShield]: 35,
+          [PossibleCharacterStats.physicalDmg]: 30,
+        },
+      ]);
     });
 
     it('with gladiator and thundering sets effects', () => {
@@ -374,21 +380,22 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildsStats(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts)).toEqual(
-        [
-          {
-            [PossibleCharacterStats.hp]: 1167,
-            [PossibleCharacterStats.atk]: 173,
-            [PossibleCharacterStats.critRate]: 11.6,
-            [PossibleCharacterStats.energyRecharge]: 3,
-            [PossibleCharacterStats.def]: 66.9,
-            [PossibleCharacterStats.elementalMastery]: 7,
-            [PossibleCharacterStats.healingBonus]: 31.3,
-            [PossibleCharacterStats.critDmg]: 9.3,
-            [PossibleCharacterStats.electroDmg]: 15,
-          },
-        ],
-      );
+      expect(
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 16825,
+          [PossibleCharacterStats.atk]: 419,
+          [PossibleCharacterStats.critRate]: 16.6,
+          [PossibleCharacterStats.energyRecharge]: 103,
+          [PossibleCharacterStats.def]: 1125,
+          [PossibleCharacterStats.elementalMastery]: 7,
+          [PossibleCharacterStats.healingBonus]: 31.3,
+          [PossibleCharacterStats.critDmg]: 59.3,
+          [PossibleCharacterStats.electroDmg]: 15,
+          [PossibleCharacterStats.physicalDmg]: 30,
+        },
+      ]);
     });
 
     it('with bolide and Lavawalker sets effects', () => {
@@ -460,23 +467,24 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      expect(buildOptimizer.computeBuildsStats(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts)).toEqual(
-        [
-          {
-            [PossibleCharacterStats.hp]: 1167,
-            [PossibleCharacterStats.atk]: 155,
-            [PossibleCharacterStats.critRate]: 11.6,
-            [PossibleCharacterStats.energyRecharge]: 3,
-            [PossibleCharacterStats.def]: 62.9,
-            [PossibleCharacterStats.elementalMastery]: 7,
-            [PossibleCharacterStats.healingBonus]: 31.3,
-            [PossibleCharacterStats.critDmg]: 13.2,
-            [PossibleCharacterStats.powerfulShield]: 35,
-            [PossibleCharacterStats.pyroRes]: 40,
-          },
-        ],
-      );
-    });*/
+      expect(
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 16825,
+          [PossibleCharacterStats.atk]: 380,
+          [PossibleCharacterStats.critRate]: 16.6,
+          [PossibleCharacterStats.energyRecharge]: 103,
+          [PossibleCharacterStats.def]: 1097,
+          [PossibleCharacterStats.elementalMastery]: 7,
+          [PossibleCharacterStats.healingBonus]: 31.3,
+          [PossibleCharacterStats.critDmg]: 63.2,
+          [PossibleCharacterStats.powerfulShield]: 35,
+          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.pyroRes]: 40,
+        },
+      ]);
+    });
 
     it('with level 1 Amber', () => {
       const amber = { name: 'Amber', level: '1' };
@@ -737,9 +745,94 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
     });
+
+    it('with level 80 ascended Razor', () => {
+      flowerArtifacts = getArtifactsWithValues('flower', [
+        {
+          id: '0',
+          set: SetNames.gladiatorsFinale,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 16,
+            [PossibleSubStats.percentAtk]: 4.7,
+            [PossibleSubStats.critDmg]: 11.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+          },
+        },
+      ]);
+      plumeArtifacts = getArtifactsWithValues('plume', [
+        {
+          id: '1',
+          set: SetNames.crimsonWitchOfFlames,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatHp]: 478,
+            [PossibleSubStats.critDmg]: 7.8,
+            [PossibleSubStats.critRate]: 3.1,
+            [PossibleSubStats.energyRecharge]: 5.8,
+          },
+        },
+      ]);
+      sandsArtifacts = getArtifactsWithValues('sands', [
+        {
+          id: '2',
+          set: SetNames.archaicPetra,
+          level: 8,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 16,
+            [PossibleSubStats.flatHp]: 538,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.energyRecharge]: 5.2,
+          },
+        },
+      ]);
+      gobletArtifacts = getArtifactsWithValues('goblet', [
+        {
+          id: '3',
+          set: SetNames.bloodstainedChivalry,
+          level: 0,
+          mainStatType: PossibleMainStats.pyroDmg,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 21,
+            [PossibleSubStats.percentHp]: 4.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+            [PossibleSubStats.flatAtk]: 19,
+          },
+        },
+      ]);
+      circletArtifacts = getArtifactsWithValues('circlet', [
+        {
+          id: '4',
+          set: SetNames.gladiatorsFinale,
+          level: 16,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 53,
+            [PossibleSubStats.flatDef]: 37,
+            [PossibleSubStats.elementalMastery]: 19,
+            [PossibleSubStats.percentDef]: 7.6,
+          },
+        },
+      ]);
+      expect(
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 15015,
+          [PossibleCharacterStats.atk]: 640,
+          [PossibleCharacterStats.def]: 789,
+          [PossibleCharacterStats.elementalMastery]: 56,
+          [PossibleCharacterStats.critRate]: 11.6,
+          [PossibleCharacterStats.critDmg]: 69.5,
+          [PossibleCharacterStats.energyRecharge]: 120,
+          [PossibleCharacterStats.pyroDmg]: 7,
+          [PossibleCharacterStats.physicalDmg]: 30,
+        },
+      ]);
+    });
   });
 
-  /*
   it('should compute build stats of multiple artifacts for each type', () => {
     flowerArtifacts = getArtifactsWithValues('flower', [
       {
@@ -848,101 +941,113 @@ describe('BuildOptimizer.computeBuildStats', () => {
       },
     ]);
 
-    expect(buildOptimizer.computeBuildsStats(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts)).toEqual([
+    expect(
+      buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+    ).toEqual([
       {
-        [PossibleCharacterStats.hp]: 1167,
-        [PossibleCharacterStats.atk]: 155,
-        [PossibleCharacterStats.critRate]: 11.6,
-        [PossibleCharacterStats.energyRecharge]: 4,
-        [PossibleCharacterStats.def]: 62.9,
+        [PossibleCharacterStats.hp]: 16825,
+        [PossibleCharacterStats.atk]: 380,
+        [PossibleCharacterStats.critRate]: 16.6,
+        [PossibleCharacterStats.energyRecharge]: 104,
+        [PossibleCharacterStats.def]: 1097,
         [PossibleCharacterStats.elementalMastery]: 7,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 14.3,
+        [PossibleCharacterStats.critDmg]: 64.3,
         [PossibleCharacterStats.powerfulShield]: 35,
+        [PossibleCharacterStats.physicalDmg]: 30,
         [PossibleCharacterStats.pyroRes]: 40,
       },
       {
-        [PossibleCharacterStats.hp]: 1164,
-        [PossibleCharacterStats.atk]: 155,
-        [PossibleCharacterStats.critRate]: 9.1,
-        [PossibleCharacterStats.energyRecharge]: 4,
-        [PossibleCharacterStats.def]: 17,
+        [PossibleCharacterStats.hp]: 16822,
+        [PossibleCharacterStats.atk]: 380,
+        [PossibleCharacterStats.critRate]: 14.1,
+        [PossibleCharacterStats.energyRecharge]: 104,
+        [PossibleCharacterStats.def]: 776,
         [PossibleCharacterStats.elementalMastery]: 11,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 17.3,
+        [PossibleCharacterStats.critDmg]: 67.3,
         [PossibleCharacterStats.powerfulShield]: 35,
+        [PossibleCharacterStats.physicalDmg]: 30,
         [PossibleCharacterStats.cryoDmg]: 22.8,
       },
       {
-        [PossibleCharacterStats.hp]: 1179,
-        [PossibleCharacterStats.atk]: 226,
-        [PossibleCharacterStats.critRate]: 8.9,
-        [PossibleCharacterStats.def]: 69.9,
+        [PossibleCharacterStats.hp]: 16837,
+        [PossibleCharacterStats.atk]: 457,
+        [PossibleCharacterStats.critRate]: 13.9,
+        [PossibleCharacterStats.energyRecharge]: 100,
+        [PossibleCharacterStats.def]: 1152,
         [PossibleCharacterStats.elementalMastery]: 7,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 9.3,
+        [PossibleCharacterStats.critDmg]: 59.3,
         [PossibleCharacterStats.pyroRes]: 40,
+        [PossibleCharacterStats.physicalDmg]: 30,
       },
       {
-        [PossibleCharacterStats.hp]: 1176,
-        [PossibleCharacterStats.atk]: 226,
-        [PossibleCharacterStats.critRate]: 6.4,
-        [PossibleCharacterStats.def]: 24,
+        [PossibleCharacterStats.hp]: 16834,
+        [PossibleCharacterStats.atk]: 457,
+        [PossibleCharacterStats.critRate]: 11.4,
+        [PossibleCharacterStats.energyRecharge]: 100,
+        [PossibleCharacterStats.def]: 831,
         [PossibleCharacterStats.elementalMastery]: 11,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 12.3,
+        [PossibleCharacterStats.critDmg]: 62.3,
         [PossibleCharacterStats.cryoDmg]: 37.8,
+        [PossibleCharacterStats.physicalDmg]: 30,
       },
       {
-        [PossibleCharacterStats.hp]: 2189,
-        [PossibleCharacterStats.atk]: 154,
-        [PossibleCharacterStats.critRate]: 8.4,
-        [PossibleCharacterStats.energyRecharge]: 7,
-        [PossibleCharacterStats.def]: 62.9,
+        [PossibleCharacterStats.hp]: 18509,
+        [PossibleCharacterStats.atk]: 384,
+        [PossibleCharacterStats.critRate]: 13.4,
+        [PossibleCharacterStats.energyRecharge]: 107,
+        [PossibleCharacterStats.def]: 1097,
         [PossibleCharacterStats.elementalMastery]: 7,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 15,
+        [PossibleCharacterStats.critDmg]: 65,
         [PossibleCharacterStats.powerfulShield]: 35,
         [PossibleCharacterStats.electroDmg]: 15,
+        [PossibleCharacterStats.physicalDmg]: 30,
       },
       {
-        [PossibleCharacterStats.hp]: 2186,
-        [PossibleCharacterStats.atk]: 154,
-        [PossibleCharacterStats.critRate]: 5.9,
-        [PossibleCharacterStats.energyRecharge]: 7,
-        [PossibleCharacterStats.def]: 17,
+        [PossibleCharacterStats.hp]: 18506,
+        [PossibleCharacterStats.atk]: 384,
+        [PossibleCharacterStats.critRate]: 10.9,
+        [PossibleCharacterStats.energyRecharge]: 107,
+        [PossibleCharacterStats.def]: 776,
         [PossibleCharacterStats.elementalMastery]: 11,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 18,
+        [PossibleCharacterStats.critDmg]: 68,
         [PossibleCharacterStats.powerfulShield]: 35,
         [PossibleCharacterStats.electroDmg]: 15,
         [PossibleCharacterStats.cryoDmg]: 22.8,
+        [PossibleCharacterStats.physicalDmg]: 30,
       },
       {
-        [PossibleCharacterStats.hp]: 2201,
-        [PossibleCharacterStats.atk]: 225,
-        [PossibleCharacterStats.critRate]: 5.7,
-        [PossibleCharacterStats.energyRecharge]: 3,
-        [PossibleCharacterStats.def]: 69.9,
+        [PossibleCharacterStats.hp]: 18521,
+        [PossibleCharacterStats.atk]: 461,
+        [PossibleCharacterStats.critRate]: 10.7,
+        [PossibleCharacterStats.energyRecharge]: 103,
+        [PossibleCharacterStats.def]: 1152,
         [PossibleCharacterStats.elementalMastery]: 7,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 10,
+        [PossibleCharacterStats.critDmg]: 60,
         [PossibleCharacterStats.electroDmg]: 15,
+        [PossibleCharacterStats.physicalDmg]: 30,
       },
       {
-        [PossibleCharacterStats.hp]: 2198,
-        [PossibleCharacterStats.atk]: 225,
-        [PossibleCharacterStats.critRate]: 3.2,
-        [PossibleCharacterStats.energyRecharge]: 3,
-        [PossibleCharacterStats.def]: 24,
+        [PossibleCharacterStats.hp]: 18518,
+        [PossibleCharacterStats.atk]: 461,
+        [PossibleCharacterStats.critRate]: 8.2,
+        [PossibleCharacterStats.energyRecharge]: 103,
+        [PossibleCharacterStats.def]: 831,
         [PossibleCharacterStats.elementalMastery]: 11,
         [PossibleCharacterStats.healingBonus]: 31.3,
-        [PossibleCharacterStats.critDmg]: 13,
+        [PossibleCharacterStats.critDmg]: 63,
         [PossibleCharacterStats.electroDmg]: 15,
         [PossibleCharacterStats.cryoDmg]: 37.8,
+        [PossibleCharacterStats.physicalDmg]: 30,
       },
     ]);
-  });*/
+  });
 });
 
 function getArtifactsWithValues(

@@ -94,36 +94,43 @@ export class BuildOptimizer {
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
     let characterBonus: Partial<{ [key in AllBuildStatTypes]: number }> = {};
     let baseStats: CharacterStatsValues = {
-      [PossibleCharacterStats.hp]: 793,
-      [PossibleCharacterStats.atk]: 19,
-      [PossibleCharacterStats.def]: 50,
       [PossibleCharacterStats.critRate]: 5,
       [PossibleCharacterStats.critDmg]: 50,
       [PossibleCharacterStats.energyRecharge]: 100,
     };
 
-    if (character) {
+    if (character.name === 'Amber') {
+      baseStats = { ...baseStats, [PossibleCharacterStats.hp]: 793, [PossibleCharacterStats.atk]: 19, [PossibleCharacterStats.def]: 50 };
       if (character.level === '20a') {
         baseStats = {
+          ...baseStats,
           [PossibleCharacterStats.hp]: 2630,
           [PossibleCharacterStats.atk]: 62,
           [PossibleCharacterStats.def]: 167,
-          [PossibleCharacterStats.critRate]: 5,
-          [PossibleCharacterStats.critDmg]: 50,
-          [PossibleCharacterStats.energyRecharge]: 100,
         };
       }
 
       if (character.level === '50') {
         baseStats = {
+          ...baseStats,
           [PossibleCharacterStats.hp]: 5016,
           [PossibleCharacterStats.atk]: 118,
           [PossibleCharacterStats.def]: 318,
-          [PossibleCharacterStats.critRate]: 5,
-          [PossibleCharacterStats.critDmg]: 50,
-          [PossibleCharacterStats.energyRecharge]: 100,
         };
         characterBonus = { [possibleBuildStats.percentAtk]: 6 };
+      }
+    }
+
+    if (character.name === 'Razor') {
+      baseStats = { ...baseStats, [PossibleCharacterStats.hp]: 1003, [PossibleCharacterStats.atk]: 20, [PossibleCharacterStats.def]: 63 };
+      if (character.level === '80a') {
+        baseStats = {
+          ...baseStats,
+          [PossibleCharacterStats.hp]: 11134,
+          [PossibleCharacterStats.atk]: 217,
+          [PossibleCharacterStats.def]: 699,
+        };
+        characterBonus = { [possibleBuildStats.physicalDmg]: 30 };
       }
     }
 
@@ -144,7 +151,7 @@ export class BuildOptimizer {
       return buildStats;
     }, baseStats);
 
-    const otherStats = Object.keys({ ...artifactsStats, ...setsStats }).filter(
+    const otherStats = Object.keys({ ...characterBonus, ...artifactsStats, ...setsStats }).filter(
       (statName: ArtifactStatsTypes | PossibleSetStatTypes) => !percentStats.includes(statName),
     );
     return otherStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
@@ -152,7 +159,9 @@ export class BuildOptimizer {
 
       buildStats[buildStatName] = this.updateFlatBuildStat(
         buildStats[buildStatName],
-        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) + getStatValue(setsStats[statName as PossibleSetStatTypes]),
+        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
+          getStatValue(setsStats[statName as PossibleSetStatTypes]) +
+          getStatValue(characterBonus[statName as PossibleSetStatTypes]),
       );
 
       return buildStats;
