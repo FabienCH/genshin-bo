@@ -28,6 +28,12 @@ export enum PossibleCharacterStats {
   powerfulShield = 'powerfulShield',
 }
 
+export type CharacterStatsPerLevel = {
+  [PossibleCharacterStats.hp]: number;
+  [PossibleCharacterStats.atk]: number;
+  [PossibleCharacterStats.def]: number;
+};
+
 export type CharacterStatTypes = keyof typeof PossibleCharacterStats;
 
 export type CharacterStatsValues = Partial<{ [key in PossibleCharacterStats]: number }>;
