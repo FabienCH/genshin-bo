@@ -62,9 +62,9 @@ export class BuildOptimizer {
   private computeArtifactsStats(artifacts: Artifact[]): ArtifactStatsValues {
     return artifacts.reduce((buildStats, artifact: Artifact) => {
       const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
-      buildStats[mainStatKey] = this.updateFlatBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
+      buildStats[mainStatKey] = this.addStatToBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
       Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
-        buildStats[subStatKey] = this.updateFlatBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
+        buildStats[subStatKey] = this.addStatToBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
       });
 
       return buildStats;
@@ -88,7 +88,6 @@ export class BuildOptimizer {
   }
 
   private reduceToBuildStats(character: Character, artifactsStats: ArtifactStatsValues, setsStats: SetStatsValues): CharacterStatsValues {
-    character;
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
     const baseStats: CharacterStatsValues = { ...character.stats };
     const characterBonusStat: CharacterStatsValues = character.bonusStat;
@@ -101,8 +100,8 @@ export class BuildOptimizer {
     const statsUpdatedWithPercent = percentStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
       const bonusStatValue = characterBonusStat ? getStatValue(characterBonusStat[statName as CharacterStatTypes]) : 0;
-      bonusStatValue;
-      buildStats[buildStatName] = this.updatePercentBuildStat(
+
+      buildStats[buildStatName] = this.applyMultiplierToBuildStat(
         buildStats[buildStatName],
         getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
           getStatValue(setsStats[statName as PossibleSetStatTypes]) +
@@ -118,8 +117,8 @@ export class BuildOptimizer {
     return otherStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
       const bonusStatValue = characterBonusStat ? getStatValue(characterBonusStat[statName as CharacterStatTypes]) : 0;
-      bonusStatValue;
-      buildStats[buildStatName] = this.updateFlatBuildStat(
+
+      buildStats[buildStatName] = this.addStatToBuildStat(
         buildStats[buildStatName],
         getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
           getStatValue(setsStats[statName as PossibleSetStatTypes]) +
@@ -130,11 +129,11 @@ export class BuildOptimizer {
     }, statsUpdatedWithPercent);
   }
 
-  private updateFlatBuildStat(buildStat: number, statToAdd: number): number {
+  private addStatToBuildStat(buildStat: number, statToAdd: number): number {
     return buildStat ? Math.round((buildStat + statToAdd) * 10) / 10 : statToAdd;
   }
 
-  private updatePercentBuildStat(buildStat: number, statValue: number): number {
+  private applyMultiplierToBuildStat(buildStat: number, statValue: number): number {
     return Math.round(buildStat * (1 + statValue / 100));
   }
 
