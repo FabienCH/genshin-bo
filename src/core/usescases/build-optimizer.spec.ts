@@ -835,6 +835,181 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
     });
+
+    it('with level 60 ascended Albedo', () => {
+      const albedo = charactersRepository.getCharacter('albedo', '60a');
+
+      flowerArtifacts = getArtifactsWithValues('flower', [
+        {
+          id: '0',
+          set: SetNames.gladiatorsFinale,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 16,
+            [PossibleSubStats.percentAtk]: 4.7,
+            [PossibleSubStats.critDmg]: 11.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+          },
+        },
+      ]);
+      plumeArtifacts = getArtifactsWithValues('plume', [
+        {
+          id: '1',
+          set: SetNames.crimsonWitchOfFlames,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatHp]: 478,
+            [PossibleSubStats.critDmg]: 7.8,
+            [PossibleSubStats.critRate]: 3.1,
+            [PossibleSubStats.energyRecharge]: 5.8,
+          },
+        },
+      ]);
+      sandsArtifacts = getArtifactsWithValues('sands', [
+        {
+          id: '2',
+          set: SetNames.archaicPetra,
+          level: 8,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 16,
+            [PossibleSubStats.flatHp]: 538,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.energyRecharge]: 5.2,
+          },
+        },
+      ]);
+      gobletArtifacts = getArtifactsWithValues('goblet', [
+        {
+          id: '3',
+          set: SetNames.bloodstainedChivalry,
+          level: 0,
+          mainStatType: PossibleMainStats.pyroDmg,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 21,
+            [PossibleSubStats.percentHp]: 4.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+            [PossibleSubStats.flatAtk]: 19,
+          },
+        },
+      ]);
+      circletArtifacts = getArtifactsWithValues('circlet', [
+        {
+          id: '4',
+          set: SetNames.gladiatorsFinale,
+          level: 16,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 53,
+            [PossibleSubStats.flatDef]: 37,
+            [PossibleSubStats.elementalMastery]: 19,
+            [PossibleSubStats.percentDef]: 7.6,
+          },
+        },
+      ]);
+      expect(
+        buildOptimizer.computeBuildsStats(albedo, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 12998,
+          [PossibleCharacterStats.atk]: 562,
+          [PossibleCharacterStats.def]: 693,
+          [PossibleCharacterStats.elementalMastery]: 56,
+          [PossibleCharacterStats.critRate]: 11.6,
+          [PossibleCharacterStats.critDmg]: 69.5,
+          [PossibleCharacterStats.energyRecharge]: 120,
+          [PossibleCharacterStats.pyroDmg]: 7,
+          [PossibleCharacterStats.geoDmg]: 14.4,
+        },
+      ]);
+    });
+
+    it('with level 70 Fischl', () => {
+      const albedo = charactersRepository.getCharacter('fischl', '70');
+
+      flowerArtifacts = getArtifactsWithValues('flower', [
+        {
+          id: '0',
+          set: SetNames.gladiatorsFinale,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 16,
+            [PossibleSubStats.percentAtk]: 4.7,
+            [PossibleSubStats.critDmg]: 11.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+          },
+        },
+      ]);
+      plumeArtifacts = getArtifactsWithValues('plume', [
+        {
+          id: '1',
+          set: SetNames.crimsonWitchOfFlames,
+          level: 8,
+          subStats: {
+            [PossibleSubStats.flatHp]: 478,
+            [PossibleSubStats.critDmg]: 7.8,
+            [PossibleSubStats.critRate]: 3.1,
+            [PossibleSubStats.energyRecharge]: 5.8,
+          },
+        },
+      ]);
+      sandsArtifacts = getArtifactsWithValues('sands', [
+        {
+          id: '2',
+          set: SetNames.archaicPetra,
+          level: 8,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 16,
+            [PossibleSubStats.flatHp]: 538,
+            [PossibleSubStats.critRate]: 3.5,
+            [PossibleSubStats.energyRecharge]: 5.2,
+          },
+        },
+      ]);
+      gobletArtifacts = getArtifactsWithValues('goblet', [
+        {
+          id: '3',
+          set: SetNames.bloodstainedChivalry,
+          level: 0,
+          mainStatType: PossibleMainStats.pyroDmg,
+          subStats: {
+            [PossibleSubStats.elementalMastery]: 21,
+            [PossibleSubStats.percentHp]: 4.7,
+            [PossibleSubStats.energyRecharge]: 4.5,
+            [PossibleSubStats.flatAtk]: 19,
+          },
+        },
+      ]);
+      circletArtifacts = getArtifactsWithValues('circlet', [
+        {
+          id: '4',
+          set: SetNames.gladiatorsFinale,
+          level: 16,
+          mainStatType: PossibleMainStats.percentAtk,
+          subStats: {
+            [PossibleSubStats.flatAtk]: 53,
+            [PossibleSubStats.flatDef]: 37,
+            [PossibleSubStats.elementalMastery]: 19,
+            [PossibleSubStats.percentDef]: 7.6,
+          },
+        },
+      ]);
+      expect(
+        buildOptimizer.computeBuildsStats(albedo, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      ).toEqual([
+        {
+          [PossibleCharacterStats.hp]: 10791,
+          [PossibleCharacterStats.atk]: 611,
+          [PossibleCharacterStats.def]: 531,
+          [PossibleCharacterStats.elementalMastery]: 56,
+          [PossibleCharacterStats.critRate]: 11.6,
+          [PossibleCharacterStats.critDmg]: 69.5,
+          [PossibleCharacterStats.energyRecharge]: 120,
+          [PossibleCharacterStats.pyroDmg]: 7,
+        },
+      ]);
+    });
   });
 
   it('should compute build stats of multiple artifacts for each type', () => {
