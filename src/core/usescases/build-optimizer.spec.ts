@@ -9,19 +9,23 @@ import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { CircletArtifact, CircletMainStatType } from '../domain/entities/circlet-artifact';
 import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-artifact';
 import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
+import { InMemoryCharactersRepository } from '../adapters/secondaries/in-mermory-characters-repository';
+import { Character } from '../domain/models/character';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
+  let charactersRepository: InMemoryCharactersRepository;
   let flowerArtifacts: Artifact[];
   let plumeArtifacts: Artifact[];
   let sandsArtifacts: Artifact[];
   let gobletArtifacts: Artifact[];
   let circletArtifacts: Artifact[];
-  let razor: { name: string; level: string };
+  let razor: Character;
 
   beforeEach(() => {
     buildOptimizer = new BuildOptimizer();
-    razor = { name: 'Razor', level: '80a' };
+    charactersRepository = new InMemoryCharactersRepository();
+    razor = charactersRepository.getCharacter('razor', '80a');
   });
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
@@ -487,7 +491,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 1 Amber', () => {
-      const amber = { name: 'Amber', level: '1' };
+      const amber = charactersRepository.getCharacter('amber', '1');
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -575,7 +579,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 20 ascended Amber', () => {
-      const amber = { name: 'Amber', level: '20a' };
+      const amber = charactersRepository.getCharacter('amber', '20a');
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -661,7 +665,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 50 Amber', () => {
-      const amber = { name: 'Amber', level: '50' };
+      const amber = charactersRepository.getCharacter('amber', '50');
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',

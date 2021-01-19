@@ -1,4 +1,5 @@
 import { Artifact } from '../domain/entities/artifact';
+import { Character } from '../domain/models/character';
 import {
   AllBuildStatTypes,
   CharacterStatsValues,
@@ -29,7 +30,7 @@ export class BuildOptimizer {
   ];
 
   public computeBuildsStats(
-    character: { name: string; level: string },
+    character: Character,
     flowerArtifacts: Artifact[],
     plumeArtifacts: Artifact[],
     sandsArtifacts: Artifact[],
@@ -86,82 +87,43 @@ export class BuildOptimizer {
     }, {} as SetStatsValues);
   }
 
-  private reduceToBuildStats(
-    character: { name: string; level: string },
-    artifactsStats: ArtifactStatsValues,
-    setsStats: SetStatsValues,
-  ): CharacterStatsValues {
+  private reduceToBuildStats(character: Character, artifactsStats: ArtifactStatsValues, setsStats: SetStatsValues): CharacterStatsValues {
+    character;
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
-    let characterBonus: Partial<{ [key in AllBuildStatTypes]: number }> = {};
-    let baseStats: CharacterStatsValues = {
-      [PossibleCharacterStats.critRate]: 5,
-      [PossibleCharacterStats.critDmg]: 50,
-      [PossibleCharacterStats.energyRecharge]: 100,
-    };
-
-    if (character.name === 'Amber') {
-      baseStats = { ...baseStats, [PossibleCharacterStats.hp]: 793, [PossibleCharacterStats.atk]: 19, [PossibleCharacterStats.def]: 50 };
-      if (character.level === '20a') {
-        baseStats = {
-          ...baseStats,
-          [PossibleCharacterStats.hp]: 2630,
-          [PossibleCharacterStats.atk]: 62,
-          [PossibleCharacterStats.def]: 167,
-        };
-      }
-
-      if (character.level === '50') {
-        baseStats = {
-          ...baseStats,
-          [PossibleCharacterStats.hp]: 5016,
-          [PossibleCharacterStats.atk]: 118,
-          [PossibleCharacterStats.def]: 318,
-        };
-        characterBonus = { [possibleBuildStats.percentAtk]: 6 };
-      }
-    }
-
-    if (character.name === 'Razor') {
-      baseStats = { ...baseStats, [PossibleCharacterStats.hp]: 1003, [PossibleCharacterStats.atk]: 20, [PossibleCharacterStats.def]: 63 };
-      if (character.level === '80a') {
-        baseStats = {
-          ...baseStats,
-          [PossibleCharacterStats.hp]: 11134,
-          [PossibleCharacterStats.atk]: 217,
-          [PossibleCharacterStats.def]: 699,
-        };
-        characterBonus = { [possibleBuildStats.physicalDmg]: 30 };
-      }
-    }
-
+    const baseStats: CharacterStatsValues = { ...character.stats };
+    const characterBonusStat: CharacterStatsValues = character.bonusStat;
+    characterBonusStat;
     const percentStats = Object.keys({
-      ...characterBonus,
+      ...characterBonusStat,
       ...artifactsStats,
       ...setsStats,
     }).filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => statName.includes('percent'));
     const statsUpdatedWithPercent = percentStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
+      const bonusStatValue = characterBonusStat ? getStatValue(characterBonusStat[statName as CharacterStatTypes]) : 0;
+      bonusStatValue;
       buildStats[buildStatName] = this.updatePercentBuildStat(
         buildStats[buildStatName],
         getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
           getStatValue(setsStats[statName as PossibleSetStatTypes]) +
-          getStatValue(characterBonus[statName as PossibleSetStatTypes]),
+          bonusStatValue,
       );
 
       return buildStats;
     }, baseStats);
 
-    const otherStats = Object.keys({ ...characterBonus, ...artifactsStats, ...setsStats }).filter(
+    const otherStats = Object.keys({ ...characterBonusStat, ...artifactsStats, ...setsStats }).filter(
       (statName: ArtifactStatsTypes | PossibleSetStatTypes) => !percentStats.includes(statName),
     );
     return otherStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
-
+      const bonusStatValue = characterBonusStat ? getStatValue(characterBonusStat[statName as CharacterStatTypes]) : 0;
+      bonusStatValue;
       buildStats[buildStatName] = this.updateFlatBuildStat(
         buildStats[buildStatName],
         getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
           getStatValue(setsStats[statName as PossibleSetStatTypes]) +
-          getStatValue(characterBonus[statName as PossibleSetStatTypes]),
+          bonusStatValue,
       );
 
       return buildStats;
