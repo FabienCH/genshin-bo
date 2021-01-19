@@ -67,7 +67,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
     ];
   }
   getCharacter(name: ExistingCharacters, level: PossibleLevels): Character {
-    const characterStats = this.charactersStats.find((tu) => tu.name === name).levels[level];
+    const characterStats = this.charactersStats.find((character) => character.name === name).levels[level];
     return new CharacterBuilder()
       .withName(name)
       .withLevel(level)
