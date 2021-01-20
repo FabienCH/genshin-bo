@@ -17,6 +17,7 @@ import {
 import { PossibleSetStats, PossibleSetStatTypes, SetStatsValues } from '../domain/models/set-statistics';
 import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
+import { Weapon } from '../domain/models/weapon';
 
 export class BuildOptimizer {
   private readonly setsWithEffects: SetWithEffect[] = [
@@ -37,7 +38,7 @@ export class BuildOptimizer {
 
   public computeBuildsStats(
     character: Character,
-    weapon: { name: string; level: string },
+    weapon: Weapon,
     flowerArtifacts: Artifact[],
     plumeArtifacts: Artifact[],
     sandsArtifacts: Artifact[],
@@ -96,20 +97,14 @@ export class BuildOptimizer {
 
   private reduceToBuildStats(
     character: Character,
-    weapon: { name: string; level: string },
+    weapon: Weapon,
     artifactsStats: ArtifactStatsValues,
     setsStats: SetStatsValues,
   ): CharacterStatsValues {
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
-    const baseStats: CharacterStatsValues = { ...character.stats };
-    let characterBonusStat: MainStatsValues = character.bonusStat;
+    const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
+    const characterBonusStat: MainStatsValues = { ...character.bonusStat, ...weapon.bonusStat };
 
-    if (weapon) {
-      const weaponAtk = weapon.level === '1' ? 44 : 252;
-      const weaponPercentAtk = weapon.level === '1' ? 6 : 15.5;
-      baseStats.atk = baseStats.atk + weaponAtk;
-      characterBonusStat = { ...characterBonusStat, [PossibleMainStats.percentAtk]: weaponPercentAtk };
-    }
     const percentStats = Object.keys({
       ...characterBonusStat,
       ...artifactsStats,

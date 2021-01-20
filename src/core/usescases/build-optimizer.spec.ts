@@ -11,10 +11,12 @@ import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-ar
 import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-mermory-characters-repository';
 import { Character } from '../domain/models/character';
+import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-mermory-weapons-repository';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
   let charactersRepository: InMemoryCharactersRepository;
+  let weaponsRepository: InMemoryWeaponsRepository;
   let flowerArtifacts: Artifact[];
   let plumeArtifacts: Artifact[];
   let sandsArtifacts: Artifact[];
@@ -25,6 +27,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
   beforeEach(() => {
     buildOptimizer = new BuildOptimizer();
     charactersRepository = new InMemoryCharactersRepository();
+    weaponsRepository = new InMemoryWeaponsRepository();
     razor = charactersRepository.getCharacter('razor', '80a');
   });
 
@@ -1012,7 +1015,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     fit('with level 1 Prototype Archaic', () => {
-      const prototypeArchaic = { name: 'prototypeArchaic', level: '1' };
+      const prototypeArchaic = weaponsRepository.getWeapon('prototypeArchaic', '1');
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -1108,7 +1111,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     fit('with level 40 ascended Prototype Archaic', () => {
-      const prototypeArchaic = { name: 'prototypeArchaic', level: '40a' };
+      const prototypeArchaic = weaponsRepository.getWeapon('prototypeArchaic', '40a');
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {

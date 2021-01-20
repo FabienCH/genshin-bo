@@ -1,4 +1,5 @@
 import { CharacterStatsValues } from './character-statistics';
+import { PossibleLevels } from './possible-levels';
 
 export type ExistingCharacters =
   | 'albedo'
@@ -29,8 +30,6 @@ export type ExistingCharacters =
   | 'xingqiu'
   | 'xinyan'
   | 'zhongli';
-
-export type PossibleLevels = '1' | '20' | '20a' | '40' | '40a' | '50' | '50a' | '60' | '60a' | '70' | '70a' | '80' | '80a' | '90';
 
 export type Character = {
   name: ExistingCharacters;

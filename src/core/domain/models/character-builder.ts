@@ -1,5 +1,6 @@
-import { Character, ExistingCharacters, PossibleLevels } from './character';
+import { Character, ExistingCharacters } from './character';
 import { CharacterStatsPerLevel, PossibleCharacterStats } from './character-statistics';
+import { PossibleLevels } from './possible-levels';
 
 export class CharacterBuilder {
   private name: ExistingCharacters;
