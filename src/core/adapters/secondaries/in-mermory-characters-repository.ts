@@ -1,6 +1,6 @@
 import { CharactersRepository } from '../../domain/characters-repository';
 import { CharacterBuilder } from '../../domain/models/character-builder';
-import { ExistingCharacters, PossibleLevels, Character } from '../../domain/models/character';
+import { ExistingCharacters, Character } from '../../domain/models/character';
 import { amber } from './characters-stats/amber';
 import { CharacterStats } from './characters-stats/character-stats-type';
 import { razor } from './characters-stats/razor';
@@ -30,6 +30,7 @@ import { xiangling } from './characters-stats/xiangling';
 import { xingqiu } from './characters-stats/xingqiu';
 import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
+import { PossibleLevels } from '../../domain/models/possible-levels';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly charactersStats: CharacterStats[];
