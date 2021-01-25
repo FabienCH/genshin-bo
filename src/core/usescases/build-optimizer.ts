@@ -47,6 +47,12 @@ export class BuildOptimizer {
   ): CharacterStatsValues[] {
     const allBuilds: CharacterStatsValues[] = [];
     const allArtifacts = [flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts];
+    const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
+    const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
+    const characterBonusStat: MainStatsValues =
+      characterBonusKey === Object.keys(weapon.bonusStat)[0]
+        ? { [characterBonusKey]: this.addStats([character.bonusStat[characterBonusKey], weapon.bonusStat[characterBonusKey]]) }
+        : { ...character.bonusStat, ...weapon.bonusStat };
     const max = allArtifacts.length - 1;
 
     const addArtifactsToCompute = (artifacts: Artifact[], i: number) => {
@@ -56,7 +62,7 @@ export class BuildOptimizer {
         if (i === max) {
           const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
           const setsStats = this.computeSetsStats(artifactsToCompute);
-          allBuilds.push(this.reduceToBuildStats(character, weapon, artifactsStats, setsStats));
+          allBuilds.push(this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsStats, setsStats));
           return;
         }
         addArtifactsToCompute(artifactsToCompute, i + 1);
@@ -70,9 +76,9 @@ export class BuildOptimizer {
   private computeArtifactsStats(artifacts: Artifact[]): ArtifactStatsValues {
     return artifacts.reduce((buildStats, artifact: Artifact) => {
       const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
-      buildStats[mainStatKey] = this.addStatToBuildStat(buildStats[mainStatKey], artifact.mainStat[mainStatKey]);
+      buildStats[mainStatKey] = this.addStats([buildStats[mainStatKey], artifact.mainStat[mainStatKey]]);
       Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
-        buildStats[subStatKey] = this.addStatToBuildStat(buildStats[subStatKey], artifact.subStats[subStatKey]);
+        buildStats[subStatKey] = this.addStats([buildStats[subStatKey], artifact.subStats[subStatKey]]);
       });
 
       return buildStats;
@@ -96,19 +102,13 @@ export class BuildOptimizer {
   }
 
   private reduceToBuildStats(
-    character: Character,
-    weapon: Weapon,
+    baseStats: CharacterStatsValues,
+    characterBonusStat: MainStatsValues,
     artifactsStats: ArtifactStatsValues,
     setsStats: SetStatsValues,
   ): CharacterStatsValues {
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
-    const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
-    const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
-    const characterBonusStat: MainStatsValues =
-      characterBonusKey === Object.keys(weapon.bonusStat)[0]
-        ? { [characterBonusKey]: this.addStatToBuildStat(character.bonusStat[characterBonusKey], weapon.bonusStat[characterBonusKey]) }
-        : { ...character.bonusStat, ...weapon.bonusStat };
-    characterBonusStat;
+
     const percentStats = Object.keys({
       ...characterBonusStat,
       ...artifactsStats,
@@ -120,9 +120,7 @@ export class BuildOptimizer {
 
       buildStats[buildStatName] = this.applyMultiplierToBuildStat(
         buildStats[buildStatName],
-        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
-          getStatValue(setsStats[statName as PossibleSetStatTypes]) +
-          bonusStatValue,
+        this.addStats([artifactsStats[statName as ArtifactStatsTypes], setsStats[statName as PossibleSetStatTypes], bonusStatValue]),
       );
 
       return buildStats;
@@ -135,19 +133,24 @@ export class BuildOptimizer {
       const buildStatName = this.getBuildStatName(statName);
       const bonusStatValue = getStatValue(characterBonusStat[statName as PossibleMainStatTypes]);
 
-      buildStats[buildStatName] = this.addStatToBuildStat(
+      buildStats[buildStatName] = this.addStats([
         buildStats[buildStatName],
-        getStatValue(artifactsStats[statName as ArtifactStatsTypes]) +
-          getStatValue(setsStats[statName as PossibleSetStatTypes]) +
-          bonusStatValue,
-      );
+        artifactsStats[statName as ArtifactStatsTypes],
+        setsStats[statName as PossibleSetStatTypes],
+        bonusStatValue,
+      ]);
 
       return buildStats;
     }, statsUpdatedWithPercent);
   }
 
-  private addStatToBuildStat(buildStat: number, statToAdd: number): number {
-    return buildStat ? Math.round((buildStat + statToAdd) * 10) / 10 : statToAdd;
+  private addStats(statsValues: number[]): number {
+    const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
+
+    return statsValues.reduce((acc, statValue) => {
+      acc = Math.round((getStatValue(acc) + getStatValue(statValue)) * 10) / 10;
+      return acc;
+    }, 0);
   }
 
   private applyMultiplierToBuildStat(buildStat: number, statValue: number): number {
