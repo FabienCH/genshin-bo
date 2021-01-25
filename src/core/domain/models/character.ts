@@ -35,5 +35,5 @@ export type Character = {
   name: ExistingCharacters;
   level: PossibleLevels;
   stats: CharacterStatsValues;
-  bonusStat: { [bonusStat: string]: number };
+  bonusStat?: { [bonusStat: string]: number };
 };

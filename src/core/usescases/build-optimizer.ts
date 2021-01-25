@@ -103,8 +103,12 @@ export class BuildOptimizer {
   ): CharacterStatsValues {
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
     const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
-    const characterBonusStat: MainStatsValues = { ...character.bonusStat, ...weapon.bonusStat };
-
+    const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
+    const characterBonusStat: MainStatsValues =
+      characterBonusKey === Object.keys(weapon.bonusStat)[0]
+        ? { [characterBonusKey]: this.addStatToBuildStat(character.bonusStat[characterBonusKey], weapon.bonusStat[characterBonusKey]) }
+        : { ...character.bonusStat, ...weapon.bonusStat };
+    characterBonusStat;
     const percentStats = Object.keys({
       ...characterBonusStat,
       ...artifactsStats,
@@ -112,7 +116,7 @@ export class BuildOptimizer {
     }).filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => statName.includes('percent'));
     const statsUpdatedWithPercent = percentStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
-      const bonusStatValue = characterBonusStat ? getStatValue(characterBonusStat[statName as PossibleMainStatTypes]) : 0;
+      const bonusStatValue = getStatValue(characterBonusStat[statName as PossibleMainStatTypes]);
 
       buildStats[buildStatName] = this.applyMultiplierToBuildStat(
         buildStats[buildStatName],
@@ -129,7 +133,7 @@ export class BuildOptimizer {
     );
     return otherStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
-      const bonusStatValue = characterBonusStat ? getStatValue(characterBonusStat[statName as PossibleMainStatTypes]) : 0;
+      const bonusStatValue = getStatValue(characterBonusStat[statName as PossibleMainStatTypes]);
 
       buildStats[buildStatName] = this.addStatToBuildStat(
         buildStats[buildStatName],

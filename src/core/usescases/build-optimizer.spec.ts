@@ -12,6 +12,7 @@ import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artif
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-mermory-characters-repository';
 import { Character } from '../domain/models/character';
 import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-mermory-weapons-repository';
+import { Weapon } from '../domain/models/weapon';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
@@ -23,12 +24,14 @@ describe('BuildOptimizer.computeBuildStats', () => {
   let gobletArtifacts: Artifact[];
   let circletArtifacts: Artifact[];
   let razor: Character;
+  let razorWeapon: Weapon;
 
   beforeEach(() => {
     buildOptimizer = new BuildOptimizer();
     charactersRepository = new InMemoryCharactersRepository();
     weaponsRepository = new InMemoryWeaponsRepository();
     razor = charactersRepository.getCharacter('razor', '80a');
+    razorWeapon = weaponsRepository.getWeapon('snowTombedStarsilver', '90');
   });
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
@@ -83,13 +86,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          razor,
+          razorWeapon,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 11951,
-          [PossibleCharacterStats.atk]: 298,
+          [PossibleCharacterStats.atk]: 931,
           [PossibleCharacterStats.def]: 906,
-          [PossibleCharacterStats.physicalDmg]: 38.7,
+          [PossibleCharacterStats.physicalDmg]: 73.2,
           [PossibleCharacterStats.critRate]: 16,
           [PossibleCharacterStats.elementalMastery]: 6,
           [PossibleCharacterStats.critDmg]: 53.7,
@@ -140,25 +151,33 @@ describe('BuildOptimizer.computeBuildStats', () => {
       ]);
 
       expect(
-        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          razor,
+          razorWeapon,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 12430,
-          [PossibleCharacterStats.atk]: 303,
+          [PossibleCharacterStats.atk]: 947,
           [PossibleCharacterStats.critRate]: 16.6,
           [PossibleCharacterStats.energyRecharge]: 103,
           [PossibleCharacterStats.def]: 797,
           [PossibleCharacterStats.elementalMastery]: 35,
           [PossibleCharacterStats.geoDmg]: 7,
           [PossibleCharacterStats.critDmg]: 53.2,
-          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.physicalDmg]: 64.5,
           [PossibleCharacterStats.powerfulShield]: 35,
         },
       ]);
     });
   });
 
-  fdescribe('should compute build stats of 5 artifacts', () => {
+  describe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -219,11 +238,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          razor,
+          razorWeapon,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 13190,
-          [PossibleCharacterStats.atk]: 360,
+          [PossibleCharacterStats.atk]: 1048,
           [PossibleCharacterStats.critRate]: 16.6,
           [PossibleCharacterStats.energyRecharge]: 103,
           [PossibleCharacterStats.def]: 797,
@@ -231,7 +258,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           [PossibleCharacterStats.geoDmg]: 22.8,
           [PossibleCharacterStats.critDmg]: 59.3,
           [PossibleCharacterStats.powerfulShield]: 35,
-          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.physicalDmg]: 64.5,
         },
       ]);
     });
@@ -301,11 +328,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          razor,
+          razorWeapon,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 16825,
-          [PossibleCharacterStats.atk]: 391,
+          [PossibleCharacterStats.atk]: 1024,
           [PossibleCharacterStats.critRate]: 16.6,
           [PossibleCharacterStats.energyRecharge]: 103,
           [PossibleCharacterStats.def]: 1097,
@@ -313,7 +348,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           [PossibleCharacterStats.healingBonus]: 31.3,
           [PossibleCharacterStats.critDmg]: 59.3,
           [PossibleCharacterStats.powerfulShield]: 35,
-          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.physicalDmg]: 64.5,
         },
       ]);
     });
@@ -388,11 +423,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          razor,
+          razorWeapon,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 16825,
-          [PossibleCharacterStats.atk]: 419,
+          [PossibleCharacterStats.atk]: 1126,
           [PossibleCharacterStats.critRate]: 16.6,
           [PossibleCharacterStats.energyRecharge]: 103,
           [PossibleCharacterStats.def]: 1125,
@@ -400,7 +443,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           [PossibleCharacterStats.healingBonus]: 31.3,
           [PossibleCharacterStats.critDmg]: 59.3,
           [PossibleCharacterStats.electroDmg]: 15,
-          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.physicalDmg]: 64.5,
         },
       ]);
     });
@@ -475,11 +518,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          razor,
+          razorWeapon,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 16825,
-          [PossibleCharacterStats.atk]: 380,
+          [PossibleCharacterStats.atk]: 985,
           [PossibleCharacterStats.critRate]: 16.6,
           [PossibleCharacterStats.energyRecharge]: 103,
           [PossibleCharacterStats.def]: 1097,
@@ -487,7 +538,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           [PossibleCharacterStats.healingBonus]: 31.3,
           [PossibleCharacterStats.critDmg]: 63.2,
           [PossibleCharacterStats.powerfulShield]: 35,
-          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.physicalDmg]: 64.5,
           [PossibleCharacterStats.pyroRes]: 40,
         },
       ]);
@@ -495,6 +546,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 1 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '1');
+      const rust = weaponsRepository.getWeapon('rust', '1');
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -564,11 +616,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(amber, rust, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 2244,
-          [PossibleCharacterStats.atk]: 168,
+          [PossibleCharacterStats.atk]: 219,
           [PossibleCharacterStats.critRate]: 16.6,
           [PossibleCharacterStats.energyRecharge]: 103,
           [PossibleCharacterStats.def]: 85,
@@ -583,6 +635,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 20 ascended Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '20a');
+      const rust = weaponsRepository.getWeapon('rust', '40');
+
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -652,11 +706,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(amber, rust, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 6112,
-          [PossibleCharacterStats.atk]: 354,
+          [PossibleCharacterStats.atk]: 794,
           [PossibleCharacterStats.def]: 217,
           [PossibleCharacterStats.elementalMastery]: 56,
           [PossibleCharacterStats.critRate]: 11.6,
@@ -669,6 +723,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 50 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '50');
+      const rust = weaponsRepository.getWeapon('rust', '60a');
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -738,11 +793,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(amber, rust, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 8610,
-          [PossibleCharacterStats.atk]: 464,
+          [PossibleCharacterStats.atk]: 1279,
           [PossibleCharacterStats.def]: 379,
           [PossibleCharacterStats.elementalMastery]: 56,
           [PossibleCharacterStats.critRate]: 11.6,
@@ -823,24 +878,33 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          razor,
+          razorWeapon,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 15015,
-          [PossibleCharacterStats.atk]: 640,
+          [PossibleCharacterStats.atk]: 1680,
           [PossibleCharacterStats.def]: 789,
           [PossibleCharacterStats.elementalMastery]: 56,
           [PossibleCharacterStats.critRate]: 11.6,
           [PossibleCharacterStats.critDmg]: 69.5,
           [PossibleCharacterStats.energyRecharge]: 120,
           [PossibleCharacterStats.pyroDmg]: 7,
-          [PossibleCharacterStats.physicalDmg]: 30,
+          [PossibleCharacterStats.physicalDmg]: 64.5,
         },
       ]);
     });
 
     it('with level 60 ascended Albedo', () => {
       const albedo = charactersRepository.getCharacter('albedo', '60a');
+      const darkIronSword = weaponsRepository.getWeapon('darkIronSword', '70');
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -911,13 +975,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(albedo, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          albedo,
+          darkIronSword,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 12998,
-          [PossibleCharacterStats.atk]: 562,
+          [PossibleCharacterStats.atk]: 1132,
           [PossibleCharacterStats.def]: 693,
-          [PossibleCharacterStats.elementalMastery]: 56,
+          [PossibleCharacterStats.elementalMastery]: 172,
           [PossibleCharacterStats.critRate]: 11.6,
           [PossibleCharacterStats.critDmg]: 69.5,
           [PossibleCharacterStats.energyRecharge]: 120,
@@ -928,7 +1000,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 70 Fischl', () => {
-      const albedo = charactersRepository.getCharacter('fischl', '70');
+      const fischl = charactersRepository.getCharacter('fischl', '70');
+      const favoniusWarbow = weaponsRepository.getWeapon('favoniusWarbow', '70a');
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -999,22 +1072,30 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(albedo, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(
+          fischl,
+          favoniusWarbow,
+          flowerArtifacts,
+          plumeArtifacts,
+          sandsArtifacts,
+          gobletArtifacts,
+          circletArtifacts,
+        ),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 10791,
-          [PossibleCharacterStats.atk]: 611,
+          [PossibleCharacterStats.atk]: 1343,
           [PossibleCharacterStats.def]: 531,
           [PossibleCharacterStats.elementalMastery]: 56,
           [PossibleCharacterStats.critRate]: 11.6,
           [PossibleCharacterStats.critDmg]: 69.5,
-          [PossibleCharacterStats.energyRecharge]: 120,
+          [PossibleCharacterStats.energyRecharge]: 170.5,
           [PossibleCharacterStats.pyroDmg]: 7,
         },
       ]);
     });
 
-    fit('with level 1 Prototype Archaic', () => {
+    it('with level 1 Prototype Archaic', () => {
       const prototypeArchaic = weaponsRepository.getWeapon('prototypeArchaic', '1');
 
       flowerArtifacts = getArtifactsWithValues('flower', [
@@ -1110,7 +1191,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       ]);
     });
 
-    fit('with level 40 ascended Prototype Archaic', () => {
+    it('with level 40 ascended Prototype Archaic', () => {
       const prototypeArchaic = weaponsRepository.getWeapon('prototypeArchaic', '40a');
 
       flowerArtifacts = getArtifactsWithValues('flower', [
@@ -1316,11 +1397,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
     ]);
 
     expect(
-      buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+      buildOptimizer.computeBuildsStats(
+        razor,
+        razorWeapon,
+        flowerArtifacts,
+        plumeArtifacts,
+        sandsArtifacts,
+        gobletArtifacts,
+        circletArtifacts,
+      ),
     ).toEqual([
       {
         [PossibleCharacterStats.hp]: 16825,
-        [PossibleCharacterStats.atk]: 380,
+        [PossibleCharacterStats.atk]: 985,
         [PossibleCharacterStats.critRate]: 16.6,
         [PossibleCharacterStats.energyRecharge]: 104,
         [PossibleCharacterStats.def]: 1097,
@@ -1328,12 +1417,12 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.healingBonus]: 31.3,
         [PossibleCharacterStats.critDmg]: 64.3,
         [PossibleCharacterStats.powerfulShield]: 35,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
         [PossibleCharacterStats.pyroRes]: 40,
       },
       {
         [PossibleCharacterStats.hp]: 16822,
-        [PossibleCharacterStats.atk]: 380,
+        [PossibleCharacterStats.atk]: 985,
         [PossibleCharacterStats.critRate]: 14.1,
         [PossibleCharacterStats.energyRecharge]: 104,
         [PossibleCharacterStats.def]: 776,
@@ -1341,12 +1430,12 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.healingBonus]: 31.3,
         [PossibleCharacterStats.critDmg]: 67.3,
         [PossibleCharacterStats.powerfulShield]: 35,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
         [PossibleCharacterStats.cryoDmg]: 22.8,
       },
       {
         [PossibleCharacterStats.hp]: 16837,
-        [PossibleCharacterStats.atk]: 457,
+        [PossibleCharacterStats.atk]: 1090,
         [PossibleCharacterStats.critRate]: 13.9,
         [PossibleCharacterStats.energyRecharge]: 100,
         [PossibleCharacterStats.def]: 1152,
@@ -1354,11 +1443,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.healingBonus]: 31.3,
         [PossibleCharacterStats.critDmg]: 59.3,
         [PossibleCharacterStats.pyroRes]: 40,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
       },
       {
         [PossibleCharacterStats.hp]: 16834,
-        [PossibleCharacterStats.atk]: 457,
+        [PossibleCharacterStats.atk]: 1090,
         [PossibleCharacterStats.critRate]: 11.4,
         [PossibleCharacterStats.energyRecharge]: 100,
         [PossibleCharacterStats.def]: 831,
@@ -1366,11 +1455,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.healingBonus]: 31.3,
         [PossibleCharacterStats.critDmg]: 62.3,
         [PossibleCharacterStats.cryoDmg]: 37.8,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
       },
       {
         [PossibleCharacterStats.hp]: 18509,
-        [PossibleCharacterStats.atk]: 384,
+        [PossibleCharacterStats.atk]: 1011,
         [PossibleCharacterStats.critRate]: 13.4,
         [PossibleCharacterStats.energyRecharge]: 107,
         [PossibleCharacterStats.def]: 1097,
@@ -1379,11 +1468,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.critDmg]: 65,
         [PossibleCharacterStats.powerfulShield]: 35,
         [PossibleCharacterStats.electroDmg]: 15,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
       },
       {
         [PossibleCharacterStats.hp]: 18506,
-        [PossibleCharacterStats.atk]: 384,
+        [PossibleCharacterStats.atk]: 1011,
         [PossibleCharacterStats.critRate]: 10.9,
         [PossibleCharacterStats.energyRecharge]: 107,
         [PossibleCharacterStats.def]: 776,
@@ -1393,11 +1482,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.powerfulShield]: 35,
         [PossibleCharacterStats.electroDmg]: 15,
         [PossibleCharacterStats.cryoDmg]: 22.8,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
       },
       {
         [PossibleCharacterStats.hp]: 18521,
-        [PossibleCharacterStats.atk]: 461,
+        [PossibleCharacterStats.atk]: 1116,
         [PossibleCharacterStats.critRate]: 10.7,
         [PossibleCharacterStats.energyRecharge]: 103,
         [PossibleCharacterStats.def]: 1152,
@@ -1405,11 +1494,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.healingBonus]: 31.3,
         [PossibleCharacterStats.critDmg]: 60,
         [PossibleCharacterStats.electroDmg]: 15,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
       },
       {
         [PossibleCharacterStats.hp]: 18518,
-        [PossibleCharacterStats.atk]: 461,
+        [PossibleCharacterStats.atk]: 1116,
         [PossibleCharacterStats.critRate]: 8.2,
         [PossibleCharacterStats.energyRecharge]: 103,
         [PossibleCharacterStats.def]: 831,
@@ -1418,7 +1507,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.critDmg]: 63,
         [PossibleCharacterStats.electroDmg]: 15,
         [PossibleCharacterStats.cryoDmg]: 37.8,
-        [PossibleCharacterStats.physicalDmg]: 30,
+        [PossibleCharacterStats.physicalDmg]: 64.5,
       },
     ]);
   });

@@ -1,5 +1,6 @@
 import { CharacterStatsPerLevel } from '../../../domain/models/character-statistics';
-import { ExistingCharacters, PossibleLevels } from '../../../domain/models/character';
+import { ExistingCharacters } from '../../../domain/models/character';
+import { PossibleLevels } from '../../../domain/models/possible-levels';
 
 export interface CharacterStats {
   name: ExistingCharacters;

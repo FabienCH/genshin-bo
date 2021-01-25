@@ -1,8 +1,7 @@
-import { WeaponStats } from './weapon-stats-type';
-
-export const prototypeArchaic: WeaponStats = {
-  name: 'prototypeArchaic',
-  type: 'sword',
+import { WeaponStats } from '../weapon-stats-type';
+export const royalGreatsword: WeaponStats = {
+  name: 'royalGreatsword',
+  type: 'claymore',
   levels: {
     '1': { atk: 44, bonusStat: { percentAtk: 6 } },
     '20': { atk: 119, bonusStat: { percentAtk: 10.6 } },

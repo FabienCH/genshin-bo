@@ -5,6 +5,6 @@ export interface WeaponStats {
   name: string;
   type: WeaponType;
   levels: {
-    [key in PossibleLevels]: { atk: number; bonusStat?: { [bonusStat: string]: number } };
+    [key in PossibleLevels]: { atk: number; bonusStat: { [bonusStat: string]: number } };
   };
 }
