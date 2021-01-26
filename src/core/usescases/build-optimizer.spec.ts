@@ -11,27 +11,21 @@ import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-ar
 import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-mermory-characters-repository';
 import { Character } from '../domain/models/character';
-import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-mermory-weapons-repository';
-import { Weapon } from '../domain/models/weapon';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
   let charactersRepository: InMemoryCharactersRepository;
-  let weaponsRepository: InMemoryWeaponsRepository;
   let flowerArtifacts: Artifact[];
   let plumeArtifacts: Artifact[];
   let sandsArtifacts: Artifact[];
   let gobletArtifacts: Artifact[];
   let circletArtifacts: Artifact[];
   let razor: Character;
-  let razorWeapon: Weapon;
 
   beforeEach(() => {
     buildOptimizer = new BuildOptimizer();
     charactersRepository = new InMemoryCharactersRepository();
-    weaponsRepository = new InMemoryWeaponsRepository();
-    razor = charactersRepository.getCharacter('razor', '80a');
-    razorWeapon = weaponsRepository.getWeapon('snowTombedStarsilver', '90');
+    razor = charactersRepository.getCharacter('razor', '80a', { name: 'snowTombedStarsilver', level: '90' });
   });
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
@@ -86,15 +80,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          razorWeapon,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 11951,
@@ -151,15 +137,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       ]);
 
       expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          razorWeapon,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 12430,
@@ -238,15 +216,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          razorWeapon,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 13190,
@@ -328,15 +298,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          razorWeapon,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 16825,
@@ -423,15 +385,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          razorWeapon,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 16825,
@@ -518,15 +472,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          razorWeapon,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 16825,
@@ -545,8 +491,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 1 Amber', () => {
-      const amber = charactersRepository.getCharacter('amber', '1');
-      const rust = weaponsRepository.getWeapon('rust', '1');
+      const amber = charactersRepository.getCharacter('amber', '1', { name: 'rust', level: '1' });
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -616,7 +561,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(amber, rust, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 2244,
@@ -634,8 +579,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 20 ascended Amber', () => {
-      const amber = charactersRepository.getCharacter('amber', '20a');
-      const rust = weaponsRepository.getWeapon('rust', '40');
+      const amber = charactersRepository.getCharacter('amber', '20a', { name: 'rust', level: '40' });
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -706,7 +650,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(amber, rust, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 6112,
@@ -722,8 +666,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 50 Amber', () => {
-      const amber = charactersRepository.getCharacter('amber', '50');
-      const rust = weaponsRepository.getWeapon('rust', '60a');
+      const amber = charactersRepository.getCharacter('amber', '50', { name: 'rust', level: '60a' });
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -793,7 +736,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(amber, rust, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
+        buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 8610,
@@ -878,15 +821,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          razorWeapon,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 15015,
@@ -903,9 +838,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 60 ascended Albedo', () => {
-      const albedo = charactersRepository.getCharacter('albedo', '60a');
-      const darkIronSword = weaponsRepository.getWeapon('darkIronSword', '70');
-
+      const albedo = charactersRepository.getCharacter('albedo', '60a', { name: 'darkIronSword', level: '70' });
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
           id: '0',
@@ -975,15 +908,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          albedo,
-          darkIronSword,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(albedo, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 12998,
@@ -1000,8 +925,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 70 Fischl', () => {
-      const fischl = charactersRepository.getCharacter('fischl', '70');
-      const favoniusWarbow = weaponsRepository.getWeapon('favoniusWarbow', '70a');
+      const fischl = charactersRepository.getCharacter('fischl', '70', { name: 'favoniusWarbow', level: '70a' });
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -1072,15 +996,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
       expect(
-        buildOptimizer.computeBuildsStats(
-          fischl,
-          favoniusWarbow,
-          flowerArtifacts,
-          plumeArtifacts,
-          sandsArtifacts,
-          gobletArtifacts,
-          circletArtifacts,
-        ),
+        buildOptimizer.computeBuildsStats(fischl, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
         {
           [PossibleCharacterStats.hp]: 10791,
@@ -1096,7 +1012,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 1 Prototype Archaic', () => {
-      const prototypeArchaic = weaponsRepository.getWeapon('prototypeArchaic', '1');
+      const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '1' });
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -1168,8 +1084,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       ]);
       expect(
         buildOptimizer.computeBuildsStats(
-          razor,
-          prototypeArchaic,
+          razorWithProto,
           flowerArtifacts,
           plumeArtifacts,
           sandsArtifacts,
@@ -1192,7 +1107,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 40 ascended Prototype Archaic', () => {
-      const prototypeArchaic = weaponsRepository.getWeapon('prototypeArchaic', '40a');
+      const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '40a' });
 
       flowerArtifacts = getArtifactsWithValues('flower', [
         {
@@ -1264,8 +1179,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       ]);
       expect(
         buildOptimizer.computeBuildsStats(
-          razor,
-          prototypeArchaic,
+          razorWithProto,
           flowerArtifacts,
           plumeArtifacts,
           sandsArtifacts,
@@ -1397,15 +1311,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     ]);
 
     expect(
-      buildOptimizer.computeBuildsStats(
-        razor,
-        razorWeapon,
-        flowerArtifacts,
-        plumeArtifacts,
-        sandsArtifacts,
-        gobletArtifacts,
-        circletArtifacts,
-      ),
+      buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
     ).toEqual([
       {
         [PossibleCharacterStats.hp]: 16825,

@@ -31,11 +31,14 @@ import { xingqiu } from './characters-stats/xingqiu';
 import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
 import { PossibleLevels } from '../../domain/models/possible-levels';
+import { InMemoryWeaponsRepository } from './in-mermory-weapons-repository';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
+  private readonly weaponsRepository: InMemoryWeaponsRepository;
   private readonly charactersStats: CharacterStats[];
 
   constructor() {
+    this.weaponsRepository = new InMemoryWeaponsRepository();
     this.charactersStats = [
       albedo,
       amber,
@@ -67,13 +70,15 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       zhongli,
     ];
   }
-  getCharacter(name: ExistingCharacters, level: PossibleLevels): Character {
+  getCharacter(name: ExistingCharacters, level: PossibleLevels, weaponProps: { name: string; level: PossibleLevels }): Character {
     const characterStats = this.charactersStats.find((character) => character.name === name).levels[level];
+    const weapon = this.weaponsRepository.getWeapon(weaponProps.name, weaponProps.level);
     return new CharacterBuilder()
       .withName(name)
       .withLevel(level)
       .withStats(characterStats.stats)
       .withBonusStat(characterStats.bonusStat)
+      .withWeapon(weapon)
       .build();
   }
 }

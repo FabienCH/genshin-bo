@@ -17,7 +17,6 @@ import {
 import { PossibleSetStats, PossibleSetStatTypes, SetStatsValues } from '../domain/models/set-statistics';
 import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
-import { Weapon } from '../domain/models/weapon';
 
 export class BuildOptimizer {
   private readonly setsWithEffects: SetWithEffect[] = [
@@ -38,7 +37,6 @@ export class BuildOptimizer {
 
   public computeBuildsStats(
     character: Character,
-    weapon: Weapon,
     flowerArtifacts: Artifact[],
     plumeArtifacts: Artifact[],
     sandsArtifacts: Artifact[],
@@ -47,6 +45,7 @@ export class BuildOptimizer {
   ): CharacterStatsValues[] {
     const allBuilds: CharacterStatsValues[] = [];
     const allArtifacts = [flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts];
+    const weapon = character.weapon;
     const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
     const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
     const characterBonusStat: MainStatsValues =

@@ -1,5 +1,6 @@
 import { CharacterStatsValues } from './character-statistics';
 import { PossibleLevels } from './possible-levels';
+import { Weapon } from './weapon';
 
 export type ExistingCharacters =
   | 'albedo'
@@ -34,6 +35,7 @@ export type ExistingCharacters =
 export type Character = {
   name: ExistingCharacters;
   level: PossibleLevels;
+  weapon: Weapon;
   stats: CharacterStatsValues;
   bonusStat?: { [bonusStat: string]: number };
 };
