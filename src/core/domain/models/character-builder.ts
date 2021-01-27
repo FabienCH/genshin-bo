@@ -1,11 +1,14 @@
-import { Character, ExistingCharacters, PossibleLevels } from './character';
+import { Character, ExistingCharacters } from './character';
 import { CharacterStatsPerLevel, PossibleCharacterStats } from './character-statistics';
+import { PossibleLevels } from './possible-levels';
+import { Weapon } from './weapon';
 
 export class CharacterBuilder {
   private name: ExistingCharacters;
   private level: PossibleLevels = '1';
   private stats: CharacterStatsPerLevel;
   private bonusStat: { [bonusStat: string]: number };
+  private weapon: Weapon;
 
   private readonly commonBaseStats = {
     [PossibleCharacterStats.critRate]: 5,
@@ -33,10 +36,16 @@ export class CharacterBuilder {
     return this;
   }
 
+  withWeapon(value: Weapon): CharacterBuilder {
+    this.weapon = value;
+    return this;
+  }
+
   build(): Character {
     return {
       name: this.name,
       level: this.level,
+      weapon: this.weapon,
       stats: { ...this.commonBaseStats, ...this.stats },
       bonusStat: this.bonusStat,
     };
