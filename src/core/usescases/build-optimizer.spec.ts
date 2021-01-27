@@ -1419,6 +1419,164 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 });
 
+describe('BuildOptimizer.filterArtifacts', () => {
+  let buildOptimizer: BuildOptimizer;
+  const allSandsArtifacts: SandsArtifact[] = getArtifactsWithValues('sands', [
+    {
+      id: '4',
+      set: SetNames.thunderingFury,
+      level: 12,
+      mainStatType: PossibleMainStats.percentHp,
+      subStats: {
+        [PossibleSubStats.percentDef]: 6,
+        [PossibleSubStats.elementalMastery]: 7,
+        [PossibleSubStats.critRate]: 3.2,
+        [PossibleSubStats.critDmg]: 2.9,
+      },
+    },
+    {
+      id: '5',
+      set: SetNames.bloodstainedChivalry,
+      level: 16,
+      mainStatType: PossibleMainStats.percentAtk,
+      subStats: {
+        [PossibleSubStats.energyRecharge]: 6,
+        [PossibleSubStats.flatAtk]: 7,
+        [PossibleSubStats.critRate]: 3.2,
+        [PossibleSubStats.flatDef]: 2.9,
+      },
+    },
+    {
+      id: '6',
+      set: SetNames.retracingBolide,
+      level: 8,
+      mainStatType: PossibleMainStats.elementalMastery,
+      subStats: {
+        [PossibleSubStats.flatHp]: 6,
+        [PossibleSubStats.critDmg]: 7,
+        [PossibleSubStats.percentDef]: 3.2,
+        [PossibleSubStats.percentHp]: 2.9,
+      },
+    },
+  ]);
+
+  const allGobletArtifacts: GobletArtifact[] = getArtifactsWithValues('goblet', [
+    {
+      id: '5',
+      set: SetNames.lavawalker,
+      level: 15,
+      mainStatType: PossibleMainStats.percentDef,
+      subStats: {
+        [PossibleSubStats.critRate]: 2.5,
+        [PossibleSubStats.percentHp]: 5.2,
+        [PossibleSubStats.percentAtk]: 4,
+        [PossibleSubStats.flatHp]: 3,
+      },
+    },
+    {
+      id: '5',
+      set: SetNames.archaicPetra,
+      level: 12,
+      mainStatType: PossibleMainStats.percentDef,
+      subStats: {
+        [PossibleSubStats.critDmg]: 2.5,
+        [PossibleSubStats.energyRecharge]: 5.2,
+        [PossibleSubStats.percentHp]: 4,
+        [PossibleSubStats.flatDef]: 3,
+      },
+    },
+    {
+      id: '6',
+      set: SetNames.blizzardStrayer,
+      level: 8,
+      mainStatType: PossibleMainStats.cryoDmg,
+      subStats: {
+        [PossibleSubStats.elementalMastery]: 4,
+        [PossibleSubStats.percentHp]: 5.2,
+        [PossibleSubStats.percentAtk]: 4,
+        [PossibleSubStats.critDmg]: 3,
+      },
+    },
+    {
+      id: '6',
+      set: SetNames.wanderersTroupe,
+      level: 4,
+      mainStatType: PossibleMainStats.physicalDmg,
+      subStats: {
+        [PossibleSubStats.flatAtk]: 4,
+        [PossibleSubStats.percentDef]: 5.2,
+        [PossibleSubStats.energyRecharge]: 4,
+        [PossibleSubStats.critRate]: 3,
+      },
+    },
+  ]);
+
+  const allCircletArtifacts: CircletArtifact[] = getArtifactsWithValues('circlet', [
+    {
+      id: '7',
+      set: SetNames.retracingBolide,
+      level: 17,
+      mainStatType: PossibleMainStats.healingBonus,
+      subStats: {
+        [PossibleSubStats.percentDef]: 4,
+        [PossibleSubStats.flatAtk]: 4,
+        [PossibleSubStats.critDmg]: 3.2,
+        [PossibleSubStats.percentHp]: 5,
+      },
+    },
+    {
+      id: '7',
+      set: SetNames.gladiatorsFinale,
+      level: 12,
+      mainStatType: PossibleMainStats.critRate,
+      subStats: {
+        [PossibleSubStats.flatHp]: 4,
+        [PossibleSubStats.percentAtk]: 4,
+        [PossibleSubStats.critDmg]: 3.2,
+        [PossibleSubStats.energyRecharge]: 5,
+      },
+    },
+    {
+      id: '7',
+      set: SetNames.retracingBolide,
+      level: 14,
+      mainStatType: PossibleMainStats.critRate,
+      subStats: {
+        [PossibleSubStats.energyRecharge]: 4,
+        [PossibleSubStats.flatAtk]: 4,
+        [PossibleSubStats.critDmg]: 3.2,
+        [PossibleSubStats.flatHp]: 5,
+      },
+    },
+  ]);
+
+  beforeEach(() => {
+    buildOptimizer = new BuildOptimizer([], [], allSandsArtifacts, allGobletArtifacts, allCircletArtifacts);
+  });
+
+  describe('filter artifacts by main stat', () => {
+    it('should filter sand with elementalMastery', () => {
+      buildOptimizer.filterArtifacts(PossibleMainStats.elementalMastery);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(12);
+    });
+
+    it('should filter goblet with cryoDmg', () => {
+      buildOptimizer.filterArtifacts(null, PossibleMainStats.cryoDmg);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(9);
+    });
+
+    it('should filter circlet with critRate', () => {
+      buildOptimizer.filterArtifacts(null, null, PossibleMainStats.critRate);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(24);
+    });
+
+    it('should filter sand, goblet and circlet', () => {
+      buildOptimizer.filterArtifacts(PossibleMainStats.percentAtk, PossibleMainStats.percentDef, PossibleMainStats.healingBonus);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(2);
+    });
+  });
+});
+
 function getArtifactsWithValues(
   type: string,
   allArtifactsData: {

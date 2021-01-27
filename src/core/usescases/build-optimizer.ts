@@ -1,4 +1,9 @@
 import { Artifact } from '../domain/entities/artifact';
+import { CircletArtifact } from '../domain/entities/circlet-artifact';
+import { FlowerArtifact } from '../domain/entities/flower-artifact';
+import { GobletArtifact } from '../domain/entities/goblet-artifact';
+import { PlumeArtifact } from '../domain/entities/plume-artifact';
+import { SandsArtifact } from '../domain/entities/sands-artifact';
 import { Character } from '../domain/models/character';
 import {
   AllBuildStatTypes,
@@ -19,6 +24,16 @@ import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
+  private flowerArtifacts: FlowerArtifact[];
+  private plumeArtifacts: PlumeArtifact[];
+  private sandsArtifacts: SandsArtifact[];
+  private gobletArtifacts: GobletArtifact[];
+  private circletArtifacts: CircletArtifact[];
+
+  private filteredSandsArtifacts: SandsArtifact[];
+  private filteredGobletArtifacts: GobletArtifact[];
+  private filteredCircletArtifacts: CircletArtifact[];
+
   private readonly setsWithEffects: SetWithEffect[] = [
     { name: SetNames.gladiatorsFinale, stat: PossibleSetStats.percentAtk, value: 18 },
     { name: SetNames.wanderersTroupe, stat: PossibleSetStats.elementalMastery, value: 80 },
@@ -34,6 +49,20 @@ export class BuildOptimizer {
     { name: SetNames.archaicPetra, stat: PossibleSetStats.geoDmg, value: 15 },
     { name: SetNames.bloodstainedChivalry, stat: PossibleSetStats.physicalDmg, value: 25 },
   ];
+
+  constructor(
+    flowerArtifacts: FlowerArtifact[] = [],
+    plumeArtifacts: PlumeArtifact[] = [],
+    sandsArtifacts: SandsArtifact[] = [],
+    gobletArtifacts: GobletArtifact[] = [],
+    circletArtifacts: CircletArtifact[] = [],
+  ) {
+    this.flowerArtifacts = flowerArtifacts;
+    this.plumeArtifacts = plumeArtifacts;
+    this.sandsArtifacts = sandsArtifacts;
+    this.gobletArtifacts = gobletArtifacts;
+    this.circletArtifacts = circletArtifacts;
+  }
 
   public computeBuildsStats(
     character: Character,
@@ -70,6 +99,31 @@ export class BuildOptimizer {
 
     addArtifactsToCompute([], 0);
     return allBuilds;
+  }
+
+  public filterArtifacts(sandsMain?: PossibleMainStats, gobletMain?: PossibleMainStats, circletMain?: PossibleMainStats): void {
+    this.filteredSandsArtifacts = this.sandsArtifacts.filter((sandsArtifact) => {
+      if (!sandsMain) {
+        return true;
+      }
+      return Object.keys(sandsArtifact.mainStat)[0] === sandsMain;
+    });
+    this.filteredGobletArtifacts = this.gobletArtifacts.filter((gobletArtifact) => {
+      if (!gobletMain) {
+        return true;
+      }
+      return Object.keys(gobletArtifact.mainStat)[0] === gobletMain;
+    });
+    this.filteredCircletArtifacts = this.circletArtifacts.filter((circletArtifact) => {
+      if (!circletMain) {
+        return true;
+      }
+      return Object.keys(circletArtifact.mainStat)[0] === circletMain;
+    });
+  }
+
+  public getPossibleBuilds(): number {
+    return this.filteredSandsArtifacts.length * this.filteredGobletArtifacts.length * this.filteredCircletArtifacts.length;
   }
 
   private computeArtifactsStats(artifacts: Artifact[]): ArtifactStatsValues {
