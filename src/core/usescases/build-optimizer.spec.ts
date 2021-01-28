@@ -1505,7 +1505,7 @@ describe('BuildOptimizer.filterArtifacts', () => {
         [PossibleSubStats.flatHp]: 6,
         [PossibleSubStats.critDmg]: 7,
         [PossibleSubStats.percentDef]: 3.2,
-        [PossibleSubStats.percentHp]: 2.9,
+        [PossibleSubStats.percentAtk]: 2.9,
       },
     },
   ]);
@@ -1604,7 +1604,7 @@ describe('BuildOptimizer.filterArtifacts', () => {
     buildOptimizer = new BuildOptimizer(allFlowerArtifacts, allPlumeArtifacts, allSandsArtifacts, allGobletArtifacts, allCircletArtifacts);
   });
 
-  describe('filter artifacts by main stat should set possible builds ', () => {
+  describe('filter artifacts by main stat should set possible builds', () => {
     it('with sand having elementalMastery', () => {
       buildOptimizer.filterArtifacts(PossibleMainStats.elementalMastery);
       expect(buildOptimizer.getPossibleBuilds()).toEqual(48);
@@ -1635,6 +1635,25 @@ describe('BuildOptimizer.filterArtifacts', () => {
       buildOptimizer.filterArtifacts(null, null, null, 12);
       expect(buildOptimizer.getPossibleBuilds()).toEqual(0);
     });
+  });
+
+  describe('filter artifacts by focused stats should set possible builds', () => {
+    it('with artifacts that have percent atk', () => {
+      buildOptimizer.filterArtifacts(null, null, null, null, [PossibleSubStats.percentAtk]);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(8);
+    });
+    it('with artifacts that have at least flat hp or elemental mastery', () => {
+      buildOptimizer.filterArtifacts(null, null, null, null, [PossibleSubStats.flatHp, PossibleSubStats.elementalMastery]);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(16);
+    });
+  });
+
+  it('with artifacts that have healing bonus in circlet, level 8 and at least flat hp or elemental mastery', () => {
+    buildOptimizer.filterArtifacts(null, null, PossibleMainStats.healingBonus, 8, [
+      PossibleSubStats.flatHp,
+      PossibleSubStats.elementalMastery,
+    ]);
+    expect(buildOptimizer.getPossibleBuilds()).toEqual(4);
   });
 });
 
