@@ -1,6 +1,8 @@
 import { Artifact } from '../domain/entities/artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
+import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact } from '../domain/entities/goblet-artifact';
+import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
 import { Character } from '../domain/models/character';
 import {
@@ -22,14 +24,14 @@ import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
-  private flowerArtifacts: Artifact[];
-  private plumeArtifacts: Artifact[];
+  private flowerArtifacts: FlowerArtifact[];
+  private plumeArtifacts: PlumeArtifact[];
   private sandsArtifacts: SandsArtifact[];
   private gobletArtifacts: GobletArtifact[];
   private circletArtifacts: CircletArtifact[];
 
-  private filteredFlowerArtifacts: Artifact[];
-  private filteredPlumeArtifacts: Artifact[];
+  private filteredFlowerArtifacts: FlowerArtifact[];
+  private filteredPlumeArtifacts: PlumeArtifact[];
   private filteredSandsArtifacts: SandsArtifact[];
   private filteredGobletArtifacts: GobletArtifact[];
   private filteredCircletArtifacts: CircletArtifact[];
@@ -51,8 +53,8 @@ export class BuildOptimizer {
   ];
 
   constructor(
-    flowerArtifacts: Artifact[] = [],
-    plumeArtifacts: Artifact[] = [],
+    flowerArtifacts: FlowerArtifact[] = [],
+    plumeArtifacts: PlumeArtifact[] = [],
     sandsArtifacts: SandsArtifact[] = [],
     gobletArtifacts: GobletArtifact[] = [],
     circletArtifacts: CircletArtifact[] = [],
@@ -66,11 +68,11 @@ export class BuildOptimizer {
 
   public computeBuildsStats(
     character: Character,
-    flowerArtifacts: Artifact[],
-    plumeArtifacts: Artifact[],
-    sandsArtifacts: Artifact[],
-    gobletArtifacts: Artifact[],
-    circletArtifacts: Artifact[],
+    flowerArtifacts: FlowerArtifact[],
+    plumeArtifacts: PlumeArtifact[],
+    sandsArtifacts: SandsArtifact[],
+    gobletArtifacts: GobletArtifact[],
+    circletArtifacts: CircletArtifact[],
   ): CharacterStatsValues[] {
     const allBuilds: CharacterStatsValues[] = [];
     const allArtifacts = [flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts];

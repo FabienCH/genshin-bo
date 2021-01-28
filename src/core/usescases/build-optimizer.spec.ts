@@ -1,4 +1,3 @@
-import { Artifact } from '../domain/entities/artifact';
 import { PossibleMainStats } from '../domain/models/main-statistics';
 import { PossibleSubStats, SubStatsValues } from '../domain/models/sub-statistics';
 import { BuildOptimizer } from './build-optimizer';
@@ -15,11 +14,11 @@ import { Character } from '../domain/models/character';
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
   let charactersRepository: InMemoryCharactersRepository;
-  let flowerArtifacts: Artifact[];
-  let plumeArtifacts: Artifact[];
-  let sandsArtifacts: Artifact[];
-  let gobletArtifacts: Artifact[];
-  let circletArtifacts: Artifact[];
+  let flowerArtifacts: FlowerArtifact[];
+  let plumeArtifacts: PlumeArtifact[];
+  let sandsArtifacts: SandsArtifact[];
+  let gobletArtifacts: GobletArtifact[];
+  let circletArtifacts: CircletArtifact[];
   let razor: Character;
 
   beforeEach(() => {
@@ -30,13 +29,13 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           subStats: {
@@ -47,7 +46,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
 
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           mainStatType: PossibleMainStats.percentDef,
@@ -55,7 +54,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
 
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           mainStatType: PossibleMainStats.physicalDmg,
@@ -67,7 +66,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
         },
       ]);
 
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           mainStatType: PossibleMainStats.percentAtk,
@@ -97,26 +96,26 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.critRate]: 3.2, [PossibleSubStats.percentAtk]: 3 },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           mainStatType: PossibleMainStats.percentAtk,
           subStats: { [PossibleSubStats.percentDef]: 6, [PossibleSubStats.elementalMastery]: 7, [PossibleSubStats.critRate]: 3.2 },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           mainStatType: PossibleMainStats.geoDmg,
@@ -128,7 +127,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           mainStatType: PossibleMainStats.elementalMastery,
@@ -157,7 +156,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
   describe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           level: 1,
@@ -169,14 +168,14 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           level: 3,
           subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           level: 4,
@@ -189,7 +188,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           level: 8,
@@ -202,7 +201,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           level: 20,
@@ -234,7 +233,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with levels 2, 7, 12, 15, 17', () => {
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           level: 2,
@@ -246,7 +245,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           level: 7,
@@ -258,7 +257,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           level: 12,
@@ -271,7 +270,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           level: 15,
@@ -284,7 +283,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           level: 17,
@@ -316,7 +315,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with gladiator and thundering sets effects', () => {
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -329,7 +328,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.retracingBolide,
@@ -342,7 +341,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.thunderingFury,
@@ -356,7 +355,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.thunderingFury,
@@ -370,7 +369,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -403,7 +402,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with bolide and Lavawalker sets effects', () => {
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.lavawalker,
@@ -416,7 +415,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.retracingBolide,
@@ -429,7 +428,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.thunderingFury,
@@ -443,7 +442,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.lavawalker,
@@ -457,7 +456,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.retracingBolide,
@@ -492,7 +491,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 1 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '1', { name: 'rust', level: '1' });
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.lavawalker,
@@ -505,7 +504,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.retracingBolide,
@@ -518,7 +517,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.thunderingFury,
@@ -532,7 +531,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.lavawalker,
@@ -546,7 +545,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.retracingBolide,
@@ -581,7 +580,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 20 ascended Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '20a', { name: 'rust', level: '40' });
 
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -594,7 +593,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.crimsonWitchOfFlames,
@@ -607,7 +606,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.archaicPetra,
@@ -621,7 +620,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.bloodstainedChivalry,
@@ -635,7 +634,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -667,7 +666,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 50 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '50', { name: 'rust', level: '60a' });
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -680,7 +679,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.crimsonWitchOfFlames,
@@ -693,7 +692,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.archaicPetra,
@@ -707,7 +706,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.bloodstainedChivalry,
@@ -721,7 +720,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -752,7 +751,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 80 ascended Razor', () => {
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -765,7 +764,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.crimsonWitchOfFlames,
@@ -778,7 +777,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.archaicPetra,
@@ -792,7 +791,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.bloodstainedChivalry,
@@ -806,7 +805,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -839,7 +838,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 60 ascended Albedo', () => {
       const albedo = charactersRepository.getCharacter('albedo', '60a', { name: 'darkIronSword', level: '70' });
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -852,7 +851,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.crimsonWitchOfFlames,
@@ -865,7 +864,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.archaicPetra,
@@ -879,7 +878,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.bloodstainedChivalry,
@@ -893,7 +892,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -927,7 +926,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 70 Fischl', () => {
       const fischl = charactersRepository.getCharacter('fischl', '70', { name: 'favoniusWarbow', level: '70a' });
 
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -940,7 +939,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.crimsonWitchOfFlames,
@@ -953,7 +952,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.archaicPetra,
@@ -967,7 +966,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.bloodstainedChivalry,
@@ -981,7 +980,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -1014,7 +1013,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 1 Prototype Archaic', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '1' });
 
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -1027,7 +1026,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.crimsonWitchOfFlames,
@@ -1040,7 +1039,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.archaicPetra,
@@ -1054,7 +1053,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.bloodstainedChivalry,
@@ -1068,7 +1067,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -1109,7 +1108,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 40 ascended Prototype Archaic', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '40a' });
 
-      flowerArtifacts = getArtifactsWithValues('flower', [
+      flowerArtifacts = getFlowerArtifactsWithValues([
         {
           id: '0',
           set: SetNames.gladiatorsFinale,
@@ -1122,7 +1121,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      plumeArtifacts = getArtifactsWithValues('plume', [
+      plumeArtifacts = getPlumeArtifactsWithValues([
         {
           id: '1',
           set: SetNames.crimsonWitchOfFlames,
@@ -1135,7 +1134,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      sandsArtifacts = getArtifactsWithValues('sands', [
+      sandsArtifacts = getSandsArtifactsWithValues([
         {
           id: '2',
           set: SetNames.archaicPetra,
@@ -1149,7 +1148,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      gobletArtifacts = getArtifactsWithValues('goblet', [
+      gobletArtifacts = getGobletArtifactsWithValues([
         {
           id: '3',
           set: SetNames.bloodstainedChivalry,
@@ -1163,7 +1162,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
           },
         },
       ]);
-      circletArtifacts = getArtifactsWithValues('circlet', [
+      circletArtifacts = getCircletArtifactsWithValues([
         {
           id: '4',
           set: SetNames.gladiatorsFinale,
@@ -1203,7 +1202,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 
   it('should compute build stats of multiple artifacts for each type', () => {
-    flowerArtifacts = getArtifactsWithValues('flower', [
+    flowerArtifacts = getFlowerArtifactsWithValues([
       {
         id: '0',
         set: SetNames.lavawalker,
@@ -1228,7 +1227,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       },
     ]);
 
-    plumeArtifacts = getArtifactsWithValues('plume', [
+    plumeArtifacts = getPlumeArtifactsWithValues([
       {
         id: '2',
         set: SetNames.retracingBolide,
@@ -1253,7 +1252,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       },
     ]);
 
-    sandsArtifacts = getArtifactsWithValues('sands', [
+    sandsArtifacts = getSandsArtifactsWithValues([
       {
         id: '4',
         set: SetNames.thunderingFury,
@@ -1268,7 +1267,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       },
     ]);
 
-    gobletArtifacts = getArtifactsWithValues('goblet', [
+    gobletArtifacts = getGobletArtifactsWithValues([
       {
         id: '5',
         set: SetNames.lavawalker,
@@ -1295,7 +1294,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
       },
     ]);
 
-    circletArtifacts = getArtifactsWithValues('circlet', [
+    circletArtifacts = getCircletArtifactsWithValues([
       {
         id: '7',
         set: SetNames.retracingBolide,
@@ -1422,7 +1421,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
 describe('BuildOptimizer.filterArtifacts', () => {
   let buildOptimizer: BuildOptimizer;
 
-  const allFlowerArtifacts: Artifact[] = getArtifactsWithValues('flower', [
+  const allFlowerArtifacts: FlowerArtifact[] = getFlowerArtifactsWithValues([
     {
       id: '0',
       set: SetNames.lavawalker,
@@ -1447,7 +1446,7 @@ describe('BuildOptimizer.filterArtifacts', () => {
     },
   ]);
 
-  const allPlumeArtifacts: Artifact[] = getArtifactsWithValues('plume', [
+  const allPlumeArtifacts: PlumeArtifact[] = getPlumeArtifactsWithValues([
     {
       id: '2',
       set: SetNames.retracingBolide,
@@ -1472,7 +1471,7 @@ describe('BuildOptimizer.filterArtifacts', () => {
     },
   ]);
 
-  const allSandsArtifacts: SandsArtifact[] = getArtifactsWithValues('sands', [
+  const allSandsArtifacts: SandsArtifact[] = getSandsArtifactsWithValues([
     {
       id: '4',
       set: SetNames.thunderingFury,
@@ -1511,7 +1510,7 @@ describe('BuildOptimizer.filterArtifacts', () => {
     },
   ]);
 
-  const allGobletArtifacts: GobletArtifact[] = getArtifactsWithValues('goblet', [
+  const allGobletArtifacts: GobletArtifact[] = getGobletArtifactsWithValues([
     {
       id: '5',
       set: SetNames.lavawalker,
@@ -1562,7 +1561,7 @@ describe('BuildOptimizer.filterArtifacts', () => {
     },
   ]);
 
-  const allCircletArtifacts: CircletArtifact[] = getArtifactsWithValues('circlet', [
+  const allCircletArtifacts: CircletArtifact[] = getCircletArtifactsWithValues([
     {
       id: '7',
       set: SetNames.retracingBolide,
@@ -1639,32 +1638,99 @@ describe('BuildOptimizer.filterArtifacts', () => {
   });
 });
 
-function getArtifactsWithValues(
-  type: string,
+function getSet(artifactSet: SetNames): SetNames {
+  return artifactSet ? artifactSet : SetNames.retracingBolide;
+}
+
+function getLevel(artifactLevel: number): number {
+  return artifactLevel ? artifactLevel : 0;
+}
+
+function getFlowerArtifactsWithValues(
   allArtifactsData: {
     id: string;
     set?: SetNames;
     level?: number;
     subStats: SubStatsValues;
-    mainStatType?: SandsMainStatType | GobletMainStatType | CircletMainStatType;
   }[],
-): FlowerArtifact[] | PlumeArtifact[] | SandsArtifact[] | GobletArtifact[] | CircletArtifact[] {
-  return allArtifactsData.map((artifactData) => {
-    const set = artifactData.set ? artifactData.set : SetNames.retracingBolide;
-    const level = artifactData.level ? artifactData.level : 0;
-    switch (type) {
-      case 'flower':
-        return new FlowerArtifact(artifactData.id, set, artifactData.subStats, level);
-      case 'plume':
-        return new PlumeArtifact(artifactData.id, set, artifactData.subStats, level);
-      case 'sands':
-        return new SandsArtifact(artifactData.id, set, artifactData.subStats, level, artifactData.mainStatType as SandsMainStatType);
-      case 'goblet':
-        return new GobletArtifact(artifactData.id, set, artifactData.subStats, level, artifactData.mainStatType as GobletMainStatType);
-      case 'circlet':
-        return new CircletArtifact(artifactData.id, set, artifactData.subStats, level, artifactData.mainStatType as CircletMainStatType);
-      default:
-        new Artifact(artifactData.id, set, artifactData.subStats, level, artifactData.mainStatType);
-    }
-  });
+): FlowerArtifact[] {
+  return allArtifactsData.map(
+    (artifactData) => new FlowerArtifact(artifactData.id, getSet(artifactData.set), artifactData.subStats, getLevel(artifactData.level)),
+  );
+}
+
+function getPlumeArtifactsWithValues(
+  allArtifactsData: {
+    id: string;
+    set?: SetNames;
+    level?: number;
+    subStats: SubStatsValues;
+  }[],
+): PlumeArtifact[] {
+  return allArtifactsData.map(
+    (artifactData) => new PlumeArtifact(artifactData.id, getSet(artifactData.set), artifactData.subStats, getLevel(artifactData.level)),
+  );
+}
+
+function getSandsArtifactsWithValues(
+  allArtifactsData: {
+    id: string;
+    set?: SetNames;
+    level?: number;
+    subStats: SubStatsValues;
+    mainStatType: SandsMainStatType;
+  }[],
+): SandsArtifact[] {
+  return allArtifactsData.map(
+    (artifactData) =>
+      new SandsArtifact(
+        artifactData.id,
+        getSet(artifactData.set),
+        artifactData.subStats,
+        getLevel(artifactData.level),
+        artifactData.mainStatType as SandsMainStatType,
+      ),
+  );
+}
+
+function getGobletArtifactsWithValues(
+  allArtifactsData: {
+    id: string;
+    set?: SetNames;
+    level?: number;
+    subStats: SubStatsValues;
+    mainStatType: GobletMainStatType;
+  }[],
+): GobletArtifact[] {
+  return allArtifactsData.map(
+    (artifactData) =>
+      new GobletArtifact(
+        artifactData.id,
+        getSet(artifactData.set),
+        artifactData.subStats,
+        getLevel(artifactData.level),
+        artifactData.mainStatType as GobletMainStatType,
+      ),
+  );
+}
+
+function getCircletArtifactsWithValues(
+  allArtifactsData: {
+    id: string;
+    set?: SetNames;
+    level?: number;
+    subStats: SubStatsValues;
+    mainStatType: CircletMainStatType;
+  }[],
+): CircletArtifact[] {
+  return allArtifactsData.map(
+    (artifactData) =>
+      new CircletArtifact(
+        artifactData.id,
+        getSet(artifactData.set),
+        artifactData.subStats,
+        getLevel(artifactData.level),
+        artifactData.mainStatType as CircletMainStatType,
+      ),
+  );
 }
