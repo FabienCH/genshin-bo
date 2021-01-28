@@ -1421,6 +1421,57 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
 describe('BuildOptimizer.filterArtifacts', () => {
   let buildOptimizer: BuildOptimizer;
+
+  const allFlowerArtifacts: Artifact[] = getArtifactsWithValues('flower', [
+    {
+      id: '0',
+      set: SetNames.lavawalker,
+      level: 2,
+      subStats: {
+        [PossibleSubStats.flatAtk]: 5,
+        [PossibleSubStats.critRate]: 3.2,
+        [PossibleSubStats.percentAtk]: 3,
+        [PossibleSubStats.critDmg]: 3.2,
+      },
+    },
+    {
+      id: '1',
+      set: SetNames.thunderingFury,
+      level: 8,
+      subStats: {
+        [PossibleSubStats.energyRecharge]: 3,
+        [PossibleSubStats.percentHp]: 6,
+        [PossibleSubStats.critDmg]: 3.9,
+        [PossibleSubStats.percentAtk]: 7,
+      },
+    },
+  ]);
+
+  const allPlumeArtifacts: Artifact[] = getArtifactsWithValues('plume', [
+    {
+      id: '2',
+      set: SetNames.retracingBolide,
+      level: 7,
+      subStats: {
+        [PossibleSubStats.energyRecharge]: 4,
+        [PossibleSubStats.flatDef]: 7,
+        [PossibleSubStats.critRate]: 2.7,
+        [PossibleSubStats.critDmg]: 5,
+      },
+    },
+    {
+      id: '3',
+      set: SetNames.blizzardStrayer,
+      level: 12,
+      subStats: {
+        [PossibleSubStats.percentAtk]: 5,
+        [PossibleSubStats.flatHp]: 12,
+        [PossibleSubStats.flatDef]: 6,
+        [PossibleSubStats.percentDef]: 8,
+      },
+    },
+  ]);
+
   const allSandsArtifacts: SandsArtifact[] = getArtifactsWithValues('sands', [
     {
       id: '4',
@@ -1551,28 +1602,39 @@ describe('BuildOptimizer.filterArtifacts', () => {
   ]);
 
   beforeEach(() => {
-    buildOptimizer = new BuildOptimizer([], [], allSandsArtifacts, allGobletArtifacts, allCircletArtifacts);
+    buildOptimizer = new BuildOptimizer(allFlowerArtifacts, allPlumeArtifacts, allSandsArtifacts, allGobletArtifacts, allCircletArtifacts);
   });
 
-  describe('filter artifacts by main stat', () => {
-    it('should filter sand with elementalMastery', () => {
+  describe('filter artifacts by main stat should set possible builds ', () => {
+    it('with sand having elementalMastery', () => {
       buildOptimizer.filterArtifacts(PossibleMainStats.elementalMastery);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(12);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(48);
     });
 
-    it('should filter goblet with cryoDmg', () => {
+    it('with goblet having cryoDmg', () => {
       buildOptimizer.filterArtifacts(null, PossibleMainStats.cryoDmg);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(9);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(36);
     });
 
-    it('should filter circlet with critRate', () => {
+    it('with circlet having critRate', () => {
       buildOptimizer.filterArtifacts(null, null, PossibleMainStats.critRate);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(24);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(96);
     });
 
-    it('should filter sand, goblet and circlet', () => {
+    it('with sand, goblet and circlet artifacts', () => {
       buildOptimizer.filterArtifacts(PossibleMainStats.percentAtk, PossibleMainStats.percentDef, PossibleMainStats.healingBonus);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(2);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(8);
+    });
+  });
+
+  describe('filter artifacts by min level should set possible builds', () => {
+    it('with artifacts higher or equal to 8', () => {
+      buildOptimizer.filterArtifacts(null, null, null, 8);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(27);
+    });
+    it('with artifacts higher or equal to 12', () => {
+      buildOptimizer.filterArtifacts(null, null, null, 12);
+      expect(buildOptimizer.getPossibleBuilds()).toEqual(0);
     });
   });
 });
@@ -1586,7 +1648,7 @@ function getArtifactsWithValues(
     subStats: SubStatsValues;
     mainStatType?: SandsMainStatType | GobletMainStatType | CircletMainStatType;
   }[],
-): Artifact[] {
+): FlowerArtifact[] | PlumeArtifact[] | SandsArtifact[] | GobletArtifact[] | CircletArtifact[] {
   return allArtifactsData.map((artifactData) => {
     const set = artifactData.set ? artifactData.set : SetNames.retracingBolide;
     const level = artifactData.level ? artifactData.level : 0;

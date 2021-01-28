@@ -1,8 +1,6 @@
 import { Artifact } from '../domain/entities/artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
-import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact } from '../domain/entities/goblet-artifact';
-import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
 import { Character } from '../domain/models/character';
 import {
@@ -24,12 +22,14 @@ import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
-  private flowerArtifacts: FlowerArtifact[];
-  private plumeArtifacts: PlumeArtifact[];
+  private flowerArtifacts: Artifact[];
+  private plumeArtifacts: Artifact[];
   private sandsArtifacts: SandsArtifact[];
   private gobletArtifacts: GobletArtifact[];
   private circletArtifacts: CircletArtifact[];
 
+  private filteredFlowerArtifacts: Artifact[];
+  private filteredPlumeArtifacts: Artifact[];
   private filteredSandsArtifacts: SandsArtifact[];
   private filteredGobletArtifacts: GobletArtifact[];
   private filteredCircletArtifacts: CircletArtifact[];
@@ -51,8 +51,8 @@ export class BuildOptimizer {
   ];
 
   constructor(
-    flowerArtifacts: FlowerArtifact[] = [],
-    plumeArtifacts: PlumeArtifact[] = [],
+    flowerArtifacts: Artifact[] = [],
+    plumeArtifacts: Artifact[] = [],
     sandsArtifacts: SandsArtifact[] = [],
     gobletArtifacts: GobletArtifact[] = [],
     circletArtifacts: CircletArtifact[] = [],
@@ -101,13 +101,29 @@ export class BuildOptimizer {
     return allBuilds;
   }
 
-  public filterArtifacts(sandsMain?: PossibleMainStats, gobletMain?: PossibleMainStats, circletMain?: PossibleMainStats): void {
+  public filterArtifacts(
+    sandsMain?: PossibleMainStats,
+    gobletMain?: PossibleMainStats,
+    circletMain?: PossibleMainStats,
+    minLevel = 0,
+  ): void {
     this.filteredSandsArtifacts = this.filterArtifactsByMainStat(this.sandsArtifacts, sandsMain);
     this.filteredGobletArtifacts = this.filterArtifactsByMainStat(this.gobletArtifacts, gobletMain);
     this.filteredCircletArtifacts = this.filterArtifactsByMainStat(this.circletArtifacts, circletMain);
+    this.filteredFlowerArtifacts = this.flowerArtifacts.filter((artifact) => artifact.level >= minLevel);
+    this.filteredPlumeArtifacts = this.plumeArtifacts.filter((artifact) => artifact.level >= minLevel);
+    this.filteredSandsArtifacts = this.filteredSandsArtifacts.filter((artifact) => artifact.level >= minLevel);
+    this.filteredGobletArtifacts = this.filteredGobletArtifacts.filter((artifact) => artifact.level >= minLevel);
+    this.filteredCircletArtifacts = this.filteredCircletArtifacts.filter((artifact) => artifact.level >= minLevel);
   }
   public getPossibleBuilds(): number {
-    return this.filteredSandsArtifacts.length * this.filteredGobletArtifacts.length * this.filteredCircletArtifacts.length;
+    return (
+      this.filteredFlowerArtifacts.length *
+      this.filteredPlumeArtifacts.length *
+      this.filteredSandsArtifacts.length *
+      this.filteredGobletArtifacts.length *
+      this.filteredCircletArtifacts.length
+    );
   }
 
   private computeArtifactsStats(artifacts: Artifact[]): ArtifactStatsValues {
