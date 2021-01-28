@@ -102,26 +102,10 @@ export class BuildOptimizer {
   }
 
   public filterArtifacts(sandsMain?: PossibleMainStats, gobletMain?: PossibleMainStats, circletMain?: PossibleMainStats): void {
-    this.filteredSandsArtifacts = this.sandsArtifacts.filter((sandsArtifact) => {
-      if (!sandsMain) {
-        return true;
-      }
-      return Object.keys(sandsArtifact.mainStat)[0] === sandsMain;
-    });
-    this.filteredGobletArtifacts = this.gobletArtifacts.filter((gobletArtifact) => {
-      if (!gobletMain) {
-        return true;
-      }
-      return Object.keys(gobletArtifact.mainStat)[0] === gobletMain;
-    });
-    this.filteredCircletArtifacts = this.circletArtifacts.filter((circletArtifact) => {
-      if (!circletMain) {
-        return true;
-      }
-      return Object.keys(circletArtifact.mainStat)[0] === circletMain;
-    });
+    this.filteredSandsArtifacts = this.filterArtifactsByMainStat(this.sandsArtifacts, sandsMain);
+    this.filteredGobletArtifacts = this.filterArtifactsByMainStat(this.gobletArtifacts, gobletMain);
+    this.filteredCircletArtifacts = this.filterArtifactsByMainStat(this.circletArtifacts, circletMain);
   }
-
   public getPossibleBuilds(): number {
     return this.filteredSandsArtifacts.length * this.filteredGobletArtifacts.length * this.filteredCircletArtifacts.length;
   }
@@ -195,6 +179,15 @@ export class BuildOptimizer {
 
       return buildStats;
     }, statsUpdatedWithPercent);
+  }
+
+  private filterArtifactsByMainStat(artifacts: Artifact[], sandsMain: PossibleMainStats) {
+    return artifacts.filter((sandsArtifact) => {
+      if (!sandsMain) {
+        return true;
+      }
+      return Object.keys(sandsArtifact.mainStat)[0] === sandsMain;
+    });
   }
 
   private addStats(statsValues: number[]): number {
