@@ -1606,50 +1606,54 @@ describe('BuildOptimizer.filterArtifacts', () => {
 
   describe('filter artifacts by main stat should set possible builds', () => {
     it('with sand having elementalMastery', () => {
-      buildOptimizer.filterArtifacts(PossibleMainStats.elementalMastery);
+      buildOptimizer.filterArtifacts({ sandsMain: PossibleMainStats.elementalMastery });
       expect(buildOptimizer.getPossibleBuilds()).toEqual(48);
     });
 
     it('with goblet having cryoDmg', () => {
-      buildOptimizer.filterArtifacts(null, PossibleMainStats.cryoDmg);
+      buildOptimizer.filterArtifacts({ gobletMain: PossibleMainStats.cryoDmg });
       expect(buildOptimizer.getPossibleBuilds()).toEqual(36);
     });
 
     it('with circlet having critRate', () => {
-      buildOptimizer.filterArtifacts(null, null, PossibleMainStats.critRate);
+      buildOptimizer.filterArtifacts({ circletMain: PossibleMainStats.critRate });
       expect(buildOptimizer.getPossibleBuilds()).toEqual(96);
     });
 
     it('with sand, goblet and circlet artifacts', () => {
-      buildOptimizer.filterArtifacts(PossibleMainStats.percentAtk, PossibleMainStats.percentDef, PossibleMainStats.healingBonus);
+      buildOptimizer.filterArtifacts({
+        sandsMain: PossibleMainStats.percentAtk,
+        gobletMain: PossibleMainStats.percentDef,
+        circletMain: PossibleMainStats.healingBonus,
+      });
       expect(buildOptimizer.getPossibleBuilds()).toEqual(8);
     });
   });
 
   describe('filter artifacts by min level should set possible builds', () => {
     it('with artifacts higher or equal to 8', () => {
-      buildOptimizer.filterArtifacts(null, null, null, 8);
+      buildOptimizer.filterArtifacts(null, 8);
       expect(buildOptimizer.getPossibleBuilds()).toEqual(27);
     });
     it('with artifacts higher or equal to 12', () => {
-      buildOptimizer.filterArtifacts(null, null, null, 12);
+      buildOptimizer.filterArtifacts(null, 12);
       expect(buildOptimizer.getPossibleBuilds()).toEqual(0);
     });
   });
 
   describe('filter artifacts by focused stats should set possible builds', () => {
     it('with artifacts that have percent atk', () => {
-      buildOptimizer.filterArtifacts(null, null, null, null, [PossibleSubStats.percentAtk]);
+      buildOptimizer.filterArtifacts(null, null, [PossibleSubStats.percentAtk]);
       expect(buildOptimizer.getPossibleBuilds()).toEqual(8);
     });
     it('with artifacts that have at least flat hp or elemental mastery', () => {
-      buildOptimizer.filterArtifacts(null, null, null, null, [PossibleSubStats.flatHp, PossibleSubStats.elementalMastery]);
+      buildOptimizer.filterArtifacts(null, null, [PossibleSubStats.flatHp, PossibleSubStats.elementalMastery]);
       expect(buildOptimizer.getPossibleBuilds()).toEqual(16);
     });
   });
 
   it('with artifacts that have healing bonus in circlet, level 8 and at least flat hp or elemental mastery', () => {
-    buildOptimizer.filterArtifacts(null, null, PossibleMainStats.healingBonus, 8, [
+    buildOptimizer.filterArtifacts({ circletMain: PossibleMainStats.healingBonus }, 8, [
       PossibleSubStats.flatHp,
       PossibleSubStats.elementalMastery,
     ]);

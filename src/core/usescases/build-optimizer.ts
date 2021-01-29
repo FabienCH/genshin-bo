@@ -104,58 +104,23 @@ export class BuildOptimizer {
   }
 
   public filterArtifacts(
-    sandsMain?: PossibleMainStats,
-    gobletMain?: PossibleMainStats,
-    circletMain?: PossibleMainStats,
+    mainStats: { sandsMain?: PossibleMainStats; gobletMain?: PossibleMainStats; circletMain?: PossibleMainStats },
     minLevel = 0,
     focusStats?: Array<PossibleSubStats | PossibleMainStats>,
   ): void {
-    this.filteredSandsArtifacts = this.filterArtifactsByMainStat(this.sandsArtifacts, sandsMain);
-    this.filteredGobletArtifacts = this.filterArtifactsByMainStat(this.gobletArtifacts, gobletMain);
-    this.filteredCircletArtifacts = this.filterArtifactsByMainStat(this.circletArtifacts, circletMain);
+    const { sandsMain, gobletMain, circletMain } = mainStats ? mainStats : { sandsMain: null, gobletMain: null, circletMain: null };
 
-    this.filteredFlowerArtifacts = this.flowerArtifacts.filter((artifact) => artifact.level >= minLevel);
-    this.filteredPlumeArtifacts = this.plumeArtifacts.filter((artifact) => artifact.level >= minLevel);
-    this.filteredSandsArtifacts = this.filteredSandsArtifacts.filter((artifact) => artifact.level >= minLevel);
-    this.filteredGobletArtifacts = this.filteredGobletArtifacts.filter((artifact) => artifact.level >= minLevel);
-    this.filteredCircletArtifacts = this.filteredCircletArtifacts.filter((artifact) => artifact.level >= minLevel);
-
-    this.filteredFlowerArtifacts = this.filteredFlowerArtifacts.filter(
-      (artifact) =>
-        !focusStats ||
-        Object.keys({ ...artifact.subStats, ...artifact.mainStat }).find((artifactStats: PossibleSubStats | PossibleMainStats) =>
-          focusStats.includes(artifactStats),
-        ),
+    this.filteredFlowerArtifacts = this.flowerArtifacts.filter(
+      (artifact) => artifact.level >= minLevel && this.filterByFocusStats(artifact, focusStats),
     );
-    this.filteredPlumeArtifacts = this.filteredPlumeArtifacts.filter(
-      (artifact) =>
-        !focusStats ||
-        Object.keys({ ...artifact.subStats, ...artifact.mainStat }).find((artifactStats: PossibleSubStats | PossibleMainStats) =>
-          focusStats.includes(artifactStats),
-        ),
+    this.filteredPlumeArtifacts = this.plumeArtifacts.filter(
+      (artifact) => artifact.level >= minLevel && this.filterByFocusStats(artifact, focusStats),
     );
-    this.filteredSandsArtifacts = this.filteredSandsArtifacts.filter(
-      (artifact) =>
-        !focusStats ||
-        Object.keys({ ...artifact.subStats, ...artifact.mainStat }).find((artifactStats: PossibleSubStats | PossibleMainStats) =>
-          [...focusStats, sandsMain].includes(artifactStats),
-        ),
-    );
-    this.filteredGobletArtifacts = this.filteredGobletArtifacts.filter(
-      (artifact) =>
-        !focusStats ||
-        Object.keys({ ...artifact.subStats, ...artifact.mainStat }).find((artifactStats: PossibleSubStats | PossibleMainStats) =>
-          [...focusStats, gobletMain].includes(artifactStats),
-        ),
-    );
-    this.filteredCircletArtifacts = this.filteredCircletArtifacts.filter(
-      (artifact) =>
-        !focusStats ||
-        Object.keys({ ...artifact.subStats, ...artifact.mainStat }).find((artifactStats: PossibleSubStats | PossibleMainStats) =>
-          [...focusStats, circletMain].includes(artifactStats),
-        ),
-    );
+    this.filteredSandsArtifacts = this.applyFilters(this.sandsArtifacts, sandsMain, minLevel, focusStats);
+    this.filteredGobletArtifacts = this.applyFilters(this.gobletArtifacts, gobletMain, minLevel, focusStats);
+    this.filteredCircletArtifacts = this.applyFilters(this.circletArtifacts, circletMain, minLevel, focusStats);
   }
+
   public getPossibleBuilds(): number {
     return (
       this.filteredFlowerArtifacts.length *
@@ -237,13 +202,27 @@ export class BuildOptimizer {
     }, statsUpdatedWithPercent);
   }
 
-  private filterArtifactsByMainStat(artifacts: Artifact[], sandsMain: PossibleMainStats) {
-    return artifacts.filter((sandsArtifact) => {
-      if (!sandsMain) {
-        return true;
-      }
-      return Object.keys(sandsArtifact.mainStat)[0] === sandsMain;
+  private applyFilters(
+    artifacts: Artifact[],
+    mainStat: PossibleMainStats,
+    minLevel = 0,
+    focusStats?: Array<PossibleSubStats | PossibleMainStats>,
+  ): Artifact[] {
+    const focusAndMainStats = focusStats ? [...focusStats, mainStat] : focusStats;
+
+    return artifacts.filter((artifact) => {
+      const mainStatMatchFilter = !mainStat || Object.keys(artifact.mainStat)[0] === mainStat;
+      return mainStatMatchFilter && artifact.level >= minLevel && this.filterByFocusStats(artifact, focusAndMainStats);
     });
+  }
+
+  private filterByFocusStats(artifact: Artifact, focusStats: Array<PossibleSubStats | PossibleMainStats>) {
+    return (
+      !focusStats ||
+      Object.keys({ ...artifact.subStats, ...artifact.mainStat }).find((artifactStats: PossibleSubStats | PossibleMainStats) =>
+        focusStats.includes(artifactStats),
+      )
+    );
   }
 
   private addStats(statsValues: number[]): number {
