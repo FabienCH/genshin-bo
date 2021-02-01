@@ -1653,11 +1653,12 @@ describe('BuildOptimizer.filterArtifacts', () => {
   });
 
   it('with artifacts that have healing bonus in circlet, level 8 and at least flat hp or elemental mastery', () => {
-    buildOptimizer.filterArtifacts({ circletMain: PossibleMainStats.healingBonus }, 8, [
-      PossibleSubStats.flatHp,
-      PossibleSubStats.elementalMastery,
-    ]);
-    expect(buildOptimizer.getPossibleBuilds()).toEqual(4);
+    buildOptimizer.filterArtifacts(
+      { sandsMain: PossibleMainStats.percentHp, gobletMain: PossibleMainStats.percentDef, circletMain: PossibleMainStats.healingBonus },
+      8,
+      [PossibleSubStats.flatHp, PossibleSubStats.elementalMastery],
+    );
+    expect(buildOptimizer.getPossibleBuilds()).toEqual(2);
   });
 });
 
