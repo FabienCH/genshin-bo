@@ -1,6 +1,6 @@
 import { MainStat, PossibleMainStats } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
-import { SubStatsValues } from '../models/sub-statistics';
+import { PossibleSubStats, SubStatsValues } from '../models/sub-statistics';
 import { Artifact } from './artifact';
 
 export type SandsMainStatType =
@@ -15,5 +15,15 @@ export class SandsArtifact extends Artifact {
 
   constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: SandsMainStatType) {
     super(id, set, subStats, level, mainStatType);
+  }
+
+  public matchFiltersWithMain(
+    mainStat: SandsMainStatType,
+    minLevel = 0,
+    focusStats?: Array<PossibleSubStats | PossibleMainStats>,
+  ): boolean {
+    const focusAndMainStats = focusStats ? [...focusStats, mainStat] : focusStats;
+    const mainStatMatchFilter = !mainStat || Object.keys(this.mainStat)[0] === mainStat;
+    return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats);
   }
 }

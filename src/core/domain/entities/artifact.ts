@@ -1,6 +1,6 @@
 import { MainStat, PossibleMainStats, PossibleMainStatTypes } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
-import { SubStatsValues } from '../models/sub-statistics';
+import { PossibleSubStats, SubStatsValues } from '../models/sub-statistics';
 
 export class Artifact {
   public id: string;
@@ -81,6 +81,19 @@ export class Artifact {
     this.level = level;
     this.subStats = subStats;
     this.setMainStat(mainStatType);
+  }
+
+  public matchFilters(minLevel = 0, focusStats?: Array<PossibleSubStats | PossibleMainStats>): boolean {
+    return this.level >= minLevel && this.filterByFocusStats(focusStats);
+  }
+
+  private filterByFocusStats(focusStats: Array<PossibleSubStats | PossibleMainStats>): boolean {
+    return (
+      !focusStats ||
+      !!Object.keys({ ...this.subStats, ...this.mainStat }).find((artifactStats: PossibleSubStats | PossibleMainStats) =>
+        focusStats.includes(artifactStats),
+      )
+    );
   }
 
   private setMainStat(mainStatType: PossibleMainStatTypes): void {
