@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "reporters": ["html", "clear-text", "progress"],
+  "coverageAnalysis": "off",
+  "checkers": ["typescript"],
+  "tsconfigFile": "tsconfig.json",
+  "mutate": [
+    "src/**/*.ts",
+    "!src/**/*.spec.ts",
+    "!src/core/adapters/secondaries/weapons-stats/bows/*",
+    "!src/core/adapters/secondaries/weapons-stats/catalysts/*",
+    "!src/core/adapters/secondaries/weapons-stats/claymores/*",
+    "!src/core/adapters/secondaries/weapons-stats/polearms/*",
+    "!src/core/adapters/secondaries/weapons-stats/swords/*",
+    "!src/core/adapters/secondaries/characters-stats/*.ts",
+    "src/core/adapters/secondaries/characters-stats/character-stats-type.ts"
+  ]
+}
