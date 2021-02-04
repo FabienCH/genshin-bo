@@ -1,0 +1,1022 @@
+22:39:05 (559) INFO ConfigReader Using stryker.conf.json
+22:39:06 (559) DEBUG BroadcastReporter Broadcasting to reporters ["html","clear-text","progress"]
+22:39:05 (559) DEBUG ConfigReader Loading config /mnt/c/Users/Fabien/dev/genshin-bo/stryker.conf.json
+22:39:05 (559) DEBUG ConfigReader Loaded config: {
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "reporters": [
+    "html",
+    "clear-text",
+    "progress"
+  ],
+  "testRunner": "jest",
+  "coverageAnalysis": "perTest",
+  "checkers": [
+    "typescript"
+  ],
+  "tsconfigFile": "tsconfig.json",
+  "allowConsoleColors": true,
+  "maxTestRunnerReuse": 0,
+  "commandRunner": {
+    "command": "npm test"
+  },
+  "clearTextReporter": {
+    "allowColor": true,
+    "logTests": true,
+    "maxTestsToLog": 3
+  },
+  "dashboard": {
+    "baseUrl": "https://dashboard.stryker-mutator.io/api/reports",
+    "reportType": "full"
+  },
+  "eventReporter": {
+    "baseDir": "reports/mutation/events"
+  },
+  "fileLogLevel": "trace",
+  "inPlace": false,
+  "logLevel": "debug",
+  "maxConcurrentTestRunners": 9007199254740991,
+  "mutate": [
+    "{src,lib}/**/!(*.+(s|S)pec|*.+(t|T)est).+(cjs|mjs|js|ts|jsx|tsx|html|vue)",
+    "!{src,lib}/**/__tests__/**/*.+(cjs|mjs|js|ts|jsx|tsx|html|vue)"
+  ],
+  "mutator": {
+    "plugins": null,
+    "excludedMutations": []
+  },
+  "plugins": [
+    "@stryker-mutator/*"
+  ],
+  "appendPlugins": [],
+  "jsonReporter": {
+    "fileName": "reports/mutation/mutation.json"
+  },
+  "disableTypeChecks": "{test,src,lib}/**/*.{js,ts,jsx,tsx,html,vue}",
+  "symlinkNodeModules": true,
+  "tempDirName": ".stryker-tmp",
+  "cleanTempDir": true,
+  "testRunnerNodeArgs": [],
+  "thresholds": {
+    "high": 80,
+    "low": 60,
+    "break": null
+  },
+  "timeoutFactor": 1.5,
+  "timeoutMS": 5000,
+  "dryRunTimeoutMinutes": 5,
+  "warnings": true,
+  "configFile": "/mnt/c/Users/Fabien/dev/genshin-bo/stryker.conf.json"
+}
+22:39:05 (559) DEBUG PluginLoader Loading @stryker-mutator/* from /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator
+22:39:05 (559) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter" (matched with expression @stryker-mutator/*)
+22:39:05 (559) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner" (matched with expression @stryker-mutator/*)
+22:39:05 (559) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker" (matched with expression @stryker-mutator/*)
+22:39:05 (559) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter
+22:39:05 (559) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner
+22:39:05 (559) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker
+22:39:06 (559) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/reporters/index.js
+22:39:06 (559) DEBUG buildSchemaWithPluginContributions Contributing 1 schemas from plugins to options validation.
+22:39:06 (559) INFO InputFileResolver Found 150 of 165 file(s) to be mutated.
+22:39:06 (559) DEBUG InputFileResolver All input files: [
+  "/mnt/c/Users/Fabien/dev/genshin-bo/.eslintignore",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/.eslintrc.json",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/.github/workflows/cicd.yml",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/.github/workflows/codeql-analysis.yml",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/.gitignore",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/.prettierrc.json",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/README.md",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/jest.config.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/package-lock.json",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/package.json",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/albedo.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/amber.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/barbara.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/beidou.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/bennett.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/character-stats-type.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/chongyun.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diluc.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diona.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/fischl.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ganyu.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/jean.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/kaeya.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/keqing.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/klee.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/lisa.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/mona.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ningguang.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/noelle.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/qiqi.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/razor.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/sucrose.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/tartaglia.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/traveler.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/venti.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xiangling.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xingqiu.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xinyan.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/zhongli.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-characters-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-weapons-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/alley-hunter.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/amos-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/blackcliff-warbow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/compound-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/ebony-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/favonius-warbow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/messenger.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/prototype-crescent.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/raven-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/recurve-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/royal-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/rust.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sacrificial-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sharpshooters-oath.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/skyward-harp.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/slingshot.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-stringless.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-viridescent-hunt.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/amber-catalyst.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/blackcliff-agate.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/emerald-orb.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/eye-of-perception.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/favonius-codex.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/frostbearer.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/lost-prayer-to-the-sacred-winds.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/magic-guide.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/mappa-mare.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/memory-of-dust.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/otherworldly-story.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/prototype-amber.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/royal-grimoire.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/sacrificial-fragments.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/skyward-atlas.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/solar-pearl.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/the-widsith.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/thrilling-tales-of-dragon-slayers.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/twin-nephrite.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/wine-and-song.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/blackcliff-slasher.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/bloodtainted-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/debate-club.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/favonius-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/ferrous-shadow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/lithic-blade.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/prototype-archaic.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/quartz.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/rainslasher.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/royal-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/sacrificial-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/serpent-spine.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyrider-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyward-pride.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/snow-tombed-starsilver.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-bell.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-unforged.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/white-iron-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/whiteblind.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/wolfs-gravestone.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/black-tassel.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/blackcliff-pole.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/crescent-pike.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/deathmatch.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragons-bane.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragonspine-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/favonius-lance.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/halberd.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/lithic-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/primordial-jade-winged-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/prototype-starglitter.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/royal-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/skyward-spine.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/vortex-vanquisher.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/white-tassel.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/aquila-favonia.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/blackcliff-longsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/cool-steel.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/dark-iron-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/favonius-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/festering-desire.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/fillet-blade.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/harbinger-of-dawn.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/iron-sting.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/lions-roar.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/prototype-rancour.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/royal-longsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sacrificial-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyrider-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyward-blade.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/summit-shaper.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sword-of-descension.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-alley-flash.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-black-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-flute.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/travelers-handy-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/weapon-stats-type.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/characters-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/circlet-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/flower-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/goblet-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/plume-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/sands-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-builder.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/main-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/possible-levels.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/set-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sets-with-effects.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sub-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/weapon.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/weapons-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/artifacts-handler.spec.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/artifacts-handler.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/build-optimizer.spec.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/build-optimizer.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/stryker.conf.json",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/stryker.log",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/tsconfig.json"
+]
+22:39:06 (559) DEBUG InputFileResolver Files to mutate: [
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/albedo.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/amber.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/barbara.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/beidou.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/bennett.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/character-stats-type.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/chongyun.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diluc.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diona.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/fischl.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ganyu.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/jean.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/kaeya.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/keqing.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/klee.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/lisa.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/mona.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ningguang.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/noelle.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/qiqi.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/razor.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/sucrose.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/tartaglia.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/traveler.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/venti.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xiangling.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xingqiu.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xinyan.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/zhongli.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-characters-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-weapons-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/alley-hunter.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/amos-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/blackcliff-warbow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/compound-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/ebony-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/favonius-warbow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/messenger.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/prototype-crescent.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/raven-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/recurve-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/royal-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/rust.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sacrificial-bow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sharpshooters-oath.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/skyward-harp.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/slingshot.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-stringless.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-viridescent-hunt.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/amber-catalyst.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/blackcliff-agate.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/emerald-orb.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/eye-of-perception.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/favonius-codex.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/frostbearer.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/lost-prayer-to-the-sacred-winds.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/magic-guide.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/mappa-mare.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/memory-of-dust.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/otherworldly-story.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/prototype-amber.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/royal-grimoire.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/sacrificial-fragments.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/skyward-atlas.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/solar-pearl.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/the-widsith.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/thrilling-tales-of-dragon-slayers.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/twin-nephrite.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/wine-and-song.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/blackcliff-slasher.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/bloodtainted-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/debate-club.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/favonius-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/ferrous-shadow.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/lithic-blade.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/prototype-archaic.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/quartz.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/rainslasher.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/royal-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/sacrificial-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/serpent-spine.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyrider-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyward-pride.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/snow-tombed-starsilver.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-bell.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-unforged.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/white-iron-greatsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/whiteblind.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/wolfs-gravestone.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/black-tassel.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/blackcliff-pole.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/crescent-pike.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/deathmatch.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragons-bane.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragonspine-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/favonius-lance.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/halberd.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/lithic-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/primordial-jade-winged-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/prototype-starglitter.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/royal-spear.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/skyward-spine.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/vortex-vanquisher.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/white-tassel.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/aquila-favonia.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/blackcliff-longsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/cool-steel.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/dark-iron-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/favonius-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/festering-desire.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/fillet-blade.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/harbinger-of-dawn.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/index.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/iron-sting.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/lions-roar.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/prototype-rancour.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/royal-longsword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sacrificial-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyrider-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyward-blade.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/summit-shaper.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sword-of-descension.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-alley-flash.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-black-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-flute.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/travelers-handy-sword.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/weapon-stats-type.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/characters-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/circlet-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/flower-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/goblet-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/plume-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/sands-artifact.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-builder.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/main-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/possible-levels.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/set-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sets-with-effects.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sub-statistics.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/weapon.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/weapons-repository.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/artifacts-handler.ts",
+  "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/build-optimizer.ts"
+]
+22:39:06 (559) DEBUG TemporaryDirectory Using temp directory "/mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp"
+22:39:06 (559) DEBUG Instrumenter Instrumenting 150 source files with mutants
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/albedo.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/amber.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/barbara.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/beidou.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/bennett.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/character-stats-type.ts (0 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/chongyun.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/diluc.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/diona.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/fischl.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/ganyu.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/jean.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/kaeya.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/keqing.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/klee.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/lisa.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/mona.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/ningguang.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/noelle.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/qiqi.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/razor.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/sucrose.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/tartaglia.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/traveler.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/venti.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/xiangling.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/xingqiu.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/xinyan.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/characters-stats/zhongli.ts (41 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/in-mermory-characters-repository.ts (7 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/in-mermory-weapons-repository.ts (8 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/alley-hunter.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/amos-bow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/blackcliff-warbow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/compound-bow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/ebony-bow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/favonius-warbow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/index.ts (1 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/messenger.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/prototype-crescent.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/raven-bow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/recurve-bow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/royal-bow.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/rust.ts (32 mutant(s))
+22:39:06 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/sacrificial-bow.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/sharpshooters-oath.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/skyward-harp.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/slingshot.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/the-stringless.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/bows/the-viridescent-hunt.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/amber-catalyst.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/blackcliff-agate.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/emerald-orb.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/eye-of-perception.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/favonius-codex.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/frostbearer.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/index.ts (1 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/lost-prayer-to-the-sacred-winds.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/magic-guide.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/mappa-mare.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/memory-of-dust.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/otherworldly-story.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/prototype-amber.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/royal-grimoire.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/sacrificial-fragments.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/skyward-atlas.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/solar-pearl.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/the-widsith.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/thrilling-tales-of-dragon-slayers.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/twin-nephrite.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/catalysts/wine-and-song.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/blackcliff-slasher.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/bloodtainted-greatsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/debate-club.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/favonius-greatsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/ferrous-shadow.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/index.ts (1 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/lithic-blade.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/prototype-archaic.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/quartz.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/rainslasher.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/royal-greatsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/sacrificial-greatsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/serpent-spine.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/skyrider-greatsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/skyward-pride.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/snow-tombed-starsilver.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/the-bell.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/the-unforged.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/white-iron-greatsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/whiteblind.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/claymores/wolfs-gravestone.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/black-tassel.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/blackcliff-pole.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/crescent-pike.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/deathmatch.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/dragons-bane.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/dragonspine-spear.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/favonius-lance.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/halberd.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/index.ts (1 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/lithic-spear.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/primordial-jade-winged-spear.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/prototype-starglitter.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/royal-spear.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/skyward-spine.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/vortex-vanquisher.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/polearms/white-tassel.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/aquila-favonia.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/blackcliff-longsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/cool-steel.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/dark-iron-sword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/favonius-sword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/festering-desire.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/fillet-blade.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/harbinger-of-dawn.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/index.ts (1 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/iron-sting.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/lions-roar.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/prototype-rancour.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/royal-longsword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/sacrificial-sword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/skyrider-sword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/skyward-blade.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/summit-shaper.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/sword-of-descension.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/the-alley-flash.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/the-black-sword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/the-flute.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/swords/travelers-handy-sword.ts (32 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/adapters/secondaries/weapons-stats/weapon-stats-type.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/characters-repository.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/entities/artifact.ts (86 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/entities/circlet-artifact.ts (13 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/entities/flower-artifact.ts (1 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/entities/goblet-artifact.ts (13 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/entities/plume-artifact.ts (1 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/entities/sands-artifact.ts (13 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/character-builder.ts (10 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/character-statistics.ts (1 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/character.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/main-statistics.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/possible-levels.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/set-statistics.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/sets-with-effects.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/sub-statistics.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/models/weapon.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/domain/weapons-repository.ts (0 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/usescases/artifacts-handler.ts (12 mutant(s))
+22:39:07 (559) DEBUG Instrumenter Instrumented src/core/usescases/build-optimizer.ts (108 mutant(s))
+22:39:07 (559) INFO Instrumenter Instrumented 150 source file(s) with 4434 mutant(s)
+22:39:08 (559) DEBUG TSConfigPreprocessor Rewriting file File {
+  name: '/mnt/c/Users/Fabien/dev/genshin-bo/tsconfig.json',
+  _content: <Buffer 7b 0d 0a 20 20 22 63 6f 6d 70 69 6c 65 72 4f 70 74 69 6f 6e 73 22 3a 20 7b 0d 0a 20 20 20 20 22 74 61 72 67 65 74 22 3a 20 22 65 73 36 22 2c 0d 0a 20 ... 321 more bytes>,
+  _textContent: '{\r\n' +
+    '  "compilerOptions": {\r\n' +
+    '    "target": "es6",\r\n' +
+    '    "outDir": "dist",\r\n' +
+    '    "module": "esnext",\r\n' +
+    '    "moduleResolution": "node",\r\n' +
+    '    "sourceMap": false,\r\n' +
+    '    "allowSyntheticDefaultImports": true,\r\n' +
+    '    "noUnusedLocals": true,\r\n' +
+    '    "noUnusedParameters": true,\r\n' +
+    '    "noImplicitAny": true,\r\n' +
+    '    "baseUrl": ".",\r\n' +
+    '    "paths": {\r\n' +
+    '      "*": ["node_modules/"]\r\n' +
+    '    }\r\n' +
+    '  },\r\n' +
+    '}\r\n'
+}
+22:39:08 (559) INFO ConcurrencyTokenProvider Creating 2 checker process(es) and 2 test runner process(es).
+22:39:08 (559) DEBUG ChildProcessProxy Started CheckerWorker in child process 572
+22:39:08 (559) DEBUG ChildProcessProxy Started CheckerWorker in child process 579
+22:39:08 (572) DEBUG PluginLoader Loading @stryker-mutator/* from /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator
+22:39:08 (572) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter" (matched with expression @stryker-mutator/*)
+22:39:08 (572) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner" (matched with expression @stryker-mutator/*)
+22:39:08 (572) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker" (matched with expression @stryker-mutator/*)
+22:39:08 (572) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter
+22:39:09 (572) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner
+22:39:09 (572) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker
+22:39:09 (572) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/reporters/index.js
+22:39:08 (579) DEBUG PluginLoader Loading @stryker-mutator/* from /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator
+22:39:08 (579) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter" (matched with expression @stryker-mutator/*)
+22:39:08 (579) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner" (matched with expression @stryker-mutator/*)
+22:39:08 (579) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker" (matched with expression @stryker-mutator/*)
+22:39:08 (579) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter
+22:39:09 (579) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner
+22:39:09 (579) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker
+22:39:09 (579) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/reporters/index.js
+22:39:14 (579) TRACE TypescriptChecker summary message TS6194: Found 0 errors. Watching for file changes.
+
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/tsconfig.json"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/jest.config.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-characters-repository.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-weapons-repository.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/albedo.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/amber.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/barbara.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/beidou.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/bennett.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/character-stats-type.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/chongyun.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diluc.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diona.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/fischl.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ganyu.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/jean.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/kaeya.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/keqing.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/klee.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/lisa.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/mona.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ningguang.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/noelle.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/qiqi.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/razor.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/sucrose.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/tartaglia.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/traveler.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/venti.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xiangling.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xingqiu.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xinyan.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/zhongli.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/weapon-stats-type.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/alley-hunter.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/amos-bow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/blackcliff-warbow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/compound-bow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/ebony-bow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/favonius-warbow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/index.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/messenger.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/prototype-crescent.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/raven-bow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/recurve-bow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/royal-bow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/rust.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sacrificial-bow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sharpshooters-oath.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/skyward-harp.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/slingshot.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-stringless.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-viridescent-hunt.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/amber-catalyst.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/blackcliff-agate.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/emerald-orb.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/eye-of-perception.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/favonius-codex.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/frostbearer.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/index.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/lost-prayer-to-the-sacred-winds.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/magic-guide.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/mappa-mare.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/memory-of-dust.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/otherworldly-story.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/prototype-amber.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/royal-grimoire.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/sacrificial-fragments.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/skyward-atlas.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/solar-pearl.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/the-widsith.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/thrilling-tales-of-dragon-slayers.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/twin-nephrite.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/wine-and-song.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/blackcliff-slasher.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/bloodtainted-greatsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/debate-club.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/favonius-greatsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/ferrous-shadow.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/index.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/lithic-blade.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/prototype-archaic.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/quartz.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/rainslasher.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/royal-greatsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/sacrificial-greatsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/serpent-spine.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyrider-greatsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyward-pride.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/snow-tombed-starsilver.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-bell.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-unforged.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/white-iron-greatsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/whiteblind.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/wolfs-gravestone.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/black-tassel.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/blackcliff-pole.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/crescent-pike.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/deathmatch.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragons-bane.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragonspine-spear.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/favonius-lance.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/halberd.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/index.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/lithic-spear.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/primordial-jade-winged-spear.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/prototype-starglitter.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/royal-spear.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/skyward-spine.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/vortex-vanquisher.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/white-tassel.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/aquila-favonia.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/blackcliff-longsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/cool-steel.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/dark-iron-sword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/favonius-sword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/festering-desire.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/fillet-blade.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/harbinger-of-dawn.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/index.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/iron-sting.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/lions-roar.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/prototype-rancour.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/royal-longsword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sacrificial-sword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyrider-sword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyward-blade.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/summit-shaper.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sword-of-descension.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-alley-flash.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-black-sword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-flute.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/travelers-handy-sword.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/characters-repository.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/weapons-repository.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/artifact.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/circlet-artifact.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/flower-artifact.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/goblet-artifact.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/plume-artifact.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/sands-artifact.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-builder.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-statistics.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/main-statistics.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/possible-levels.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/set-statistics.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sets-with-effects.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sub-statistics.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/weapon.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/artifacts-handler.spec.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/artifacts-handler.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/build-optimizer.spec.ts"
+22:39:14 (579) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/build-optimizer.ts"
+22:39:14 (572) TRACE TypescriptChecker summary message TS6194: Found 0 errors. Watching for file changes.
+
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/tsconfig.json"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/jest.config.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-characters-repository.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/in-mermory-weapons-repository.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/albedo.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/amber.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/barbara.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/beidou.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/bennett.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/character-stats-type.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/chongyun.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diluc.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/diona.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/fischl.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ganyu.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/jean.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/kaeya.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/keqing.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/klee.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/lisa.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/mona.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/ningguang.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/noelle.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/qiqi.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/razor.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/sucrose.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/tartaglia.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/traveler.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/venti.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xiangling.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xingqiu.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/xinyan.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/characters-stats/zhongli.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/weapon-stats-type.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/alley-hunter.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/amos-bow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/blackcliff-warbow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/compound-bow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/ebony-bow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/favonius-warbow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/index.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/messenger.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/prototype-crescent.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/raven-bow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/recurve-bow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/royal-bow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/rust.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sacrificial-bow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/sharpshooters-oath.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/skyward-harp.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/slingshot.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-stringless.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/bows/the-viridescent-hunt.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/amber-catalyst.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/blackcliff-agate.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/emerald-orb.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/eye-of-perception.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/favonius-codex.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/frostbearer.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/index.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/lost-prayer-to-the-sacred-winds.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/magic-guide.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/mappa-mare.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/memory-of-dust.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/otherworldly-story.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/prototype-amber.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/royal-grimoire.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/sacrificial-fragments.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/skyward-atlas.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/solar-pearl.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/the-widsith.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/thrilling-tales-of-dragon-slayers.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/twin-nephrite.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/catalysts/wine-and-song.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/blackcliff-slasher.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/bloodtainted-greatsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/debate-club.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/favonius-greatsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/ferrous-shadow.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/index.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/lithic-blade.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/prototype-archaic.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/quartz.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/rainslasher.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/royal-greatsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/sacrificial-greatsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/serpent-spine.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyrider-greatsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/skyward-pride.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/snow-tombed-starsilver.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-bell.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/the-unforged.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/white-iron-greatsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/whiteblind.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/claymores/wolfs-gravestone.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/black-tassel.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/blackcliff-pole.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/crescent-pike.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/deathmatch.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragons-bane.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/dragonspine-spear.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/favonius-lance.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/halberd.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/index.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/lithic-spear.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/primordial-jade-winged-spear.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/prototype-starglitter.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/royal-spear.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/skyward-spine.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/vortex-vanquisher.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/polearms/white-tassel.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/aquila-favonia.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/blackcliff-longsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/cool-steel.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/dark-iron-sword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/favonius-sword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/festering-desire.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/fillet-blade.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/harbinger-of-dawn.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/index.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/iron-sting.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/lions-roar.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/prototype-rancour.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/royal-longsword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sacrificial-sword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyrider-sword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/skyward-blade.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/summit-shaper.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/sword-of-descension.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-alley-flash.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-black-sword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/the-flute.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/adapters/secondaries/weapons-stats/swords/travelers-handy-sword.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/characters-repository.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/weapons-repository.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/artifact.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/circlet-artifact.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/flower-artifact.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/goblet-artifact.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/plume-artifact.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/entities/sands-artifact.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-builder.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character-statistics.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/character.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/main-statistics.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/possible-levels.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/set-statistics.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sets-with-effects.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/sub-statistics.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/domain/models/weapon.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/artifacts-handler.spec.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/artifacts-handler.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/build-optimizer.spec.ts"
+22:39:14 (572) TRACE TypescriptChecker.HybridFileSystem Registering watcher for file "/mnt/c/Users/Fabien/dev/genshin-bo/src/core/usescases/build-optimizer.ts"
+22:39:14 (559) DEBUG Sandbox Creating a sandbox for files in /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583
+22:39:14 (559) DEBUG ChildProcessProxy Started ChildProcessTestRunnerWorker in child process 594
+22:39:14 (559) DEBUG ChildProcessProxy Started ChildProcessTestRunnerWorker in child process 601
+22:39:16 (559) INFO DryRunExecutor Starting initial test run. This may take a while.
+22:39:16 (559) DEBUG DryRunExecutor Using timeout of undefined ms.
+22:39:16 (559) DEBUG TimeoutDecorator Starting timeout timer (300000 ms) for a test run
+22:39:15 (594) DEBUG ChildProcessProxyWorker Changing current working directory for this process to /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583
+22:39:15 (594) DEBUG PluginLoader Loading @stryker-mutator/* from /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator
+22:39:15 (594) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter" (matched with expression @stryker-mutator/*)
+22:39:15 (594) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner" (matched with expression @stryker-mutator/*)
+22:39:15 (594) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker" (matched with expression @stryker-mutator/*)
+22:39:15 (594) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter
+22:39:15 (594) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner
+22:39:15 (594) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker
+22:39:16 (594) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/reporters/index.js
+22:39:16 (594) DEBUG jestTestAdapterFactory Detected Jest version 26.6.3
+22:39:16 (594) DEBUG CustomJestConfigLoader Read Jest config from /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583/package.json
+22:39:16 (594) DEBUG JestTestRunner Merging file-based config {} 
+      with custom config {
+  "bail": true
+}
+      and default (internal) stryker config {
+  "collectCoverage": false,
+  "verbose": false,
+  "notify": false,
+  "reporters": []
+}
+22:39:16 (594) DEBUG JestTestRunner Running jest with --findRelatedTests flag. Set jest.enableFindRelatedTests to false to run all tests on every mutant.
+22:39:16 (594) TRACE JestTestRunner Invoking Jest with config {"jestConfig":{"bail":true,"collectCoverage":false,"verbose":false,"notify":false,"reporters":[],"globals":{"__strykerGlobalNamespace__":"__stryker__"},"testEnvironment":"/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner/src/jest-plugins/jest-environment-jsdom.js","setupFilesAfterEnv":["/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner/src/jest-plugins/jasmine2-setup-coverage-analysis.js"]},"projectRoot":"/mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583"}
+22:39:15 (601) DEBUG ChildProcessProxyWorker Changing current working directory for this process to /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583
+22:39:15 (601) DEBUG PluginLoader Loading @stryker-mutator/* from /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator
+22:39:15 (601) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter" (matched with expression @stryker-mutator/*)
+22:39:15 (601) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner" (matched with expression @stryker-mutator/*)
+22:39:15 (601) DEBUG PluginLoader Loading plugin "/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker" (matched with expression @stryker-mutator/*)
+22:39:15 (601) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/instrumenter
+22:39:15 (601) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/jest-runner
+22:39:15 (601) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/typescript-checker
+22:39:16 (601) DEBUG PluginLoader Loading plugins /mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/reporters/index.js
+22:39:16 (601) DEBUG jestTestAdapterFactory Detected Jest version 26.6.3
+22:39:16 (601) DEBUG CustomJestConfigLoader Read Jest config from /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583/package.json
+22:39:16 (601) DEBUG JestTestRunner Merging file-based config {} 
+      with custom config {
+  "bail": true
+}
+      and default (internal) stryker config {
+  "collectCoverage": false,
+  "verbose": false,
+  "notify": false,
+  "reporters": []
+}
+22:39:16 (601) DEBUG JestTestRunner Running jest with --findRelatedTests flag. Set jest.enableFindRelatedTests to false to run all tests on every mutant.
+22:39:19 (559) ERROR DryRunExecutor One or more tests resulted in an error:
+	BABEL_PARSE_ERROR /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583/src/core/usescases/build-optimizer.spec.ts: Unexpected token, expected ";" (16:20)
+
+  14 | 
+  15 | describe('BuildOptimizer.computeBuildStats', () => {
+> 16 |   let buildOptimizer: BuildOptimizer;
+     |                     ^
+  17 |   let charactersRepository: InMemoryCharactersRepository;
+  18 |   let flowerArtifacts: FlowerArtifact[];
+  19 |   let plumeArtifacts: PlumeArtifact[]; SyntaxError: /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583/src/core/usescases/build-optimizer.spec.ts: Unexpected token, expected ";" (16:20)
+
+  14 | 
+  15 | describe('BuildOptimizer.computeBuildStats', () => {
+> 16 |   let buildOptimizer: BuildOptimizer;
+     |                     ^
+  17 |   let charactersRepository: InMemoryCharactersRepository;
+  18 |   let flowerArtifacts: FlowerArtifact[];
+  19 |   let plumeArtifacts: PlumeArtifact[];
+    at Parser._raise (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/error.js:60:45)
+    at Parser.raiseWithData (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/error.js:55:17)
+    at Parser.raise (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/error.js:39:17)
+    at Parser.unexpected (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/util.js:139:16)
+    at Parser.semicolon (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/util.js:109:40)
+    at Parser.parseVarStatement (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:701:10)
+    at Parser.parseStatementContent (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:217:21)
+    at Parser.parseStatement (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:157:17)
+    at Parser.parseBlockOrModuleBlockBody (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:874:25)
+    at Parser.parseBlockBody (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:850:10), BABEL_PARSE_ERROR /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583/src/core/usescases/artifacts-handler.spec.ts: Unexpected token, expected ";" (14:22)
+
+  12 | 
+  13 | describe('ArtifactsHandler.addArtifact', () => {
+> 14 |   let artifactsHandler: ArtifactsHandler;
+     |                       ^
+  15 | 
+  16 |   beforeEach(() => {
+  17 |     artifactsHandler = new ArtifactsHandler(); SyntaxError: /mnt/c/Users/Fabien/dev/genshin-bo/.stryker-tmp/sandbox1364583/src/core/usescases/artifacts-handler.spec.ts: Unexpected token, expected ";" (14:22)
+
+  12 | 
+  13 | describe('ArtifactsHandler.addArtifact', () => {
+> 14 |   let artifactsHandler: ArtifactsHandler;
+     |                       ^
+  15 | 
+  16 |   beforeEach(() => {
+  17 |     artifactsHandler = new ArtifactsHandler();
+    at Parser._raise (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/error.js:60:45)
+    at Parser.raiseWithData (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/error.js:55:17)
+    at Parser.raise (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/error.js:39:17)
+    at Parser.unexpected (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/util.js:139:16)
+    at Parser.semicolon (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/util.js:109:40)
+    at Parser.parseVarStatement (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:701:10)
+    at Parser.parseStatementContent (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:217:21)
+    at Parser.parseStatement (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:157:17)
+    at Parser.parseBlockOrModuleBlockBody (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:874:25)
+    at Parser.parseBlockBody (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@babel/parser/src/parser/statement.js:850:10)
+22:39:20 (559) DEBUG Stryker Not removing the temp dir because an error occurred
+22:39:20 (559) ERROR Stryker Error: Something went wrong in the initial test run
+    at DryRunExecutor.validateResultCompleted (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/process/3-dry-run-executor.js:59:15)
+    at DryRunExecutor.timeDryRun (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/process/3-dry-run-executor.js:69:14)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at async MergeMapSubscriber.project (/mnt/c/Users/Fabien/dev/genshin-bo/node_modules/@stryker-mutator/core/src/concurrent/pool.js:62:28)
+22:39:20 (559) DEBUG ChildProcessProxy Disposing of worker process 601
+22:39:20 (559) DEBUG ChildProcessProxy Disposing of worker process 594
+22:39:20 (559) DEBUG ChildProcessProxy Kill 601
+22:39:20 (559) DEBUG ChildProcessProxy Kill 594
+22:39:20 (559) DEBUG ChildProcessProxy Disposing of worker process 572
+22:39:20 (559) DEBUG ChildProcessProxy Disposing of worker process 579
+22:39:20 (559) DEBUG ChildProcessProxy Kill 572
+22:39:20 (559) DEBUG ChildProcessProxy Kill 579
