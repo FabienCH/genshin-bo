@@ -1341,7 +1341,7 @@ function getSandsArtifactsWithValues(
         getSet(artifactData.set),
         artifactData.subStats,
         getLevel(artifactData.level),
-        artifactData.mainStatType as SandsMainStatType,
+        artifactData.mainStatType,
       ),
   );
 }
@@ -1362,7 +1362,7 @@ function getGobletArtifactsWithValues(
         getSet(artifactData.set),
         artifactData.subStats,
         getLevel(artifactData.level),
-        artifactData.mainStatType as GobletMainStatType,
+        artifactData.mainStatType,
       ),
   );
 }
@@ -1383,7 +1383,7 @@ function getCircletArtifactsWithValues(
         getSet(artifactData.set),
         artifactData.subStats,
         getLevel(artifactData.level),
-        artifactData.mainStatType as CircletMainStatType,
+        artifactData.mainStatType,
       ),
   );
 }
