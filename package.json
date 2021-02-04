@@ -6,13 +6,18 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "mutation-testing": "stryker run --buildCommand jest",
     "lint": "eslint src/*",
-    "lint:fix": "eslint src/* --fix"
+    "lint:fix": "eslint src/* --fix",
+    "build":"tsc -b ./tsconfig.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@stryker-mutator/core": "^4.4.1",
+    "@stryker-mutator/jest-runner": "^4.4.1",
+    "@stryker-mutator/typescript-checker": "^4.4.1",
     "@types/jest": "^26.0.19",
     "@types/node": "^14.14.14",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
