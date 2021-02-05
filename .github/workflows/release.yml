@@ -4,7 +4,7 @@ on:
   push:
     branches: [ test/mutation-testing* ]
   release:
-    types: [published, created]
+    types: [published]
 jobs:
   mutation-testing:
     name: mutation-testing
@@ -13,10 +13,9 @@ jobs:
       STRYKER_TOKEN: ${{secrets.STRYKER_DASHBOARD_API_KEY}}
       BASE_URL: "https://dashboard.stryker-mutator.io"
       PROJECT: "github.com/FabienCH/genshin-bo"
-      VERSION: ${GITHUB_REF##*/}
     steps:
       - uses: actions/checkout@master
       - run: npm install
       - run: npm run mutation-testing
       - run: >
-          bash <(curl -X PUT $BASE_URL/api/reports/$PROJECT/${GITHUB_REF##*/} -H "Content-Type: application/json" -H "Host: dashboard.stryker-mutator.io" -H "X-Api-Key: $STRYKER_TOKEN" -d @reports/mutation/mutation.json)
+          curl -X PUT $BASE_URL/api/reports/$PROJECT/${GITHUB_REF##*/} -H 'Content-Type: application/json' -H 'Host: dashboard.stryker-mutator.io' -H 'X-Api-Key: $STRYKER_TOKEN' -d @reports/mutation/mutation.json
