@@ -18,4 +18,4 @@ jobs:
       - run: npm install
       - run: npm run mutation-testing
       - run: >
-          curl -X PUT $BASE_URL/api/reports/$PROJECT/${GITHUB_REF##*/} -H "Content-Type: application/json" -H "Host: dashboard.stryker-mutator.io" -H "X-Api-Key: $STRYKER_TOKEN" -d @reports/mutation/mutation.json)
+          curl -X PUT $BASE_URL/api/reports/$PROJECT/${GITHUB_REF##*/} -H "Content-Type: application/json" -H "Host: dashboard.stryker-mutator.io" -H "X-Api-Key: $STRYKER_TOKEN" -d @reports/mutation/mutation.json
