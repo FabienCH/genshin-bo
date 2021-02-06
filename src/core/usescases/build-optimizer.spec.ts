@@ -8,13 +8,13 @@ import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { GobletArtifact } from '../domain/entities/goblet-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
-import { InMemoryCharactersRepository } from '../adapters/secondaries/in-mermory-characters-repository';
+import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
 import { Character } from '../domain/models/character';
 import { ArtifactData } from '../domain/models/artifact-data';
 import { CircletArtifactData } from '../domain/models/circlet-artifact-data';
 import { GobletArtifactData } from '../domain/models/goblet-artifact-data';
 import { SandsArtifactData } from '../domain/models/sands-artifact-data';
-import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-mermory-artifacts-repository';
+import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;

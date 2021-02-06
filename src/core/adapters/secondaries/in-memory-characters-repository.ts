@@ -31,7 +31,7 @@ import { xingqiu } from './characters-stats/xingqiu';
 import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
 import { PossibleLevels } from '../../domain/models/possible-levels';
-import { InMemoryWeaponsRepository } from './in-mermory-weapons-repository';
+import { InMemoryWeaponsRepository } from './in-memory-weapons-repository';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly weaponsRepository: InMemoryWeaponsRepository;
