@@ -2,7 +2,6 @@ import { PossibleMainStats } from '../domain/models/main-statistics';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 import { BuildOptimizer } from './build-optimizer';
 import { PossibleCharacterStats } from '../domain/models/character-statistics';
-import { SetNames } from '../domain/models/sets-with-effects';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
@@ -10,15 +9,22 @@ import { GobletArtifact } from '../domain/entities/goblet-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
 import { Character } from '../domain/models/character';
-import { ArtifactData } from '../domain/models/artifact-data';
-import { CircletArtifactData } from '../domain/models/circlet-artifact-data';
-import { GobletArtifactData } from '../domain/models/goblet-artifact-data';
-import { SandsArtifactData } from '../domain/models/sands-artifact-data';
 import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
+import {
+  atkGeoDmgEmBuildArtifactsData,
+  bolideLavawalkerBuildArtifactsData,
+  defaultBuildArtifactsData,
+  defPhyDmgAtkBuildArtifactsData,
+  gladiatorThunderingBuildArtifactsData,
+  lvl134820BuildArtifactsData,
+  lvl27121517BuildArtifactsData,
+  multipleArtifactsBuildArtifactsData,
+} from '../../test/artifacts-data-mock';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
   let charactersRepository: InMemoryCharactersRepository;
+  let artifactsRepository: InMemoryArtifactsRepository;
   let defaultFlowerArtifacts: FlowerArtifact[];
   let defaultPlumeArtifacts: PlumeArtifact[];
   let defaultSandsArtifacts: SandsArtifact[];
@@ -29,128 +35,26 @@ describe('BuildOptimizer.computeBuildStats', () => {
   beforeEach(() => {
     buildOptimizer = new BuildOptimizer();
     charactersRepository = new InMemoryCharactersRepository();
+    artifactsRepository = new InMemoryArtifactsRepository(defaultBuildArtifactsData);
+
     razor = charactersRepository.getCharacter('razor', '80a', { name: 'snowTombedStarsilver', level: '90' });
-    defaultFlowerArtifacts = getFlowerArtifactsWithValues([
-      {
-        id: '0',
-        set: SetNames.gladiatorsFinale,
-        level: 8,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 16,
-          [PossibleSubStats.percentAtk]: 4.7,
-          [PossibleSubStats.critDmg]: 11.7,
-          [PossibleSubStats.energyRecharge]: 4.5,
-        },
-      },
-    ]);
-    defaultPlumeArtifacts = getPlumeArtifactsWithValues([
-      {
-        id: '1',
-        set: SetNames.crimsonWitchOfFlames,
-        level: 8,
-        subStats: {
-          [PossibleSubStats.flatHp]: 478,
-          [PossibleSubStats.critDmg]: 7.8,
-          [PossibleSubStats.critRate]: 3.1,
-          [PossibleSubStats.energyRecharge]: 5.8,
-        },
-      },
-    ]);
-    defaultSandsArtifacts = getSandsArtifactsWithValues([
-      {
-        id: '2',
-        set: SetNames.archaicPetra,
-        level: 8,
-        mainStatType: PossibleMainStats.percentAtk,
-        subStats: {
-          [PossibleSubStats.elementalMastery]: 16,
-          [PossibleSubStats.flatHp]: 538,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.energyRecharge]: 5.2,
-        },
-      },
-    ]);
-    defaultGobletArtifacts = getGobletArtifactsWithValues([
-      {
-        id: '3',
-        set: SetNames.bloodstainedChivalry,
-        level: 0,
-        mainStatType: PossibleMainStats.pyroDmg,
-        subStats: {
-          [PossibleSubStats.elementalMastery]: 21,
-          [PossibleSubStats.percentHp]: 4.7,
-          [PossibleSubStats.energyRecharge]: 4.5,
-          [PossibleSubStats.flatAtk]: 19,
-        },
-      },
-    ]);
-    defaultCircletArtifacts = getCircletArtifactsWithValues([
-      {
-        id: '4',
-        set: SetNames.gladiatorsFinale,
-        level: 16,
-        mainStatType: PossibleMainStats.percentAtk,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 53,
-          [PossibleSubStats.flatDef]: 37,
-          [PossibleSubStats.elementalMastery]: 19,
-          [PossibleSubStats.percentDef]: 7.6,
-        },
-      },
-    ]);
+    defaultFlowerArtifacts = artifactsRepository.getFlowerArtifacts();
+    defaultPlumeArtifacts = artifactsRepository.getPlumeArtifacts();
+    defaultSandsArtifacts = artifactsRepository.getSandsArtifacts();
+    defaultGobletArtifacts = artifactsRepository.getGobletArtifacts();
+    defaultCircletArtifacts = artifactsRepository.getCircletArtifacts();
   });
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
-      const flowerArtifacts = getFlowerArtifactsWithValues([
-        {
-          id: '0',
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
-        },
-      ]);
-      const plumeArtifacts = getPlumeArtifactsWithValues([
-        {
-          id: '1',
-          subStats: {
-            [PossibleSubStats.percentAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 6,
-          },
-        },
-      ]);
+      artifactsRepository = new InMemoryArtifactsRepository(defPhyDmgAtkBuildArtifactsData);
 
-      const sandsArtifacts = getSandsArtifactsWithValues([
-        {
-          id: '2',
-          mainStatType: PossibleMainStats.percentDef,
-          subStats: { [PossibleSubStats.flatDef]: 6, [PossibleSubStats.flatHp]: 40, [PossibleSubStats.critRate]: 2.5 },
-        },
-      ]);
+      const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+      const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+      const circletArtifacts = artifactsRepository.getCircletArtifacts();
 
-      const gobletArtifacts = getGobletArtifactsWithValues([
-        {
-          id: '3',
-          mainStatType: PossibleMainStats.physicalDmg,
-          subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.critDmg]: 3.7,
-          },
-        },
-      ]);
-
-      const circletArtifacts = getCircletArtifactsWithValues([
-        {
-          id: '4',
-          mainStatType: PossibleMainStats.percentAtk,
-          subStats: {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.flatHp]: 60,
-            [PossibleSubStats.flatAtk]: 3,
-          },
-        },
-      ]);
       expect(
         buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
@@ -169,44 +73,13 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
-      const flowerArtifacts = getFlowerArtifactsWithValues([
-        {
-          id: '0',
-          subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.critRate]: 3.2, [PossibleSubStats.percentAtk]: 3 },
-        },
-      ]);
-      const plumeArtifacts = getPlumeArtifactsWithValues([
-        {
-          id: '1',
-          subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
-        },
-      ]);
-      const sandsArtifacts = getSandsArtifactsWithValues([
-        {
-          id: '2',
-          mainStatType: PossibleMainStats.percentAtk,
-          subStats: { [PossibleSubStats.percentDef]: 6, [PossibleSubStats.elementalMastery]: 7, [PossibleSubStats.critRate]: 3.2 },
-        },
-      ]);
-      const gobletArtifacts = getGobletArtifactsWithValues([
-        {
-          id: '3',
-          mainStatType: PossibleMainStats.geoDmg,
-          subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.percentDef]: 3,
-          },
-        },
-      ]);
-      const circletArtifacts = getCircletArtifactsWithValues([
-        {
-          id: '4',
-          mainStatType: PossibleMainStats.elementalMastery,
-          subStats: { [PossibleSubStats.percentDef]: 4, [PossibleSubStats.flatAtk]: 4, [PossibleSubStats.critDmg]: 3.2 },
-        },
-      ]);
+      artifactsRepository = new InMemoryArtifactsRepository(atkGeoDmgEmBuildArtifactsData);
+
+      const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+      const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+      const circletArtifacts = artifactsRepository.getCircletArtifacts();
 
       expect(
         buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
@@ -229,64 +102,14 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
   describe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
-      const flowerArtifacts = getFlowerArtifactsWithValues([
-        {
-          id: '0',
-          level: 1,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.percentAtk]: 3,
-            [PossibleSubStats.critDmg]: 3.2,
-          },
-        },
-      ]);
-      const plumeArtifacts = getPlumeArtifactsWithValues([
-        {
-          id: '1',
-          level: 3,
-          subStats: { [PossibleSubStats.energyRecharge]: 3, [PossibleSubStats.flatDef]: 7, [PossibleSubStats.critRate]: 2.7 },
-        },
-      ]);
-      const sandsArtifacts = getSandsArtifactsWithValues([
-        {
-          id: '2',
-          level: 4,
-          mainStatType: PossibleMainStats.percentAtk,
-          subStats: {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
-          },
-        },
-      ]);
-      const gobletArtifacts = getGobletArtifactsWithValues([
-        {
-          id: '3',
-          level: 8,
-          mainStatType: PossibleMainStats.geoDmg,
-          subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.percentDef]: 3,
-          },
-        },
-      ]);
-      const circletArtifacts = getCircletArtifactsWithValues([
-        {
-          id: '4',
-          level: 20,
-          mainStatType: PossibleMainStats.elementalMastery,
-          subStats: {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.percentHp]: 5,
-          },
-        },
-      ]);
+      artifactsRepository = new InMemoryArtifactsRepository(lvl134820BuildArtifactsData);
+
+      const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+      const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+      const circletArtifacts = artifactsRepository.getCircletArtifacts();
+
       expect(
         buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
@@ -306,69 +129,14 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with levels 2, 7, 12, 15, 17', () => {
-      const flowerArtifacts = getFlowerArtifactsWithValues([
-        {
-          id: '0',
-          level: 2,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.percentAtk]: 3,
-            [PossibleSubStats.critDmg]: 3.2,
-          },
-        },
-      ]);
-      const plumeArtifacts = getPlumeArtifactsWithValues([
-        {
-          id: '1',
-          level: 7,
-          subStats: {
-            [PossibleSubStats.energyRecharge]: 3,
-            [PossibleSubStats.flatDef]: 7,
-            [PossibleSubStats.critRate]: 2.7,
-            [PossibleSubStats.percentAtk]: 5,
-          },
-        },
-      ]);
-      const sandsArtifacts = getSandsArtifactsWithValues([
-        {
-          id: '2',
-          level: 12,
-          mainStatType: PossibleMainStats.percentHp,
-          subStats: {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
-          },
-        },
-      ]);
-      const gobletArtifacts = getGobletArtifactsWithValues([
-        {
-          id: '3',
-          level: 15,
-          mainStatType: PossibleMainStats.percentDef,
-          subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
-          },
-        },
-      ]);
-      const circletArtifacts = getCircletArtifactsWithValues([
-        {
-          id: '4',
-          level: 17,
-          mainStatType: PossibleMainStats.healingBonus,
-          subStats: {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.percentHp]: 5,
-          },
-        },
-      ]);
+      artifactsRepository = new InMemoryArtifactsRepository(lvl27121517BuildArtifactsData);
+
+      const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+      const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+      const circletArtifacts = artifactsRepository.getCircletArtifacts();
+
       expect(
         buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
@@ -388,74 +156,14 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with gladiator and thundering sets effects', () => {
-      const flowerArtifacts = getFlowerArtifactsWithValues([
-        {
-          id: '0',
-          set: SetNames.gladiatorsFinale,
-          level: 2,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.percentAtk]: 3,
-            [PossibleSubStats.critDmg]: 3.2,
-          },
-        },
-      ]);
-      const plumeArtifacts = getPlumeArtifactsWithValues([
-        {
-          id: '1',
-          set: SetNames.retracingBolide,
-          level: 7,
-          subStats: {
-            [PossibleSubStats.energyRecharge]: 3,
-            [PossibleSubStats.flatDef]: 7,
-            [PossibleSubStats.critRate]: 2.7,
-            [PossibleSubStats.percentDef]: 4,
-          },
-        },
-      ]);
-      const sandsArtifacts = getSandsArtifactsWithValues([
-        {
-          id: '2',
-          set: SetNames.thunderingFury,
-          level: 12,
-          mainStatType: PossibleMainStats.percentHp,
-          subStats: {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
-          },
-        },
-      ]);
-      const gobletArtifacts = getGobletArtifactsWithValues([
-        {
-          id: '3',
-          set: SetNames.thunderingFury,
-          level: 15,
-          mainStatType: PossibleMainStats.percentDef,
-          subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
-          },
-        },
-      ]);
-      const circletArtifacts = getCircletArtifactsWithValues([
-        {
-          id: '4',
-          set: SetNames.gladiatorsFinale,
-          level: 17,
-          mainStatType: PossibleMainStats.healingBonus,
-          subStats: {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.percentHp]: 5,
-          },
-        },
-      ]);
+      artifactsRepository = new InMemoryArtifactsRepository(gladiatorThunderingBuildArtifactsData);
+
+      const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+      const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+      const circletArtifacts = artifactsRepository.getCircletArtifacts();
+
       expect(
         buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
@@ -475,74 +183,14 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with bolide and Lavawalker sets effects', () => {
-      const flowerArtifacts = getFlowerArtifactsWithValues([
-        {
-          id: '0',
-          set: SetNames.lavawalker,
-          level: 2,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.percentAtk]: 3,
-            [PossibleSubStats.critDmg]: 3.2,
-          },
-        },
-      ]);
-      const plumeArtifacts = getPlumeArtifactsWithValues([
-        {
-          id: '1',
-          set: SetNames.retracingBolide,
-          level: 7,
-          subStats: {
-            [PossibleSubStats.energyRecharge]: 3,
-            [PossibleSubStats.flatDef]: 7,
-            [PossibleSubStats.critRate]: 2.7,
-            [PossibleSubStats.critDmg]: 3.9,
-          },
-        },
-      ]);
-      const sandsArtifacts = getSandsArtifactsWithValues([
-        {
-          id: '2',
-          set: SetNames.thunderingFury,
-          level: 12,
-          mainStatType: PossibleMainStats.percentHp,
-          subStats: {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
-          },
-        },
-      ]);
-      const gobletArtifacts = getGobletArtifactsWithValues([
-        {
-          id: '3',
-          set: SetNames.lavawalker,
-          level: 15,
-          mainStatType: PossibleMainStats.percentDef,
-          subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
-          },
-        },
-      ]);
-      const circletArtifacts = getCircletArtifactsWithValues([
-        {
-          id: '4',
-          set: SetNames.retracingBolide,
-          level: 17,
-          mainStatType: PossibleMainStats.healingBonus,
-          subStats: {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.percentHp]: 5,
-          },
-        },
-      ]);
+      artifactsRepository = new InMemoryArtifactsRepository(bolideLavawalkerBuildArtifactsData);
+
+      const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+      const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+      const circletArtifacts = artifactsRepository.getCircletArtifacts();
+
       expect(
         buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
@@ -564,74 +212,14 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 1 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '1', { name: 'rust', level: '1' });
-      const flowerArtifacts = getFlowerArtifactsWithValues([
-        {
-          id: '0',
-          set: SetNames.lavawalker,
-          level: 2,
-          subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.percentAtk]: 3,
-            [PossibleSubStats.critDmg]: 3.2,
-          },
-        },
-      ]);
-      const plumeArtifacts = getPlumeArtifactsWithValues([
-        {
-          id: '1',
-          set: SetNames.retracingBolide,
-          level: 7,
-          subStats: {
-            [PossibleSubStats.energyRecharge]: 3,
-            [PossibleSubStats.flatDef]: 7,
-            [PossibleSubStats.critRate]: 2.7,
-            [PossibleSubStats.critDmg]: 3.9,
-          },
-        },
-      ]);
-      const sandsArtifacts = getSandsArtifactsWithValues([
-        {
-          id: '2',
-          set: SetNames.thunderingFury,
-          level: 12,
-          mainStatType: PossibleMainStats.percentHp,
-          subStats: {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
-          },
-        },
-      ]);
-      const gobletArtifacts = getGobletArtifactsWithValues([
-        {
-          id: '3',
-          set: SetNames.lavawalker,
-          level: 15,
-          mainStatType: PossibleMainStats.percentDef,
-          subStats: {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
-          },
-        },
-      ]);
-      const circletArtifacts = getCircletArtifactsWithValues([
-        {
-          id: '4',
-          set: SetNames.retracingBolide,
-          level: 17,
-          mainStatType: PossibleMainStats.healingBonus,
-          subStats: {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.percentHp]: 5,
-          },
-        },
-      ]);
+      artifactsRepository = new InMemoryArtifactsRepository(bolideLavawalkerBuildArtifactsData);
+
+      const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+      const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+      const circletArtifacts = artifactsRepository.getCircletArtifacts();
+
       expect(
         buildOptimizer.computeBuildsStats(amber, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
       ).toEqual([
@@ -836,112 +424,13 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 
   it('should compute build stats of multiple artifacts for each type', () => {
-    const flowerArtifacts = getFlowerArtifactsWithValues([
-      {
-        id: '0',
-        set: SetNames.lavawalker,
-        level: 2,
-        subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.critRate]: 3.2,
-          [PossibleSubStats.percentAtk]: 3,
-          [PossibleSubStats.critDmg]: 3.2,
-        },
-      },
-      {
-        id: '1',
-        set: SetNames.thunderingFury,
-        level: 7,
-        subStats: {
-          [PossibleSubStats.energyRecharge]: 3,
-          [PossibleSubStats.percentHp]: 6,
-          [PossibleSubStats.critDmg]: 3.9,
-          [PossibleSubStats.percentAtk]: 7,
-        },
-      },
-    ]);
+    artifactsRepository = new InMemoryArtifactsRepository(multipleArtifactsBuildArtifactsData);
 
-    const plumeArtifacts = getPlumeArtifactsWithValues([
-      {
-        id: '2',
-        set: SetNames.retracingBolide,
-        level: 7,
-        subStats: {
-          [PossibleSubStats.energyRecharge]: 4,
-          [PossibleSubStats.flatDef]: 7,
-          [PossibleSubStats.critRate]: 2.7,
-          [PossibleSubStats.critDmg]: 5,
-        },
-      },
-      {
-        id: '3',
-        set: SetNames.blizzardStrayer,
-        level: 12,
-        subStats: {
-          [PossibleSubStats.percentAtk]: 5,
-          [PossibleSubStats.flatHp]: 12,
-          [PossibleSubStats.flatDef]: 6,
-          [PossibleSubStats.percentDef]: 8,
-        },
-      },
-    ]);
-
-    const sandsArtifacts = getSandsArtifactsWithValues([
-      {
-        id: '4',
-        set: SetNames.thunderingFury,
-        level: 12,
-        mainStatType: PossibleMainStats.percentHp,
-        subStats: {
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.elementalMastery]: 7,
-          [PossibleSubStats.critRate]: 3.2,
-          [PossibleSubStats.critDmg]: 2.9,
-        },
-      },
-    ]);
-
-    const gobletArtifacts = getGobletArtifactsWithValues([
-      {
-        id: '5',
-        set: SetNames.lavawalker,
-        level: 15,
-        mainStatType: PossibleMainStats.percentDef,
-        subStats: {
-          [PossibleSubStats.critRate]: 2.5,
-          [PossibleSubStats.percentHp]: 5.2,
-          [PossibleSubStats.percentAtk]: 4,
-          [PossibleSubStats.flatHp]: 3,
-        },
-      },
-      {
-        id: '6',
-        set: SetNames.blizzardStrayer,
-        level: 8,
-        mainStatType: PossibleMainStats.cryoDmg,
-        subStats: {
-          [PossibleSubStats.elementalMastery]: 4,
-          [PossibleSubStats.percentHp]: 5.2,
-          [PossibleSubStats.percentAtk]: 4,
-          [PossibleSubStats.critDmg]: 3,
-        },
-      },
-    ]);
-
-    const circletArtifacts = getCircletArtifactsWithValues([
-      {
-        id: '7',
-        set: SetNames.retracingBolide,
-        level: 17,
-        mainStatType: PossibleMainStats.healingBonus,
-        subStats: {
-          [PossibleSubStats.percentDef]: 4,
-          [PossibleSubStats.flatAtk]: 4,
-          [PossibleSubStats.critDmg]: 3.2,
-          [PossibleSubStats.percentHp]: 5,
-        },
-      },
-    ]);
+    const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
+    const plumeArtifacts = artifactsRepository.getPlumeArtifacts();
+    const sandsArtifacts = artifactsRepository.getSandsArtifacts();
+    const gobletArtifacts = artifactsRepository.getGobletArtifacts();
+    const circletArtifacts = artifactsRepository.getCircletArtifacts();
 
     expect(
       buildOptimizer.computeBuildsStats(razor, flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts),
@@ -1123,62 +612,3 @@ describe('BuildOptimizer.filterArtifacts', () => {
     expect(buildOptimizer.getPossibleBuilds()).toEqual(2);
   });
 });
-
-function getSet(artifactSet: SetNames): SetNames {
-  return artifactSet ? artifactSet : SetNames.retracingBolide;
-}
-
-function getLevel(artifactLevel: number): number {
-  return artifactLevel ? artifactLevel : 0;
-}
-
-function getFlowerArtifactsWithValues(allArtifactsData: ArtifactData[]): FlowerArtifact[] {
-  return allArtifactsData.map(
-    (artifactData) => new FlowerArtifact(artifactData.id, getSet(artifactData.set), artifactData.subStats, getLevel(artifactData.level)),
-  );
-}
-
-function getPlumeArtifactsWithValues(allArtifactsData: ArtifactData[]): PlumeArtifact[] {
-  return allArtifactsData.map(
-    (artifactData) => new PlumeArtifact(artifactData.id, getSet(artifactData.set), artifactData.subStats, getLevel(artifactData.level)),
-  );
-}
-
-function getSandsArtifactsWithValues(allArtifactsData: SandsArtifactData[]): SandsArtifact[] {
-  return allArtifactsData.map(
-    (artifactData) =>
-      new SandsArtifact(
-        artifactData.id,
-        getSet(artifactData.set),
-        artifactData.subStats,
-        getLevel(artifactData.level),
-        artifactData.mainStatType,
-      ),
-  );
-}
-
-function getGobletArtifactsWithValues(allArtifactsData: GobletArtifactData[]): GobletArtifact[] {
-  return allArtifactsData.map(
-    (artifactData) =>
-      new GobletArtifact(
-        artifactData.id,
-        getSet(artifactData.set),
-        artifactData.subStats,
-        getLevel(artifactData.level),
-        artifactData.mainStatType,
-      ),
-  );
-}
-
-function getCircletArtifactsWithValues(allArtifactsData: CircletArtifactData[]): CircletArtifact[] {
-  return allArtifactsData.map(
-    (artifactData) =>
-      new CircletArtifact(
-        artifactData.id,
-        getSet(artifactData.set),
-        artifactData.subStats,
-        getLevel(artifactData.level),
-        artifactData.mainStatType,
-      ),
-  );
-}
