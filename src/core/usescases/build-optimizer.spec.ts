@@ -20,6 +20,7 @@ import {
   lvl27121517BuildArtifactsData,
   multipleArtifactsBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
+import { SetNames } from '../domain/models/sets-with-effects';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
@@ -538,6 +539,36 @@ describe('BuildOptimizer.computeBuildStats', () => {
         [PossibleCharacterStats.physicalDmg]: 64.5,
       },
     ]);
+  });
+
+  fdescribe('filter builds before stats computation', () => {
+    const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
+
+    let buildOptimizer: BuildOptimizer;
+    let allFlowerArtifacts: FlowerArtifact[];
+    let allPlumeArtifacts: PlumeArtifact[];
+    let allSandsArtifacts: SandsArtifact[];
+    let allGobletArtifacts: GobletArtifact[];
+    let allCircletArtifacts: CircletArtifact[];
+
+    beforeEach(() => {
+      allFlowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      allPlumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      allSandsArtifacts = artifactsRepository.getSandsArtifacts();
+      allGobletArtifacts = artifactsRepository.getGobletArtifacts();
+      allCircletArtifacts = artifactsRepository.getCircletArtifacts();
+      buildOptimizer = new BuildOptimizer(
+        allFlowerArtifacts,
+        allPlumeArtifacts,
+        allSandsArtifacts,
+        allGobletArtifacts,
+        allCircletArtifacts,
+      );
+    });
+
+    fit('that must have 2 thunderingFury set pieces', () => {
+      expect(buildOptimizer.computeBuildsStats(razor, SetNames.thunderingFury).length).toEqual(24);
+    });
   });
 });
 

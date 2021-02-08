@@ -69,16 +69,9 @@ export class BuildOptimizer {
     this.circletArtifacts = circletArtifacts;
   }
 
-  public computeBuildsStats(
-    character: Character,
-    flowerArtifacts: FlowerArtifact[],
-    plumeArtifacts: PlumeArtifact[],
-    sandsArtifacts: SandsArtifact[],
-    gobletArtifacts: GobletArtifact[],
-    circletArtifacts: CircletArtifact[],
-  ): CharacterStatsValues[] {
+  public computeBuildsStats(character: Character, setFilter: SetNames): CharacterStatsValues[] {
     const allBuilds: CharacterStatsValues[] = [];
-    const allArtifacts = [flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts];
+    const allArtifacts = [this.flowerArtifacts, this.plumeArtifacts, this.sandsArtifacts, this.gobletArtifacts, this.circletArtifacts];
     const weapon = character.weapon;
     const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
     const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
@@ -93,9 +86,12 @@ export class BuildOptimizer {
         const artifactsToCompute = [...artifacts];
         artifactsToCompute.push(artifact);
         if (i === max) {
-          const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
-          const setsStats = this.computeSetsStats(artifactsToCompute);
-          allBuilds.push(this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsStats, setsStats));
+          if (artifactsToCompute.filter((artifact) => artifact.set === setFilter).length >= 2) {
+            const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
+            const setsStats = this.computeSetsStats(artifactsToCompute);
+            allBuilds.push(this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsStats, setsStats));
+          }
+
           return;
         }
         addArtifactsToCompute(artifactsToCompute, i + 1);

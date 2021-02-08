@@ -16,7 +16,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private flowerArtifactsData: ArtifactData[] = [
     {
       id: '0',
-      set: SetNames.lavawalker,
+      set: SetNames.retracingBolide,
       level: 2,
       subStats: {
         [PossibleSubStats.flatAtk]: 5,
