@@ -570,6 +570,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
       expect(buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury], pieces: 2 }).length).toEqual(24);
     });
 
+    fit('that must have 2 thunderingFury set pieces with filtered artifacts', () => {
+      buildOptimizer.filterArtifacts(null, 8);
+      expect(buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury], pieces: 2 }).length).toEqual(9);
+    });
+
     fit('that must have 4 retracingBolide set pieces', () => {
       expect(buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.retracingBolide], pieces: 4 }).length).toEqual(8);
     });

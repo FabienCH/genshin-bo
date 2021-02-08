@@ -67,6 +67,11 @@ export class BuildOptimizer {
     this.sandsArtifacts = sandsArtifacts;
     this.gobletArtifacts = gobletArtifacts;
     this.circletArtifacts = circletArtifacts;
+    this.filteredFlowerArtifacts = flowerArtifacts;
+    this.filteredPlumeArtifacts = plumeArtifacts;
+    this.filteredSandsArtifacts = sandsArtifacts;
+    this.filteredGobletArtifacts = gobletArtifacts;
+    this.filteredCircletArtifacts = circletArtifacts;
   }
 
   public computeBuildsStats(character: Character, setFilter: { setNames: SetNames[]; pieces: 2 | 4 }): CharacterStatsValues[] {
@@ -80,7 +85,13 @@ export class BuildOptimizer {
     }
 
     const allBuilds: CharacterStatsValues[] = [];
-    const allArtifacts = [this.flowerArtifacts, this.plumeArtifacts, this.sandsArtifacts, this.gobletArtifacts, this.circletArtifacts];
+    const allArtifacts = [
+      this.filteredFlowerArtifacts,
+      this.filteredPlumeArtifacts,
+      this.filteredSandsArtifacts,
+      this.filteredGobletArtifacts,
+      this.filteredCircletArtifacts,
+    ];
     const weapon = character.weapon;
     const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
     const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
