@@ -1,9 +1,12 @@
 import { Artifact } from '../domain/entities/artifact';
-import { CircletArtifact, CircletMainStatType } from '../domain/entities/circlet-artifact';
+import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
-import { GobletArtifact, GobletMainStatType } from '../domain/entities/goblet-artifact';
+import { GobletArtifact } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
-import { SandsArtifact, SandsMainStatType } from '../domain/entities/sands-artifact';
+import { SandsArtifact } from '../domain/entities/sands-artifact';
+import { CircletMainStatType } from '../domain/models/circlet-artifact-data';
+import { GobletMainStatType } from '../domain/models/goblet-artifact-data';
+import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStatsValues } from '../domain/models/sub-statistics';
 

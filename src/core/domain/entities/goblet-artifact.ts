@@ -1,21 +1,8 @@
+import { GobletMainStatType } from '../models/goblet-artifact-data';
 import { MainStat, PossibleMainStats } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
 import { PossibleSubStats, SubStatsValues } from '../models/sub-statistics';
 import { Artifact } from './artifact';
-
-export type GobletMainStatType =
-  | PossibleMainStats.percentAtk
-  | PossibleMainStats.percentDef
-  | PossibleMainStats.percentHp
-  | PossibleMainStats.elementalMastery
-  | PossibleMainStats.anemoDmg
-  | PossibleMainStats.cryoDmg
-  | PossibleMainStats.dendroDmg
-  | PossibleMainStats.electroDmg
-  | PossibleMainStats.geoDmg
-  | PossibleMainStats.hydroDmg
-  | PossibleMainStats.pyroDmg
-  | PossibleMainStats.physicalDmg;
 
 export class GobletArtifact extends Artifact {
   public mainStat: MainStat;

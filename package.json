@@ -9,7 +9,7 @@
     "mutation-testing": "stryker run --buildCommand jest",
     "lint": "eslint src/*",
     "lint:fix": "eslint src/* --fix",
-    "build":"tsc -b ./tsconfig.json"
+    "build": "tsc -b ./tsconfig.json"
   },
   "keywords": [],
   "author": "",

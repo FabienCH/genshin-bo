@@ -1,14 +1,8 @@
 import { MainStat, PossibleMainStats } from '../models/main-statistics';
+import { SandsMainStatType } from '../models/sands-artifact-data';
 import { SetNames } from '../models/sets-with-effects';
 import { PossibleSubStats, SubStatsValues } from '../models/sub-statistics';
 import { Artifact } from './artifact';
-
-export type SandsMainStatType =
-  | PossibleMainStats.percentAtk
-  | PossibleMainStats.percentDef
-  | PossibleMainStats.percentHp
-  | PossibleMainStats.elementalMastery
-  | PossibleMainStats.energyRecharge;
 
 export class SandsArtifact extends Artifact {
   public mainStat: MainStat;
