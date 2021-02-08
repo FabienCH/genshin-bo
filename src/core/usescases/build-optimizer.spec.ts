@@ -542,16 +542,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
 });
 
 describe('BuildOptimizer.filterArtifacts', () => {
-  let buildOptimizer: BuildOptimizer;
   const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
 
-  const allFlowerArtifacts: FlowerArtifact[] = artifactsRepository.getFlowerArtifacts();
-  const allPlumeArtifacts: PlumeArtifact[] = artifactsRepository.getPlumeArtifacts();
-  const allSandsArtifacts: SandsArtifact[] = artifactsRepository.getSandsArtifacts();
-  const allGobletArtifacts: GobletArtifact[] = artifactsRepository.getGobletArtifacts();
-  const allCircletArtifacts: CircletArtifact[] = artifactsRepository.getCircletArtifacts();
+  let buildOptimizer: BuildOptimizer;
+  let allFlowerArtifacts: FlowerArtifact[];
+  let allPlumeArtifacts: PlumeArtifact[];
+  let allSandsArtifacts: SandsArtifact[];
+  let allGobletArtifacts: GobletArtifact[];
+  let allCircletArtifacts: CircletArtifact[];
 
   beforeEach(() => {
+    allFlowerArtifacts = artifactsRepository.getFlowerArtifacts();
+    allPlumeArtifacts = artifactsRepository.getPlumeArtifacts();
+    allSandsArtifacts = artifactsRepository.getSandsArtifacts();
+    allGobletArtifacts = artifactsRepository.getGobletArtifacts();
+    allCircletArtifacts = artifactsRepository.getCircletArtifacts();
     buildOptimizer = new BuildOptimizer(allFlowerArtifacts, allPlumeArtifacts, allSandsArtifacts, allGobletArtifacts, allCircletArtifacts);
   });
 
