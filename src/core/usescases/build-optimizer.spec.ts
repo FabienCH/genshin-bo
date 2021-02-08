@@ -567,7 +567,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     fit('that must have 2 thunderingFury set pieces', () => {
-      expect(buildOptimizer.computeBuildsStats(razor, SetNames.thunderingFury).length).toEqual(24);
+      expect(buildOptimizer.computeBuildsStats(razor, { setName: SetNames.thunderingFury, pieces: 2 }).length).toEqual(24);
+    });
+
+    fit('that must have 4 retracingBolide set pieces', () => {
+      expect(buildOptimizer.computeBuildsStats(razor, { setName: SetNames.retracingBolide, pieces: 4 }).length).toEqual(8);
     });
   });
 });
