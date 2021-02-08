@@ -70,6 +70,15 @@ export class BuildOptimizer {
   }
 
   public computeBuildsStats(character: Character, setFilter: { setNames: SetNames[]; pieces: 2 | 4 }): CharacterStatsValues[] {
+    if (
+      setFilter.setNames.reduce((totalPieces) => {
+        totalPieces += setFilter.pieces;
+        return totalPieces;
+      }, 0) > 5
+    ) {
+      throw new Error('total pieces can not be higher than 5');
+    }
+
     const allBuilds: CharacterStatsValues[] = [];
     const allArtifacts = [this.flowerArtifacts, this.plumeArtifacts, this.sandsArtifacts, this.gobletArtifacts, this.circletArtifacts];
     const weapon = character.weapon;

@@ -579,6 +579,12 @@ describe('BuildOptimizer.computeBuildStats', () => {
         buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury, SetNames.blizzardStrayer], pieces: 2 }).length,
       ).toEqual(3);
     });
+
+    fit('must not run with total pieces higher than 5', () => {
+      expect(
+        () => buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury, SetNames.blizzardStrayer], pieces: 4 }).length,
+      ).toThrowError('total pieces can not be higher than 5');
+    });
   });
 });
 
