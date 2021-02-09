@@ -46,7 +46,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     defaultCircletArtifacts = artifactsRepository.getCircletArtifacts();
   });
 
-  describe('should compute build stats of 5 lvl 0 artifacts', () => {
+  xdescribe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
       artifactsRepository = new InMemoryArtifactsRepository(defPhyDmgAtkBuildArtifactsData);
 
@@ -101,7 +101,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
   });
 
-  describe('should compute build stats of 5 artifacts', () => {
+  xdescribe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
       artifactsRepository = new InMemoryArtifactsRepository(lvl134820BuildArtifactsData);
 
@@ -424,7 +424,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
   });
 
-  it('should compute build stats of multiple artifacts for each type', () => {
+  xit('should compute build stats of multiple artifacts for each type', () => {
     artifactsRepository = new InMemoryArtifactsRepository(multipleArtifactsBuildArtifactsData);
 
     const flowerArtifacts = artifactsRepository.getFlowerArtifacts();
@@ -541,7 +541,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     ]);
   });
 
-  fdescribe('filter builds before stats computation', () => {
+  xdescribe('filter builds before stats computation', () => {
     const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
 
     let buildOptimizer: BuildOptimizer;
@@ -566,34 +566,64 @@ describe('BuildOptimizer.computeBuildStats', () => {
       );
     });
 
-    fit('that must have 2 thunderingFury set pieces', () => {
+    it('that must have 2 thunderingFury set pieces', () => {
       expect(buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury], pieces: 2 }).length).toEqual(24);
     });
 
-    fit('that must have 2 thunderingFury set pieces with filtered artifacts', () => {
+    it('that must have 2 thunderingFury set pieces with filtered artifacts', () => {
       buildOptimizer.filterArtifacts(null, 8);
       expect(buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury], pieces: 2 }).length).toEqual(9);
     });
 
-    fit('that must have 4 retracingBolide set pieces', () => {
+    it('that must have 4 retracingBolide set pieces', () => {
       expect(buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.retracingBolide], pieces: 4 }).length).toEqual(8);
     });
 
-    fit('that must have 2 thunderingFury and 2 blizzardStrayer set pieces', () => {
+    it('that must have 2 thunderingFury and 2 blizzardStrayer set pieces', () => {
       expect(
         buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury, SetNames.blizzardStrayer], pieces: 2 }).length,
       ).toEqual(3);
     });
 
-    fit('must not run with total pieces higher than 5', () => {
+    it('must not run with total pieces higher than 5', () => {
       expect(
         () => buildOptimizer.computeBuildsStats(razor, { setNames: [SetNames.thunderingFury, SetNames.blizzardStrayer], pieces: 4 }).length,
       ).toThrowError('total pieces can not be higher than 5');
     });
   });
+
+  fdescribe('filter builds after stats computation', () => {
+    const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
+
+    let buildOptimizer: BuildOptimizer;
+    let allFlowerArtifacts: FlowerArtifact[];
+    let allPlumeArtifacts: PlumeArtifact[];
+    let allSandsArtifacts: SandsArtifact[];
+    let allGobletArtifacts: GobletArtifact[];
+    let allCircletArtifacts: CircletArtifact[];
+
+    beforeEach(() => {
+      allFlowerArtifacts = artifactsRepository.getFlowerArtifacts();
+      allPlumeArtifacts = artifactsRepository.getPlumeArtifacts();
+      allSandsArtifacts = artifactsRepository.getSandsArtifacts();
+      allGobletArtifacts = artifactsRepository.getGobletArtifacts();
+      allCircletArtifacts = artifactsRepository.getCircletArtifacts();
+      buildOptimizer = new BuildOptimizer(
+        allFlowerArtifacts,
+        allPlumeArtifacts,
+        allSandsArtifacts,
+        allGobletArtifacts,
+        allCircletArtifacts,
+      );
+    });
+
+    fit('that must have at least 17000 hp', () => {
+      expect(buildOptimizer.computeBuildsStats(razor, null, { [PossibleCharacterStats.hp]: 17000 }).length).toEqual(24);
+    });
+  });
 });
 
-describe('BuildOptimizer.filterArtifacts', () => {
+xdescribe('BuildOptimizer.filterArtifacts', () => {
   const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
 
   let buildOptimizer: BuildOptimizer;

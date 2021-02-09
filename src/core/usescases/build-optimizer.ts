@@ -74,8 +74,13 @@ export class BuildOptimizer {
     this.filteredCircletArtifacts = circletArtifacts;
   }
 
-  public computeBuildsStats(character: Character, setFilter: { setNames: SetNames[]; pieces: 2 | 4 }): CharacterStatsValues[] {
+  public computeBuildsStats(
+    character: Character,
+    setFilter?: { setNames: SetNames[]; pieces: 2 | 4 },
+    statsFilter?: { [statName: string]: number },
+  ): CharacterStatsValues[] {
     if (
+      setFilter &&
       setFilter.setNames.reduce((totalPieces) => {
         totalPieces += setFilter.pieces;
         return totalPieces;
@@ -107,13 +112,20 @@ export class BuildOptimizer {
         artifactsToCompute.push(artifact);
         if (i === max) {
           if (
+            !setFilter ||
             setFilter.setNames.filter(
               (setName) => artifactsToCompute.filter((artifact) => artifact.set === setName).length >= setFilter.pieces,
             ).length >= setFilter.setNames.length
           ) {
             const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
             const setsStats = this.computeSetsStats(artifactsToCompute);
-            allBuilds.push(this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsStats, setsStats));
+            const buildStats = this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsStats, setsStats);
+            if (
+              !statsFilter ||
+              Object.keys(statsFilter).find((statName: PossibleCharacterStats) => buildStats[statName] >= statsFilter[statName])
+            ) {
+              allBuilds.push(buildStats);
+            }
           }
 
           return;
