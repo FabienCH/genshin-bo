@@ -1,9 +1,5 @@
 import { Artifact } from '../domain/entities/artifact';
-import { CircletArtifact } from '../domain/entities/circlet-artifact';
-import { FlowerArtifact } from '../domain/entities/flower-artifact';
-import { GobletArtifact } from '../domain/entities/goblet-artifact';
-import { PlumeArtifact } from '../domain/entities/plume-artifact';
-import { SandsArtifact } from '../domain/entities/sands-artifact';
+import { AllArtifacts } from '../domain/models/all-artifacts';
 import { Character } from '../domain/models/character';
 import {
   AllBuildStatTypes,
@@ -12,8 +8,6 @@ import {
   possibleBuildStats,
   PossibleCharacterStats,
 } from '../domain/models/character-statistics';
-import { CircletMainStatType } from '../domain/models/circlet-artifact-data';
-import { GobletMainStatType } from '../domain/models/goblet-artifact-data';
 import {
   ArtifactStatsTypes,
   ArtifactStatsValues,
@@ -21,24 +15,11 @@ import {
   PossibleMainStats,
   PossibleMainStatTypes,
 } from '../domain/models/main-statistics';
-import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { PossibleSetStats, PossibleSetStatTypes, SetStatsValues } from '../domain/models/set-statistics';
 import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
 import { PossibleSubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
-  private flowerArtifacts: FlowerArtifact[];
-  private plumeArtifacts: PlumeArtifact[];
-  private sandsArtifacts: SandsArtifact[];
-  private gobletArtifacts: GobletArtifact[];
-  private circletArtifacts: CircletArtifact[];
-
-  private filteredFlowerArtifacts: FlowerArtifact[];
-  private filteredPlumeArtifacts: PlumeArtifact[];
-  private filteredSandsArtifacts: SandsArtifact[];
-  private filteredGobletArtifacts: GobletArtifact[];
-  private filteredCircletArtifacts: CircletArtifact[];
-
   private readonly setsWithEffects: SetWithEffect[] = [
     { name: SetNames.gladiatorsFinale, stat: PossibleSetStats.percentAtk, value: 18 },
     { name: SetNames.wanderersTroupe, stat: PossibleSetStats.elementalMastery, value: 80 },
@@ -55,27 +36,9 @@ export class BuildOptimizer {
     { name: SetNames.bloodstainedChivalry, stat: PossibleSetStats.physicalDmg, value: 25 },
   ];
 
-  constructor(
-    flowerArtifacts: FlowerArtifact[] = [],
-    plumeArtifacts: PlumeArtifact[] = [],
-    sandsArtifacts: SandsArtifact[] = [],
-    gobletArtifacts: GobletArtifact[] = [],
-    circletArtifacts: CircletArtifact[] = [],
-  ) {
-    this.flowerArtifacts = flowerArtifacts;
-    this.plumeArtifacts = plumeArtifacts;
-    this.sandsArtifacts = sandsArtifacts;
-    this.gobletArtifacts = gobletArtifacts;
-    this.circletArtifacts = circletArtifacts;
-    this.filteredFlowerArtifacts = flowerArtifacts;
-    this.filteredPlumeArtifacts = plumeArtifacts;
-    this.filteredSandsArtifacts = sandsArtifacts;
-    this.filteredGobletArtifacts = gobletArtifacts;
-    this.filteredCircletArtifacts = circletArtifacts;
-  }
-
   public computeBuildsStats(
     character: Character,
+    artifacts: AllArtifacts,
     setFilter?: { setNames: SetNames[]; pieces: 2 | 4 },
     statsFilter?: { [statName: string]: number },
   ): CharacterStatsValues[] {
@@ -90,13 +53,7 @@ export class BuildOptimizer {
     }
 
     const allBuilds: CharacterStatsValues[] = [];
-    const allArtifacts = [
-      this.filteredFlowerArtifacts,
-      this.filteredPlumeArtifacts,
-      this.filteredSandsArtifacts,
-      this.filteredGobletArtifacts,
-      this.filteredCircletArtifacts,
-    ];
+    const allArtifacts = Object.values(artifacts);
     const weapon = character.weapon;
     const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
     const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
@@ -138,13 +95,9 @@ export class BuildOptimizer {
     return allBuilds;
   }
 
-  public getPossibleBuilds(): number {
+  public getPossibleBuilds(artifacts: AllArtifacts): number {
     return (
-      this.filteredFlowerArtifacts.length *
-      this.filteredPlumeArtifacts.length *
-      this.filteredSandsArtifacts.length *
-      this.filteredGobletArtifacts.length *
-      this.filteredCircletArtifacts.length
+      artifacts.flowers.length * artifacts.plumes.length * artifacts.sands.length * artifacts.goblets.length * artifacts.circlets.length
     );
   }
 
