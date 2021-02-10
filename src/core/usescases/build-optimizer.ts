@@ -122,7 +122,7 @@ export class BuildOptimizer {
             const buildStats = this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsStats, setsStats);
             if (
               !statsFilter ||
-              Object.keys(statsFilter).find((statName: PossibleCharacterStats) => buildStats[statName] >= statsFilter[statName])
+              Object.keys(statsFilter).every((statName: PossibleCharacterStats) => buildStats[statName] >= statsFilter[statName])
             ) {
               allBuilds.push(buildStats);
             }

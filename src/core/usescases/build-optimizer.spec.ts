@@ -620,6 +620,13 @@ describe('BuildOptimizer.computeBuildStats', () => {
     fit('that must have at least 17000 hp', () => {
       expect(buildOptimizer.computeBuildsStats(razor, null, { [PossibleCharacterStats.hp]: 17000 }).length).toEqual(24);
     });
+
+    fit('that must have at least 16000 hp and 30 crit rate', () => {
+      expect(
+        buildOptimizer.computeBuildsStats(razor, null, { [PossibleCharacterStats.hp]: 16000, [PossibleCharacterStats.critRate]: 30 })
+          .length,
+      ).toEqual(26);
+    });
   });
 });
 
