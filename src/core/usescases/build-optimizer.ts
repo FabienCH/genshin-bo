@@ -138,24 +138,6 @@ export class BuildOptimizer {
     return allBuilds;
   }
 
-  public filterArtifacts(
-    mainStats?: { sandsMain?: SandsMainStatType; gobletMain?: GobletMainStatType; circletMain?: CircletMainStatType },
-    minLevel?: number,
-    focusStats?: Array<PossibleSubStats | PossibleMainStats>,
-  ): void {
-    const { sandsMain, gobletMain, circletMain } = mainStats ? mainStats : { sandsMain: null, gobletMain: null, circletMain: null };
-
-    this.filteredFlowerArtifacts = this.flowerArtifacts.filter((artifact) => artifact.matchFilters(minLevel, focusStats));
-    this.filteredPlumeArtifacts = this.plumeArtifacts.filter((artifact) => artifact.matchFilters(minLevel, focusStats));
-    this.filteredSandsArtifacts = this.sandsArtifacts.filter((artifact) => artifact.matchFiltersWithMain(sandsMain, minLevel, focusStats));
-    this.filteredGobletArtifacts = this.gobletArtifacts.filter((artifact) =>
-      artifact.matchFiltersWithMain(gobletMain, minLevel, focusStats),
-    );
-    this.filteredCircletArtifacts = this.circletArtifacts.filter((artifact) =>
-      artifact.matchFiltersWithMain(circletMain, minLevel, focusStats),
-    );
-  }
-
   public getPossibleBuilds(): number {
     return (
       this.filteredFlowerArtifacts.length *

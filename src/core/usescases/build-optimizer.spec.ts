@@ -1,5 +1,3 @@
-import { PossibleMainStats } from '../domain/models/main-statistics';
-import { PossibleSubStats } from '../domain/models/sub-statistics';
 import { BuildOptimizer } from './build-optimizer';
 import { PossibleCharacterStats } from '../domain/models/character-statistics';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
@@ -617,92 +615,15 @@ describe('BuildOptimizer.computeBuildStats', () => {
       );
     });
 
-    fit('that must have at least 17000 hp', () => {
+    it('that must have at least 17000 hp', () => {
       expect(buildOptimizer.computeBuildsStats(razor, null, { [PossibleCharacterStats.hp]: 17000 }).length).toEqual(24);
     });
 
-    fit('that must have at least 16000 hp and 30 crit rate', () => {
+    it('that must have at least 16000 hp and 30 crit rate', () => {
       expect(
         buildOptimizer.computeBuildsStats(razor, null, { [PossibleCharacterStats.hp]: 16000, [PossibleCharacterStats.critRate]: 30 })
           .length,
       ).toEqual(26);
     });
-  });
-});
-
-xdescribe('BuildOptimizer.filterArtifacts', () => {
-  const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
-
-  let buildOptimizer: BuildOptimizer;
-  let allFlowerArtifacts: FlowerArtifact[];
-  let allPlumeArtifacts: PlumeArtifact[];
-  let allSandsArtifacts: SandsArtifact[];
-  let allGobletArtifacts: GobletArtifact[];
-  let allCircletArtifacts: CircletArtifact[];
-
-  beforeEach(() => {
-    allFlowerArtifacts = artifactsRepository.getFlowerArtifacts();
-    allPlumeArtifacts = artifactsRepository.getPlumeArtifacts();
-    allSandsArtifacts = artifactsRepository.getSandsArtifacts();
-    allGobletArtifacts = artifactsRepository.getGobletArtifacts();
-    allCircletArtifacts = artifactsRepository.getCircletArtifacts();
-    buildOptimizer = new BuildOptimizer(allFlowerArtifacts, allPlumeArtifacts, allSandsArtifacts, allGobletArtifacts, allCircletArtifacts);
-  });
-
-  describe('filter artifacts by main stat should set possible builds', () => {
-    it('with sand having elementalMastery', () => {
-      buildOptimizer.filterArtifacts({ sandsMain: PossibleMainStats.elementalMastery });
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(48);
-    });
-
-    it('with goblet having cryoDmg', () => {
-      buildOptimizer.filterArtifacts({ gobletMain: PossibleMainStats.cryoDmg });
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(36);
-    });
-
-    it('with circlet having critRate', () => {
-      buildOptimizer.filterArtifacts({ circletMain: PossibleMainStats.critRate });
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(96);
-    });
-
-    it('with sand, goblet and circlet artifacts', () => {
-      buildOptimizer.filterArtifacts({
-        sandsMain: PossibleMainStats.percentAtk,
-        gobletMain: PossibleMainStats.percentDef,
-        circletMain: PossibleMainStats.healingBonus,
-      });
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(8);
-    });
-  });
-
-  describe('filter artifacts by min level should set possible builds', () => {
-    it('with artifacts higher or equal to 8', () => {
-      buildOptimizer.filterArtifacts(null, 8);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(27);
-    });
-    it('with artifacts higher or equal to 12', () => {
-      buildOptimizer.filterArtifacts(null, 12);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(0);
-    });
-  });
-
-  describe('filter artifacts by focused stats should set possible builds', () => {
-    it('with artifacts that have percent atk', () => {
-      buildOptimizer.filterArtifacts(null, null, [PossibleSubStats.percentAtk]);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(8);
-    });
-    it('with artifacts that have at least flat hp or elemental mastery', () => {
-      buildOptimizer.filterArtifacts(null, null, [PossibleSubStats.flatHp, PossibleSubStats.elementalMastery]);
-      expect(buildOptimizer.getPossibleBuilds()).toEqual(16);
-    });
-  });
-
-  it('with artifacts that have healing bonus in circlet, level 8 and at least flat hp or elemental mastery', () => {
-    buildOptimizer.filterArtifacts(
-      { sandsMain: PossibleMainStats.percentHp, gobletMain: PossibleMainStats.percentDef, circletMain: PossibleMainStats.healingBonus },
-      8,
-      [PossibleSubStats.flatHp, PossibleSubStats.elementalMastery],
-    );
-    expect(buildOptimizer.getPossibleBuilds()).toEqual(2);
   });
 });
