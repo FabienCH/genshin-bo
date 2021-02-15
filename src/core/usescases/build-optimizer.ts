@@ -6,6 +6,11 @@ import { MainStatsValues } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { StatsComputation } from '../domain/stats-computation';
 
+interface SetFilter {
+  setNames: SetNames[];
+  pieces: 2 | 4;
+}
+
 export class BuildOptimizer {
   private readonly statsComputation: StatsComputation;
 
@@ -16,16 +21,11 @@ export class BuildOptimizer {
   public computeBuildsStats(
     character: Character,
     artifacts: AllArtifacts,
-    setFilter?: { setNames: SetNames[]; pieces: 2 | 4 },
+    setFilter?: SetFilter,
     statsFilter?: { [statName: string]: number },
   ): CharacterStatsValues[] {
-    if (
-      setFilter &&
-      setFilter.setNames.reduce((totalPieces) => {
-        totalPieces += setFilter.pieces;
-        return totalPieces;
-      }, 0) > 5
-    ) {
+    const totalSetFilterPieces = this.getTotalSetFilterPieces(setFilter);
+    if (totalSetFilterPieces > 5) {
       throw new Error('total pieces can not be higher than 5');
     }
 
@@ -34,7 +34,7 @@ export class BuildOptimizer {
     const weapon = character.weapon;
     const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
     const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : character.bonusStat;
-    const characterBonusStat: MainStatsValues =
+    const characterBonusStats: MainStatsValues =
       characterBonusKey === Object.keys(weapon.bonusStat)[0]
         ? {
             [characterBonusKey]: this.statsComputation.addStats([
@@ -50,17 +50,9 @@ export class BuildOptimizer {
         const artifactsToCompute = [...artifacts];
         artifactsToCompute.push(artifact);
         if (i === max) {
-          if (
-            !setFilter ||
-            setFilter.setNames.filter(
-              (setName) => artifactsToCompute.filter((artifact) => artifact.set === setName).length >= setFilter.pieces,
-            ).length >= setFilter.setNames.length
-          ) {
-            const buildStats = this.statsComputation.computeStats({ ...baseStats }, characterBonusStat, artifactsToCompute);
-            if (
-              !statsFilter ||
-              Object.keys(statsFilter).every((statName: CharacterStats) => buildStats[statName] >= statsFilter[statName])
-            ) {
+          if (this.setFilterMatch(setFilter, artifactsToCompute)) {
+            const buildStats = this.statsComputation.computeStats({ ...baseStats }, characterBonusStats, artifactsToCompute);
+            if (this.statFilterMatch(statsFilter, buildStats)) {
               allBuilds.push(buildStats);
             }
           }
@@ -79,5 +71,30 @@ export class BuildOptimizer {
     return (
       artifacts.flowers.length * artifacts.plumes.length * artifacts.sands.length * artifacts.goblets.length * artifacts.circlets.length
     );
+  }
+
+  private getTotalSetFilterPieces(setFilter: SetFilter) {
+    const setNames = setFilter ? setFilter.setNames : [];
+    const totalSetFilterPieces = setNames.reduce((totalPieces) => {
+      totalPieces += setFilter.pieces;
+      return totalPieces;
+    }, 0);
+    return totalSetFilterPieces;
+  }
+
+  private setFilterMatch(setFilter: SetFilter, artifactsToCompute: Artifact[]): boolean {
+    const setMatchingFilterCount = (): number => {
+      const setsMatchingPieces = setFilter.setNames.filter((setName) => {
+        const artifactsMatchingSetName = artifactsToCompute.filter((artifact) => artifact.set === setName);
+        return artifactsMatchingSetName.length >= setFilter.pieces;
+      });
+      return setsMatchingPieces.length;
+    };
+
+    return !setFilter || setMatchingFilterCount() >= setFilter.setNames.length;
+  }
+
+  private statFilterMatch(statsFilter: { [statName: string]: number }, buildStats: CharacterStatsValues): boolean {
+    return !statsFilter || Object.keys(statsFilter).every((statName: CharacterStats) => buildStats[statName] >= statsFilter[statName]);
   }
 }
