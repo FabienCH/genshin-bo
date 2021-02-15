@@ -16,7 +16,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private flowerArtifactsData: ArtifactData[] = [
     {
       id: '0',
-      set: SetNames.lavawalker,
+      set: SetNames.retracingBolide,
       level: 2,
       subStats: {
         [PossibleSubStats.flatAtk]: 5,
@@ -101,7 +101,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   ];
   private gobletArtifactsData: GobletArtifactData[] = [
     {
-      id: '5',
+      id: '7',
       set: SetNames.lavawalker,
       level: 15,
       mainStatType: PossibleMainStats.percentDef,
@@ -113,7 +113,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
       },
     },
     {
-      id: '5',
+      id: '8',
       set: SetNames.archaicPetra,
       level: 12,
       mainStatType: PossibleMainStats.percentDef,
@@ -125,7 +125,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
       },
     },
     {
-      id: '6',
+      id: '9',
       set: SetNames.blizzardStrayer,
       level: 8,
       mainStatType: PossibleMainStats.cryoDmg,
@@ -137,7 +137,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
       },
     },
     {
-      id: '6',
+      id: '10',
       set: SetNames.wanderersTroupe,
       level: 4,
       mainStatType: PossibleMainStats.physicalDmg,
@@ -151,7 +151,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   ];
   private circletArtifactsData: CircletArtifactData[] = [
     {
-      id: '7',
+      id: '11',
       set: SetNames.retracingBolide,
       level: 17,
       mainStatType: PossibleMainStats.healingBonus,
@@ -163,7 +163,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
       },
     },
     {
-      id: '7',
+      id: '12',
       set: SetNames.gladiatorsFinale,
       level: 12,
       mainStatType: PossibleMainStats.critRate,
@@ -175,7 +175,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
       },
     },
     {
-      id: '7',
+      id: '13',
       set: SetNames.retracingBolide,
       level: 14,
       mainStatType: PossibleMainStats.critRate,
