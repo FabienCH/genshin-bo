@@ -5,35 +5,29 @@ import {
   AllBuildStatTypes,
   CharacterStatsValues,
   CharacterStatTypes,
-  possibleBuildStats,
-  PossibleCharacterStats,
+  allBuildStats,
+  CharacterStats,
 } from '../domain/models/character-statistics';
-import {
-  ArtifactStatsTypes,
-  ArtifactStatsValues,
-  MainStatsValues,
-  PossibleMainStats,
-  PossibleMainStatTypes,
-} from '../domain/models/main-statistics';
-import { PossibleSetStats, PossibleSetStatTypes, SetStatsValues } from '../domain/models/set-statistics';
+import { ArtifactStatsTypes, ArtifactStatsValues, MainStatsValues, MainStats, MainStatTypes } from '../domain/models/main-statistics';
+import { SetStats, SetStatTypes, SetStatsValues } from '../domain/models/set-statistics';
 import { SetNames, SetWithEffect } from '../domain/models/sets-with-effects';
-import { PossibleSubStats } from '../domain/models/sub-statistics';
+import { SubStats } from '../domain/models/sub-statistics';
 
 export class BuildOptimizer {
   private readonly setsWithEffects: SetWithEffect[] = [
-    { name: SetNames.gladiatorsFinale, stat: PossibleSetStats.percentAtk, value: 18 },
-    { name: SetNames.wanderersTroupe, stat: PossibleSetStats.elementalMastery, value: 80 },
-    { name: SetNames.maidenBeloved, stat: PossibleSetStats.healingBonus, value: 15 },
-    { name: SetNames.retracingBolide, stat: PossibleSetStats.powerfulShield, value: 35 },
-    { name: SetNames.crimsonWitchOfFlames, stat: PossibleSetStats.pyroDmg, value: 15 },
-    { name: SetNames.lavawalker, stat: PossibleSetStats.pyroRes, value: 40 },
-    { name: SetNames.heartOfDepth, stat: PossibleSetStats.hydroDmg, value: 15 },
-    { name: SetNames.thunderingFury, stat: PossibleSetStats.electroDmg, value: 15 },
-    { name: SetNames.thundersoother, stat: PossibleSetStats.electroRes, value: 40 },
-    { name: SetNames.viridescentVenerer, stat: PossibleSetStats.anemoDmg, value: 15 },
-    { name: SetNames.blizzardStrayer, stat: PossibleSetStats.cryoDmg, value: 15 },
-    { name: SetNames.archaicPetra, stat: PossibleSetStats.geoDmg, value: 15 },
-    { name: SetNames.bloodstainedChivalry, stat: PossibleSetStats.physicalDmg, value: 25 },
+    { name: SetNames.gladiatorsFinale, stat: SetStats.percentAtk, value: 18 },
+    { name: SetNames.wanderersTroupe, stat: SetStats.elementalMastery, value: 80 },
+    { name: SetNames.maidenBeloved, stat: SetStats.healingBonus, value: 15 },
+    { name: SetNames.retracingBolide, stat: SetStats.powerfulShield, value: 35 },
+    { name: SetNames.crimsonWitchOfFlames, stat: SetStats.pyroDmg, value: 15 },
+    { name: SetNames.lavawalker, stat: SetStats.pyroRes, value: 40 },
+    { name: SetNames.heartOfDepth, stat: SetStats.hydroDmg, value: 15 },
+    { name: SetNames.thunderingFury, stat: SetStats.electroDmg, value: 15 },
+    { name: SetNames.thundersoother, stat: SetStats.electroRes, value: 40 },
+    { name: SetNames.viridescentVenerer, stat: SetStats.anemoDmg, value: 15 },
+    { name: SetNames.blizzardStrayer, stat: SetStats.cryoDmg, value: 15 },
+    { name: SetNames.archaicPetra, stat: SetStats.geoDmg, value: 15 },
+    { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
   ];
 
   public computeBuildsStats(
@@ -77,7 +71,7 @@ export class BuildOptimizer {
             const buildStats = this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsToCompute);
             if (
               !statsFilter ||
-              Object.keys(statsFilter).every((statName: PossibleCharacterStats) => buildStats[statName] >= statsFilter[statName])
+              Object.keys(statsFilter).every((statName: CharacterStats) => buildStats[statName] >= statsFilter[statName])
             ) {
               allBuilds.push(buildStats);
             }
@@ -93,7 +87,7 @@ export class BuildOptimizer {
     return allBuilds;
   }
 
-  public getPossibleBuilds(artifacts: AllArtifacts): number {
+  public getBuilds(artifacts: AllArtifacts): number {
     return (
       artifacts.flowers.length * artifacts.plumes.length * artifacts.sands.length * artifacts.goblets.length * artifacts.circlets.length
     );
@@ -101,9 +95,9 @@ export class BuildOptimizer {
 
   private computeArtifactsStats(artifacts: Artifact[]): ArtifactStatsValues {
     return artifacts.reduce((buildStats, artifact: Artifact) => {
-      const mainStatKey: PossibleMainStats = Object.keys(artifact.mainStat)[0] as PossibleMainStats;
+      const mainStatKey: MainStats = Object.keys(artifact.mainStat)[0] as MainStats;
       buildStats[mainStatKey] = this.addStats([buildStats[mainStatKey], artifact.mainStat[mainStatKey]]);
-      Object.keys(artifact.subStats).forEach((subStatKey: PossibleSubStats) => {
+      Object.keys(artifact.subStats).forEach((subStatKey: SubStats) => {
         buildStats[subStatKey] = this.addStats([buildStats[subStatKey], artifact.subStats[subStatKey]]);
       });
 
@@ -140,10 +134,10 @@ export class BuildOptimizer {
       ...setsStats,
     });
 
-    const percentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => statName.includes('percent'));
+    const percentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | SetStatTypes) => statName.includes('percent'));
     const statsUpdatedWithPercent = this.updateStats(percentStats, characterBonusStat, artifactsStats, setsStats, baseStats);
 
-    const nonPercentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => !percentStats.includes(statName));
+    const nonPercentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | SetStatTypes) => !percentStats.includes(statName));
     return this.updateStats(nonPercentStats, characterBonusStat, artifactsStats, setsStats, statsUpdatedWithPercent);
   }
 
@@ -156,13 +150,13 @@ export class BuildOptimizer {
   ): CharacterStatsValues {
     const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
 
-    return statsNames.reduce((updatedBuildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
+    return statsNames.reduce((updatedBuildStats, statName: ArtifactStatsTypes | SetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
-      const bonusStatValue = getStatValue(characterBonusStat[statName as PossibleMainStatTypes]);
+      const bonusStatValue = getStatValue(characterBonusStat[statName as MainStatTypes]);
 
       updatedBuildStats[buildStatName] = this.computeStat(
         updatedBuildStats[buildStatName],
-        [artifactsStats[statName as ArtifactStatsTypes], setsStats[statName as PossibleSetStatTypes], bonusStatValue],
+        [artifactsStats[statName as ArtifactStatsTypes], setsStats[statName as SetStatTypes], bonusStatValue],
         statName.includes('percent'),
       );
 
@@ -189,11 +183,11 @@ export class BuildOptimizer {
     return Math.round(buildStat * (1 + statValue / 100));
   }
 
-  private getBuildStatName(statName: ArtifactStatsTypes | PossibleSetStatTypes): CharacterStatTypes {
-    const statNameMap: { buildStatName: PossibleCharacterStats; match: AllBuildStatTypes[] }[] = [
-      { buildStatName: PossibleCharacterStats.atk, match: [possibleBuildStats.flatAtk, possibleBuildStats.percentAtk] },
-      { buildStatName: PossibleCharacterStats.def, match: [possibleBuildStats.flatDef, possibleBuildStats.percentDef] },
-      { buildStatName: PossibleCharacterStats.hp, match: [possibleBuildStats.flatHp, possibleBuildStats.percentHp] },
+  private getBuildStatName(statName: ArtifactStatsTypes | SetStatTypes): CharacterStatTypes {
+    const statNameMap: { buildStatName: CharacterStats; match: AllBuildStatTypes[] }[] = [
+      { buildStatName: CharacterStats.atk, match: [allBuildStats.flatAtk, allBuildStats.percentAtk] },
+      { buildStatName: CharacterStats.def, match: [allBuildStats.flatDef, allBuildStats.percentDef] },
+      { buildStatName: CharacterStats.hp, match: [allBuildStats.flatHp, allBuildStats.percentHp] },
     ];
 
     const mappedStateName = statNameMap.find((statNameItem) => statNameItem.match.includes(statName));

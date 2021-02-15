@@ -1,11 +1,11 @@
-import { PossibleLevels } from './possible-levels';
+import { Levels } from './possible-levels';
 
 export type WeaponType = 'bow' | 'catalyst' | 'claymore' | 'polearm' | 'sword';
 
 export type Weapon = {
   name: string;
   type: WeaponType;
-  level: PossibleLevels;
+  level: Levels;
   atk: number;
   bonusStat: { [bonusStat: string]: number };
 };

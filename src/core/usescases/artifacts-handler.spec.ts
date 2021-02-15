@@ -6,10 +6,10 @@ import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
 import { CircletMainStatType } from '../domain/models/circlet-artifact-data';
 import { GobletMainStatType } from '../domain/models/goblet-artifact-data';
-import { PossibleMainStats } from '../domain/models/main-statistics';
+import { MainStats } from '../domain/models/main-statistics';
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { PossibleSubStats } from '../domain/models/sub-statistics';
+import { SubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
 
 describe('ArtifactsHandler.addArtifact', () => {
@@ -25,14 +25,14 @@ describe('ArtifactsHandler.addArtifact', () => {
         id: '1',
         set: SetNames.gladiatorsFinale,
         level: 2,
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
       };
       artifactsHandler.addFlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level);
       const addedArtifact = artifactsHandler.getAll().find((storedArtifact) => storedArtifact.id === artifactValues.id);
       expect(addedArtifact).toEqual(
         new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
       );
-      expect(addedArtifact.mainStat).toEqual({ [PossibleMainStats.flatHp]: 1123 });
+      expect(addedArtifact.mainStat).toEqual({ [MainStats.flatHp]: 1123 });
     });
   });
 
@@ -43,10 +43,10 @@ describe('ArtifactsHandler.addArtifact', () => {
         set: SetNames.thundersoother,
         level: 8,
         subStats: {
-          [PossibleSubStats.percentAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.elementalMastery]: 8,
+          [SubStats.percentAtk]: 5,
+          [SubStats.percentDef]: 6,
+          [SubStats.critRate]: 3.5,
+          [SubStats.elementalMastery]: 8,
         },
       };
       artifactsHandler.addPlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level);
@@ -54,16 +54,16 @@ describe('ArtifactsHandler.addArtifact', () => {
       expect(addedArtifact).toEqual(
         new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
       );
-      expect(addedArtifact.mainStat).toEqual({ [PossibleMainStats.flatAtk]: 152 });
+      expect(addedArtifact.mainStat).toEqual({ [MainStats.flatAtk]: 152 });
     });
   });
 
   describe('Adding a sands artifact', () => {
     const subStats = {
-      [PossibleSubStats.flatAtk]: 5,
-      [PossibleSubStats.flatHp]: 6,
-      [PossibleSubStats.critRate]: 3.5,
-      [PossibleSubStats.critDmg]: 8,
+      [SubStats.flatAtk]: 5,
+      [SubStats.flatHp]: 6,
+      [SubStats.critRate]: 3.5,
+      [SubStats.critDmg]: 8,
     };
     it('should succeed with percent HP, percent def, percent atk, elemental mastery or energy recharge in main stat', () => {
       const artifactsValues = [
@@ -141,10 +141,10 @@ describe('ArtifactsHandler.addArtifact', () => {
 
   describe('Adding a goblet artifact', () => {
     const subStats = {
-      [PossibleSubStats.flatAtk]: 5,
-      [PossibleSubStats.flatHp]: 6,
-      [PossibleSubStats.critRate]: 3.5,
-      [PossibleSubStats.energyRecharge]: 8,
+      [SubStats.flatAtk]: 5,
+      [SubStats.flatHp]: 6,
+      [SubStats.critRate]: 3.5,
+      [SubStats.energyRecharge]: 8,
     };
     it('should succeed with percent HP, percent def, percent atk, elemental mastery, elemental damage or physical damage in main stat', () => {
       const artifactsValues = [
@@ -229,10 +229,10 @@ describe('ArtifactsHandler.addArtifact', () => {
 
   describe('Adding a circlet artifact', () => {
     const subStats = {
-      [PossibleSubStats.flatAtk]: 5,
-      [PossibleSubStats.flatHp]: 6,
-      [PossibleSubStats.energyRecharge]: 3.5,
-      [PossibleSubStats.flatDef]: 8,
+      [SubStats.flatAtk]: 5,
+      [SubStats.flatHp]: 6,
+      [SubStats.energyRecharge]: 3.5,
+      [SubStats.flatDef]: 8,
     };
     it('should succeed with percent HP, percent def, percent atk, elemental mastery, crit rate, crit damage or healing bonus in main stat', () => {
       const artifactsValues = [
@@ -329,24 +329,24 @@ describe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.thundersoother,
           level: 3,
-          mainStatType: PossibleMainStats.percentHp,
+          mainStatType: MainStats.percentHp,
           subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.percentAtk]: 7,
+            [SubStats.flatAtk]: 5,
+            [SubStats.percentDef]: 6,
+            [SubStats.critRate]: 3.5,
+            [SubStats.percentAtk]: 7,
           },
         },
         {
           id: '2',
           set: SetNames.thundersoother,
           level: 4,
-          mainStatType: PossibleMainStats.percentDef,
+          mainStatType: MainStats.percentDef,
           subStats: {
-            [PossibleSubStats.flatAtk]: 5,
-            [PossibleSubStats.percentHp]: 6,
-            [PossibleSubStats.critRate]: 3.5,
-            [PossibleSubStats.percentAtk]: 9,
+            [SubStats.flatAtk]: 5,
+            [SubStats.percentHp]: 6,
+            [SubStats.critRate]: 3.5,
+            [SubStats.percentAtk]: 9,
           },
         },
       ];
@@ -374,11 +374,11 @@ describe('ArtifactsHandler.addArtifact', () => {
         level: 4,
         type: 'flower',
         subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.percentHp]: 8,
-          [PossibleSubStats.critDmg]: 5.2,
+          [SubStats.flatAtk]: 5,
+          [SubStats.percentDef]: 6,
+          [SubStats.critRate]: 3.5,
+          [SubStats.percentHp]: 8,
+          [SubStats.critDmg]: 5.2,
         },
       };
       expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
@@ -392,7 +392,7 @@ describe('ArtifactsHandler.addArtifact', () => {
         set: SetNames.gladiatorsFinale,
         level: 4,
         type: 'flower',
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6 },
+        subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6 },
       };
       expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
         'an artifact can not have less than 3 substats',
@@ -405,7 +405,7 @@ describe('ArtifactsHandler.addArtifact', () => {
         set: SetNames.gladiatorsFinale,
         level: 4,
         type: 'flower',
-        subStats: { [PossibleSubStats.flatAtk]: 5, [PossibleSubStats.percentDef]: 6, [PossibleSubStats.critRate]: 3.5 },
+        subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
       };
       expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
         'an artifact with level higher than 3 must have 4 substat',
@@ -419,15 +419,15 @@ describe('ArtifactsHandler.addArtifact', () => {
         level: 4,
         type: 'goblet',
         subStats: {
-          [PossibleSubStats.flatAtk]: 5,
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.critRate]: 3.5,
-          [PossibleSubStats.energyRecharge]: 3.5,
+          [SubStats.flatAtk]: 5,
+          [SubStats.percentDef]: 6,
+          [SubStats.critRate]: 3.5,
+          [SubStats.energyRecharge]: 3.5,
         },
       };
       expect(
         () =>
-          new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, PossibleMainStats.percentDef),
+          new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, MainStats.percentDef),
       ).toThrowError('main stat can not be the same as one of the substats');
     });
   });

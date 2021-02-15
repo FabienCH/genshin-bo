@@ -1,4 +1,4 @@
-export enum PossibleSetStats {
+export enum SetStats {
   percentAtk = 'percentAtk',
   elementalMastery = 'elementalMastery',
   healingBonus = 'healingBonus',
@@ -20,6 +20,6 @@ export enum PossibleSetStats {
   geoRes = 'geoRes',
 }
 
-export type PossibleSetStatTypes = keyof typeof PossibleSetStats;
+export type SetStatTypes = keyof typeof SetStats;
 
-export type SetStatsValues = Partial<{ [key in PossibleSetStats]: number }>;
+export type SetStatsValues = Partial<{ [key in SetStats]: number }>;

@@ -30,7 +30,7 @@ import { xiangling } from './characters-stats/xiangling';
 import { xingqiu } from './characters-stats/xingqiu';
 import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
-import { PossibleLevels } from '../../domain/models/possible-levels';
+import { Levels } from '../../domain/models/possible-levels';
 import { InMemoryWeaponsRepository } from './in-memory-weapons-repository';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
@@ -70,7 +70,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       zhongli,
     ];
   }
-  getCharacter(name: ExistingCharacters, level: PossibleLevels, weaponProps: { name: string; level: PossibleLevels }): Character {
+  getCharacter(name: ExistingCharacters, level: Levels, weaponProps: { name: string; level: Levels }): Character {
     const characterStats = this.charactersStats.find((character) => character.name === name).levels[level];
     const weapon = this.weaponsRepository.getWeapon(weaponProps.name, weaponProps.level);
     return new CharacterBuilder()

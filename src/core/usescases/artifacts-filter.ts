@@ -1,16 +1,16 @@
 import { AllArtifacts } from '../domain/models/all-artifacts';
 import { CircletMainStatType } from '../domain/models/circlet-artifact-data';
 import { GobletMainStatType } from '../domain/models/goblet-artifact-data';
-import { PossibleMainStats } from '../domain/models/main-statistics';
+import { MainStats } from '../domain/models/main-statistics';
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
-import { PossibleSubStats } from '../domain/models/sub-statistics';
+import { SubStats } from '../domain/models/sub-statistics';
 
 export abstract class ArtifactsFilter {
   public static filterArtifacts(
     artifacts: AllArtifacts,
     mainStats?: { sandsMain?: SandsMainStatType; gobletMain?: GobletMainStatType; circletMain?: CircletMainStatType },
     minLevel?: number,
-    focusStats?: Array<PossibleSubStats | PossibleMainStats>,
+    focusStats?: Array<SubStats | MainStats>,
   ): AllArtifacts {
     const { flowers, plumes, sands, goblets, circlets } = artifacts;
     const { sandsMain, gobletMain, circletMain } = mainStats ? mainStats : { sandsMain: null, gobletMain: null, circletMain: null };

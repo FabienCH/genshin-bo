@@ -1,4 +1,4 @@
-export enum PossibleSubStats {
+export enum SubStats {
   flatHp = 'flatHp',
   percentHp = 'percentHp',
   flatAtk = 'flatAtk',
@@ -11,6 +11,6 @@ export enum PossibleSubStats {
   critDmg = 'critDmg',
 }
 
-export type PossibleSubStatTypes = keyof typeof PossibleSubStats;
+export type SubStatTypes = keyof typeof SubStats;
 
-export type SubStatsValues = Partial<{ [key in PossibleSubStats]: number }>;
+export type SubStatsValues = Partial<{ [key in SubStats]: number }>;

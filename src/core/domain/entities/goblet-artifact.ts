@@ -1,7 +1,7 @@
 import { GobletMainStatType } from '../models/goblet-artifact-data';
-import { MainStat, PossibleMainStats } from '../models/main-statistics';
+import { MainStat, MainStats } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
-import { PossibleSubStats, SubStatsValues } from '../models/sub-statistics';
+import { SubStats, SubStatsValues } from '../models/sub-statistics';
 import { Artifact } from './artifact';
 
 export class GobletArtifact extends Artifact {
@@ -13,7 +13,7 @@ export class GobletArtifact extends Artifact {
   public matchFiltersWithMain(
     mainStat: GobletMainStatType,
     minLevel = 0,
-    focusStats?: Array<PossibleSubStats | PossibleMainStats>,
+    focusStats?: Array<SubStats | MainStats>,
   ): boolean {
     const focusAndMainStats = focusStats ? [...focusStats, mainStat] : focusStats;
     const mainStatMatchFilter = !mainStat || Object.keys(this.mainStat)[0] === mainStat;
