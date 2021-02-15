@@ -4,7 +4,6 @@ import { Character } from '../domain/models/character';
 import { CharacterStatsValues, CharacterStats } from '../domain/models/character-statistics';
 import { MainStatsValues } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { Weapon } from '../domain/models/weapon';
 import { StatsComputation } from '../domain/stats-computation';
 
 interface SetFilter {
@@ -14,6 +13,12 @@ interface SetFilter {
 
 export class BuildOptimizer {
   private readonly statsComputation: StatsComputation;
+
+  private allBuilds: CharacterStatsValues[];
+  private character: Character;
+  private allArtifacts: Artifact[][];
+  private setFilter: SetFilter;
+  private statsFilter: { [statName: string]: number };
 
   constructor() {
     this.statsComputation = new StatsComputation();
@@ -30,35 +35,16 @@ export class BuildOptimizer {
       throw new Error('total pieces can not be higher than 5');
     }
 
-    const weapon = character.weapon;
-    const baseStats: CharacterStatsValues = { ...character.stats, atk: character.stats.atk + weapon.atk };
-    const characterBonusStats: MainStatsValues = this.computeCharacterBonusStats(character, weapon);
+    this.allBuilds = [];
+    this.character = character;
+    this.allArtifacts = Object.values(artifacts);
+    this.setFilter = setFilter;
+    this.statsFilter = statsFilter;
 
-    const allBuilds: CharacterStatsValues[] = [];
-    const allArtifacts = Object.values(artifacts);
-    const max = allArtifacts.length - 1;
-
-    const addArtifactsToCompute = (artifacts: Artifact[], i: number) => {
-      allArtifacts[i].forEach((artifact: Artifact) => {
-        const artifactsToCompute = [...artifacts];
-        artifactsToCompute.push(artifact);
-        if (i === max) {
-          if (this.setFilterMatch(setFilter, artifactsToCompute)) {
-            const buildStats = this.statsComputation.computeStats({ ...baseStats }, characterBonusStats, artifactsToCompute);
-            if (this.statFilterMatch(statsFilter, buildStats)) {
-              allBuilds.push(buildStats);
-            }
-          }
-
-          return;
-        }
-        addArtifactsToCompute(artifactsToCompute, i + 1);
-      });
-    };
-
-    addArtifactsToCompute([], 0);
-    return allBuilds;
+    this.iterateOverAllBuilds([], 0);
+    return this.allBuilds;
   }
+
   public getBuilds(artifacts: AllArtifacts): number {
     return (
       artifacts.flowers.length * artifacts.plumes.length * artifacts.sands.length * artifacts.goblets.length * artifacts.circlets.length
@@ -74,15 +60,40 @@ export class BuildOptimizer {
     return totalSetFilterPieces;
   }
 
-  private computeCharacterBonusStats(character: Character, weapon: Weapon): CharacterStatsValues {
-    const withSameCharAndWeaponStat = (characterBonusKey: string): CharacterStatsValues => ({
-      [characterBonusKey]: this.statsComputation.addStats([character.bonusStat[characterBonusKey], weapon.bonusStat[characterBonusKey]]),
+  private iterateOverAllBuilds(artifacts: Artifact[], i: number) {
+    const baseStats: CharacterStatsValues = { ...this.character.stats, atk: this.character.stats.atk + this.character.weapon.atk };
+    const characterBonusStats: MainStatsValues = this.computeCharacterBonusStats();
+    const max = this.allArtifacts.length - 1;
+
+    this.allArtifacts[i].forEach((artifact: Artifact) => {
+      const artifactsToCompute = [...artifacts];
+      artifactsToCompute.push(artifact);
+      if (i === max) {
+        if (this.setFilterMatch(this.setFilter, artifactsToCompute)) {
+          const buildStats = this.statsComputation.computeStats({ ...baseStats }, characterBonusStats, artifactsToCompute);
+          if (this.statFilterMatch(this.statsFilter, buildStats)) {
+            this.allBuilds.push(buildStats);
+          }
+        }
+
+        return;
+      }
+      this.iterateOverAllBuilds(artifactsToCompute, i + 1);
+    });
+  }
+
+  private computeCharacterBonusStats(): CharacterStatsValues {
+    const weaponBonusStat = this.character.weapon.bonusStat;
+    const characterBonusStat = this.character.bonusStat;
+    const characterBonusKey = characterBonusStat ? Object.keys(characterBonusStat)[0] : undefined;
+
+    const withSameCharAndWeaponStat = (): CharacterStatsValues => ({
+      [characterBonusKey]: this.statsComputation.addStats([characterBonusStat[characterBonusKey], weaponBonusStat[characterBonusKey]]),
     });
 
-    const characterBonusKey = character.bonusStat ? Object.keys(character.bonusStat)[0] : undefined;
-    return characterBonusKey === Object.keys(weapon.bonusStat)[0]
-      ? withSameCharAndWeaponStat(characterBonusKey)
-      : { ...character.bonusStat, ...weapon.bonusStat };
+    return characterBonusKey === Object.keys(weaponBonusStat)[0]
+      ? withSameCharAndWeaponStat()
+      : { ...characterBonusStat, ...weaponBonusStat };
   }
 
   private setFilterMatch(setFilter: SetFilter, artifactsToCompute: Artifact[]): boolean {
