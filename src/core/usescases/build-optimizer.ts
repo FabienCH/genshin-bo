@@ -74,9 +74,7 @@ export class BuildOptimizer {
               (setName) => artifactsToCompute.filter((artifact) => artifact.set === setName).length >= setFilter.pieces,
             ).length >= setFilter.setNames.length
           ) {
-            const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
-            const setsStats = this.computeSetsStats(artifactsToCompute);
-            const buildStats = this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsStats, setsStats);
+            const buildStats = this.reduceToBuildStats({ ...baseStats }, characterBonusStat, artifactsToCompute);
             if (
               !statsFilter ||
               Object.keys(statsFilter).every((statName: PossibleCharacterStats) => buildStats[statName] >= statsFilter[statName])
@@ -132,44 +130,50 @@ export class BuildOptimizer {
   private reduceToBuildStats(
     baseStats: CharacterStatsValues,
     characterBonusStat: MainStatsValues,
-    artifactsStats: ArtifactStatsValues,
-    setsStats: SetStatsValues,
+    artifactsToCompute: Artifact[],
   ): CharacterStatsValues {
-    const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
-
-    const percentStats = Object.keys({
+    const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
+    const setsStats = this.computeSetsStats(artifactsToCompute);
+    const allStatsKeys = Object.keys({
       ...characterBonusStat,
       ...artifactsStats,
       ...setsStats,
-    }).filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => statName.includes('percent'));
-    const statsUpdatedWithPercent = percentStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
+    });
+
+    const percentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => statName.includes('percent'));
+    const statsUpdatedWithPercent = this.updateStats(percentStats, characterBonusStat, artifactsStats, setsStats, baseStats);
+
+    const nonPercentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | PossibleSetStatTypes) => !percentStats.includes(statName));
+    return this.updateStats(nonPercentStats, characterBonusStat, artifactsStats, setsStats, statsUpdatedWithPercent);
+  }
+
+  private updateStats(
+    statsNames: string[],
+    characterBonusStat: MainStatsValues,
+    artifactsStats: ArtifactStatsValues,
+    setsStats: SetStatsValues,
+    buildStats: CharacterStatsValues,
+  ): CharacterStatsValues {
+    const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
+
+    return statsNames.reduce((updatedBuildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
       const buildStatName = this.getBuildStatName(statName);
       const bonusStatValue = getStatValue(characterBonusStat[statName as PossibleMainStatTypes]);
 
-      buildStats[buildStatName] = this.applyMultiplierToBuildStat(
-        buildStats[buildStatName],
-        this.addStats([artifactsStats[statName as ArtifactStatsTypes], setsStats[statName as PossibleSetStatTypes], bonusStatValue]),
+      updatedBuildStats[buildStatName] = this.computeStat(
+        updatedBuildStats[buildStatName],
+        [artifactsStats[statName as ArtifactStatsTypes], setsStats[statName as PossibleSetStatTypes], bonusStatValue],
+        statName.includes('percent'),
       );
 
-      return buildStats;
-    }, baseStats);
+      return updatedBuildStats;
+    }, buildStats);
+  }
 
-    const otherStats = Object.keys({ ...characterBonusStat, ...artifactsStats, ...setsStats }).filter(
-      (statName: ArtifactStatsTypes | PossibleSetStatTypes) => !percentStats.includes(statName),
-    );
-    return otherStats.reduce((buildStats, statName: ArtifactStatsTypes | PossibleSetStatTypes) => {
-      const buildStatName = this.getBuildStatName(statName);
-      const bonusStatValue = getStatValue(characterBonusStat[statName as PossibleMainStatTypes]);
-
-      buildStats[buildStatName] = this.addStats([
-        buildStats[buildStatName],
-        artifactsStats[statName as ArtifactStatsTypes],
-        setsStats[statName as PossibleSetStatTypes],
-        bonusStatValue,
-      ]);
-
-      return buildStats;
-    }, statsUpdatedWithPercent);
+  private computeStat(buildStatValue: number, values: number[], applyMultiplier: boolean): number {
+    return applyMultiplier
+      ? this.applyMultiplierToBuildStat(buildStatValue, this.addStats(values))
+      : this.addStats([buildStatValue, ...values]);
   }
 
   private addStats(statsValues: number[]): number {
