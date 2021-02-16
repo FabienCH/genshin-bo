@@ -1,6 +1,6 @@
-import { CharacterStats } from './character-stats-type';
+import { CharacterWithStats } from './character-stats-type';
 
-export const kaeya: CharacterStats = {
+export const kaeya: CharacterWithStats = {
   name: 'kaeya',
   levels: {
     '1': { stats: { hp: 976, atk: 19, def: 66 } },

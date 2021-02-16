@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": true,

@@ -2,7 +2,7 @@ import { CharactersRepository } from '../../domain/characters-repository';
 import { CharacterBuilder } from '../../domain/models/character-builder';
 import { ExistingCharacters, Character } from '../../domain/models/character';
 import { amber } from './characters-stats/amber';
-import { CharacterStats } from './characters-stats/character-stats-type';
+import { CharacterWithStats } from './characters-stats/character-stats-type';
 import { razor } from './characters-stats/razor';
 import { albedo } from './characters-stats/albedo';
 import { barbara } from './characters-stats/barbara';
@@ -32,10 +32,12 @@ import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
 import { Levels } from '../../domain/models/levels';
 import { InMemoryWeaponsRepository } from './in-memory-weapons-repository';
+import { CharacterStats, CharacterStatsPerLevel } from '../../domain/models/character-statistics';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly weaponsRepository: InMemoryWeaponsRepository;
-  private readonly charactersStats: CharacterStats[];
+  private readonly charactersStats: CharacterWithStats[];
+  private readonly defaultStats: CharacterStatsPerLevel = { [CharacterStats.hp]: 0, [CharacterStats.atk]: 0, [CharacterStats.def]: 0 };
 
   constructor() {
     this.weaponsRepository = new InMemoryWeaponsRepository();
@@ -70,14 +72,16 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       zhongli,
     ];
   }
-  getCharacter(name: ExistingCharacters, level: Levels, weaponProps: { name: string; level: Levels }): Character {
-    const characterStats = this.charactersStats.find((character) => character.name === name).levels[level];
+  
+  public getCharacter(name: ExistingCharacters, level: Levels, weaponProps: { name: string; level: Levels }): Character {
+    const characterStats = this.charactersStats.find((character) => character.name === name);
+    const character = characterStats ? characterStats.levels[level] : { stats: this.defaultStats };
     const weapon = this.weaponsRepository.getWeapon(weaponProps.name, weaponProps.level);
     return new CharacterBuilder()
       .withName(name)
       .withLevel(level)
-      .withStats(characterStats.stats)
-      .withBonusStat(characterStats.bonusStat)
+      .withStats(character.stats)
+      .withBonusStat(character.bonusStat)
       .withWeapon(weapon)
       .build();
   }

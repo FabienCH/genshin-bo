@@ -80,26 +80,24 @@ export class Artifact {
     this.set = set;
     this.level = level;
     this.subStats = subStats;
-    this.setMainStat(mainStatType);
+    this.mainStat = this.getMainStat(mainStatType);
   }
 
   public matchFilters(minLevel = 0, focusStats?: Array<SubStats | MainStats>): boolean {
     return this.level >= minLevel && this.filterByFocusStats(focusStats);
   }
 
-  private filterByFocusStats(focusStats: Array<SubStats | MainStats>): boolean {
+  private filterByFocusStats(focusStats?: Array<SubStats | MainStats>): boolean {
     return (
       !focusStats ||
-      !!Object.keys({ ...this.subStats, ...this.mainStat }).find((artifactStats: SubStats | MainStats) =>
-        focusStats.includes(artifactStats),
+      !!Object.keys({ ...this.subStats, ...this.mainStat }).find((artifactStats) =>
+        focusStats.includes(artifactStats as SubStats | MainStats),
       )
     );
   }
 
-  private setMainStat(mainStatType: MainStatTypes): void {
-    const mainStatValue: number = this.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType)).values[
-      this.level
-    ];
-    this.mainStat = { [mainStatType]: mainStatValue };
+  private getMainStat(mainStatType: MainStatTypes): MainStat {
+    const mainStat = this.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType));
+    return { [mainStatType]: mainStat ? mainStat.values[this.level] : 0 };
   }
 }

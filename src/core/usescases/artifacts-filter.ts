@@ -13,7 +13,9 @@ export abstract class ArtifactsFilter {
     focusStats?: Array<SubStats | MainStats>,
   ): AllArtifacts {
     const { flowers, plumes, sands, goblets, circlets } = artifacts;
-    const { sandsMain, gobletMain, circletMain } = mainStats ? mainStats : { sandsMain: null, gobletMain: null, circletMain: null };
+    const { sandsMain, gobletMain, circletMain } = mainStats
+      ? mainStats
+      : { sandsMain: undefined, gobletMain: undefined, circletMain: undefined };
 
     return {
       flowers: flowers.filter((artifact) => artifact.matchFilters(minLevel, focusStats)),

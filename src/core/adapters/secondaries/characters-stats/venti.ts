@@ -1,6 +1,6 @@
-import { CharacterStats } from './character-stats-type';
+import { CharacterWithStats } from './character-stats-type';
 
-export const venti: CharacterStats = {
+export const venti: CharacterWithStats = {
   name: 'venti',
   levels: {
     '1': { stats: { hp: 820, atk: 20, def: 52 } },

@@ -202,11 +202,11 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   }
 
   private setArtifactsData(
-    flowerArtifactsData: ArtifactData[],
-    plumeArtifactsData: ArtifactData[],
-    sandsArtifactsData: SandsArtifactData[],
-    gobletArtifactsData: GobletArtifactData[],
-    circletArtifactsData: CircletArtifactData[],
+    flowerArtifactsData?: ArtifactData[],
+    plumeArtifactsData?: ArtifactData[],
+    sandsArtifactsData?: SandsArtifactData[],
+    gobletArtifactsData?: GobletArtifactData[],
+    circletArtifactsData?: CircletArtifactData[],
   ) {
     if (flowerArtifactsData) {
       this.flowerArtifactsData = flowerArtifactsData;
@@ -274,11 +274,11 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     );
   }
 
-  private getSet(artifactSet: SetNames): SetNames {
-    return artifactSet ? artifactSet : SetNames.retracingBolide;
+  private getSet(artifactSet: SetNames = SetNames.retracingBolide): SetNames {
+    return artifactSet;
   }
 
-  private getLevel(artifactLevel: number): number {
-    return artifactLevel ? artifactLevel : 0;
+  private getLevel(artifactLevel = 0): number {
+    return artifactLevel;
   }
 }

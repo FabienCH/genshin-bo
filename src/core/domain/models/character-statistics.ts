@@ -37,7 +37,7 @@ export type CharacterStatsPerLevel = {
 
 export type CharacterStatTypes = keyof typeof CharacterStats;
 
-export type CharacterStatsValues = Partial<{ [key in CharacterStats]: number }>;
+export type CharacterStatsValues = CharacterStatsPerLevel & Partial<{ [key in CharacterStats]: number }>;
 
 export const allBuildStats = { ...CharacterStats, ...MainStats, ...SubStats, ...SetStats };
 

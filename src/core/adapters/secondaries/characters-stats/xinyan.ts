@@ -1,6 +1,6 @@
-import { CharacterStats } from './character-stats-type';
+import { CharacterWithStats } from './character-stats-type';
 
-export const xinyan: CharacterStats = {
+export const xinyan: CharacterWithStats = {
   name: 'xinyan',
   levels: {
     '1': { stats: { hp: 939, atk: 21, def: 67 } },

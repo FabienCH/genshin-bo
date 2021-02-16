@@ -1,6 +1,6 @@
-import { CharacterStats } from './character-stats-type';
+import { CharacterWithStats } from './character-stats-type';
 
-export const albedo: CharacterStats = {
+export const albedo: CharacterWithStats = {
   name: 'albedo',
   levels: {
     '1': { stats: { hp: 1030, atk: 20, def: 68 } },

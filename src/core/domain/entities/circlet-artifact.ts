@@ -1,17 +1,13 @@
 import { CircletMainStatType } from '../models/circlet-artifact-data';
-import { MainStat, MainStats } from '../models/main-statistics';
-import { SetNames } from '../models/sets-with-effects';
-import { SubStats, SubStatsValues } from '../models/sub-statistics';
+import { MainStats } from '../models/main-statistics';
+import { SubStats } from '../models/sub-statistics';
 import { Artifact } from './artifact';
 
 export class CircletArtifact extends Artifact {
-  public mainStat: MainStat;
-  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: CircletMainStatType) {
-    super(id, set, subStats, level, mainStatType);
-  }
+  public mainStat!: { [key in CircletMainStatType]: number };
 
-  public matchFiltersWithMain(mainStat: CircletMainStatType, minLevel = 0, focusStats?: Array<SubStats | MainStats>): boolean {
-    const focusAndMainStats = focusStats ? [...focusStats, mainStat] : focusStats;
+  public matchFiltersWithMain(mainStat?: CircletMainStatType, minLevel = 0, focusStats?: Array<SubStats | MainStats>): boolean {
+    const focusAndMainStats = focusStats && mainStat ? [...focusStats, mainStat] : focusStats;
     const mainStatMatchFilter = !mainStat || Object.keys(this.mainStat)[0] === mainStat;
     return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats);
   }
