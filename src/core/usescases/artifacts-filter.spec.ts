@@ -451,10 +451,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts that have at least flat hp or elemental mastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [
-        SubStats.flatHp,
-        SubStats.elementalMastery,
-      ]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [SubStats.flatHp, SubStats.elementalMastery]);
       const expectedPlumes = [
         new PlumeArtifact(
           '3',

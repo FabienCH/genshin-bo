@@ -426,8 +426,7 @@ describe('ArtifactsHandler.addArtifact', () => {
         },
       };
       expect(
-        () =>
-          new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, MainStats.percentDef),
+        () => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, MainStats.percentDef),
       ).toThrowError('main stat can not be the same as one of the substats');
     });
   });

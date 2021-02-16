@@ -97,9 +97,9 @@ export class Artifact {
   }
 
   private setMainStat(mainStatType: MainStatTypes): void {
-    const mainStatValue: number = this.mainStatValues.find((mainStatValue) =>
-      mainStatValue.stats.includes(mainStatType),
-    ).values[this.level];
+    const mainStatValue: number = this.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType)).values[
+      this.level
+    ];
     this.mainStat = { [mainStatType]: mainStatValue };
   }
 }
