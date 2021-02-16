@@ -6,9 +6,9 @@ import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
 
 import { AllArtifacts } from '../domain/models/all-artifacts';
-import { PossibleMainStats } from '../domain/models/main-statistics';
+import { MainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { PossibleSubStats } from '../domain/models/sub-statistics';
+import { SubStats } from '../domain/models/sub-statistics';
 import { ArtifactsFilter } from './artifacts-filter';
 
 describe('Artifacts Filter', () => {
@@ -28,19 +28,19 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by main stat should set possible builds', () => {
     it('with sand having elementalMastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { sandsMain: PossibleMainStats.elementalMastery });
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { sandsMain: MainStats.elementalMastery });
       const expectedSands = [
         new GobletArtifact(
           '6',
           SetNames.retracingBolide,
           {
-            [PossibleSubStats.flatHp]: 6,
-            [PossibleSubStats.critDmg]: 7,
-            [PossibleSubStats.percentDef]: 3.2,
-            [PossibleSubStats.percentAtk]: 2.9,
+            [SubStats.flatHp]: 6,
+            [SubStats.critDmg]: 7,
+            [SubStats.percentDef]: 3.2,
+            [SubStats.percentAtk]: 2.9,
           },
           8,
-          PossibleMainStats.elementalMastery,
+          MainStats.elementalMastery,
         ),
       ];
 
@@ -48,19 +48,19 @@ describe('Artifacts Filter', () => {
     });
 
     it('with goblet having cryoDmg', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { gobletMain: PossibleMainStats.cryoDmg });
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { gobletMain: MainStats.cryoDmg });
       const expectedGoblets = [
         new GobletArtifact(
           '9',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.elementalMastery]: 4,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.critDmg]: 3,
+            [SubStats.elementalMastery]: 4,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3,
           },
           8,
-          PossibleMainStats.cryoDmg,
+          MainStats.cryoDmg,
         ),
       ];
 
@@ -68,31 +68,31 @@ describe('Artifacts Filter', () => {
     });
 
     it('with circlet having critRate', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { circletMain: PossibleMainStats.critRate });
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { circletMain: MainStats.critRate });
       const expectedCirclets = [
         new CircletArtifact(
           '12',
           SetNames.gladiatorsFinale,
           {
-            [PossibleSubStats.flatHp]: 4,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.energyRecharge]: 5,
+            [SubStats.flatHp]: 4,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3.2,
+            [SubStats.energyRecharge]: 5,
           },
           12,
-          PossibleMainStats.critRate,
+          MainStats.critRate,
         ),
         new CircletArtifact(
           '13',
           SetNames.retracingBolide,
           {
-            [PossibleSubStats.energyRecharge]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.flatHp]: 5,
+            [SubStats.energyRecharge]: 4,
+            [SubStats.flatAtk]: 4,
+            [SubStats.critDmg]: 3.2,
+            [SubStats.flatHp]: 5,
           },
           14,
-          PossibleMainStats.critRate,
+          MainStats.critRate,
         ),
       ];
 
@@ -101,22 +101,22 @@ describe('Artifacts Filter', () => {
 
     it('with sand, goblet and circlet artifacts', () => {
       const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {
-        sandsMain: PossibleMainStats.percentAtk,
-        gobletMain: PossibleMainStats.percentDef,
-        circletMain: PossibleMainStats.healingBonus,
+        sandsMain: MainStats.percentAtk,
+        gobletMain: MainStats.percentDef,
+        circletMain: MainStats.healingBonus,
       });
       const expectedSands = [
         new SandsArtifact(
           '5',
           SetNames.bloodstainedChivalry,
           {
-            [PossibleSubStats.energyRecharge]: 6,
-            [PossibleSubStats.flatAtk]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.flatDef]: 2.9,
+            [SubStats.energyRecharge]: 6,
+            [SubStats.flatAtk]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.flatDef]: 2.9,
           },
           16,
-          PossibleMainStats.percentAtk,
+          MainStats.percentAtk,
         ),
       ];
       const expectedGoblets = [
@@ -124,25 +124,25 @@ describe('Artifacts Filter', () => {
           '7',
           SetNames.lavawalker,
           {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
+            [SubStats.critRate]: 2.5,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.flatHp]: 3,
           },
           15,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
         new GobletArtifact(
           '8',
           SetNames.archaicPetra,
           {
-            [PossibleSubStats.critDmg]: 2.5,
-            [PossibleSubStats.energyRecharge]: 5.2,
-            [PossibleSubStats.percentHp]: 4,
-            [PossibleSubStats.flatDef]: 3,
+            [SubStats.critDmg]: 2.5,
+            [SubStats.energyRecharge]: 5.2,
+            [SubStats.percentHp]: 4,
+            [SubStats.flatDef]: 3,
           },
           12,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
       ];
       const expectedCirclets = [
@@ -150,13 +150,13 @@ describe('Artifacts Filter', () => {
           '11',
           SetNames.retracingBolide,
           {
-            [PossibleSubStats.percentDef]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.percentHp]: 5,
+            [SubStats.percentDef]: 4,
+            [SubStats.flatAtk]: 4,
+            [SubStats.critDmg]: 3.2,
+            [SubStats.percentHp]: 5,
           },
           17,
-          PossibleMainStats.healingBonus,
+          MainStats.healingBonus,
         ),
       ];
       expect(filteredArtifacts).toEqual({ ...allArtifacts, sands: expectedSands, goblets: expectedGoblets, circlets: expectedCirclets });
@@ -171,10 +171,10 @@ describe('Artifacts Filter', () => {
           '1',
           SetNames.thunderingFury,
           {
-            [PossibleSubStats.energyRecharge]: 3,
-            [PossibleSubStats.percentHp]: 6,
-            [PossibleSubStats.critDmg]: 3.9,
-            [PossibleSubStats.percentAtk]: 7,
+            [SubStats.energyRecharge]: 3,
+            [SubStats.percentHp]: 6,
+            [SubStats.critDmg]: 3.9,
+            [SubStats.percentAtk]: 7,
           },
           8,
         ),
@@ -184,10 +184,10 @@ describe('Artifacts Filter', () => {
           '3',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.percentAtk]: 5,
-            [PossibleSubStats.flatHp]: 12,
-            [PossibleSubStats.flatDef]: 6,
-            [PossibleSubStats.percentDef]: 8,
+            [SubStats.percentAtk]: 5,
+            [SubStats.flatHp]: 12,
+            [SubStats.flatDef]: 6,
+            [SubStats.percentDef]: 8,
           },
           12,
         ),
@@ -197,37 +197,37 @@ describe('Artifacts Filter', () => {
           '4',
           SetNames.thunderingFury,
           {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
+            [SubStats.percentDef]: 6,
+            [SubStats.elementalMastery]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.critDmg]: 2.9,
           },
           12,
-          PossibleMainStats.percentHp,
+          MainStats.percentHp,
         ),
         new SandsArtifact(
           '5',
           SetNames.bloodstainedChivalry,
           {
-            [PossibleSubStats.energyRecharge]: 6,
-            [PossibleSubStats.flatAtk]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.flatDef]: 2.9,
+            [SubStats.energyRecharge]: 6,
+            [SubStats.flatAtk]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.flatDef]: 2.9,
           },
           16,
-          PossibleMainStats.percentAtk,
+          MainStats.percentAtk,
         ),
         new SandsArtifact(
           '6',
           SetNames.retracingBolide,
           {
-            [PossibleSubStats.flatHp]: 6,
-            [PossibleSubStats.critDmg]: 7,
-            [PossibleSubStats.percentDef]: 3.2,
-            [PossibleSubStats.percentAtk]: 2.9,
+            [SubStats.flatHp]: 6,
+            [SubStats.critDmg]: 7,
+            [SubStats.percentDef]: 3.2,
+            [SubStats.percentAtk]: 2.9,
           },
           8,
-          PossibleMainStats.elementalMastery,
+          MainStats.elementalMastery,
         ),
       ];
       const expectedGoblets = [
@@ -235,37 +235,37 @@ describe('Artifacts Filter', () => {
           '7',
           SetNames.lavawalker,
           {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
+            [SubStats.critRate]: 2.5,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.flatHp]: 3,
           },
           15,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
         new GobletArtifact(
           '8',
           SetNames.archaicPetra,
           {
-            [PossibleSubStats.critDmg]: 2.5,
-            [PossibleSubStats.energyRecharge]: 5.2,
-            [PossibleSubStats.percentHp]: 4,
-            [PossibleSubStats.flatDef]: 3,
+            [SubStats.critDmg]: 2.5,
+            [SubStats.energyRecharge]: 5.2,
+            [SubStats.percentHp]: 4,
+            [SubStats.flatDef]: 3,
           },
           12,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
         new GobletArtifact(
           '9',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.elementalMastery]: 4,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.critDmg]: 3,
+            [SubStats.elementalMastery]: 4,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3,
           },
           8,
-          PossibleMainStats.cryoDmg,
+          MainStats.cryoDmg,
         ),
       ];
 
@@ -286,10 +286,10 @@ describe('Artifacts Filter', () => {
           '3',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.percentAtk]: 5,
-            [PossibleSubStats.flatHp]: 12,
-            [PossibleSubStats.flatDef]: 6,
-            [PossibleSubStats.percentDef]: 8,
+            [SubStats.percentAtk]: 5,
+            [SubStats.flatHp]: 12,
+            [SubStats.flatDef]: 6,
+            [SubStats.percentDef]: 8,
           },
           12,
         ),
@@ -299,25 +299,25 @@ describe('Artifacts Filter', () => {
           '4',
           SetNames.thunderingFury,
           {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
+            [SubStats.percentDef]: 6,
+            [SubStats.elementalMastery]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.critDmg]: 2.9,
           },
           12,
-          PossibleMainStats.percentHp,
+          MainStats.percentHp,
         ),
         new SandsArtifact(
           '5',
           SetNames.bloodstainedChivalry,
           {
-            [PossibleSubStats.energyRecharge]: 6,
-            [PossibleSubStats.flatAtk]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.flatDef]: 2.9,
+            [SubStats.energyRecharge]: 6,
+            [SubStats.flatAtk]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.flatDef]: 2.9,
           },
           16,
-          PossibleMainStats.percentAtk,
+          MainStats.percentAtk,
         ),
       ];
       const expectedGoblets = [
@@ -325,25 +325,25 @@ describe('Artifacts Filter', () => {
           '7',
           SetNames.lavawalker,
           {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
+            [SubStats.critRate]: 2.5,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.flatHp]: 3,
           },
           15,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
         new GobletArtifact(
           '8',
           SetNames.archaicPetra,
           {
-            [PossibleSubStats.critDmg]: 2.5,
-            [PossibleSubStats.energyRecharge]: 5.2,
-            [PossibleSubStats.percentHp]: 4,
-            [PossibleSubStats.flatDef]: 3,
+            [SubStats.critDmg]: 2.5,
+            [SubStats.energyRecharge]: 5.2,
+            [SubStats.percentHp]: 4,
+            [SubStats.flatDef]: 3,
           },
           12,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
       ];
 
@@ -359,17 +359,17 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by focused stats should set possible builds', () => {
     it('with artifacts that have percent atk', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [PossibleSubStats.percentAtk]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [SubStats.percentAtk]);
 
       const expectedPlumes = [
         new PlumeArtifact(
           '3',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.percentAtk]: 5,
-            [PossibleSubStats.flatHp]: 12,
-            [PossibleSubStats.flatDef]: 6,
-            [PossibleSubStats.percentDef]: 8,
+            [SubStats.percentAtk]: 5,
+            [SubStats.flatHp]: 12,
+            [SubStats.flatDef]: 6,
+            [SubStats.percentDef]: 8,
           },
           12,
         ),
@@ -379,25 +379,25 @@ describe('Artifacts Filter', () => {
           '5',
           SetNames.bloodstainedChivalry,
           {
-            [PossibleSubStats.energyRecharge]: 6,
-            [PossibleSubStats.flatAtk]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.flatDef]: 2.9,
+            [SubStats.energyRecharge]: 6,
+            [SubStats.flatAtk]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.flatDef]: 2.9,
           },
           16,
-          PossibleMainStats.percentAtk,
+          MainStats.percentAtk,
         ),
         new SandsArtifact(
           '6',
           SetNames.retracingBolide,
           {
-            [PossibleSubStats.flatHp]: 6,
-            [PossibleSubStats.critDmg]: 7,
-            [PossibleSubStats.percentDef]: 3.2,
-            [PossibleSubStats.percentAtk]: 2.9,
+            [SubStats.flatHp]: 6,
+            [SubStats.critDmg]: 7,
+            [SubStats.percentDef]: 3.2,
+            [SubStats.percentAtk]: 2.9,
           },
           8,
-          PossibleMainStats.elementalMastery,
+          MainStats.elementalMastery,
         ),
       ];
       const expectedGoblets = [
@@ -405,25 +405,25 @@ describe('Artifacts Filter', () => {
           '7',
           SetNames.lavawalker,
           {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
+            [SubStats.critRate]: 2.5,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.flatHp]: 3,
           },
           15,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
         new GobletArtifact(
           '9',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.elementalMastery]: 4,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.critDmg]: 3,
+            [SubStats.elementalMastery]: 4,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3,
           },
           8,
-          PossibleMainStats.cryoDmg,
+          MainStats.cryoDmg,
         ),
       ];
       const expectedCirclets = [
@@ -431,13 +431,13 @@ describe('Artifacts Filter', () => {
           '12',
           SetNames.gladiatorsFinale,
           {
-            [PossibleSubStats.flatHp]: 4,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.energyRecharge]: 5,
+            [SubStats.flatHp]: 4,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3.2,
+            [SubStats.energyRecharge]: 5,
           },
           12,
-          PossibleMainStats.critRate,
+          MainStats.critRate,
         ),
       ];
 
@@ -451,19 +451,16 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts that have at least flat hp or elemental mastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [
-        PossibleSubStats.flatHp,
-        PossibleSubStats.elementalMastery,
-      ]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [SubStats.flatHp, SubStats.elementalMastery]);
       const expectedPlumes = [
         new PlumeArtifact(
           '3',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.percentAtk]: 5,
-            [PossibleSubStats.flatHp]: 12,
-            [PossibleSubStats.flatDef]: 6,
-            [PossibleSubStats.percentDef]: 8,
+            [SubStats.percentAtk]: 5,
+            [SubStats.flatHp]: 12,
+            [SubStats.flatDef]: 6,
+            [SubStats.percentDef]: 8,
           },
           12,
         ),
@@ -473,25 +470,25 @@ describe('Artifacts Filter', () => {
           '4',
           SetNames.thunderingFury,
           {
-            [PossibleSubStats.percentDef]: 6,
-            [PossibleSubStats.elementalMastery]: 7,
-            [PossibleSubStats.critRate]: 3.2,
-            [PossibleSubStats.critDmg]: 2.9,
+            [SubStats.percentDef]: 6,
+            [SubStats.elementalMastery]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.critDmg]: 2.9,
           },
           12,
-          PossibleMainStats.percentHp,
+          MainStats.percentHp,
         ),
         new SandsArtifact(
           '6',
           SetNames.retracingBolide,
           {
-            [PossibleSubStats.flatHp]: 6,
-            [PossibleSubStats.critDmg]: 7,
-            [PossibleSubStats.percentDef]: 3.2,
-            [PossibleSubStats.percentAtk]: 2.9,
+            [SubStats.flatHp]: 6,
+            [SubStats.critDmg]: 7,
+            [SubStats.percentDef]: 3.2,
+            [SubStats.percentAtk]: 2.9,
           },
           8,
-          PossibleMainStats.elementalMastery,
+          MainStats.elementalMastery,
         ),
       ];
       const expectedGoblets = [
@@ -499,25 +496,25 @@ describe('Artifacts Filter', () => {
           '7',
           SetNames.lavawalker,
           {
-            [PossibleSubStats.critRate]: 2.5,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.flatHp]: 3,
+            [SubStats.critRate]: 2.5,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.flatHp]: 3,
           },
           15,
-          PossibleMainStats.percentDef,
+          MainStats.percentDef,
         ),
         new GobletArtifact(
           '9',
           SetNames.blizzardStrayer,
           {
-            [PossibleSubStats.elementalMastery]: 4,
-            [PossibleSubStats.percentHp]: 5.2,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.critDmg]: 3,
+            [SubStats.elementalMastery]: 4,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3,
           },
           8,
-          PossibleMainStats.cryoDmg,
+          MainStats.cryoDmg,
         ),
       ];
       const expectedCirclets = [
@@ -525,25 +522,25 @@ describe('Artifacts Filter', () => {
           '12',
           SetNames.gladiatorsFinale,
           {
-            [PossibleSubStats.flatHp]: 4,
-            [PossibleSubStats.percentAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.energyRecharge]: 5,
+            [SubStats.flatHp]: 4,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3.2,
+            [SubStats.energyRecharge]: 5,
           },
           12,
-          PossibleMainStats.critRate,
+          MainStats.critRate,
         ),
         new CircletArtifact(
           '13',
           SetNames.retracingBolide,
           {
-            [PossibleSubStats.energyRecharge]: 4,
-            [PossibleSubStats.flatAtk]: 4,
-            [PossibleSubStats.critDmg]: 3.2,
-            [PossibleSubStats.flatHp]: 5,
+            [SubStats.energyRecharge]: 4,
+            [SubStats.flatAtk]: 4,
+            [SubStats.critDmg]: 3.2,
+            [SubStats.flatHp]: 5,
           },
           14,
-          PossibleMainStats.critRate,
+          MainStats.critRate,
         ),
       ];
       expect(filteredArtifacts).toEqual({
@@ -559,19 +556,19 @@ describe('Artifacts Filter', () => {
   it('with artifacts that have percentHp in sands, percentDef in goblet and healingBonus in circlet, level 8 and at least flat hp or elemental mastery', () => {
     const filteredArtifacts = ArtifactsFilter.filterArtifacts(
       allArtifacts,
-      { sandsMain: PossibleMainStats.percentHp, gobletMain: PossibleMainStats.percentDef, circletMain: PossibleMainStats.healingBonus },
+      { sandsMain: MainStats.percentHp, gobletMain: MainStats.percentDef, circletMain: MainStats.healingBonus },
       8,
-      [PossibleSubStats.flatHp, PossibleSubStats.elementalMastery],
+      [SubStats.flatHp, SubStats.elementalMastery],
     );
     const expectedFlowers = [
       new FlowerArtifact(
         '1',
         SetNames.thunderingFury,
         {
-          [PossibleSubStats.energyRecharge]: 3,
-          [PossibleSubStats.percentHp]: 6,
-          [PossibleSubStats.critDmg]: 3.9,
-          [PossibleSubStats.percentAtk]: 7,
+          [SubStats.energyRecharge]: 3,
+          [SubStats.percentHp]: 6,
+          [SubStats.critDmg]: 3.9,
+          [SubStats.percentAtk]: 7,
         },
         8,
       ),
@@ -581,10 +578,10 @@ describe('Artifacts Filter', () => {
         '3',
         SetNames.blizzardStrayer,
         {
-          [PossibleSubStats.percentAtk]: 5,
-          [PossibleSubStats.flatHp]: 12,
-          [PossibleSubStats.flatDef]: 6,
-          [PossibleSubStats.percentDef]: 8,
+          [SubStats.percentAtk]: 5,
+          [SubStats.flatHp]: 12,
+          [SubStats.flatDef]: 6,
+          [SubStats.percentDef]: 8,
         },
         12,
       ),
@@ -594,13 +591,13 @@ describe('Artifacts Filter', () => {
         '4',
         SetNames.thunderingFury,
         {
-          [PossibleSubStats.percentDef]: 6,
-          [PossibleSubStats.elementalMastery]: 7,
-          [PossibleSubStats.critRate]: 3.2,
-          [PossibleSubStats.critDmg]: 2.9,
+          [SubStats.percentDef]: 6,
+          [SubStats.elementalMastery]: 7,
+          [SubStats.critRate]: 3.2,
+          [SubStats.critDmg]: 2.9,
         },
         12,
-        PossibleMainStats.percentHp,
+        MainStats.percentHp,
       ),
     ];
     const expectedGoblets = [
@@ -608,25 +605,25 @@ describe('Artifacts Filter', () => {
         '7',
         SetNames.lavawalker,
         {
-          [PossibleSubStats.critRate]: 2.5,
-          [PossibleSubStats.percentHp]: 5.2,
-          [PossibleSubStats.percentAtk]: 4,
-          [PossibleSubStats.flatHp]: 3,
+          [SubStats.critRate]: 2.5,
+          [SubStats.percentHp]: 5.2,
+          [SubStats.percentAtk]: 4,
+          [SubStats.flatHp]: 3,
         },
         15,
-        PossibleMainStats.percentDef,
+        MainStats.percentDef,
       ),
       new GobletArtifact(
         '8',
         SetNames.archaicPetra,
         {
-          [PossibleSubStats.critDmg]: 2.5,
-          [PossibleSubStats.energyRecharge]: 5.2,
-          [PossibleSubStats.percentHp]: 4,
-          [PossibleSubStats.flatDef]: 3,
+          [SubStats.critDmg]: 2.5,
+          [SubStats.energyRecharge]: 5.2,
+          [SubStats.percentHp]: 4,
+          [SubStats.flatDef]: 3,
         },
         12,
-        PossibleMainStats.percentDef,
+        MainStats.percentDef,
       ),
     ];
     const expectedCirclets = [
@@ -634,13 +631,13 @@ describe('Artifacts Filter', () => {
         '11',
         SetNames.retracingBolide,
         {
-          [PossibleSubStats.percentDef]: 4,
-          [PossibleSubStats.flatAtk]: 4,
-          [PossibleSubStats.critDmg]: 3.2,
-          [PossibleSubStats.percentHp]: 5,
+          [SubStats.percentDef]: 4,
+          [SubStats.flatAtk]: 4,
+          [SubStats.critDmg]: 3.2,
+          [SubStats.percentHp]: 5,
         },
         17,
-        PossibleMainStats.healingBonus,
+        MainStats.healingBonus,
       ),
     ];
     expect(filteredArtifacts).toEqual({

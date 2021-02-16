@@ -1,12 +1,12 @@
-import { PossibleMainStats } from './main-statistics';
+import { MainStats } from './main-statistics';
 import { ArtifactData } from './artifact-data';
 
 export type SandsMainStatType =
-  | PossibleMainStats.percentAtk
-  | PossibleMainStats.percentDef
-  | PossibleMainStats.percentHp
-  | PossibleMainStats.elementalMastery
-  | PossibleMainStats.energyRecharge;
+  | MainStats.percentAtk
+  | MainStats.percentDef
+  | MainStats.percentHp
+  | MainStats.elementalMastery
+  | MainStats.energyRecharge;
 
 export interface SandsArtifactData extends ArtifactData {
   mainStatType: SandsMainStatType;

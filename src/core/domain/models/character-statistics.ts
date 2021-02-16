@@ -1,7 +1,8 @@
-import { PossibleMainStats } from './main-statistics';
-import { PossibleSubStats } from './sub-statistics';
+import { MainStats } from './main-statistics';
+import { SetStats } from './set-statistics';
+import { SubStats } from './sub-statistics';
 
-export enum PossibleCharacterStats {
+export enum CharacterStats {
   hp = 'hp',
   atk = 'atk',
   def = 'def',
@@ -29,15 +30,15 @@ export enum PossibleCharacterStats {
 }
 
 export type CharacterStatsPerLevel = {
-  [PossibleCharacterStats.hp]: number;
-  [PossibleCharacterStats.atk]: number;
-  [PossibleCharacterStats.def]: number;
+  [CharacterStats.hp]: number;
+  [CharacterStats.atk]: number;
+  [CharacterStats.def]: number;
 };
 
-export type CharacterStatTypes = keyof typeof PossibleCharacterStats;
+export type CharacterStatTypes = keyof typeof CharacterStats;
 
-export type CharacterStatsValues = Partial<{ [key in PossibleCharacterStats]: number }>;
+export type CharacterStatsValues = Partial<{ [key in CharacterStats]: number }>;
 
-export const possibleBuildStats = { ...PossibleCharacterStats, ...PossibleMainStats, ...PossibleSubStats, ...PossibleSubStats };
+export const allBuildStats = { ...CharacterStats, ...MainStats, ...SubStats, ...SetStats };
 
-export type AllBuildStatTypes = keyof typeof possibleBuildStats;
+export type AllBuildStatTypes = keyof typeof allBuildStats;
