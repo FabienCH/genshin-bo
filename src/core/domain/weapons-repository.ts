@@ -1,4 +1,4 @@
-import { Levels } from './models/possible-levels';
+import { Levels } from './models/levels';
 import { Weapon } from './models/weapon';
 
 export interface WeaponsRepository {

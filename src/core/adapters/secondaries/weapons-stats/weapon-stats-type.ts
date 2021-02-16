@@ -1,5 +1,5 @@
 import { WeaponType } from '../../../domain/models/weapon';
-import { Levels } from '../../../domain/models/possible-levels';
+import { Levels } from '../../../domain/models/levels';
 
 export interface WeaponStats {
   name: string;

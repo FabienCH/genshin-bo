@@ -30,7 +30,7 @@ import { xiangling } from './characters-stats/xiangling';
 import { xingqiu } from './characters-stats/xingqiu';
 import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
-import { Levels } from '../../domain/models/possible-levels';
+import { Levels } from '../../domain/models/levels';
 import { InMemoryWeaponsRepository } from './in-memory-weapons-repository';
 
 export class InMemoryCharactersRepository implements CharactersRepository {

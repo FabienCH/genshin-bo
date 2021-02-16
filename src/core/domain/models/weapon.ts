@@ -1,4 +1,4 @@
-import { Levels } from './possible-levels';
+import { Levels } from './levels';
 
 export type WeaponType = 'bow' | 'catalyst' | 'claymore' | 'polearm' | 'sword';
 

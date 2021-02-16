@@ -1,5 +1,5 @@
 import { CharacterStatsValues } from './character-statistics';
-import { Levels } from './possible-levels';
+import { Levels } from './levels';
 import { Weapon } from './weapon';
 
 export type ExistingCharacters =

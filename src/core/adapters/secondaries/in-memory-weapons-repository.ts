@@ -1,5 +1,5 @@
 import { Weapon } from '../../domain/models/weapon';
-import { Levels } from '../../domain/models/possible-levels';
+import { Levels } from '../../domain/models/levels';
 import { WeaponsRepository } from '../../domain/weapons-repository';
 
 import { allBows } from './weapons-stats/bows';
