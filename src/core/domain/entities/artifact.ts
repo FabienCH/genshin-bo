@@ -68,10 +68,6 @@ export class Artifact {
       throw new Error('an artifact can not have more than 4 substats');
     }
 
-    if (!mainStatType) {
-      throw new Error('main stat is mandatory');
-    }
-
     if (Object.keys(subStats).find((subStat) => subStat === mainStatType)) {
       throw new Error('main stat can not be the same as one of the substats');
     }
@@ -98,6 +94,9 @@ export class Artifact {
 
   private getMainStat(mainStatType: MainStatTypes): MainStat {
     const mainStat = this.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType));
-    return { [mainStatType]: mainStat ? mainStat.values[this.level] : 0 };
+    if (!mainStat) {
+      throw new Error(`could not find values for main stat ${mainStatType}`);
+    }
+    return { [mainStatType]: mainStat.values[this.level] };
   }
 }

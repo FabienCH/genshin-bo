@@ -40,8 +40,4 @@ export class ArtifactsHandler {
   public addCircletArtifact(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: CircletMainStatType): void {
     this.artifacts = [...this.artifacts, new CircletArtifact(id, set, subStats, level, mainStatType)];
   }
-
-  public getAll(): Artifact[] {
-    return this.artifacts;
-  }
 }
