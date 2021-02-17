@@ -16,6 +16,6 @@ export const theAlleyFlash: WeaponStats = {
     '70a': { atk: 455, bonusStat: { critRate: 15.2 } },
     '80': { atk: 497, bonusStat: { critRate: 16.8 } },
     '80a': { atk: 523, bonusStat: { critRate: 16.8 } },
-    '90': { atk: 565, bonusStat: { critRate: undefined } },
+    '90': { atk: 565, bonusStat: { critRate: NaN } },
   },
 };

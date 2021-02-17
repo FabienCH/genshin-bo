@@ -68,10 +68,6 @@ export class Artifact {
       throw new Error('an artifact can not have more than 4 substats');
     }
 
-    if (!mainStatType) {
-      throw new Error('main stat is mandatory');
-    }
-
     if (Object.keys(subStats).find((subStat) => subStat === mainStatType)) {
       throw new Error('main stat can not be the same as one of the substats');
     }
@@ -80,26 +76,27 @@ export class Artifact {
     this.set = set;
     this.level = level;
     this.subStats = subStats;
-    this.setMainStat(mainStatType);
+    this.mainStat = this.getMainStat(mainStatType);
   }
 
   public matchFilters(minLevel = 0, focusStats?: Array<SubStats | MainStats>): boolean {
     return this.level >= minLevel && this.filterByFocusStats(focusStats);
   }
 
-  private filterByFocusStats(focusStats: Array<SubStats | MainStats>): boolean {
+  private filterByFocusStats(focusStats?: Array<SubStats | MainStats>): boolean {
     return (
       !focusStats ||
-      !!Object.keys({ ...this.subStats, ...this.mainStat }).find((artifactStats: SubStats | MainStats) =>
-        focusStats.includes(artifactStats),
+      !!Object.keys({ ...this.subStats, ...this.mainStat }).find((artifactStats) =>
+        focusStats.includes(artifactStats as SubStats | MainStats),
       )
     );
   }
 
-  private setMainStat(mainStatType: MainStatTypes): void {
-    const mainStatValue: number = this.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType)).values[
-      this.level
-    ];
-    this.mainStat = { [mainStatType]: mainStatValue };
+  private getMainStat(mainStatType: MainStatTypes): MainStat {
+    const mainStat = this.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType));
+    if (!mainStat) {
+      throw new Error(`could not find values for main stat ${mainStatType}`);
+    }
+    return { [mainStatType]: mainStat.values[this.level] };
   }
 }

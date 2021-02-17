@@ -165,7 +165,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by min level should set possible builds', () => {
     it('with artifacts higher or equal to 8', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, 8);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, 8);
       const expectedFlowers = [
         new FlowerArtifact(
           '1',
@@ -279,7 +279,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts higher or equal to 12', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, 12);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, 12);
 
       const expectedPlumes = [
         new PlumeArtifact(
@@ -359,7 +359,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by focused stats should set possible builds', () => {
     it('with artifacts that have percent atk', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [SubStats.percentAtk]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, undefined, [SubStats.percentAtk]);
 
       const expectedPlumes = [
         new PlumeArtifact(
@@ -451,7 +451,10 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts that have at least flat hp or elemental mastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, null, null, [SubStats.flatHp, SubStats.elementalMastery]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, undefined, [
+        SubStats.flatHp,
+        SubStats.elementalMastery,
+      ]);
       const expectedPlumes = [
         new PlumeArtifact(
           '3',

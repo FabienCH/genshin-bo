@@ -1,6 +1,6 @@
-import { CharacterStats } from './character-stats-type';
+import { CharacterWithStats } from './character-stats-type';
 
-export const keqing: CharacterStats = {
+export const keqing: CharacterWithStats = {
   name: 'keqing',
   levels: {
     '1': { stats: { hp: 1020, atk: 25, def: 62 } },

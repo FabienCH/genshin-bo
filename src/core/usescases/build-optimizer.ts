@@ -14,11 +14,11 @@ interface SetFilter {
 export class BuildOptimizer {
   private readonly statsComputation: StatsComputation;
 
-  private allBuilds: CharacterStatsValues[];
-  private character: Character;
-  private allArtifacts: Artifact[][];
-  private setFilter: SetFilter;
-  private statsFilter: { [statName: string]: number };
+  private allBuilds!: CharacterStatsValues[];
+  private character!: Character;
+  private allArtifacts!: Artifact[][];
+  private setFilter!: SetFilter;
+  private statsFilter!: { [statName: string]: number };
 
   constructor() {
     this.statsComputation = new StatsComputation();
@@ -30,16 +30,20 @@ export class BuildOptimizer {
     setFilter?: SetFilter,
     statsFilter?: { [statName: string]: number },
   ): CharacterStatsValues[] {
-    const totalSetFilterPieces = this.getTotalSetFilterPieces(setFilter);
-    if (totalSetFilterPieces > 5) {
-      throw new Error('total pieces can not be higher than 5');
+    if (setFilter) {
+      this.setFilter = setFilter;
+      const totalSetFilterPieces = this.getTotalSetFilterPieces(this.setFilter);
+      if (totalSetFilterPieces > 5) {
+        throw new Error('total pieces can not be higher than 5');
+      }
+    }
+    if (statsFilter) {
+      this.statsFilter = statsFilter;
     }
 
     this.allBuilds = [];
     this.character = character;
     this.allArtifacts = Object.values(artifacts);
-    this.setFilter = setFilter;
-    this.statsFilter = statsFilter;
 
     this.iterateOverAllBuilds([], 0);
     return this.allBuilds;
@@ -82,12 +86,15 @@ export class BuildOptimizer {
     });
   }
 
-  private computeCharacterBonusStats(): CharacterStatsValues {
+  private computeCharacterBonusStats(): MainStatsValues {
     const weaponBonusStat = this.character.weapon.bonusStat;
     const characterBonusStat = this.character.bonusStat;
-    const characterBonusKey = characterBonusStat ? Object.keys(characterBonusStat)[0] : undefined;
+    if (!characterBonusStat) {
+      return weaponBonusStat;
+    }
 
-    const withSameCharAndWeaponStat = (): CharacterStatsValues => ({
+    const characterBonusKey = Object.keys(characterBonusStat)[0];
+    const withSameCharAndWeaponStat = (): MainStatsValues => ({
       [characterBonusKey]: this.statsComputation.addStats([characterBonusStat[characterBonusKey], weaponBonusStat[characterBonusKey]]),
     });
 
@@ -109,6 +116,11 @@ export class BuildOptimizer {
   }
 
   private statFilterMatch(statsFilter: { [statName: string]: number }, buildStats: CharacterStatsValues): boolean {
-    return !statsFilter || Object.keys(statsFilter).every((statName: CharacterStats) => buildStats[statName] >= statsFilter[statName]);
+    const getStatValue = (statValue: number | undefined): number => (!statValue || isNaN(statValue) ? 0 : statValue);
+
+    return (
+      !statsFilter ||
+      Object.keys(statsFilter).every((statName) => getStatValue(buildStats[statName as CharacterStats]) >= statsFilter[statName])
+    );
   }
 }

@@ -1,6 +1,6 @@
-import { CharacterStats } from './character-stats-type';
+import { CharacterWithStats } from './character-stats-type';
 
-export const razor: CharacterStats = {
+export const razor: CharacterWithStats = {
   name: 'razor',
   levels: {
     '1': { stats: { hp: 1003, atk: 20, def: 63 } },

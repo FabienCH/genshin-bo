@@ -1,6 +1,6 @@
-import { CharacterStats } from './character-stats-type';
+import { CharacterWithStats } from './character-stats-type';
 
-export const mona: CharacterStats = {
+export const mona: CharacterWithStats = {
   name: 'mona',
   levels: {
     '1': { stats: { hp: 810, atk: 22, def: 51 } },

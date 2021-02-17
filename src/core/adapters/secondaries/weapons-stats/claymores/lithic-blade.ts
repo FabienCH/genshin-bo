@@ -14,8 +14,8 @@ export const lithicBlade: WeaponStats = {
     '60a': { atk: 319, bonusStat: { critDmg: 54.1 } },
     '70': { atk: 347, bonusStat: { critDmg: 60.6 } },
     '70a': { atk: 373, bonusStat: { critDmg: 60.6 } },
-    '80': { atk: 401, bonusStat: { critDmg: undefined } },
-    '80a': { atk: 427, bonusStat: { critDmg: undefined } },
-    '90': { atk: 454, bonusStat: { critDmg: undefined } },
+    '80': { atk: 401, bonusStat: { critDmg: NaN } },
+    '80a': { atk: 427, bonusStat: { critDmg: NaN } },
+    '90': { atk: 454, bonusStat: { critDmg: NaN } },
   },
 };

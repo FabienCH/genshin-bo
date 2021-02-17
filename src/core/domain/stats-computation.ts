@@ -35,18 +35,16 @@ export class StatsComputation {
       ...setsStats,
     });
 
-    const percentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | SetStatTypes) => statName.includes('percent'));
+    const percentStats = allStatsKeys.filter((statName) => statName.includes('percent'));
     const statsUpdatedWithPercent = this.updateStats(percentStats, characterBonusStat, artifactsStats, setsStats, baseStats);
 
-    const nonPercentStats = allStatsKeys.filter((statName: ArtifactStatsTypes | SetStatTypes) => !percentStats.includes(statName));
+    const nonPercentStats = allStatsKeys.filter((statName) => !percentStats.includes(statName));
     return this.updateStats(nonPercentStats, characterBonusStat, artifactsStats, setsStats, statsUpdatedWithPercent);
   }
 
-  public addStats(statsValues: number[]): number {
-    const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
-
-    return statsValues.reduce((acc, statValue) => {
-      acc = Math.round((getStatValue(acc) + getStatValue(statValue)) * 10) / 10;
+  public addStats(statsValues: Array<number | undefined>): number {
+    return statsValues.reduce((acc: number, statValue) => {
+      acc = Math.round((this.getStatValue(acc) + this.getStatValue(statValue)) * 10) / 10;
       return acc;
     }, 0);
   }
@@ -55,7 +53,7 @@ export class StatsComputation {
     return artifacts.reduce((buildStats, artifact: Artifact) => {
       const mainStatKey: MainStats = Object.keys(artifact.mainStat)[0] as MainStats;
       buildStats[mainStatKey] = this.addStats([buildStats[mainStatKey], artifact.mainStat[mainStatKey]]);
-      Object.keys(artifact.subStats).forEach((subStatKey: SubStats) => {
+      (Object.keys(artifact.subStats) as SubStats[]).forEach((subStatKey) => {
         buildStats[subStatKey] = this.addStats([buildStats[subStatKey], artifact.subStats[subStatKey]]);
       });
 
@@ -65,13 +63,15 @@ export class StatsComputation {
 
   private computeSetsStats(artifacts: Artifact[]): SetStatsValues {
     const buildSets: Partial<{ [key in SetNames]: number }> = artifacts.reduce((buildSetsAcc, artifact: Artifact) => {
-      buildSetsAcc[artifact.set] = buildSetsAcc[artifact.set] ? buildSetsAcc[artifact.set] + 1 : 1;
+      buildSetsAcc[artifact.set] = buildSetsAcc[artifact.set] ? this.getStatValue(buildSetsAcc[artifact.set]) + 1 : 1;
 
       return buildSetsAcc;
     }, {} as Partial<{ [key in SetNames]: number }>);
 
     return Object.keys(buildSets).reduce((buildStats, setName) => {
-      const setWithEffect = this.setsWithEffects.find((setWithEffect) => setWithEffect.name === setName && buildSets[setName] >= 2);
+      const setWithEffect = this.setsWithEffects.find(
+        (setWithEffect) => setWithEffect.name === setName && this.getStatValue(buildSets[setName]) >= 2,
+      );
       if (setWithEffect) {
         buildStats[setWithEffect.stat] = setWithEffect.value;
       }
@@ -86,15 +86,17 @@ export class StatsComputation {
     setsStats: SetStatsValues,
     buildStats: CharacterStatsValues,
   ): CharacterStatsValues {
-    const getStatValue = (statValue: number) => (isNaN(statValue) ? 0 : statValue);
-
-    return statsNames.reduce((updatedBuildStats, statName: ArtifactStatsTypes | SetStatTypes) => {
+    return statsNames.reduce((updatedBuildStats, statName) => {
       const buildStatName = this.getBuildStatName(statName);
-      const bonusStatValue = getStatValue(characterBonusStat[statName as MainStatTypes]);
+      const bonusStatValue = this.getStatValue(characterBonusStat[statName as MainStatTypes]);
 
       updatedBuildStats[buildStatName] = this.computeStat(
-        updatedBuildStats[buildStatName],
-        [artifactsStats[statName as ArtifactStatsTypes], setsStats[statName as SetStatTypes], bonusStatValue],
+        this.getStatValue(updatedBuildStats[buildStatName]),
+        [
+          this.getStatValue(artifactsStats[statName as ArtifactStatsTypes]),
+          this.getStatValue(setsStats[statName as SetStatTypes]),
+          bonusStatValue,
+        ],
         statName.includes('percent'),
       );
 
@@ -112,14 +114,18 @@ export class StatsComputation {
     return Math.round(buildStat * (1 + statValue / 100));
   }
 
-  private getBuildStatName(statName: ArtifactStatsTypes | SetStatTypes): CharacterStatTypes {
+  private getBuildStatName(statName: string): CharacterStatTypes {
     const statNameMap: { buildStatName: CharacterStats; match: AllBuildStatTypes[] }[] = [
       { buildStatName: CharacterStats.atk, match: [allBuildStats.flatAtk, allBuildStats.percentAtk] },
       { buildStatName: CharacterStats.def, match: [allBuildStats.flatDef, allBuildStats.percentDef] },
       { buildStatName: CharacterStats.hp, match: [allBuildStats.flatHp, allBuildStats.percentHp] },
     ];
 
-    const mappedStateName = statNameMap.find((statNameItem) => statNameItem.match.includes(statName));
+    const mappedStateName = statNameMap.find((statNameItem) => statNameItem.match.includes(statName as ArtifactStatsTypes));
     return mappedStateName ? mappedStateName.buildStatName : (statName as CharacterStatTypes);
+  }
+
+  private getStatValue(statValue: number | undefined): number {
+    return !statValue || isNaN(statValue) ? 0 : statValue;
   }
 }

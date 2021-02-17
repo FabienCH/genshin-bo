@@ -2,7 +2,7 @@ import { CharacterStatsPerLevel } from '../../../domain/models/character-statist
 import { ExistingCharacters } from '../../../domain/models/character';
 import { Levels } from '../../../domain/models/levels';
 
-export interface CharacterStats {
+export interface CharacterWithStats {
   name: ExistingCharacters;
   levels: {
     [key in Levels]: { stats: CharacterStatsPerLevel; bonusStat?: { [bonusStat: string]: number } };
