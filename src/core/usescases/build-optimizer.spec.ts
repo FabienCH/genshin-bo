@@ -532,12 +532,12 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('that must have at least 17000 hp', () => {
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts, null, { [CharacterStats.hp]: 17000 }).length).toEqual(24);
+      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts, undefined, { [CharacterStats.hp]: 17000 }).length).toEqual(24);
     });
 
     it('that must have at least 16000 hp and 30 crit rate', () => {
       expect(
-        buildOptimizer.computeBuildsStats(razor, allArtifacts, null, {
+        buildOptimizer.computeBuildsStats(razor, allArtifacts, undefined, {
           [CharacterStats.hp]: 16000,
           [CharacterStats.critRate]: 30,
         }).length,

@@ -372,7 +372,6 @@ describe('ArtifactsHandler.addArtifact', () => {
         id: '1',
         set: SetNames.gladiatorsFinale,
         level: 4,
-        type: 'flower',
         subStats: {
           [SubStats.flatAtk]: 5,
           [SubStats.percentDef]: 6,
@@ -381,7 +380,7 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.critDmg]: 5.2,
         },
       };
-      expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
+      expect(() => new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level)).toThrowError(
         'an artifact can not have more than 4 substats',
       );
     });
@@ -391,10 +390,9 @@ describe('ArtifactsHandler.addArtifact', () => {
         id: '1',
         set: SetNames.gladiatorsFinale,
         level: 4,
-        type: 'flower',
         subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6 },
       };
-      expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
+      expect(() => new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level)).toThrowError(
         'an artifact can not have less than 3 substats',
       );
     });
@@ -407,7 +405,7 @@ describe('ArtifactsHandler.addArtifact', () => {
         type: 'flower',
         subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
       };
-      expect(() => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, null)).toThrowError(
+      expect(() => new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level)).toThrowError(
         'an artifact with level higher than 3 must have 4 substat',
       );
     });
