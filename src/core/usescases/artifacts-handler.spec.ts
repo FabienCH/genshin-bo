@@ -12,11 +12,31 @@ import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
 
-describe('ArtifactsHandler.addArtifact', () => {
+fdescribe('ArtifactsHandler.addArtifact', () => {
   let artifactsHandler: ArtifactsHandler;
 
   beforeEach(() => {
     artifactsHandler = new ArtifactsHandler();
+  });
+
+  fdescribe('Retrieving an artifact', () => {
+    it('should succeed if it exists', () => {
+      const artifactValues = {
+        id: '1',
+        set: SetNames.gladiatorsFinale,
+        level: 2,
+        subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
+      };
+      artifactsHandler.addFlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level);
+      const expectedArtifact = artifactsHandler.getById(artifactValues.id);
+      expect(expectedArtifact).toEqual(
+        new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
+      );
+    });
+
+    it('should failed if it does not exist', () => {
+      expect(() => artifactsHandler.getById('1')).toThrowError('artifact with id 1 not found');
+    });
   });
 
   describe('Adding a flower artifact', () => {
