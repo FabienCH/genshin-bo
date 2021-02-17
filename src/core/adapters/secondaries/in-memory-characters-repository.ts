@@ -72,7 +72,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       zhongli,
     ];
   }
-  
+
   public getCharacter(name: ExistingCharacters, level: Levels, weaponProps: { name: string; level: Levels }): Character {
     const characterStats = this.charactersStats.find((character) => character.name === name);
     const character = characterStats ? characterStats.levels[level] : { stats: this.defaultStats };
