@@ -404,7 +404,6 @@ describe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.gladiatorsFinale,
           level: 4,
-          type: 'flower',
           subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
         };
         expect(() => new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level)).toThrowError(
@@ -417,7 +416,6 @@ describe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.gladiatorsFinale,
           level: 4,
-          type: 'goblet',
           subStats: {
             [SubStats.flatAtk]: 5,
             [SubStats.percentDef]: 6,
@@ -426,7 +424,8 @@ describe('ArtifactsHandler.addArtifact', () => {
           },
         };
         expect(
-          () => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, MainStats.percentDef),
+          () =>
+            new GobletArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, MainStats.percentDef),
         ).toThrowError('main stat can not be the same as one of the substats');
       });
     });
