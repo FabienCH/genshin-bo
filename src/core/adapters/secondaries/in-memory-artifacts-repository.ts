@@ -11,6 +11,7 @@ import { FlowerArtifact } from '../../domain/entities/flower-artifact';
 import { GobletArtifact } from '../../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../../domain/entities/plume-artifact';
 import { SandsArtifact } from '../../domain/entities/sands-artifact';
+import { Artifact } from '../../domain/entities/artifact';
 
 export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private flowerArtifactsData: ArtifactData[] = [
@@ -223,6 +224,16 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     if (circletArtifactsData) {
       this.circletArtifactsData = circletArtifactsData;
     }
+  }
+
+  public getAll(): Artifact[] {
+    return [
+      ...this.getFlowerArtifacts(),
+      ...this.getPlumeArtifacts(),
+      ...this.getSandsArtifacts(),
+      ...this.getGobletArtifacts(),
+      ...this.getCircletArtifacts(),
+    ];
   }
 
   public getFlowerArtifacts(): FlowerArtifact[] {

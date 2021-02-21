@@ -1,3 +1,4 @@
+import { ArtifactsRepository } from '../domain/artifacts-repository';
 import { Artifact } from '../domain/entities/artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
@@ -12,6 +13,12 @@ import { SubStatsValues } from '../domain/models/sub-statistics';
 
 export class ArtifactsHandler {
   private artifacts: Artifact[] = [];
+
+  constructor(private readonly artifactsRepository: ArtifactsRepository) {}
+
+  public getAll(): Artifact[] {
+    return this.artifactsRepository.getAll();
+  }
 
   public getById(id: string): Artifact {
     const artifact = this.artifacts.find((storedArtifact) => storedArtifact.id === id);
