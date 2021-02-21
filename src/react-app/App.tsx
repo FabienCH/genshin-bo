@@ -1,19 +1,33 @@
-import { ReactElement } from 'react';
-import './App.css';
+import { ReactElement, Component } from 'react';
+import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { theme } from './theme';
 
-function App(): ReactElement {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+type AppState = {
+  tabId: number;
+};
+class App extends Component<unknown, AppState> {
+  constructor(props: unknown) {
+    super(props);
+    this.state = { tabId: 0 };
+    this.handleTabChange = this.handleTabChange.bind(this);
+  }
+
+  handleTabChange(newTabId: number): void {
+    this.setState((state) => ({
+      ...state,
+      tabId: newTabId,
+    }));
+  }
+
+  render(): ReactElement {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        Hello World
+      </ThemeProvider>
+    );
+  }
 }
 
 export default App;
