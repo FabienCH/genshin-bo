@@ -1,6 +1,6 @@
 import { defaultBuildArtifactsData } from '../../test/artifacts-data-mock';
+import { defaultArtifactsViews } from '../../test/artifacts-views-mock';
 import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
-import { Artifact } from '../domain/entities/artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact } from '../domain/entities/goblet-artifact';
@@ -37,36 +37,11 @@ describe('ArtifactsHandler.addArtifact', () => {
 
     it('should give list of expected artifacts', () => {
       const artifactsHandlerWithData = new ArtifactsHandler(new InMemoryArtifactsRepository(defaultBuildArtifactsData));
-
       const expectedArtifacts = artifactsHandlerWithData.getAll();
-      const allArtifacts = [
-        ...defaultBuildArtifactsData.flowerArtifacts,
-        ...defaultBuildArtifactsData.plumeArtifacts,
-        ...defaultBuildArtifactsData.sandsArtifacts,
-        ...defaultBuildArtifactsData.gobletArtifacts,
-        ...defaultBuildArtifactsData.circletArtifacts,
-      ];
 
-      expect(expectedArtifacts.length).toEqual(allArtifacts.length);
-      defaultBuildArtifactsData.flowerArtifacts.forEach((flowerArtifact) => {
-        const expectedArtifact = expectedArtifacts.find((artifact) => artifact.id === flowerArtifact.id);
-        expect(expectedArtifact).toBeTruthy();
-      });
-      defaultBuildArtifactsData.plumeArtifacts.forEach((plumeArtifact) => {
-        const expectedArtifact = expectedArtifacts.find((artifact) => artifact.id === plumeArtifact.id);
-        expect(expectedArtifact).toBeTruthy();
-      });
-      defaultBuildArtifactsData.sandsArtifacts.forEach((sandsArtifact) => {
-        const expectedArtifact = expectedArtifacts.find((artifact) => artifact.id === sandsArtifact.id);
-        expect(expectedArtifact).toBeTruthy();
-      });
-      defaultBuildArtifactsData.gobletArtifacts.forEach((gobletArtifact) => {
-        const expectedArtifact = expectedArtifacts.find((artifact) => artifact.id === gobletArtifact.id);
-        expect(expectedArtifact).toBeTruthy();
-      });
-      defaultBuildArtifactsData.circletArtifacts.forEach((circletArtifact) => {
-        const expectedArtifact = expectedArtifacts.find((artifact) => artifact.id === circletArtifact.id);
-        expect(expectedArtifact).toBeTruthy();
+      expect(expectedArtifacts.length).toEqual(defaultArtifactsViews.length);
+      defaultArtifactsViews.forEach((artifactView, index) => {
+        expect(expectedArtifacts[index]).toEqual(artifactView);
       });
     });
   });
@@ -388,7 +363,13 @@ describe('ArtifactsHandler.addArtifact', () => {
         ];
         const createdArtifacts = artifactsValues.map(
           (artifactValues) =>
-            new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, artifactValues.mainStatType),
+            new SandsArtifact(
+              artifactValues.id,
+              artifactValues.set,
+              artifactValues.subStats,
+              artifactValues.level,
+              artifactValues.mainStatType,
+            ),
         );
 
         createdArtifacts.forEach((createdArtifact) => {

@@ -1,3 +1,4 @@
+import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { ArtifactsRepository } from '../domain/artifacts-repository';
 import { Artifact } from '../domain/entities/artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
@@ -5,6 +6,7 @@ import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
+import { ArtifactView } from '../domain/models/artifact-view';
 import { CircletMainStatType } from '../domain/models/circlet-artifact-data';
 import { GobletMainStatType } from '../domain/models/goblet-artifact-data';
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
@@ -16,8 +18,8 @@ export class ArtifactsHandler {
 
   constructor(private readonly artifactsRepository: ArtifactsRepository) {}
 
-  public getAll(): Artifact[] {
-    return this.artifactsRepository.getAll();
+  public getAll(): ArtifactView[] {
+    return this.artifactsRepository.getAll().map((artifact) => ArtifactMapper.mapToArtifactView(artifact));
   }
 
   public getById(id: string): Artifact {
