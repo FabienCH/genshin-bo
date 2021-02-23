@@ -2,7 +2,9 @@ import { MainStat, MainStats, MainStatTypes } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
 import { SubStats, SubStatsValues } from '../models/sub-statistics';
 
-export class Artifact {
+export type ArtifactType = 'flower' | 'plume' | 'sands' | 'goblet' | 'circlet';
+
+export abstract class Artifact {
   public id: string;
   public set: SetNames;
   public level: number;
@@ -83,6 +85,8 @@ export class Artifact {
     return this.level >= minLevel && this.filterByFocusStats(focusStats);
   }
 
+  public abstract getType(): ArtifactType;
+
   private filterByFocusStats(focusStats?: Array<SubStats | MainStats>): boolean {
     return (
       !focusStats ||
@@ -97,6 +101,7 @@ export class Artifact {
     if (!mainStat) {
       throw new Error(`could not find values for main stat ${mainStatType}`);
     }
+
     return { [mainStatType]: mainStat.values[this.level] };
   }
 }

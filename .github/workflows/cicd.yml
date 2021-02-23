@@ -18,5 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - run: npm install
-      - run: npm test
-      - run: bash <(curl -s https://codecov.io/bash)
+      - run: npm run test:adapters
+      - run: bash <(curl -s https://codecov.io/bash) -F adapters
+      - run: npm run test:domain
+      - run: bash <(curl -s https://codecov.io/bash) -F domain

@@ -1,4 +1,6 @@
-import { Artifact } from '../domain/entities/artifact';
+import { defaultBuildArtifactsData } from '../../test/artifacts-data-mock';
+import { defaultArtifactsViews } from '../../test/artifacts-views-mock';
+import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact } from '../domain/entities/goblet-artifact';
@@ -16,7 +18,32 @@ describe('ArtifactsHandler.addArtifact', () => {
   let artifactsHandler: ArtifactsHandler;
 
   beforeEach(() => {
-    artifactsHandler = new ArtifactsHandler();
+    artifactsHandler = new ArtifactsHandler(new InMemoryArtifactsRepository());
+  });
+
+  describe('Retrieving all artifacts', () => {
+    it('should give an empty list if there is no artifacts', () => {
+      const emptyArtifactsData = {
+        flowerArtifacts: [],
+        plumeArtifacts: [],
+        sandsArtifacts: [],
+        gobletArtifacts: [],
+        circletArtifacts: [],
+      };
+      const emptyArtifactsHandler = new ArtifactsHandler(new InMemoryArtifactsRepository(emptyArtifactsData));
+      const expectedArtifacts = emptyArtifactsHandler.getAll();
+      expect(expectedArtifacts).toEqual([]);
+    });
+
+    it('should give list of expected artifacts', () => {
+      const artifactsHandlerWithData = new ArtifactsHandler(new InMemoryArtifactsRepository(defaultBuildArtifactsData));
+      const expectedArtifacts = artifactsHandlerWithData.getAll();
+
+      expect(expectedArtifacts.length).toEqual(defaultArtifactsViews.length);
+      defaultArtifactsViews.forEach((artifactView, index) => {
+        expect(expectedArtifacts[index]).toEqual(artifactView);
+      });
+    });
   });
 
   describe('Retrieving an artifact', () => {
@@ -336,7 +363,13 @@ describe('ArtifactsHandler.addArtifact', () => {
         ];
         const createdArtifacts = artifactsValues.map(
           (artifactValues) =>
-            new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, artifactValues.mainStatType),
+            new SandsArtifact(
+              artifactValues.id,
+              artifactValues.set,
+              artifactValues.subStats,
+              artifactValues.level,
+              artifactValues.mainStatType,
+            ),
         );
 
         createdArtifacts.forEach((createdArtifact) => {
@@ -404,7 +437,6 @@ describe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.gladiatorsFinale,
           level: 4,
-          type: 'flower',
           subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
         };
         expect(() => new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level)).toThrowError(
@@ -417,7 +449,6 @@ describe('ArtifactsHandler.addArtifact', () => {
           id: '1',
           set: SetNames.gladiatorsFinale,
           level: 4,
-          type: 'goblet',
           subStats: {
             [SubStats.flatAtk]: 5,
             [SubStats.percentDef]: 6,
@@ -426,7 +457,8 @@ describe('ArtifactsHandler.addArtifact', () => {
           },
         };
         expect(
-          () => new Artifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, MainStats.percentDef),
+          () =>
+            new GobletArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level, MainStats.percentDef),
         ).toThrowError('main stat can not be the same as one of the substats');
       });
     });
