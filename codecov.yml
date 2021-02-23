@@ -1,0 +1,22 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 90%
+      adapters:
+        target: 80%
+       flags:
+          - adapters
+      domain:
+        target: 100%
+        flags:
+          - domain
+      
+flags:
+  adapters:
+    paths:
+      - src/core/adapters
+  domain:
+    paths:
+      - src/core/domain
+      - src/core/usescases
