@@ -1,3 +1,6 @@
+@import "~ag-grid-community/src/styles/ag-grid.scss";
+@import "~ag-grid-community/src/styles/ag-theme-material/sass/ag-theme-material-mixin";
+
 @font-face {
   font-family: 'genshin-font';
   font-style: normal;
@@ -20,3 +23,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.ag-theme-material {
+  @include ag-theme-material((
+    background-color:#181E24,
+    foreground-color:#d8e0e6,
+    material-primary-color:#0091C1,
+    material-accent-color:#cca574
+  ));
+
+  --ag-header-background-color:#181E24;
+  --ag-header-foreground-color:#fff;
+  --ag-row-hover-color:#2B343B;
+  --ag-selected-row-background-color:#2B343B;
+  --ag-header-cell-hover-background-color:#2B343B;
+  --ag-checkbox-unchecked-color:#d8e0e6;
+ 
+  font-size: 12px;
+  border: 1px solid #181E24
+}

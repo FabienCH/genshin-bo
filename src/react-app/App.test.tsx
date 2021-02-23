@@ -1,9 +1,8 @@
-import { logRoles, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from './App';
 
 test('renders learn react link', () => {
   render(<App />);
   const tablist = screen.getByRole('tablist');
-  logRoles(tablist);
   expect(tablist).toBeInTheDocument();
 });

@@ -1,23 +1,31 @@
 import { ReactElement } from 'react';
-import { Box, Typography } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import { Box, createStyles, WithStyles, withStyles } from '@material-ui/core';
 
-export const TabPanel = (props: { children: ReactElement | string; value: number; index: number }): ReactElement => {
-  const { children, value, index, ...other } = props;
+const styles = createStyles({
+  box: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+});
+
+interface Props extends WithStyles<typeof styles> {
+  children: ReactElement | string;
+  value: number;
+  index: number;
+}
+
+const TabPanel = (props: Props): ReactElement => {
+  const { children, value, index, classes, ...other } = props;
 
   return (
     <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
+        <Box p={3} className={classes.box}>
+          {children}
         </Box>
       )}
     </div>
   );
 };
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
+export default withStyles(styles)(TabPanel);
