@@ -18,6 +18,15 @@ export class InMemoryWeaponsRepository implements WeaponsRepository {
     this.weaponsStats = [...allBows, ...allCatalysts, ...allClaymores, ...allPolearms, ...allSwords];
   }
 
+  public getAll(level: Levels): Weapon[] {
+    return this.weaponsStats.map((weaponsStat) => ({
+      ...weaponsStat.levels[level],
+      type: weaponsStat.type,
+      name: weaponsStat.name,
+      level,
+    }));
+  }
+
   public getWeapon(name: string, level: Levels): Weapon {
     const weaponStats = this.weaponsStats.find((weapon) => weapon.name === name);
     const weapon = weaponStats ? weaponStats.levels[level] : this.defaultWeaponStats;
