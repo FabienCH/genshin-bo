@@ -5,7 +5,7 @@ import { Levels } from '../domain/models/levels';
 export class CharactersHandler {
   constructor(private readonly charactersRepository: CharactersRepository) {}
 
-  public getCharactersNames(level: Levels = '1'): string[] {
+  public getCharactersNames(level: Levels = '1'): ExistingCharacters[] {
     return this.charactersRepository.getAll(level).map((character) => character.name);
   }
 
