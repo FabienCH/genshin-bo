@@ -40,10 +40,17 @@ export const theme = createMuiTheme({
     MuiContainer: {
       root: {
         backgroundColor: '#181E24',
+        borderRadius: 10,
+        boxShadow: '0px 0px 6px 3px rgba(24, 30, 36, 0.52)',
         padding: '20px',
         '&:not(:last-child)': {
           marginRight: '30px',
         },
+      },
+    },
+    MuiTooltip: {
+      tooltip: {
+        fontSize: '0.7rem',
       },
     },
   },

@@ -10,11 +10,11 @@ const styles = createStyles({
     justifyContent: 'space-between',
   },
   leftSelect: {
-    marginRight: '30px',
-    width: '220px',
+    marginRight: 30,
+    width: 220,
   },
   rightSelect: {
-    width: '60px',
+    width: 60,
   },
 });
 

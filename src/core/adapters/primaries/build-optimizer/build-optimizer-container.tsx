@@ -3,15 +3,17 @@ import { CharactersDI } from '../../../di/characters-di';
 import { WeaponsDI } from '../../../di/weapons-di';
 import CharacterForm from './character-form';
 import SetsForm from './sets-form';
+import ArtifactsForm from './artifacts-form';
 import { ExistingCharacters } from '../../../domain/models/character';
 import { Levels } from '../../../domain/models/levels';
 import { SetNames } from '../../../domain/models/sets-with-effects';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { ArtifactStatsTypes } from '../../../domain/models/main-statistics';
 
 const styles = createStyles({
   form: {
     display: 'flex',
-    height: '260px',
+    height: 260,
   },
 });
 
@@ -24,6 +26,8 @@ type State = {
   currentWeapon: { name: string; level: Levels };
   currentSets: Array<SetNames | '-'>;
   setPieces: 2 | 4;
+  focusStats: ArtifactStatsTypes[];
+  minArtifactLevel: number;
 };
 
 class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
@@ -36,6 +40,8 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       currentWeapon: { name: 'skywardHarp', level: '1' },
       currentSets: ['-', '-'],
       setPieces: 2,
+      focusStats: [],
+      minArtifactLevel: 1,
     };
     this.handleCharacterNameChange = this.handleCharacterNameChange.bind(this);
     this.handleCharacterLevelChange = this.handleCharacterLevelChange.bind(this);
@@ -43,6 +49,8 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     this.handleWeaponLevelChange = this.handleWeaponLevelChange.bind(this);
     this.handleSetNameChange = this.handleSetNameChange.bind(this);
     this.handleSetPiecesChange = this.handleSetPiecesChange.bind(this);
+    this.handleFocusStatsChange = this.handleFocusStatsChange.bind(this);
+    this.handleMinLevelChange = this.handleMinLevelChange.bind(this);
   }
 
   componentDidMount(): void {
@@ -56,9 +64,6 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       ...state,
       currentCharacter: { ...state.currentCharacter, name },
     }));
-    setTimeout(() => {
-      console.log(this.state.currentCharacter);
-    }, 100);
   }
 
   handleCharacterLevelChange(level: Levels): void {
@@ -66,9 +71,6 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       ...state,
       currentCharacter: { ...state.currentCharacter, level },
     }));
-    setTimeout(() => {
-      console.log(this.state.currentCharacter);
-    }, 100);
   }
 
   handleWeaponNameChange(name: string): void {
@@ -76,9 +78,6 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       ...state,
       currentWeapon: { ...state.currentWeapon, name },
     }));
-    setTimeout(() => {
-      console.log(this.state.currentWeapon);
-    }, 100);
   }
 
   handleWeaponLevelChange(level: Levels): void {
@@ -86,9 +85,6 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       ...state,
       currentWeapon: { ...state.currentWeapon, level },
     }));
-    setTimeout(() => {
-      console.log(this.state.currentWeapon);
-    }, 100);
   }
 
   handleSetNameChange(event: { value: SetNames | '-'; setIndex: number }): void {
@@ -96,9 +92,6 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       ...state,
       currentSets: [...state.currentSets.slice(0, event.setIndex), event.value, ...state.currentSets.slice(event.setIndex + 1)],
     }));
-    setTimeout(() => {
-      console.log(this.state.currentSets);
-    }, 100);
   }
 
   handleSetPiecesChange(setPieces: 2 | 4): void {
@@ -106,9 +99,22 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       ...state,
       setPieces,
     }));
-    setTimeout(() => {
-      console.log(this.state);
-    }, 100);
+  }
+
+  handleFocusStatsChange(focusStats: ArtifactStatsTypes[]): void {
+    if (focusStats.length <= 5) {
+      this.setState((state) => ({
+        ...state,
+        focusStats,
+      }));
+    }
+  }
+
+  handleMinLevelChange(minArtifactLevel: number): void {
+    this.setState((state) => ({
+      ...state,
+      minArtifactLevel,
+    }));
   }
 
   render(): ReactElement {
@@ -135,6 +141,12 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
             onSetNameChange={this.handleSetNameChange}
             onSetPiecesChange={this.handleSetPiecesChange}
           ></SetsForm>
+          <ArtifactsForm
+            focusStats={this.state.focusStats}
+            minLevel={this.state.minArtifactLevel}
+            onFocusStatsChange={this.handleFocusStatsChange}
+            onMinLevelChange={this.handleMinLevelChange}
+          ></ArtifactsForm>
         </form>
       </section>
     );

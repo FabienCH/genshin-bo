@@ -2,6 +2,7 @@ import { Component, ReactElement } from 'react';
 import { ArtifactsDI } from '../../../di/artifacts-di';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { ArtifactView } from '../../../domain/models/artifact-view';
+import { Container } from '@material-ui/core';
 
 type State = {
   artifacts: ArtifactView[];
@@ -53,11 +54,11 @@ class ArtifactsContainer extends Component<unknown, State> {
         width: 170,
       },
     ];
-    const gridWidth = this.state.artifacts.length > 13 ? 1119 : 1102;
+    const gridWidth = this.state.artifacts.length > 13 ? 1169 : 1152;
     return (
       <section>
         <h2>All Artifacts</h2>
-        <div style={{ height: 700, width: gridWidth }} className="ag-theme-material">
+        <Container style={{ height: 750, width: gridWidth }} className="ag-theme-material">
           <AgGridReact rowData={this.state.artifacts} columnDefs={columnDefs}>
             <AgGridColumn field="set" checkboxSelection={true}></AgGridColumn>
             <AgGridColumn field="level"></AgGridColumn>
@@ -67,7 +68,7 @@ class ArtifactsContainer extends Component<unknown, State> {
             <AgGridColumn field="subStat3"></AgGridColumn>
             <AgGridColumn field="subStat4"></AgGridColumn>
           </AgGridReact>
-        </div>
+        </Container>
       </section>
     );
   }

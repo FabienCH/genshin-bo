@@ -47,5 +47,5 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
   );
 }
 
-type FormSelectWithClasses = <T extends string>(props: Omit<FormSelectProps<T>, 'classes'>) => JSX.Element;
+type FormSelectWithClasses = <T extends string | number>(props: Omit<FormSelectProps<T>, 'classes'>) => JSX.Element;
 export default withStyles(styles)(FormSelect) as FormSelectWithClasses;

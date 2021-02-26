@@ -10,7 +10,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = createStyles({
   container: {
-    maxWidth: '300px',
+    maxWidth: 300,
   },
 });
 
