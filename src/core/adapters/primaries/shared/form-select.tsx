@@ -35,7 +35,7 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
       </MenuItem>,
     );
   }
-  const selectId = label.toLowerCase();
+  const selectId = label.toLowerCase().replace(' ', '');
 
   return (
     <FormControl className={classes.formControl}>
@@ -47,5 +47,5 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
   );
 }
 
-type FormSelectWithClasses = <T extends string | number>(props: Omit<FormSelectProps<T>, 'classes'>) => JSX.Element;
-export default withStyles(styles)(FormSelect) as FormSelectWithClasses;
+type FormSelectWithoutClasses = <T extends string | number>(props: Omit<FormSelectProps<T>, 'classes'>) => JSX.Element;
+export default withStyles(styles)(FormSelect) as FormSelectWithoutClasses;
