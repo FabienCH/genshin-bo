@@ -2,8 +2,10 @@ import { Component, ReactElement } from 'react';
 import { CharactersDI } from '../../../di/characters-di';
 import { WeaponsDI } from '../../../di/weapons-di';
 import CharacterForm from './character-form';
+import SetsForm from './sets-form';
 import { ExistingCharacters } from '../../../domain/models/character';
 import { Levels } from '../../../domain/models/levels';
+import { SetNames } from '../../../domain/models/sets-with-effects';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 
 const styles = createStyles({
@@ -20,6 +22,8 @@ type State = {
   weaponsNames: string[];
   currentCharacter: { name: ExistingCharacters; level: Levels };
   currentWeapon: { name: string; level: Levels };
+  currentSets: Array<SetNames | '-'>;
+  setPieces: 2 | 4;
 };
 
 class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
@@ -30,11 +34,15 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       weaponsNames: [],
       currentCharacter: { name: 'albedo', level: '1' },
       currentWeapon: { name: 'skywardHarp', level: '1' },
+      currentSets: ['-', '-'],
+      setPieces: 2,
     };
     this.handleCharacterNameChange = this.handleCharacterNameChange.bind(this);
     this.handleCharacterLevelChange = this.handleCharacterLevelChange.bind(this);
     this.handleWeaponNameChange = this.handleWeaponNameChange.bind(this);
     this.handleWeaponLevelChange = this.handleWeaponLevelChange.bind(this);
+    this.handleSetNameChange = this.handleSetNameChange.bind(this);
+    this.handleSetPiecesChange = this.handleSetPiecesChange.bind(this);
   }
 
   componentDidMount(): void {
@@ -83,6 +91,26 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     }, 100);
   }
 
+  handleSetNameChange(event: { value: SetNames | '-'; setIndex: number }): void {
+    this.setState((state) => ({
+      ...state,
+      currentSets: [...state.currentSets.slice(0, event.setIndex), event.value, ...state.currentSets.slice(event.setIndex + 1)],
+    }));
+    setTimeout(() => {
+      console.log(this.state.currentSets);
+    }, 100);
+  }
+
+  handleSetPiecesChange(setPieces: 2 | 4): void {
+    this.setState((state) => ({
+      ...state,
+      setPieces,
+    }));
+    setTimeout(() => {
+      console.log(this.state);
+    }, 100);
+  }
+
   render(): ReactElement {
     const { classes } = this.props;
 
@@ -101,6 +129,12 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
             onWeaponNameChange={this.handleWeaponNameChange}
             onWeaponLevelChange={this.handleWeaponLevelChange}
           ></CharacterForm>
+          <SetsForm
+            currentSets={this.state.currentSets}
+            setPieces={this.state.setPieces}
+            onSetNameChange={this.handleSetNameChange}
+            onSetPiecesChange={this.handleSetPiecesChange}
+          ></SetsForm>
         </form>
       </section>
     );
