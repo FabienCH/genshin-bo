@@ -6,9 +6,12 @@ import SetsForm from './sets-form';
 import ArtifactsForm from './artifacts-form';
 import { ExistingCharacters } from '../../../domain/models/character';
 import { Levels } from '../../../domain/models/levels';
-import { SetNames } from '../../../domain/models/sets-with-effects';
+import { SetNamesWithPlaceholder } from '../../../domain/models/sets-with-effects';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { ArtifactStatsTypes } from '../../../domain/models/main-statistics';
+import { CircletMainStatWithPlaceholder } from '../../../domain/models/circlet-artifact-data';
+import { GobletMainStatWithPlaceholder } from '../../../domain/models/goblet-artifact-data';
+import { SandsMainStatWithPlaceholder } from '../../../domain/models/sands-artifact-data';
 
 const styles = createStyles({
   form: {
@@ -24,10 +27,15 @@ type State = {
   weaponsNames: string[];
   currentCharacter: { name: ExistingCharacters; level: Levels };
   currentWeapon: { name: string; level: Levels };
-  currentSets: Array<SetNames | '-'>;
-  setPieces: 2 | 4;
-  focusStats: ArtifactStatsTypes[];
-  minArtifactLevel: number;
+  filters: {
+    currentSets: SetNamesWithPlaceholder[];
+    setPieces: 2 | 4;
+    sandsMain: SandsMainStatWithPlaceholder;
+    gobletMain: GobletMainStatWithPlaceholder;
+    circletMain: CircletMainStatWithPlaceholder;
+    focusStats: ArtifactStatsTypes[];
+    minArtifactLevel: number;
+  };
 };
 
 class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
@@ -38,10 +46,15 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       weaponsNames: [],
       currentCharacter: { name: 'albedo', level: '1' },
       currentWeapon: { name: 'skywardHarp', level: '1' },
-      currentSets: ['-', '-'],
-      setPieces: 2,
-      focusStats: [],
-      minArtifactLevel: 1,
+      filters: {
+        currentSets: ['-', '-'],
+        setPieces: 2,
+        sandsMain: '-',
+        gobletMain: '-',
+        circletMain: '-',
+        focusStats: [],
+        minArtifactLevel: 1,
+      },
     };
     this.handleCharacterNameChange = this.handleCharacterNameChange.bind(this);
     this.handleCharacterLevelChange = this.handleCharacterLevelChange.bind(this);
@@ -49,6 +62,9 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     this.handleWeaponLevelChange = this.handleWeaponLevelChange.bind(this);
     this.handleSetNameChange = this.handleSetNameChange.bind(this);
     this.handleSetPiecesChange = this.handleSetPiecesChange.bind(this);
+    this.handleSandsMainChange = this.handleSandsMainChange.bind(this);
+    this.handleGobletMainChange = this.handleGobletMainChange.bind(this);
+    this.handleCircletChange = this.handleCircletChange.bind(this);
     this.handleFocusStatsChange = this.handleFocusStatsChange.bind(this);
     this.handleMinLevelChange = this.handleMinLevelChange.bind(this);
   }
@@ -87,17 +103,57 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     }));
   }
 
-  handleSetNameChange(event: { value: SetNames | '-'; setIndex: number }): void {
+  handleSetNameChange(event: { value: SetNamesWithPlaceholder; setIndex: number }): void {
     this.setState((state) => ({
       ...state,
-      currentSets: [...state.currentSets.slice(0, event.setIndex), event.value, ...state.currentSets.slice(event.setIndex + 1)],
+      filters: {
+        ...state.filters,
+        currentSets: [
+          ...state.filters.currentSets.slice(0, event.setIndex),
+          event.value,
+          ...state.filters.currentSets.slice(event.setIndex + 1),
+        ],
+      },
     }));
   }
 
   handleSetPiecesChange(setPieces: 2 | 4): void {
     this.setState((state) => ({
       ...state,
-      setPieces,
+      filters: {
+        ...state.filters,
+        setPieces,
+      },
+    }));
+  }
+
+  handleSandsMainChange(sandsMain: SandsMainStatWithPlaceholder): void {
+    this.setState((state) => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        sandsMain,
+      },
+    }));
+  }
+
+  handleGobletMainChange(gobletMain: GobletMainStatWithPlaceholder): void {
+    this.setState((state) => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        gobletMain,
+      },
+    }));
+  }
+
+  handleCircletChange(circletMain: CircletMainStatWithPlaceholder): void {
+    this.setState((state) => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        circletMain,
+      },
     }));
   }
 
@@ -105,7 +161,10 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     if (focusStats.length <= 5) {
       this.setState((state) => ({
         ...state,
-        focusStats,
+        filters: {
+          ...state.filters,
+          focusStats,
+        },
       }));
     }
   }
@@ -113,10 +172,12 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
   handleMinLevelChange(minArtifactLevel: number): void {
     this.setState((state) => ({
       ...state,
-      minArtifactLevel,
+      filters: {
+        ...state.filters,
+        minArtifactLevel,
+      },
     }));
   }
-
   render(): ReactElement {
     const { classes } = this.props;
 
@@ -136,14 +197,20 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
             onWeaponLevelChange={this.handleWeaponLevelChange}
           ></CharacterForm>
           <SetsForm
-            currentSets={this.state.currentSets}
-            setPieces={this.state.setPieces}
+            currentSets={this.state.filters.currentSets}
+            setPieces={this.state.filters.setPieces}
             onSetNameChange={this.handleSetNameChange}
             onSetPiecesChange={this.handleSetPiecesChange}
           ></SetsForm>
           <ArtifactsForm
-            focusStats={this.state.focusStats}
-            minLevel={this.state.minArtifactLevel}
+            sandsMain={this.state.filters.sandsMain}
+            gobletMain={this.state.filters.gobletMain}
+            circletMain={this.state.filters.circletMain}
+            focusStats={this.state.filters.focusStats}
+            minLevel={this.state.filters.minArtifactLevel}
+            onSandsMainChange={this.handleSandsMainChange}
+            onGobletMainChange={this.handleGobletMainChange}
+            onCircletMainChange={this.handleCircletChange}
             onFocusStatsChange={this.handleFocusStatsChange}
             onMinLevelChange={this.handleMinLevelChange}
           ></ArtifactsForm>

@@ -1,4 +1,4 @@
-import { SubStatTypes, SubStatsValues } from './sub-statistics';
+import { SubStatTypes, SubStatsValues, SubStats } from './sub-statistics';
 
 export enum MainStats {
   flatHp = 'flatHp',
@@ -32,3 +32,4 @@ export type MainStatsValues = Partial<{ [key in MainStats]: number }>;
 export type ArtifactStatsValues = MainStatsValues & SubStatsValues;
 
 export type ArtifactStatsTypes = MainStatTypes | SubStatTypes;
+export const artifactStats: ArtifactStatsTypes[] = [...new Set([...Object.values(MainStats), ...Object.values(SubStats)])];

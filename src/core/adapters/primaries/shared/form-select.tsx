@@ -4,8 +4,7 @@ import { StringFormatter } from '../../../domain/mappers/string-formatter';
 
 const styles = createStyles({
   formControl: {
-    width: '100%',
-    margin: '15px 0',
+    display: 'flex',
   },
 });
 
@@ -13,7 +12,6 @@ export interface FormSelectProps<T extends string | number> extends WithStyles<t
   label: string;
   data: Array<T>;
   selectedValue: T;
-  isDefaultEmpty?: boolean;
   onChange: (value: T) => void;
 }
 
@@ -28,19 +26,13 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
       {StringFormatter.formatStringWithUpperCase(`${dataItem}`)}
     </MenuItem>
   ));
-  if (selectedValue === '-') {
-    options.unshift(
-      <MenuItem value="-" key="-">
-        -
-      </MenuItem>,
-    );
-  }
+
   const selectId = label.toLowerCase().replace(' ', '');
 
   return (
     <FormControl className={classes.formControl}>
       <InputLabel htmlFor={selectId}>{label}</InputLabel>
-      <Select id={selectId} value={selectedValue} onChange={handleChange}>
+      <Select id={selectId} value={selectedValue} defaultValue="" onChange={handleChange}>
         {options}
       </Select>
     </FormControl>

@@ -48,6 +48,11 @@ export const theme = createMuiTheme({
         },
       },
     },
+    MuiFormControl: {
+      root: {
+        marginBottom: 20,
+      },
+    },
     MuiTooltip: {
       tooltip: {
         fontSize: '0.7rem',
