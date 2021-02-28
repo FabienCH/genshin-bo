@@ -1,12 +1,12 @@
-import React, { ChangeEvent, Fragment, ReactElement } from 'react';
+import React, { ChangeEvent, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import FormSelect from '../shared/form-select';
-import { SetNamesWithPlaceholder, setNamesWithPlaceholder } from '../../../domain/models/sets-with-effects';
+import { SetNamesWithPlaceholder } from '../../../domain/models/sets-with-effects';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import SetsSelects from './sets-selects';
 
 const styles = createStyles({
   container: {
@@ -24,8 +24,8 @@ interface SetsFormProps extends WithStyles<typeof styles> {
 function SetsForm(props: SetsFormProps): ReactElement {
   const { setPieces, currentSets } = props;
 
-  const handleSetNameChange = (value: SetNamesWithPlaceholder, setIndex: number): void => {
-    props.onSetNameChange({ value, setIndex });
+  const handleSetNameChange = (event: { value: SetNamesWithPlaceholder; setIndex: number }): void => {
+    props.onSetNameChange(event);
   };
 
   const handleSetPiecesChange = (_: ChangeEvent<HTMLInputElement>, value: string): void => {
@@ -33,30 +33,6 @@ function SetsForm(props: SetsFormProps): ReactElement {
     const newSetPieces = intValue === 2 || intValue === 4 ? intValue : 2;
     props.onSetPiecesChange(newSetPieces);
   };
-
-  const firstSetSelect = (
-    <FormSelect
-      label="Set 1"
-      data={setNamesWithPlaceholder}
-      selectedValue={currentSets[0]}
-      onChange={(e) => handleSetNameChange(e, 0)}
-    ></FormSelect>
-  );
-  const setSelects =
-    setPieces === 4 ? (
-      firstSetSelect
-    ) : (
-      <Fragment>
-        {firstSetSelect}
-        <FormSelect
-          label="Set 2"
-          data={setNamesWithPlaceholder}
-          selectedValue={currentSets[1]}
-          onChange={(e) => handleSetNameChange(e, 1)}
-        ></FormSelect>
-      </Fragment>
-    );
-
   return (
     <Container fixed>
       <FormControl>
@@ -66,7 +42,7 @@ function SetsForm(props: SetsFormProps): ReactElement {
           <FormControlLabel value={4} control={<Radio />} label="4 Pieces" />
         </RadioGroup>
       </FormControl>
-      {setSelects}
+      <SetsSelects currentSets={currentSets} setPieces={setPieces} onSetNameChange={handleSetNameChange}></SetsSelects>
     </Container>
   );
 }
