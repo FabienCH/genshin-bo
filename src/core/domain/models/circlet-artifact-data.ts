@@ -12,7 +12,7 @@ export type CircletMainStatType =
   | MainStats.healingBonus;
 
 export type CircletMainStatWithPlaceholder = FormPlaceholder | CircletMainStatType;
-export const circletMainStatWithPlaceholder: CircletMainStatWithPlaceholder[] = [
+export const circletMainStatsWithPlaceholder: CircletMainStatWithPlaceholder[] = [
   formPlaceholder,
   MainStats.percentAtk,
   MainStats.percentDef,

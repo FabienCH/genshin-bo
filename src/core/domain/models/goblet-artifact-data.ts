@@ -17,7 +17,7 @@ export type GobletMainStatType =
   | MainStats.physicalDmg;
 
 export type GobletMainStatWithPlaceholder = FormPlaceholder | GobletMainStatType;
-export const gobletMainStatWithPlaceholder: GobletMainStatWithPlaceholder[] = [
+export const gobletMainStatsWithPlaceholder: GobletMainStatWithPlaceholder[] = [
   formPlaceholder,
   MainStats.percentAtk,
   MainStats.percentDef,

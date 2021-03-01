@@ -1,9 +1,10 @@
 import React, { ReactElement } from 'react';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import FormSelect from '../shared/form-select';
-import { CircletMainStatWithPlaceholder, circletMainStatWithPlaceholder } from '../../../domain/models/circlet-artifact-data';
-import { SandsMainStatWithPlaceholder, sandsMainStatWithPlaceholder } from '../../../domain/models/sands-artifact-data';
-import { gobletMainStatWithPlaceholder, GobletMainStatWithPlaceholder } from '../../../domain/models/goblet-artifact-data';
+import { CircletMainStatWithPlaceholder, circletMainStatsWithPlaceholder } from '../../../domain/models/circlet-artifact-data';
+import { SandsMainStatWithPlaceholder, sandsMainStatsWithPlaceholder } from '../../../domain/models/sands-artifact-data';
+import { gobletMainStatsWithPlaceholder, GobletMainStatWithPlaceholder } from '../../../domain/models/goblet-artifact-data';
+import { ArtifactsMainStats } from './build-optimizer-container';
 
 const styles = createStyles({
   mainStatDiv: {
@@ -13,45 +14,41 @@ const styles = createStyles({
 });
 
 interface ArtifactsMainSelectsProps extends WithStyles<typeof styles> {
-  sandsMain: SandsMainStatWithPlaceholder;
-  gobletMain: GobletMainStatWithPlaceholder;
-  circletMain: CircletMainStatWithPlaceholder;
-  onSandsMainChange: (sandsMain: SandsMainStatWithPlaceholder) => void;
-  onGobletMainChange: (gobletMain: GobletMainStatWithPlaceholder) => void;
-  onCircletMainChange: (circletMain: CircletMainStatWithPlaceholder) => void;
+  mainsStats: ArtifactsMainStats;
+  onMainsStatsChange: (mainsStats: ArtifactsMainStats) => void;
 }
 
 function ArtifactsMainSelects(props: ArtifactsMainSelectsProps): ReactElement {
-  const { sandsMain, gobletMain, circletMain, classes } = props;
+  const { mainsStats, classes } = props;
 
-  const handleSandsMainChange = (value: SandsMainStatWithPlaceholder): void => {
-    props.onSandsMainChange(value);
+  const handleSandsMainChange = (sandsMain: SandsMainStatWithPlaceholder): void => {
+    props.onMainsStatsChange({ ...mainsStats, sandsMain });
   };
-  const handleGobletMainChange = (value: GobletMainStatWithPlaceholder): void => {
-    props.onGobletMainChange(value);
+  const handleGobletMainChange = (gobletMain: GobletMainStatWithPlaceholder): void => {
+    props.onMainsStatsChange({ ...mainsStats, gobletMain });
   };
-  const handleCircletMainChange = (value: CircletMainStatWithPlaceholder): void => {
-    props.onCircletMainChange(value);
+  const handleCircletMainChange = (circletMain: CircletMainStatWithPlaceholder): void => {
+    props.onMainsStatsChange({ ...mainsStats, circletMain });
   };
 
   return (
     <div className={classes.mainStatDiv}>
       <FormSelect
         label="Sands Main"
-        data={sandsMainStatWithPlaceholder}
-        selectedValue={sandsMain}
+        data={sandsMainStatsWithPlaceholder}
+        selectedValue={mainsStats.sandsMain}
         onChange={handleSandsMainChange}
       ></FormSelect>
       <FormSelect
         label="Goblet Main"
-        data={gobletMainStatWithPlaceholder}
-        selectedValue={gobletMain}
+        data={gobletMainStatsWithPlaceholder}
+        selectedValue={mainsStats.gobletMain}
         onChange={handleGobletMainChange}
       ></FormSelect>
       <FormSelect
         label="Circlet Main"
-        data={circletMainStatWithPlaceholder}
-        selectedValue={circletMain}
+        data={circletMainStatsWithPlaceholder}
+        selectedValue={mainsStats.circletMain}
         onChange={handleCircletMainChange}
       ></FormSelect>
     </div>

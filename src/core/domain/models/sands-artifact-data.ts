@@ -10,7 +10,7 @@ export type SandsMainStatType =
   | MainStats.energyRecharge;
 
 export type SandsMainStatWithPlaceholder = FormPlaceholder | SandsMainStatType;
-export const sandsMainStatWithPlaceholder: SandsMainStatWithPlaceholder[] = [
+export const sandsMainStatsWithPlaceholder: SandsMainStatWithPlaceholder[] = [
   formPlaceholder,
   MainStats.percentAtk,
   MainStats.percentDef,
