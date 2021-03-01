@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core/styles';
 
 export const theme = createMuiTheme({
   palette: {
@@ -35,5 +35,28 @@ export const theme = createMuiTheme({
       hint: 'rgba(216, 224, 230, 0.38)',
     },
     type: 'dark',
+  },
+  overrides: {
+    MuiContainer: {
+      root: {
+        backgroundColor: '#181E24',
+        borderRadius: 10,
+        boxShadow: '0px 0px 6px 3px rgba(24, 30, 36, 0.52)',
+        padding: '20px',
+        '&:not(:last-child)': {
+          marginRight: '30px',
+        },
+      },
+    },
+    MuiFormControl: {
+      root: {
+        marginBottom: 20,
+      },
+    },
+    MuiTooltip: {
+      tooltip: {
+        fontSize: '0.7rem',
+      },
+    },
   },
 });

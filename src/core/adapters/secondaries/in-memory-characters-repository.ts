@@ -73,16 +73,28 @@ export class InMemoryCharactersRepository implements CharactersRepository {
     ];
   }
 
+  public getAll(level: Levels): Character[] {
+    return this.charactersStats.map((characterStat) =>
+      this.characterStatToCharacter(characterStat.name, level, characterStat.levels[level]),
+    );
+  }
+
   public getCharacter(name: ExistingCharacters, level: Levels, weaponProps: { name: string; level: Levels }): Character {
-    const characterStats = this.charactersStats.find((character) => character.name === name);
-    const character = characterStats ? characterStats.levels[level] : { stats: this.defaultStats };
-    const weapon = this.weaponsRepository.getWeapon(weaponProps.name, weaponProps.level);
-    return new CharacterBuilder()
-      .withName(name)
-      .withLevel(level)
-      .withStats(character.stats)
-      .withBonusStat(character.bonusStat)
-      .withWeapon(weapon)
-      .build();
+    const allCharacterStats = this.charactersStats.find((character) => character.name === name);
+    const characterStats = allCharacterStats ? allCharacterStats.levels[level] : { stats: this.defaultStats };
+    return this.characterStatToCharacter(name, level, characterStats, weaponProps);
+  }
+
+  private characterStatToCharacter(
+    name: ExistingCharacters,
+    level: Levels,
+    characterStats: { stats: CharacterStatsPerLevel; bonusStat?: { [bonusStat: string]: number } },
+    weaponProps?: { name: string; level: Levels },
+  ) {
+    const characterBuilder = weaponProps
+      ? new CharacterBuilder().withWeapon(this.weaponsRepository.getWeapon(weaponProps.name, weaponProps.level))
+      : new CharacterBuilder();
+
+    return characterBuilder.withName(name).withLevel(level).withStats(characterStats.stats).withBonusStat(characterStats.bonusStat).build();
   }
 }
