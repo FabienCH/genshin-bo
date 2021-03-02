@@ -47,7 +47,7 @@ function CharacterForm(props: CharacterFormProps): ReactElement {
   };
 
   return (
-    <Container fixed>
+    <Container>
       <div className={classes.div}>
         <Box className={classes.leftSelect}>
           <FormSelect
