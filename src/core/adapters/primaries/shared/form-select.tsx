@@ -5,6 +5,7 @@ import { StringFormatter } from '../../../domain/mappers/string-formatter';
 const styles = createStyles({
   formControl: {
     display: 'flex',
+    flex: 1,
   },
 });
 
