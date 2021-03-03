@@ -9,8 +9,10 @@ import { ExistingCharacters } from '../../../domain/models/character';
 import SetsForm from './sets-form';
 import ArtifactsForm from './artifacts-form';
 import { Chip } from '@material-ui/core';
+import BuildFiltersForm from './build-filters-form';
+import { waitFor } from '@testing-library/react';
 
-fdescribe('Build Optimizer container', () => {
+describe('Build Optimizer container', () => {
   let wrapper: ReactWrapper;
   let charactersNames: ExistingCharacters[];
   let weaponsNames: string[];
@@ -61,6 +63,27 @@ fdescribe('Build Optimizer container', () => {
     expect(chips.length).toEqual(expectedFocusStats.length);
     chips.forEach((chip, index) => {
       expect(chip.childAt(0).childAt(0).text()).toEqual(expectedFocusStats[index]);
+    });
+  });
+
+  it('should reset previously set Bonus Dmg when changing stat', async () => {
+    wrapper
+      .find('#bonus-dmg-text-field')
+      .last()
+      .simulate('change', { target: { name: '', value: 10 } });
+
+    await waitFor(() => {
+      expect(wrapper.find(BuildFiltersForm).props().buildFilters['pyroDmg']).toEqual(10);
+    });
+
+    wrapper
+      .find('#bonusdmg')
+      .first()
+      .find('input')
+      .simulate('change', { target: { name: '', value: 'cryoDmg' } });
+
+    await waitFor(() => {
+      expect(wrapper.find(BuildFiltersForm).props().buildFilters['pyroDmg']).toEqual(0);
     });
   });
 });
