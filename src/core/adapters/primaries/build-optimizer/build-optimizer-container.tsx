@@ -152,7 +152,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
   }
 
   handleFocusStatsChange(focusStats: ArtifactStatsTypes[]): void {
-    if (focusStats.length <= 5) {
+    if (focusStats.length <= 6) {
       this.setState((state) => ({
         ...state,
         artifactsFilters: {
@@ -228,6 +228,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
           <h3>Build Filters</h3>
           <BuildFiltersForm
             buildFilters={this.state.buildFilters}
+            disableButton={this.state.artifactsFilters.focusStats.length === 1}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
           ></BuildFiltersForm>

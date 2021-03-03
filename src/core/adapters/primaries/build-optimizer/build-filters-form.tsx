@@ -18,6 +18,10 @@ const styles = createStyles({
     display: 'flex',
     flex: '170px 0 1',
   },
+  runButton: {
+    width: 120,
+    alignSelf: 'flex-end',
+  },
 });
 
 const statsByLines = [
@@ -60,12 +64,13 @@ const selectedListedStats = [
 
 interface BuildFiltersFormProps extends WithStyles<typeof styles> {
   buildFilters: CharacterStatsValues;
+  disableButton: boolean;
   onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number }) => void;
   onRunClick: () => void;
 }
 
 function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
-  const { buildFilters, classes } = props;
+  const { buildFilters, disableButton, classes } = props;
   const handleBuildFiltersChange = (event: ChangeEvent<{ name?: string | undefined; value: unknown }>, stat: CharacterStatTypes): void => {
     props.onBuildFiltersChange({ stat, value: parseInt(`${event.target.value}`) });
   };
@@ -128,7 +133,7 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
           );
         })}
       </div>
-      <Button variant="contained" color="primary" onClick={handleRunClick}>
+      <Button className={classes.runButton} variant="contained" color="primary" disabled={disableButton} onClick={handleRunClick}>
         Run
       </Button>
     </Container>
