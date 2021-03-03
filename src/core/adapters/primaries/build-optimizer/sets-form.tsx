@@ -34,7 +34,7 @@ function SetsForm(props: SetsFormProps): ReactElement {
     props.onSetPiecesChange(newSetPieces);
   };
   return (
-    <Container fixed>
+    <Container>
       <FormControl>
         <FormLabel>Set effects</FormLabel>
         <RadioGroup row aria-label="set-pieces" name="set-pieces" value={setPieces} onChange={handleSetPiecesChange}>

@@ -36,7 +36,7 @@ function ArtifactsForm(props: ArtifactsFormProps): ReactElement {
   };
 
   return (
-    <Container className={classes.container} fixed>
+    <Container className={classes.container}>
       <ArtifactsMainSelects mainsStats={mainsStats} onMainsStatsChange={handleMainsStatsChange}></ArtifactsMainSelects>
       <ArtifactsOptionsForm
         focusStats={focusStats}

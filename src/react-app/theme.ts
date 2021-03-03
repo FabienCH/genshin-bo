@@ -43,6 +43,9 @@ export const theme = createMuiTheme({
         borderRadius: 10,
         boxShadow: '0px 0px 6px 3px rgba(24, 30, 36, 0.52)',
         padding: '20px',
+        marginRight: '0',
+        marginLeft: '0',
+        marginBottom: '10px',
         '&:not(:last-child)': {
           marginRight: '30px',
         },
