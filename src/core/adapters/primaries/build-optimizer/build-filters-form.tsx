@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Fragment, ReactElement } from 'react';
-import { Box, Container, createStyles, TextField, withStyles, WithStyles } from '@material-ui/core';
+import { Box, Button, Container, createStyles, TextField, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
 import { StringFormatter } from '../../../domain/mappers/string-formatter';
 import FormSelect from '../shared/form-select';
@@ -61,6 +61,7 @@ const selectedListedStats = [
 interface BuildFiltersFormProps extends WithStyles<typeof styles> {
   buildFilters: CharacterStatsValues;
   onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number }) => void;
+  onRunClick: () => void;
 }
 
 function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
@@ -79,6 +80,10 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
     const value = parseInt(`${event.target.value}`);
     selectedListedStats[index].value = value;
     props.onBuildFiltersChange({ stat: selectedListedStats[index].stat, value });
+  };
+
+  const handleRunClick = (): void => {
+    props.onRunClick();
   };
 
   return (
@@ -123,6 +128,9 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
           );
         })}
       </div>
+      <Button variant="contained" color="primary" onClick={handleRunClick}>
+        Run
+      </Button>
     </Container>
   );
 }

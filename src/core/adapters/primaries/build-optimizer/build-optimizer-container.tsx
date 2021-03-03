@@ -14,6 +14,7 @@ import { GobletMainStatWithPlaceholder } from '../../../domain/models/goblet-art
 import { SandsMainStatWithPlaceholder } from '../../../domain/models/sands-artifact-data';
 import { characterStatsValues, CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
 import BuildFiltersForm from './build-filters-form';
+import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
 
 const styles = createStyles({
   form: {
@@ -79,6 +80,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     this.handleFocusStatsChange = this.handleFocusStatsChange.bind(this);
     this.handleMinLevelChange = this.handleMinLevelChange.bind(this);
     this.handleBuildFiltersChange = this.handleBuildFiltersChange.bind(this);
+    this.runOptimization = this.runOptimization.bind(this);
   }
 
   componentDidMount(): void {
@@ -181,6 +183,14 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     }));
   }
 
+  runOptimization(): void {
+    const { name, level } = this.state.currentCharacter;
+    const character = CharactersDI.charactersHandler.getCharacter(name, level, this.state.currentWeapon);
+
+    const builds = BuildOptimizerDI.buildOptimizer.computeBuildsStats(character, this.state.artifactsFilters, this.state.buildFilters);
+    console.log('builds', builds);
+  }
+
   render(): ReactElement {
     const { classes } = this.props;
 
@@ -216,7 +226,11 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
             ></ArtifactsForm>
           </div>
           <h3>Build Filters</h3>
-          <BuildFiltersForm buildFilters={this.state.buildFilters} onBuildFiltersChange={this.handleBuildFiltersChange}></BuildFiltersForm>
+          <BuildFiltersForm
+            buildFilters={this.state.buildFilters}
+            onBuildFiltersChange={this.handleBuildFiltersChange}
+            onRunClick={this.runOptimization}
+          ></BuildFiltersForm>
         </form>
       </section>
     );

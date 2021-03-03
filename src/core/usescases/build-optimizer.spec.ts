@@ -13,45 +13,47 @@ import {
   lvl27121517BuildArtifactsData,
   multipleArtifactsBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
-import { SetNames } from '../domain/models/sets-with-effects';
+import { SetNames, SetNamesWithPlaceholder } from '../domain/models/sets-with-effects';
 import { AllArtifacts } from '../domain/models/all-artifacts';
+import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
+import { ArtifactStatsTypes } from '../domain/models/main-statistics';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
   let charactersRepository: InMemoryCharactersRepository;
-  let artifactsRepository: InMemoryArtifactsRepository;
-  let allDefaultArtifacts: AllArtifacts;
-
   let razor: Character;
 
+  const defaultArtifactsFilters = {
+    currentSets: [],
+    setPieces: 2,
+    mainsStats: { sandsMain: '-', gobletMain: '-', circletMain: '-' },
+    focusStats: [],
+    minArtifactLevel: 0,
+  } as {
+    currentSets: SetNamesWithPlaceholder[];
+    setPieces: 2 | 4;
+    mainsStats: ArtifactsMainStats;
+    focusStats: ArtifactStatsTypes[];
+    minArtifactLevel: number;
+  };
+  const defaultStatsFilter = {
+    [CharacterStats.hp]: 0,
+    [CharacterStats.atk]: 0,
+    [CharacterStats.def]: 0,
+  };
+
   beforeEach(() => {
-    buildOptimizer = new BuildOptimizer();
+    buildOptimizer = new BuildOptimizer(defaultBuildArtifactsData);
     charactersRepository = new InMemoryCharactersRepository();
-    artifactsRepository = new InMemoryArtifactsRepository(defaultBuildArtifactsData);
 
     razor = charactersRepository.getCharacter('razor', '80a', { name: 'snowTombedStarsilver', level: '90' });
-    allDefaultArtifacts = {
-      flowers: artifactsRepository.getFlowerArtifacts(),
-      plumes: artifactsRepository.getPlumeArtifacts(),
-      sands: artifactsRepository.getSandsArtifacts(),
-      goblets: artifactsRepository.getGobletArtifacts(),
-      circlets: artifactsRepository.getCircletArtifacts(),
-    };
   });
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
-      artifactsRepository = new InMemoryArtifactsRepository(defPhyDmgAtkBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer(defPhyDmgAtkBuildArtifactsData);
 
-      const allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
-
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 11951,
           [CharacterStats.atk]: 931,
@@ -67,17 +69,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
-      artifactsRepository = new InMemoryArtifactsRepository(atkGeoDmgEmBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer(atkGeoDmgEmBuildArtifactsData);
 
-      const allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
-
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 12430,
           [CharacterStats.atk]: 947,
@@ -96,17 +90,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
   describe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
-      artifactsRepository = new InMemoryArtifactsRepository(lvl134820BuildArtifactsData);
+      buildOptimizer = new BuildOptimizer(lvl134820BuildArtifactsData);
 
-      const allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
-
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 13190,
           [CharacterStats.atk]: 1048,
@@ -123,17 +109,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with levels 2, 7, 12, 15, 17', () => {
-      artifactsRepository = new InMemoryArtifactsRepository(lvl27121517BuildArtifactsData);
+      buildOptimizer = new BuildOptimizer(lvl27121517BuildArtifactsData);
 
-      const allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
-
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 16825,
           [CharacterStats.atk]: 1024,
@@ -150,17 +128,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with gladiator and thundering sets effects', () => {
-      artifactsRepository = new InMemoryArtifactsRepository(gladiatorThunderingBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer(gladiatorThunderingBuildArtifactsData);
 
-      const allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
-
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 16825,
           [CharacterStats.atk]: 1126,
@@ -177,17 +147,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with bolide and Lavawalker sets effects', () => {
-      artifactsRepository = new InMemoryArtifactsRepository(bolideLavawalkerBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer(bolideLavawalkerBuildArtifactsData);
 
-      const allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
-
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 16825,
           [CharacterStats.atk]: 985,
@@ -206,17 +168,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 1 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '1', { name: 'rust', level: '1' });
-      artifactsRepository = new InMemoryArtifactsRepository(bolideLavawalkerBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer(bolideLavawalkerBuildArtifactsData);
 
-      const allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
-
-      expect(buildOptimizer.computeBuildsStats(amber, allArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 2244,
           [CharacterStats.atk]: 219,
@@ -235,7 +189,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 20 ascended Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '20a', { name: 'rust', level: '40' });
 
-      expect(buildOptimizer.computeBuildsStats(amber, allDefaultArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 6112,
           [CharacterStats.atk]: 794,
@@ -252,7 +206,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 50 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '50', { name: 'rust', level: '60a' });
 
-      expect(buildOptimizer.computeBuildsStats(amber, allDefaultArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 8610,
           [CharacterStats.atk]: 1279,
@@ -267,7 +221,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 80 ascended Razor', () => {
-      expect(buildOptimizer.computeBuildsStats(razor, allDefaultArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 15015,
           [CharacterStats.atk]: 1680,
@@ -285,7 +239,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 60 ascended Albedo', () => {
       const albedo = charactersRepository.getCharacter('albedo', '60a', { name: 'darkIronSword', level: '70' });
 
-      expect(buildOptimizer.computeBuildsStats(albedo, allDefaultArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(albedo, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 12998,
           [CharacterStats.atk]: 1132,
@@ -303,7 +257,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 70 Fischl', () => {
       const fischl = charactersRepository.getCharacter('fischl', '70', { name: 'favoniusWarbow', level: '70a' });
 
-      expect(buildOptimizer.computeBuildsStats(fischl, allDefaultArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(fischl, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 10791,
           [CharacterStats.atk]: 1343,
@@ -320,7 +274,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 1 Prototype Archaic', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '1' });
 
-      expect(buildOptimizer.computeBuildsStats(razorWithProto, allDefaultArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 15015,
           [CharacterStats.atk]: 736,
@@ -338,7 +292,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 40 ascended Prototype Archaic', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '40a' });
 
-      expect(buildOptimizer.computeBuildsStats(razorWithProto, allDefaultArtifacts)).toEqual([
+      expect(buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
           [CharacterStats.hp]: 15015,
           [CharacterStats.atk]: 1177,
@@ -355,17 +309,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 
   it('should compute build stats of multiple artifacts for each type', () => {
-    artifactsRepository = new InMemoryArtifactsRepository(multipleArtifactsBuildArtifactsData);
+    buildOptimizer = new BuildOptimizer(multipleArtifactsBuildArtifactsData);
 
-    const allArtifacts = {
-      flowers: artifactsRepository.getFlowerArtifacts(),
-      plumes: artifactsRepository.getPlumeArtifacts(),
-      sands: artifactsRepository.getSandsArtifacts(),
-      goblets: artifactsRepository.getGobletArtifacts(),
-      circlets: artifactsRepository.getCircletArtifacts(),
-    };
-
-    expect(buildOptimizer.computeBuildsStats(razor, allArtifacts)).toEqual([
+    expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
       {
         [CharacterStats.hp]: 16825,
         [CharacterStats.atk]: 985,
@@ -472,72 +418,75 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 
   describe('filter builds before stats computation', () => {
-    const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
-
     let buildOptimizer: BuildOptimizer;
-    let allArtifacts: AllArtifacts;
 
     beforeEach(() => {
-      allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
       buildOptimizer = new BuildOptimizer();
     });
 
     it('that must have 2 thunderingFury set pieces', () => {
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts, { setNames: [SetNames.thunderingFury], pieces: 2 }).length).toEqual(24);
+      expect(
+        buildOptimizer.computeBuildsStats(
+          razor,
+          { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury], setPieces: 2 },
+          defaultStatsFilter,
+        ).length,
+      ).toEqual(24);
     });
 
     it('that must have 4 retracingBolide set pieces', () => {
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts, { setNames: [SetNames.retracingBolide], pieces: 4 }).length).toEqual(8);
+      expect(
+        buildOptimizer.computeBuildsStats(
+          razor,
+          { ...defaultArtifactsFilters, currentSets: [SetNames.retracingBolide], setPieces: 4 },
+          defaultStatsFilter,
+        ).length,
+      ).toEqual(8);
     });
 
     it('that must have 2 thunderingFury and 2 blizzardStrayer set pieces', () => {
       expect(
-        buildOptimizer.computeBuildsStats(razor, allArtifacts, { setNames: [SetNames.thunderingFury, SetNames.blizzardStrayer], pieces: 2 })
-          .length,
+        buildOptimizer.computeBuildsStats(
+          razor,
+          { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer], setPieces: 2 },
+          defaultStatsFilter,
+        ).length,
       ).toEqual(3);
     });
 
     it('must not run with total pieces higher than 5', () => {
       expect(
         () =>
-          buildOptimizer.computeBuildsStats(razor, allArtifacts, {
-            setNames: [SetNames.thunderingFury, SetNames.blizzardStrayer],
-            pieces: 4,
-          }).length,
+          buildOptimizer.computeBuildsStats(
+            razor,
+            {
+              ...defaultArtifactsFilters,
+              currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer],
+              setPieces: 4,
+            },
+            defaultStatsFilter,
+          ).length,
       ).toThrowError('total pieces can not be higher than 5');
     });
   });
 
   describe('filter builds after stats computation', () => {
-    const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
-
     let buildOptimizer: BuildOptimizer;
-    let allArtifacts: AllArtifacts;
 
     beforeEach(() => {
-      allArtifacts = {
-        flowers: artifactsRepository.getFlowerArtifacts(),
-        plumes: artifactsRepository.getPlumeArtifacts(),
-        sands: artifactsRepository.getSandsArtifacts(),
-        goblets: artifactsRepository.getGobletArtifacts(),
-        circlets: artifactsRepository.getCircletArtifacts(),
-      };
       buildOptimizer = new BuildOptimizer();
     });
 
     it('that must have at least 17000 hp', () => {
-      expect(buildOptimizer.computeBuildsStats(razor, allArtifacts, undefined, { [CharacterStats.hp]: 17000 }).length).toEqual(24);
+      expect(
+        buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, { ...defaultStatsFilter, [CharacterStats.hp]: 17000 }).length,
+      ).toEqual(24);
     });
 
     it('that must have at least 16000 hp and 30 crit rate', () => {
       expect(
-        buildOptimizer.computeBuildsStats(razor, allArtifacts, undefined, {
+        buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, {
+          ...defaultStatsFilter,
           [CharacterStats.hp]: 16000,
           [CharacterStats.critRate]: 30,
         }).length,

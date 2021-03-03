@@ -28,7 +28,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by main stat should set possible builds', () => {
     it('with sand having elementalMastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { sandsMain: MainStats.elementalMastery });
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { sandsMain: MainStats.elementalMastery }, 0, []);
       const expectedSands = [
         new GobletArtifact(
           '6',
@@ -48,7 +48,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with goblet having cryoDmg', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { gobletMain: MainStats.cryoDmg });
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { gobletMain: MainStats.cryoDmg }, 0, []);
       const expectedGoblets = [
         new GobletArtifact(
           '9',
@@ -68,7 +68,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with circlet having critRate', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { circletMain: MainStats.critRate });
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { circletMain: MainStats.critRate }, 0, []);
       const expectedCirclets = [
         new CircletArtifact(
           '12',
@@ -100,11 +100,16 @@ describe('Artifacts Filter', () => {
     });
 
     it('with sand, goblet and circlet artifacts', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {
-        sandsMain: MainStats.percentAtk,
-        gobletMain: MainStats.percentDef,
-        circletMain: MainStats.healingBonus,
-      });
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(
+        allArtifacts,
+        {
+          sandsMain: MainStats.percentAtk,
+          gobletMain: MainStats.percentDef,
+          circletMain: MainStats.healingBonus,
+        },
+        0,
+        [],
+      );
       const expectedSands = [
         new SandsArtifact(
           '5',
@@ -165,7 +170,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by min level should set possible builds', () => {
     it('with artifacts higher or equal to 8', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, 8);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 8, []);
       const expectedFlowers = [
         new FlowerArtifact(
           '1',
@@ -279,7 +284,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts higher or equal to 12', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, 12);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 12, []);
 
       const expectedPlumes = [
         new PlumeArtifact(
@@ -359,7 +364,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by focused stats should set possible builds', () => {
     it('with artifacts that have percent atk', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, undefined, [SubStats.percentAtk]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [SubStats.percentAtk]);
 
       const expectedPlumes = [
         new PlumeArtifact(
@@ -451,10 +456,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts that have at least flat hp or elemental mastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, undefined, undefined, [
-        SubStats.flatHp,
-        SubStats.elementalMastery,
-      ]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [SubStats.flatHp, SubStats.elementalMastery]);
       const expectedPlumes = [
         new PlumeArtifact(
           '3',

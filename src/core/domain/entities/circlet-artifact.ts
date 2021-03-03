@@ -1,6 +1,5 @@
 import { CircletMainStatType } from '../models/circlet-artifact-data';
-import { MainStats } from '../models/main-statistics';
-import { SubStats } from '../models/sub-statistics';
+import { ArtifactStatsTypes } from '../models/main-statistics';
 import { Artifact, ArtifactType } from './artifact';
 
 export class CircletArtifact extends Artifact {
@@ -8,7 +7,7 @@ export class CircletArtifact extends Artifact {
     return 'circlet';
   }
 
-  public matchFiltersWithMain(mainStat?: CircletMainStatType, minLevel = 0, focusStats?: Array<SubStats | MainStats>): boolean {
+  public matchFiltersWithMain(minLevel: number, focusStats: ArtifactStatsTypes[], mainStat?: CircletMainStatType): boolean {
     const focusAndMainStats = focusStats && mainStat ? [...focusStats, mainStat] : focusStats;
     const mainStatMatchFilter = !mainStat || Object.keys(this.mainStat)[0] === mainStat;
     return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats);

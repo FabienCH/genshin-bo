@@ -1,4 +1,4 @@
-import { MainStat, MainStats, MainStatTypes } from '../models/main-statistics';
+import { ArtifactStatsTypes, MainStat, MainStats, MainStatTypes } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
 import { SubStats, SubStatsValues } from '../models/sub-statistics';
 
@@ -81,15 +81,15 @@ export abstract class Artifact {
     this.mainStat = this.getMainStat(mainStatType);
   }
 
-  public matchFilters(minLevel = 0, focusStats?: Array<SubStats | MainStats>): boolean {
+  public matchFilters(minLevel = 0, focusStats: ArtifactStatsTypes[]): boolean {
     return this.level >= minLevel && this.filterByFocusStats(focusStats);
   }
 
   public abstract getType(): ArtifactType;
 
-  private filterByFocusStats(focusStats?: Array<SubStats | MainStats>): boolean {
+  private filterByFocusStats(focusStats: ArtifactStatsTypes[]): boolean {
     return (
-      !focusStats ||
+      focusStats.length === 0 ||
       !!Object.keys({ ...this.subStats, ...this.mainStat }).find((artifactStats) =>
         focusStats.includes(artifactStats as SubStats | MainStats),
       )

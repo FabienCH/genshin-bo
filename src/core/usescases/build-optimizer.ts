@@ -1,10 +1,18 @@
+import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
+import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
+import { ArtifactsRepository } from '../domain/artifacts-repository';
 import { Artifact } from '../domain/entities/artifact';
 import { AllArtifacts } from '../domain/models/all-artifacts';
+import { ArtifactData } from '../domain/models/artifact-data';
 import { Character } from '../domain/models/character';
 import { CharacterStatsValues, CharacterStats } from '../domain/models/character-statistics';
-import { MainStatsValues } from '../domain/models/main-statistics';
-import { SetNames } from '../domain/models/sets-with-effects';
+import { CircletArtifactData } from '../domain/models/circlet-artifact-data';
+import { GobletArtifactData } from '../domain/models/goblet-artifact-data';
+import { ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
+import { SandsArtifactData } from '../domain/models/sands-artifact-data';
+import { SetNames, SetNamesWithPlaceholder } from '../domain/models/sets-with-effects';
 import { StatsComputation } from '../domain/stats-computation';
+import { ArtifactsFilter } from './artifacts-filter';
 
 interface SetFilter {
   setNames: SetNames[];
@@ -13,37 +21,65 @@ interface SetFilter {
 
 export class BuildOptimizer {
   private readonly statsComputation: StatsComputation;
+  private readonly artifactsRepository: ArtifactsRepository;
 
   private allBuilds!: CharacterStatsValues[];
   private character!: Character;
   private allArtifacts!: Artifact[][];
   private setFilter!: SetFilter;
-  private statsFilter!: { [statName: string]: number };
+  private statsFilter!: CharacterStatsValues;
 
-  constructor() {
+  constructor(artifactsData?: {
+    flowerArtifacts?: ArtifactData[];
+    plumeArtifacts?: ArtifactData[];
+    sandsArtifacts?: SandsArtifactData[];
+    gobletArtifacts?: GobletArtifactData[];
+    circletArtifacts?: CircletArtifactData[];
+  }) {
     this.statsComputation = new StatsComputation();
+    this.artifactsRepository = new InMemoryArtifactsRepository(artifactsData);
   }
 
   public computeBuildsStats(
     character: Character,
-    artifacts: AllArtifacts,
-    setFilter?: SetFilter,
-    statsFilter?: { [statName: string]: number },
+    artifactsFilters: {
+      currentSets: SetNamesWithPlaceholder[];
+      setPieces: 2 | 4;
+      mainsStats: ArtifactsMainStats;
+      focusStats: ArtifactStatsTypes[];
+      minArtifactLevel: number;
+    },
+    statsFilter: CharacterStatsValues,
   ): CharacterStatsValues[] {
-    if (setFilter) {
-      this.setFilter = setFilter;
-      const totalSetFilterPieces = this.getTotalSetFilterPieces(this.setFilter);
-      if (totalSetFilterPieces > 5) {
-        throw new Error('total pieces can not be higher than 5');
-      }
+    this.setFilter = {
+      setNames: artifactsFilters.currentSets.filter((set) => set !== '-') as SetNames[],
+      pieces: artifactsFilters.setPieces,
+    };
+    const totalSetFilterPieces = this.getTotalSetFilterPieces(this.setFilter);
+    if (totalSetFilterPieces > 5) {
+      throw new Error('total pieces can not be higher than 5');
     }
-    if (statsFilter) {
-      this.statsFilter = statsFilter;
-    }
+    this.statsFilter = statsFilter;
 
     this.allBuilds = [];
     this.character = character;
-    this.allArtifacts = Object.values(artifacts);
+    const allArtifacts = {
+      flowers: this.artifactsRepository.getFlowerArtifacts(),
+      plumes: this.artifactsRepository.getPlumeArtifacts(),
+      sands: this.artifactsRepository.getSandsArtifacts(),
+      goblets: this.artifactsRepository.getGobletArtifacts(),
+      circlets: this.artifactsRepository.getCircletArtifacts(),
+    };
+    this.artifactsRepository.getFlowerArtifacts();
+    const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
+
+    const mainStats = {
+      sandsMain: mainsStats.sandsMain !== '-' ? mainsStats.sandsMain : undefined,
+      gobletMain: mainsStats.gobletMain !== '-' ? mainsStats.gobletMain : undefined,
+      circletMain: mainsStats.circletMain !== '-' ? mainsStats.circletMain : undefined,
+    };
+
+    this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
 
     this.iterateOverAllBuilds([], 0);
     return this.allBuilds;
@@ -115,12 +151,14 @@ export class BuildOptimizer {
     return !setFilter || setsMatchingFilterCount() >= setFilter.setNames.length;
   }
 
-  private statFilterMatch(statsFilter: { [statName: string]: number }, buildStats: CharacterStatsValues): boolean {
+  private statFilterMatch(statsFilter: CharacterStatsValues, buildStats: CharacterStatsValues): boolean {
     const getStatValue = (statValue: number | undefined): number => (!statValue || isNaN(statValue) ? 0 : statValue);
 
     return (
       !statsFilter ||
-      Object.keys(statsFilter).every((statName) => getStatValue(buildStats[statName as CharacterStats]) >= statsFilter[statName])
+      Object.keys(statsFilter).every(
+        (statName) => getStatValue(buildStats[statName as CharacterStats]) >= getStatValue(statsFilter[statName as CharacterStats]),
+      )
     );
   }
 }
