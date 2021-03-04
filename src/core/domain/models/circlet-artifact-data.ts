@@ -1,6 +1,5 @@
 import { MainStats } from './main-statistics';
 import { ArtifactData } from './artifact-data';
-import { formPlaceholder, FormPlaceholder } from './form-placeholder';
 
 export type CircletMainStatType =
   | MainStats.percentAtk
@@ -11,9 +10,7 @@ export type CircletMainStatType =
   | MainStats.critDmg
   | MainStats.healingBonus;
 
-export type CircletMainStatWithPlaceholder = FormPlaceholder | CircletMainStatType;
-export const circletMainStatsWithPlaceholder: CircletMainStatWithPlaceholder[] = [
-  formPlaceholder,
+export const circletMainStats: CircletMainStatType[] = [
   MainStats.percentAtk,
   MainStats.percentDef,
   MainStats.percentHp,

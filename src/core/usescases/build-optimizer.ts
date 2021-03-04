@@ -10,7 +10,7 @@ import { CircletArtifactData } from '../domain/models/circlet-artifact-data';
 import { GobletArtifactData } from '../domain/models/goblet-artifact-data';
 import { ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
 import { SandsArtifactData } from '../domain/models/sands-artifact-data';
-import { SetNames, SetNamesWithPlaceholder } from '../domain/models/sets-with-effects';
+import { SetNames } from '../domain/models/sets-with-effects';
 import { StatsComputation } from '../domain/stats-computation';
 import { ArtifactsFilter } from './artifacts-filter';
 
@@ -43,7 +43,7 @@ export class BuildOptimizer {
   public computeBuildsStats(
     character: Character,
     artifactsFilters: {
-      currentSets: SetNamesWithPlaceholder[];
+      currentSets: SetNames[];
       setPieces: 2 | 4;
       mainsStats: ArtifactsMainStats;
       focusStats: ArtifactStatsTypes[];
@@ -52,7 +52,7 @@ export class BuildOptimizer {
     statsFilter: CharacterStatsValues,
   ): CharacterStatsValues[] {
     this.setFilter = {
-      setNames: artifactsFilters.currentSets.filter((set) => set !== '-') as SetNames[],
+      setNames: artifactsFilters.currentSets,
       pieces: artifactsFilters.setPieces,
     };
     const totalSetFilterPieces = this.getTotalSetFilterPieces(this.setFilter);
@@ -74,9 +74,9 @@ export class BuildOptimizer {
     const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
 
     const mainStats = {
-      sandsMain: mainsStats.sandsMain !== '-' ? mainsStats.sandsMain : undefined,
-      gobletMain: mainsStats.gobletMain !== '-' ? mainsStats.gobletMain : undefined,
-      circletMain: mainsStats.circletMain !== '-' ? mainsStats.circletMain : undefined,
+      sandsMain: mainsStats.sandsMain,
+      gobletMain: mainsStats.gobletMain,
+      circletMain: mainsStats.circletMain,
     };
 
     this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));

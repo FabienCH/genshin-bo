@@ -13,7 +13,7 @@ import {
   lvl27121517BuildArtifactsData,
   multipleArtifactsBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
-import { SetNames, SetNamesWithPlaceholder } from '../domain/models/sets-with-effects';
+import { SetNames } from '../domain/models/sets-with-effects';
 import { AllArtifacts } from '../domain/models/all-artifacts';
 import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
 import { ArtifactStatsTypes } from '../domain/models/main-statistics';
@@ -26,11 +26,11 @@ describe('BuildOptimizer.computeBuildStats', () => {
   const defaultArtifactsFilters = {
     currentSets: [],
     setPieces: 2,
-    mainsStats: { sandsMain: '-', gobletMain: '-', circletMain: '-' },
+    mainsStats: {},
     focusStats: [],
     minArtifactLevel: 0,
   } as {
-    currentSets: SetNamesWithPlaceholder[];
+    currentSets: SetNames[];
     setPieces: 2 | 4;
     mainsStats: ArtifactsMainStats;
     focusStats: ArtifactStatsTypes[];

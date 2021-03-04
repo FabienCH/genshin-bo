@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import FormSelect from '../shared/form-select';
-import { CircletMainStatWithPlaceholder, circletMainStatsWithPlaceholder } from '../../../domain/models/circlet-artifact-data';
-import { SandsMainStatWithPlaceholder, sandsMainStatsWithPlaceholder } from '../../../domain/models/sands-artifact-data';
-import { gobletMainStatsWithPlaceholder, GobletMainStatWithPlaceholder } from '../../../domain/models/goblet-artifact-data';
+import { CircletMainStatType, circletMainStats } from '../../../domain/models/circlet-artifact-data';
+import { SandsMainStatType, sandsMainStats } from '../../../domain/models/sands-artifact-data';
+import { gobletMainStats, GobletMainStatType } from '../../../domain/models/goblet-artifact-data';
 import { ArtifactsMainStats } from './build-optimizer-container';
 
 const styles = createStyles({
@@ -21,13 +21,13 @@ interface ArtifactsMainSelectsProps extends WithStyles<typeof styles> {
 function ArtifactsMainSelects(props: ArtifactsMainSelectsProps): ReactElement {
   const { mainsStats, classes } = props;
 
-  const handleSandsMainChange = (sandsMain: SandsMainStatWithPlaceholder): void => {
+  const handleSandsMainChange = (sandsMain: SandsMainStatType): void => {
     props.onMainsStatsChange({ ...mainsStats, sandsMain });
   };
-  const handleGobletMainChange = (gobletMain: GobletMainStatWithPlaceholder): void => {
+  const handleGobletMainChange = (gobletMain: GobletMainStatType): void => {
     props.onMainsStatsChange({ ...mainsStats, gobletMain });
   };
-  const handleCircletMainChange = (circletMain: CircletMainStatWithPlaceholder): void => {
+  const handleCircletMainChange = (circletMain: CircletMainStatType): void => {
     props.onMainsStatsChange({ ...mainsStats, circletMain });
   };
 
@@ -35,20 +35,23 @@ function ArtifactsMainSelects(props: ArtifactsMainSelectsProps): ReactElement {
     <div className={classes.mainStatDiv}>
       <FormSelect
         label="Sands Main"
-        data={sandsMainStatsWithPlaceholder}
+        data={sandsMainStats}
         selectedValue={mainsStats.sandsMain}
+        isOptional={true}
         onChange={handleSandsMainChange}
       ></FormSelect>
       <FormSelect
         label="Goblet Main"
-        data={gobletMainStatsWithPlaceholder}
+        data={gobletMainStats}
         selectedValue={mainsStats.gobletMain}
+        isOptional={true}
         onChange={handleGobletMainChange}
       ></FormSelect>
       <FormSelect
         label="Circlet Main"
-        data={circletMainStatsWithPlaceholder}
+        data={circletMainStats}
         selectedValue={mainsStats.circletMain}
+        isOptional={true}
         onChange={handleCircletMainChange}
       ></FormSelect>
     </div>
