@@ -1,19 +1,32 @@
 import { ReactElement, useRef } from 'react';
-import { Container } from '@material-ui/core';
+import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
 import { AgGridColumn } from 'ag-grid-react/lib/agGridColumn';
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
 import { GridApi, GridReadyEvent, RowNode } from 'ag-grid-community';
 import { BuildFilter } from '../../../usescases/build-filter';
+import InfoIcon from '@material-ui/icons/Info';
 
-interface BuildsResultsProps {
+const styles = createStyles({
+  infoIcon: {
+    float: 'left',
+    marginRight: 10,
+  },
+  infoContainer: {
+    display: 'flex',
+    margin: 0,
+    alignItems: 'center',
+  },
+});
+
+interface BuildsResultsProps extends WithStyles<typeof styles> {
   builds: CharacterStatsValues[];
   buildFilters: Partial<CharacterStatsValues>;
   additionalStatsToDisplay: CharacterStatTypes[];
 }
 
 function BuildsResults(props: BuildsResultsProps): ReactElement {
-  const { builds, additionalStatsToDisplay } = props;
+  const { builds, additionalStatsToDisplay, classes } = props;
   const gridApi = useRef<GridApi | undefined>();
   const refBuildFilters = useRef<Partial<CharacterStatsValues>>(props.buildFilters);
 
@@ -82,25 +95,33 @@ function BuildsResults(props: BuildsResultsProps): ReactElement {
   const doesExternalFilterPass = (node: RowNode) => BuildFilter.filterBuilds(refBuildFilters.current, node.data);
 
   return (
-    <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
-      <AgGridReact
-        rowData={builds}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-        onGridColumnsChanged={externalFilterChanged}
-        isExternalFilterPresent={isExternalFilterPresent}
-        doesExternalFilterPass={doesExternalFilterPass}
-      >
-        <AgGridColumn field="hp" checkboxSelection={true}></AgGridColumn>
-        <AgGridColumn field="atk"></AgGridColumn>
-        <AgGridColumn field="def"></AgGridColumn>
-        <AgGridColumn field="critRate"></AgGridColumn>
-        <AgGridColumn field="critDmg"></AgGridColumn>
-        <AgGridColumn field="energyRecharge"></AgGridColumn>
-      </AgGridReact>
+    <Container>
+      <p className={classes.infoContainer}>
+        <InfoIcon className={classes.infoIcon}></InfoIcon>
+        Add values to build filters (0 if you don't want to filter builds) to display more columns.
+        <br />
+        Only statistics are calculated for now, so 4 pieces set effects are ignored.
+      </p>
+      <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
+        <AgGridReact
+          rowData={builds}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+          onGridColumnsChanged={externalFilterChanged}
+          isExternalFilterPresent={isExternalFilterPresent}
+          doesExternalFilterPass={doesExternalFilterPass}
+        >
+          <AgGridColumn field="hp" checkboxSelection={true}></AgGridColumn>
+          <AgGridColumn field="atk"></AgGridColumn>
+          <AgGridColumn field="def"></AgGridColumn>
+          <AgGridColumn field="critRate"></AgGridColumn>
+          <AgGridColumn field="critDmg"></AgGridColumn>
+          <AgGridColumn field="energyRecharge"></AgGridColumn>
+        </AgGridReact>
+      </Container>
     </Container>
   );
 }
 
-export default BuildsResults;
+export default withStyles(styles)(BuildsResults);
