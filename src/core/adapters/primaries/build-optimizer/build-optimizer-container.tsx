@@ -11,7 +11,7 @@ import { ArtifactStatsTypes } from '../../../domain/models/main-statistics';
 import { CircletMainStatType } from '../../../domain/models/circlet-artifact-data';
 import { GobletMainStatType } from '../../../domain/models/goblet-artifact-data';
 import { SandsMainStatType } from '../../../domain/models/sands-artifact-data';
-import { characterStatsValues, CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
+import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
 import BuildFiltersForm from './build-filters-form';
 import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
 import { SetNames } from '../../../domain/models/sets-with-effects';
@@ -46,13 +46,12 @@ type State = {
     focusStats: ArtifactStatsTypes[];
     minArtifactLevel: number;
   };
-  buildFilters: CharacterStatsValues;
+  buildFilters: Partial<CharacterStatsValues>;
   builds?: CharacterStatsValues[];
 };
 
 class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
   constructor(props: BuildOptimizerProps) {
-    const buildFilters = characterStatsValues;
     super(props);
     this.state = {
       charactersNames: [],
@@ -66,7 +65,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
         focusStats: [],
         minArtifactLevel: 1,
       },
-      buildFilters,
+      buildFilters: {},
     };
     this.handleCharacterNameChange = this.handleCharacterNameChange.bind(this);
     this.handleCharacterLevelChange = this.handleCharacterLevelChange.bind(this);
@@ -175,14 +174,19 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     }));
   }
 
-  handleBuildFiltersChange(event: { stat: CharacterStatTypes; value: number }): void {
-    this.setState((state) => ({
-      ...state,
-      buildFilters: {
-        ...state.buildFilters,
-        [event.stat]: event.value,
-      },
-    }));
+  handleBuildFiltersChange(event: { stat: CharacterStatTypes; value: number | undefined }): void {
+    this.setState((state) => {
+      const buildFilters = state.buildFilters;
+      if (event.value == null) {
+        delete buildFilters[event.stat];
+      }
+      const newBuildFilters = event.value == null ? buildFilters : { ...buildFilters, [event.stat]: event.value };
+
+      return {
+        ...state,
+        buildFilters: newBuildFilters,
+      };
+    });
   }
 
   runOptimization(): void {
@@ -190,7 +194,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     const character = CharactersDI.charactersHandler.getCharacter(name, level, this.state.currentWeapon);
     const artifactsFilters = { ...this.state.artifactsFilters, currentSets: Object.values(this.state.artifactsFilters.currentSets) };
     const builds = BuildOptimizerDI.buildOptimizer.computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
-    console.log('builds', builds);
+
     this.setState((state) => ({
       ...state,
       builds,
@@ -202,7 +206,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     let buildsResults;
     if (this.state.builds) {
       const additionalStatsToDisplay: CharacterStatTypes[] = Object.keys(this.state.buildFilters).filter(
-        (key) => this.state.buildFilters[key as CharacterStatTypes] !== 0,
+        (key) => this.state.buildFilters[key as CharacterStatTypes] != null,
       ) as CharacterStatTypes[];
 
       buildsResults = (

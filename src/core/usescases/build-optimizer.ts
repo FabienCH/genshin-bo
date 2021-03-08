@@ -28,7 +28,7 @@ export class BuildOptimizer {
   private character!: Character;
   private allArtifacts!: Artifact[][];
   private setFilter!: SetFilter;
-  private statsFilter!: CharacterStatsValues;
+  private statsFilter!: Partial<CharacterStatsValues>;
 
   constructor(artifactsData?: {
     flowerArtifacts?: ArtifactData[];
@@ -50,7 +50,7 @@ export class BuildOptimizer {
       focusStats: ArtifactStatsTypes[];
       minArtifactLevel: number;
     },
-    statsFilter: CharacterStatsValues,
+    statsFilter: Partial<CharacterStatsValues>,
   ): CharacterStatsValues[] {
     this.setFilter = {
       setNames: artifactsFilters.currentSets,

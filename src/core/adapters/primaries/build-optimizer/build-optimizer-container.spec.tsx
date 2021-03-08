@@ -88,7 +88,7 @@ describe('Build Optimizer container', () => {
       .simulate('change', { target: { name: '', value: 'cryoDmg' } });
 
     await waitFor(() => {
-      expect(wrapper.find(BuildFiltersForm).props().buildFilters['pyroDmg']).toEqual(0);
+      expect(wrapper.find(BuildFiltersForm).props().buildFilters['pyroDmg']).toBeUndefined();
     });
   });
 

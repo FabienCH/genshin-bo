@@ -57,26 +57,27 @@ const listedStats = [
   },
 ];
 
-const selectedListedStats: { stat: CharacterStatTypes; value: number }[] = [
-  { stat: listedStats[0].stats[0], value: 0 },
-  { stat: listedStats[1].stats[0], value: 0 },
+const selectedListedStats: { stat: CharacterStatTypes; value: number | undefined }[] = [
+  { stat: listedStats[0].stats[0], value: undefined },
+  { stat: listedStats[1].stats[0], value: undefined },
 ];
 
 interface BuildFiltersFormProps extends WithStyles<typeof styles> {
-  buildFilters: CharacterStatsValues;
+  buildFilters: Partial<CharacterStatsValues>;
   disableButton: boolean;
-  onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number }) => void;
+  onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number | undefined }) => void;
   onRunClick: () => void;
 }
 
 function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
   const { buildFilters, disableButton, classes } = props;
   const handleBuildFiltersChange = (event: ChangeEvent<{ name?: string | undefined; value: unknown }>, stat: CharacterStatTypes): void => {
-    props.onBuildFiltersChange({ stat, value: parseInt(`${event.target.value}`) });
+    const value = parseInt(`${event.target.value}`);
+    props.onBuildFiltersChange({ stat, value: isNaN(value) ? undefined : value });
   };
 
   const handleListedStatsChange = (stat: CharacterStatTypes, index: number): void => {
-    props.onBuildFiltersChange({ stat: selectedListedStats[index].stat, value: 0 });
+    props.onBuildFiltersChange({ stat: selectedListedStats[index].stat, value: undefined });
     selectedListedStats[index].stat = CharacterStats[stat];
     props.onBuildFiltersChange({ stat, value: selectedListedStats[index].value });
   };
@@ -84,7 +85,7 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
   const handleListedStatsValueChange = (event: ChangeEvent<{ name?: string | undefined; value: unknown }>, index: number): void => {
     const value = parseInt(`${event.target.value}`);
     selectedListedStats[index].value = value;
-    props.onBuildFiltersChange({ stat: selectedListedStats[index].stat, value });
+    props.onBuildFiltersChange({ stat: selectedListedStats[index].stat, value: isNaN(value) ? undefined : value });
   };
 
   const handleRunClick = (): void => {
@@ -101,9 +102,12 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
               key={characterStat + lineIndex + statIndex}
               className={classes.textField}
               label={'Min ' + StringFormatter.formatStringWithUpperCase(characterStat)}
-              value={buildFilters[characterStat]}
+              value={buildFilters[characterStat] != null ? buildFilters[characterStat] : ''}
               onChange={(e) => handleBuildFiltersChange(e, characterStat)}
               type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           ))}
         </div>
@@ -125,9 +129,12 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
                 id={`${key}-text-field`}
                 className={classes.textField}
                 label={'Min ' + StringFormatter.formatStringWithUpperCase(selectedListedStats[index].stat)}
-                value={selectedListedStats[index].value}
+                value={selectedListedStats[index].value != null ? selectedListedStats[index].value : ''}
                 onChange={(e) => handleListedStatsValueChange(e, index)}
                 type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Fragment>
           );

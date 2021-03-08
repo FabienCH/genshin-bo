@@ -8,14 +8,14 @@ import { BuildFilter } from '../../../usescases/build-filter';
 
 interface BuildsResultsProps {
   builds: CharacterStatsValues[];
-  buildFilters: CharacterStatsValues;
+  buildFilters: Partial<CharacterStatsValues>;
   additionalStatsToDisplay: CharacterStatTypes[];
 }
 
 function BuildsResults(props: BuildsResultsProps): ReactElement {
   const { builds, additionalStatsToDisplay } = props;
   const gridApi = useRef<GridApi | undefined>();
-  const refBuildFilters = useRef<CharacterStatsValues>(props.buildFilters);
+  const refBuildFilters = useRef<Partial<CharacterStatsValues>>(props.buildFilters);
 
   const defaultColDef = { resizable: true, sortable: true };
   let columnDefs = [
