@@ -8,9 +8,11 @@ import { mount, ReactWrapper } from 'enzyme';
 import { ExistingCharacters } from '../../../domain/models/character';
 import SetsForm from './sets-form';
 import ArtifactsForm from './artifacts-form';
-import { Chip } from '@material-ui/core';
+import { Button, Chip } from '@material-ui/core';
 import BuildFiltersForm from './build-filters-form';
+import BuildsResults from './builds-results';
 import { waitFor } from '@testing-library/react';
+import { AgGridReact } from 'ag-grid-react';
 
 describe('Build Optimizer container', () => {
   let wrapper: ReactWrapper;
@@ -87,6 +89,32 @@ describe('Build Optimizer container', () => {
 
     await waitFor(() => {
       expect(wrapper.find(BuildFiltersForm).props().buildFilters['pyroDmg']).toEqual(0);
+    });
+  });
+
+  it('should update the list of builds when running optimization', async () => {
+    wrapper.find(Button).last().simulate('click');
+    await waitFor(() => {
+      expect(wrapper.find(BuildsResults).prop('builds').length).toEqual(144);
+    });
+  });
+
+  it('adding a build filter should add the corresponding column in builds list', async () => {
+    wrapper.find(Button).last().simulate('click');
+
+    wrapper
+      .find('#elementalMastery')
+      .first()
+      .find('input')
+      .simulate('change', { target: { name: '', value: '20' } });
+
+    await waitFor(() => {
+      const elementalMasteryHeaderCell = wrapper
+        .find(AgGridReact)
+        .html()
+        .includes('<span ref="eText" class="ag-header-cell-text" unselectable="on">Elemental Mastery</span>');
+
+      expect(elementalMasteryHeaderCell).toBeTruthy();
     });
   });
 });

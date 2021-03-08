@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Fragment, ReactElement } from 'react';
+import { ChangeEvent, Fragment, ReactElement } from 'react';
 import { Box, Button, Container, createStyles, TextField, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
 import { StringFormatter } from '../../../domain/mappers/string-formatter';
@@ -57,7 +57,7 @@ const listedStats = [
   },
 ];
 
-const selectedListedStats = [
+const selectedListedStats: { stat: CharacterStatTypes; value: number }[] = [
   { stat: listedStats[0].stats[0], value: 0 },
   { stat: listedStats[1].stats[0], value: 0 },
 ];

@@ -15,6 +15,7 @@ import { characterStatsValues, CharacterStatsValues, CharacterStatTypes } from '
 import BuildFiltersForm from './build-filters-form';
 import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
 import { SetNames } from '../../../domain/models/sets-with-effects';
+import BuildsResults from './builds-results';
 
 const styles = createStyles({
   form: {
@@ -46,6 +47,7 @@ type State = {
     minArtifactLevel: number;
   };
   buildFilters: CharacterStatsValues;
+  builds?: CharacterStatsValues[];
 };
 
 class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
@@ -189,10 +191,31 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     const artifactsFilters = { ...this.state.artifactsFilters, currentSets: Object.values(this.state.artifactsFilters.currentSets) };
     const builds = BuildOptimizerDI.buildOptimizer.computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
     console.log('builds', builds);
+    this.setState((state) => ({
+      ...state,
+      builds,
+    }));
   }
 
   render(): ReactElement {
     const { classes } = this.props;
+    let buildsResults;
+    if (this.state.builds) {
+      const additionalStatsToDisplay: CharacterStatTypes[] = Object.keys(this.state.buildFilters).filter(
+        (key) => this.state.buildFilters[key as CharacterStatTypes] !== 0,
+      ) as CharacterStatTypes[];
+
+      buildsResults = (
+        <div>
+          <h3>Builds Results</h3>
+          <BuildsResults
+            builds={this.state.builds}
+            buildFilters={this.state.buildFilters}
+            additionalStatsToDisplay={additionalStatsToDisplay}
+          ></BuildsResults>
+        </div>
+      );
+    }
 
     return (
       <section>
@@ -232,6 +255,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
           ></BuildFiltersForm>
+          {buildsResults}
         </form>
       </section>
     );

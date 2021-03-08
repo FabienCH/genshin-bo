@@ -5,7 +5,7 @@ import { Artifact } from '../domain/entities/artifact';
 import { AllArtifacts } from '../domain/models/all-artifacts';
 import { ArtifactData } from '../domain/models/artifact-data';
 import { Character } from '../domain/models/character';
-import { CharacterStatsValues, CharacterStats } from '../domain/models/character-statistics';
+import { CharacterStatsValues } from '../domain/models/character-statistics';
 import { CircletArtifactData } from '../domain/models/circlet-artifact-data';
 import { GobletArtifactData } from '../domain/models/goblet-artifact-data';
 import { ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
@@ -13,6 +13,7 @@ import { SandsArtifactData } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { StatsComputation } from '../domain/stats-computation';
 import { ArtifactsFilter } from './artifacts-filter';
+import { BuildFilter } from './build-filter';
 
 interface SetFilter {
   setNames: SetNames[];
@@ -111,7 +112,7 @@ export class BuildOptimizer {
       if (i === max) {
         if (this.setFilterMatch(this.setFilter, artifactsToCompute)) {
           const buildStats = this.statsComputation.computeStats({ ...baseStats }, characterBonusStats, artifactsToCompute);
-          if (this.statFilterMatch(this.statsFilter, buildStats)) {
+          if (BuildFilter.filterBuilds(this.statsFilter, buildStats)) {
             this.allBuilds.push(buildStats);
           }
         }
@@ -149,16 +150,5 @@ export class BuildOptimizer {
     };
 
     return !setFilter || setsMatchingFilterCount() >= setFilter.setNames.length;
-  }
-
-  private statFilterMatch(statsFilter: CharacterStatsValues, buildStats: CharacterStatsValues): boolean {
-    const getStatValue = (statValue: number | undefined): number => (!statValue || isNaN(statValue) ? 0 : statValue);
-
-    return (
-      !statsFilter ||
-      Object.keys(statsFilter).every(
-        (statName) => getStatValue(buildStats[statName as CharacterStats]) >= getStatValue(statsFilter[statName as CharacterStats]),
-      )
-    );
   }
 }
