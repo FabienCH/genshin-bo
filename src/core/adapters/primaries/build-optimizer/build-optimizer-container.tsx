@@ -153,7 +153,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
   }
 
   handleFocusStatsChange(focusStats: ArtifactStatsTypes[]): void {
-    if (focusStats.length <= 6) {
+    if (focusStats.length <= 5) {
       this.setState((state) => ({
         ...state,
         artifactsFilters: {

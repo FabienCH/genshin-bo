@@ -45,11 +45,8 @@ describe('Build Optimizer container', () => {
 
   it('should allow a maximum of 6 focus stats', () => {
     let chips: ReactWrapper;
-    const expectedFocusStats = ['Flat Hp', 'Percent Atk', 'Crit Rate', 'Crit Dmg', 'Energy Recharge', 'Healing Bonus'];
-    wrapper
-      .find(ArtifactsForm)
-      .props()
-      .onFocusStatsChange(['flatHp', 'percentAtk', 'critRate', 'critDmg', 'energyRecharge', 'healingBonus']);
+    const expectedFocusStats = ['Flat Hp', 'Percent Atk', 'Crit Rate', 'Crit Dmg', 'Energy Recharge'];
+    wrapper.find(ArtifactsForm).props().onFocusStatsChange(['flatHp', 'percentAtk', 'critRate', 'critDmg', 'energyRecharge']);
     wrapper.update();
 
     chips = wrapper.find(Chip);
@@ -61,7 +58,7 @@ describe('Build Optimizer container', () => {
     wrapper
       .find(ArtifactsForm)
       .props()
-      .onFocusStatsChange(['flatHp', 'percentAtk', 'critRate', 'critDmg', 'energyRecharge', 'healingBonus', 'percentDef']);
+      .onFocusStatsChange(['flatHp', 'percentAtk', 'critRate', 'critDmg', 'energyRecharge', 'healingBonus']);
     wrapper.update();
 
     chips = wrapper.find(Chip);
