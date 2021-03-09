@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement } from 'react';
+import { ChangeEvent, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { SetNames } from '../../../domain/models/sets-with-effects';
 import Radio from '@material-ui/core/Radio';

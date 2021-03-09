@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement } from 'react';
+import { ChangeEvent, ReactElement } from 'react';
 import logo from '../../../../assets/logo.png';
 import { AppBar, Tabs, Tab, createStyles, withStyles, WithStyles } from '@material-ui/core';
 

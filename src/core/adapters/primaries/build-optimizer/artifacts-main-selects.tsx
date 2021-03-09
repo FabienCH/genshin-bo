@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import FormSelect from '../shared/form-select';
 import { CircletMainStatType, circletMainStats } from '../../../domain/models/circlet-artifact-data';

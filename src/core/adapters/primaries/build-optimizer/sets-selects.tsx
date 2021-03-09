@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement } from 'react';
+import { Fragment, ReactElement } from 'react';
 import { SetNames } from '../../../domain/models/sets-with-effects';
 import FormSelect from '../shared/form-select';
 
