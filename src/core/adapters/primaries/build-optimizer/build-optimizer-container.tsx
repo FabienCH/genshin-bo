@@ -15,7 +15,7 @@ import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models
 import BuildFiltersForm from './build-filters-form';
 import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
 import { SetNames } from '../../../domain/models/sets-with-effects';
-import BuildsResults from './builds-results';
+import BuildsResultsContainer from './builds-results-container';
 
 const styles = createStyles({
   form: {
@@ -203,21 +203,11 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
 
   render(): ReactElement {
     const { classes } = this.props;
-    let buildsResults;
-    if (this.state.builds) {
-      const additionalStatsToDisplay: CharacterStatTypes[] = Object.keys(this.state.buildFilters).filter(
-        (key) => this.state.buildFilters[key as CharacterStatTypes] != null,
-      ) as CharacterStatTypes[];
 
-      buildsResults = (
-        <div>
-          <h3>Builds Results</h3>
-          <BuildsResults
-            builds={this.state.builds}
-            buildFilters={this.state.buildFilters}
-            additionalStatsToDisplay={additionalStatsToDisplay}
-          ></BuildsResults>
-        </div>
+    let buildsResultsContainer;
+    if (this.state.builds) {
+      buildsResultsContainer = (
+        <BuildsResultsContainer builds={this.state.builds} buildFilters={this.state.buildFilters}></BuildsResultsContainer>
       );
     }
 
@@ -259,8 +249,8 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
           ></BuildFiltersForm>
-          {buildsResults}
         </form>
+        {buildsResultsContainer}
       </section>
     );
   }

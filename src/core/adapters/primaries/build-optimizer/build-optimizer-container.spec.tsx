@@ -10,7 +10,7 @@ import SetsForm from './sets-form';
 import ArtifactsForm from './artifacts-form';
 import { Button, Chip } from '@material-ui/core';
 import BuildFiltersForm from './build-filters-form';
-import BuildsResults from './builds-results';
+import BuildsResultsGrid from './builds-results-grid';
 import { waitFor } from '@testing-library/react';
 import { AgGridReact } from 'ag-grid-react';
 
@@ -70,7 +70,7 @@ describe('Build Optimizer container', () => {
 
   it('should reset previously set Bonus Dmg when changing stat', async () => {
     wrapper
-      .find('#bonus-dmg-text-field')
+      .find('#pyroDmg')
       .last()
       .simulate('change', { target: { name: '', value: 10 } });
 
@@ -92,7 +92,7 @@ describe('Build Optimizer container', () => {
   it('should update the list of builds when running optimization', async () => {
     wrapper.find(Button).last().simulate('click');
     await waitFor(() => {
-      expect(wrapper.find(BuildsResults).prop('builds').length).toEqual(144);
+      expect(wrapper.find(BuildsResultsGrid).prop('builds').length).toEqual(144);
     });
   });
 
