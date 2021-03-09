@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement } from 'react';
+import { ChangeEvent, ReactElement } from 'react';
 import {
   createStyles,
   withStyles,
@@ -26,9 +26,14 @@ const styles = createStyles({
   focusStatsLabel: {
     marginBottom: 5,
   },
+  helpIconSup: {
+    display: 'inline-block',
+    height: 22,
+    padding: 3,
+    cursor: 'pointer',
+  },
   helpIcon: {
     fontSize: '1rem',
-    marginLeft: 3,
   },
   formControl: {
     width: 350,
@@ -81,22 +86,27 @@ function ArtifactsOptionsForm(props: ArtifactsOptionsFormProps): ReactElement {
     props.onMinLevelChange(value);
   };
 
-  const tooltip =
-    'Choose between 1 and 5 stats that are important for your character. This will filter artifacts by using those that have at least one of the selected stats (in main or subs stats).';
-
+  const tooltip = (
+    <div>
+      You should leave this empty if you don't have too much builds results.
+      <br />
+      Choose between 2 and 5 stats that are important for your character (the more the better). This will filter artifacts by using those
+      that have at least one of the selected stats (in main or subs stats).
+    </div>
+  );
   return (
     <div>
       <Box className={classes.levelSelect}>
         <FormSelect label="Artifacts level" data={levels} selectedValue={minLevel} onChange={handleMinLevelChange}></FormSelect>
       </Box>
-      <Tooltip title={tooltip} placement="top-start" interactive>
-        <InputLabel id="focus-stats-label" className={classes.focusStatsLabel} shrink={false}>
-          Focus stats
-          <sup>
+      <InputLabel id="focus-stats-label" className={classes.focusStatsLabel} shrink={false}>
+        Focus stats
+        <Tooltip title={tooltip} placement="top-start" interactive>
+          <sup className={classes.helpIconSup}>
             <HelpIcon className={classes.helpIcon} />
           </sup>
-        </InputLabel>
-      </Tooltip>
+        </Tooltip>
+      </InputLabel>
       <FormControl className={classes.formControl}>
         <Select
           labelId="focus-stats-label"

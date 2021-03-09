@@ -8,9 +8,11 @@ import { mount, ReactWrapper } from 'enzyme';
 import { ExistingCharacters } from '../../../domain/models/character';
 import SetsForm from './sets-form';
 import ArtifactsForm from './artifacts-form';
-import { Chip } from '@material-ui/core';
+import { Button, Chip } from '@material-ui/core';
 import BuildFiltersForm from './build-filters-form';
+import BuildsResultsGrid from './builds-results-grid';
 import { waitFor } from '@testing-library/react';
+import { AgGridReact } from 'ag-grid-react';
 
 describe('Build Optimizer container', () => {
   let wrapper: ReactWrapper;
@@ -41,7 +43,7 @@ describe('Build Optimizer container', () => {
     expect(wrapper.find({ id: 'set2' }).length).toEqual(0);
   });
 
-  it('should allow a maximum of 5 focus stats', () => {
+  it('should allow a maximum of 6 focus stats', () => {
     let chips: ReactWrapper;
     const expectedFocusStats = ['Flat Hp', 'Percent Atk', 'Crit Rate', 'Crit Dmg', 'Energy Recharge'];
     wrapper.find(ArtifactsForm).props().onFocusStatsChange(['flatHp', 'percentAtk', 'critRate', 'critDmg', 'energyRecharge']);
@@ -68,7 +70,7 @@ describe('Build Optimizer container', () => {
 
   it('should reset previously set Bonus Dmg when changing stat', async () => {
     wrapper
-      .find('#bonus-dmg-text-field')
+      .find('#pyroDmg')
       .last()
       .simulate('change', { target: { name: '', value: 10 } });
 
@@ -83,7 +85,33 @@ describe('Build Optimizer container', () => {
       .simulate('change', { target: { name: '', value: 'cryoDmg' } });
 
     await waitFor(() => {
-      expect(wrapper.find(BuildFiltersForm).props().buildFilters['pyroDmg']).toEqual(0);
+      expect(wrapper.find(BuildFiltersForm).props().buildFilters['pyroDmg']).toBeUndefined();
+    });
+  });
+
+  it('should update the list of builds when running optimization', async () => {
+    wrapper.find(Button).last().simulate('click');
+    await waitFor(() => {
+      expect(wrapper.find(BuildsResultsGrid).prop('builds').length).toEqual(144);
+    });
+  });
+
+  it('adding a build filter should add the corresponding column in builds list', async () => {
+    wrapper.find(Button).last().simulate('click');
+
+    wrapper
+      .find('#elementalMastery')
+      .first()
+      .find('input')
+      .simulate('change', { target: { name: '', value: '20' } });
+
+    await waitFor(() => {
+      const elementalMasteryHeaderCell = wrapper
+        .find(AgGridReact)
+        .html()
+        .includes('<span ref="eText" class="ag-header-cell-text" unselectable="on">Elemental Mastery</span>');
+
+      expect(elementalMasteryHeaderCell).toBeTruthy();
     });
   });
 });

@@ -1,6 +1,5 @@
 import { MainStats } from './main-statistics';
 import { ArtifactData } from './artifact-data';
-import { formPlaceholder, FormPlaceholder } from './form-placeholder';
 
 export type SandsMainStatType =
   | MainStats.percentAtk
@@ -9,9 +8,7 @@ export type SandsMainStatType =
   | MainStats.elementalMastery
   | MainStats.energyRecharge;
 
-export type SandsMainStatWithPlaceholder = FormPlaceholder | SandsMainStatType;
-export const sandsMainStatsWithPlaceholder: SandsMainStatWithPlaceholder[] = [
-  formPlaceholder,
+export const sandsMainStats: SandsMainStatType[] = [
   MainStats.percentAtk,
   MainStats.percentDef,
   MainStats.percentHp,

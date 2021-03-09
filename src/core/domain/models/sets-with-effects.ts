@@ -1,4 +1,3 @@
-import { formPlaceholder, FormPlaceholder } from './form-placeholder';
 import { SetStats } from './set-statistics';
 
 export enum SetNames {
@@ -16,9 +15,6 @@ export enum SetNames {
   archaicPetra = 'archaicPetra',
   bloodstainedChivalry = 'bloodstainedChivalry',
 }
-
-export type SetNamesWithPlaceholder = FormPlaceholder | SetNames;
-export const setNamesWithPlaceholder: SetNamesWithPlaceholder[] = [formPlaceholder, ...Object.values(SetNames)];
 
 export interface SetWithEffect {
   name: SetNames;

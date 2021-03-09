@@ -6,14 +6,16 @@ import SetsForm from './sets-form';
 import ArtifactsForm from './artifacts-form';
 import { ExistingCharacters } from '../../../domain/models/character';
 import { Levels } from '../../../domain/models/levels';
-import { SetNamesWithPlaceholder } from '../../../domain/models/sets-with-effects';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { ArtifactStatsTypes } from '../../../domain/models/main-statistics';
-import { CircletMainStatWithPlaceholder } from '../../../domain/models/circlet-artifact-data';
-import { GobletMainStatWithPlaceholder } from '../../../domain/models/goblet-artifact-data';
-import { SandsMainStatWithPlaceholder } from '../../../domain/models/sands-artifact-data';
-import { characterStatsValues, CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
+import { CircletMainStatType } from '../../../domain/models/circlet-artifact-data';
+import { GobletMainStatType } from '../../../domain/models/goblet-artifact-data';
+import { SandsMainStatType } from '../../../domain/models/sands-artifact-data';
+import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
 import BuildFiltersForm from './build-filters-form';
+import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
+import { SetNames } from '../../../domain/models/sets-with-effects';
+import BuildsResultsContainer from './builds-results-container';
 
 const styles = createStyles({
   form: {
@@ -27,9 +29,9 @@ const styles = createStyles({
 type BuildOptimizerProps = WithStyles<typeof styles>;
 
 export type ArtifactsMainStats = {
-  sandsMain: SandsMainStatWithPlaceholder;
-  gobletMain: GobletMainStatWithPlaceholder;
-  circletMain: CircletMainStatWithPlaceholder;
+  sandsMain?: SandsMainStatType;
+  gobletMain?: GobletMainStatType;
+  circletMain?: CircletMainStatType;
 };
 
 type State = {
@@ -38,18 +40,18 @@ type State = {
   currentCharacter: { name: ExistingCharacters; level: Levels };
   currentWeapon: { name: string; level: Levels };
   artifactsFilters: {
-    currentSets: SetNamesWithPlaceholder[];
+    currentSets: { [index: number]: SetNames };
     setPieces: 2 | 4;
     mainsStats: ArtifactsMainStats;
     focusStats: ArtifactStatsTypes[];
     minArtifactLevel: number;
   };
-  buildFilters: CharacterStatsValues;
+  buildFilters: Partial<CharacterStatsValues>;
+  builds?: CharacterStatsValues[];
 };
 
 class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
   constructor(props: BuildOptimizerProps) {
-    const buildFilters = characterStatsValues;
     super(props);
     this.state = {
       charactersNames: [],
@@ -57,17 +59,13 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
       currentCharacter: { name: 'albedo', level: '1' },
       currentWeapon: { name: 'skywardHarp', level: '1' },
       artifactsFilters: {
-        currentSets: ['-', '-'],
+        currentSets: {},
         setPieces: 2,
-        mainsStats: {
-          sandsMain: '-',
-          gobletMain: '-',
-          circletMain: '-',
-        },
+        mainsStats: {},
         focusStats: [],
         minArtifactLevel: 1,
       },
-      buildFilters,
+      buildFilters: {},
     };
     this.handleCharacterNameChange = this.handleCharacterNameChange.bind(this);
     this.handleCharacterLevelChange = this.handleCharacterLevelChange.bind(this);
@@ -79,6 +77,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     this.handleFocusStatsChange = this.handleFocusStatsChange.bind(this);
     this.handleMinLevelChange = this.handleMinLevelChange.bind(this);
     this.handleBuildFiltersChange = this.handleBuildFiltersChange.bind(this);
+    this.runOptimization = this.runOptimization.bind(this);
   }
 
   componentDidMount(): void {
@@ -115,18 +114,22 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     }));
   }
 
-  handleSetNameChange(event: { value: SetNamesWithPlaceholder; setIndex: number }): void {
-    this.setState((state) => ({
-      ...state,
-      artifactsFilters: {
-        ...state.artifactsFilters,
-        currentSets: [
-          ...state.artifactsFilters.currentSets.slice(0, event.setIndex),
-          event.value,
-          ...state.artifactsFilters.currentSets.slice(event.setIndex + 1),
-        ],
-      },
-    }));
+  handleSetNameChange(event: { value: SetNames; setIndex: number }): void {
+    this.setState((state) => {
+      const currentSets = state.artifactsFilters.currentSets;
+      if (event.value == null) {
+        delete currentSets[event.setIndex];
+      }
+      const newCurrentSets = event.value == null ? currentSets : { ...currentSets, [event.setIndex]: event.value };
+
+      return {
+        ...state,
+        artifactsFilters: {
+          ...state.artifactsFilters,
+          currentSets: newCurrentSets,
+        },
+      };
+    });
   }
 
   handleSetPiecesChange(setPieces: 2 | 4): void {
@@ -171,18 +174,42 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     }));
   }
 
-  handleBuildFiltersChange(event: { stat: CharacterStatTypes; value: number }): void {
+  handleBuildFiltersChange(event: { stat: CharacterStatTypes; value: number | undefined }): void {
+    this.setState((state) => {
+      const buildFilters = state.buildFilters;
+      if (event.value == null) {
+        delete buildFilters[event.stat];
+      }
+      const newBuildFilters = event.value == null ? buildFilters : { ...buildFilters, [event.stat]: event.value };
+
+      return {
+        ...state,
+        buildFilters: newBuildFilters,
+      };
+    });
+  }
+
+  runOptimization(): void {
+    const { name, level } = this.state.currentCharacter;
+    const character = CharactersDI.charactersHandler.getCharacter(name, level, this.state.currentWeapon);
+    const artifactsFilters = { ...this.state.artifactsFilters, currentSets: Object.values(this.state.artifactsFilters.currentSets) };
+    const builds = BuildOptimizerDI.buildOptimizer.computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
+
     this.setState((state) => ({
       ...state,
-      buildFilters: {
-        ...state.buildFilters,
-        [event.stat]: event.value,
-      },
+      builds,
     }));
   }
 
   render(): ReactElement {
     const { classes } = this.props;
+
+    let buildsResultsContainer;
+    if (this.state.builds) {
+      buildsResultsContainer = (
+        <BuildsResultsContainer builds={this.state.builds} buildFilters={this.state.buildFilters}></BuildsResultsContainer>
+      );
+    }
 
     return (
       <section>
@@ -216,8 +243,14 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
             ></ArtifactsForm>
           </div>
           <h3>Build Filters</h3>
-          <BuildFiltersForm buildFilters={this.state.buildFilters} onBuildFiltersChange={this.handleBuildFiltersChange}></BuildFiltersForm>
+          <BuildFiltersForm
+            buildFilters={this.state.buildFilters}
+            disableButton={this.state.artifactsFilters.focusStats.length === 1}
+            onBuildFiltersChange={this.handleBuildFiltersChange}
+            onRunClick={this.runOptimization}
+          ></BuildFiltersForm>
         </form>
+        {buildsResultsContainer}
       </section>
     );
   }

@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { ArtifactStatsTypes } from '../../../domain/models/main-statistics';
 import ArtifactsMainSelects from './artifacts-main-selects';

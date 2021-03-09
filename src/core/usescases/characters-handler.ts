@@ -9,7 +9,7 @@ export class CharactersHandler {
     return this.charactersRepository.getAll(level).map((character) => character.name);
   }
 
-  public getById(name: ExistingCharacters, level: Levels, weapon: { name: string; level: Levels }): Character {
+  public getCharacter(name: ExistingCharacters, level: Levels, weapon: { name: string; level: Levels }): Character {
     return this.charactersRepository.getCharacter(name, level, weapon);
   }
 }

@@ -1,6 +1,6 @@
-import React, { ChangeEvent, ReactElement } from 'react';
+import { ChangeEvent, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { SetNamesWithPlaceholder } from '../../../domain/models/sets-with-effects';
+import { SetNames } from '../../../domain/models/sets-with-effects';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -15,16 +15,16 @@ const styles = createStyles({
 });
 
 interface SetsFormProps extends WithStyles<typeof styles> {
-  currentSets: SetNamesWithPlaceholder[];
+  currentSets: { [index: number]: SetNames };
   setPieces: 2 | 4;
-  onSetNameChange: (event: { value: SetNamesWithPlaceholder; setIndex: number }) => void;
+  onSetNameChange: (event: { value: SetNames; setIndex: number }) => void;
   onSetPiecesChange: (value: 2 | 4) => void;
 }
 
 function SetsForm(props: SetsFormProps): ReactElement {
   const { setPieces, currentSets } = props;
 
-  const handleSetNameChange = (event: { value: SetNamesWithPlaceholder; setIndex: number }): void => {
+  const handleSetNameChange = (event: { value: SetNames; setIndex: number }): void => {
     props.onSetNameChange(event);
   };
 

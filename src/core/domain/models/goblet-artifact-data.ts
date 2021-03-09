@@ -1,6 +1,5 @@
 import { MainStats } from './main-statistics';
 import { ArtifactData } from './artifact-data';
-import { formPlaceholder, FormPlaceholder } from './form-placeholder';
 
 export type GobletMainStatType =
   | MainStats.percentAtk
@@ -16,9 +15,7 @@ export type GobletMainStatType =
   | MainStats.pyroDmg
   | MainStats.physicalDmg;
 
-export type GobletMainStatWithPlaceholder = FormPlaceholder | GobletMainStatType;
-export const gobletMainStatsWithPlaceholder: GobletMainStatWithPlaceholder[] = [
-  formPlaceholder,
+export const gobletMainStats: GobletMainStatType[] = [
   MainStats.percentAtk,
   MainStats.percentDef,
   MainStats.percentHp,

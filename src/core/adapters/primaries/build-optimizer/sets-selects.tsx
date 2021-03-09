@@ -1,25 +1,26 @@
-import React, { Fragment, ReactElement } from 'react';
+import { Fragment, ReactElement } from 'react';
+import { SetNames } from '../../../domain/models/sets-with-effects';
 import FormSelect from '../shared/form-select';
-import { SetNamesWithPlaceholder, setNamesWithPlaceholder } from '../../../domain/models/sets-with-effects';
 
 interface SetsSelectsProps {
-  currentSets: SetNamesWithPlaceholder[];
+  currentSets: { [index: number]: SetNames };
   setPieces: 2 | 4;
-  onSetNameChange: (event: { value: SetNamesWithPlaceholder; setIndex: number }) => void;
+  onSetNameChange: (event: { value: SetNames; setIndex: number }) => void;
 }
 
 function SetsSelects(props: SetsSelectsProps): ReactElement {
   const { currentSets, setPieces } = props;
-
-  const handleSetNameChange = (value: SetNamesWithPlaceholder, setIndex: number): void => {
+  const setNames = Object.values(SetNames);
+  const handleSetNameChange = (value: SetNames, setIndex: number): void => {
     props.onSetNameChange({ value, setIndex });
   };
 
   const firstSetSelect = (
     <FormSelect
       label="Set 1"
-      data={setNamesWithPlaceholder}
+      data={setNames}
       selectedValue={currentSets[0]}
+      isOptional={true}
       onChange={(e) => handleSetNameChange(e, 0)}
     ></FormSelect>
   );
@@ -30,8 +31,9 @@ function SetsSelects(props: SetsSelectsProps): ReactElement {
       {firstSetSelect}
       <FormSelect
         label="Set 2"
-        data={setNamesWithPlaceholder}
+        data={setNames}
         selectedValue={currentSets[1]}
+        isOptional={true}
         onChange={(e) => handleSetNameChange(e, 1)}
       ></FormSelect>
     </Fragment>
