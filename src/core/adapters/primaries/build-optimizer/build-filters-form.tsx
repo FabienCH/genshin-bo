@@ -1,8 +1,8 @@
 import { ChangeEvent, Fragment, ReactElement } from 'react';
-import { Box, Button, Container, createStyles, TextField, withStyles, WithStyles } from '@material-ui/core';
+import { Box, Button, Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
-import { StringFormatter } from '../../../domain/mappers/string-formatter';
 import FormSelect from '../shared/form-select';
+import BuildFiltersTextFieldProps from './build-filters-text-field';
 
 const styles = createStyles({
   container: {
@@ -71,9 +71,14 @@ interface BuildFiltersFormProps extends WithStyles<typeof styles> {
 
 function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
   const { buildFilters, disableButton, classes } = props;
+
+  const parseValue = (value: unknown): number | undefined => {
+    const intValue = parseInt(`${value}`);
+    return isNaN(intValue) ? undefined : intValue;
+  };
+
   const handleBuildFiltersChange = (event: ChangeEvent<{ name?: string | undefined; value: unknown }>, stat: CharacterStatTypes): void => {
-    const value = parseInt(`${event.target.value}`);
-    props.onBuildFiltersChange({ stat, value: isNaN(value) ? undefined : value });
+    props.onBuildFiltersChange({ stat, value: parseValue(event.target.value) });
   };
 
   const handleListedStatsChange = (stat: CharacterStatTypes, index: number): void => {
@@ -83,9 +88,9 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
   };
 
   const handleListedStatsValueChange = (event: ChangeEvent<{ name?: string | undefined; value: unknown }>, index: number): void => {
-    const value = parseInt(`${event.target.value}`);
+    const value = parseValue(event.target.value);
     selectedListedStats[index].value = value;
-    props.onBuildFiltersChange({ stat: selectedListedStats[index].stat, value: isNaN(value) ? undefined : value });
+    props.onBuildFiltersChange({ stat: selectedListedStats[index].stat, value });
   };
 
   const handleRunClick = (): void => {
@@ -96,19 +101,12 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
     <Container className={classes.container} maxWidth={false}>
       {statsByLines.map((statsByLine: CharacterStatTypes[], lineIndex: number) => (
         <div key={lineIndex} className={classes.div}>
-          {statsByLine.map((characterStat: CharacterStatTypes, statIndex: number) => (
-            <TextField
-              id={characterStat}
-              key={characterStat + lineIndex + statIndex}
-              className={classes.textField}
-              label={'Min ' + StringFormatter.formatStringWithUpperCase(characterStat)}
-              value={buildFilters[characterStat] != null ? buildFilters[characterStat] : ''}
+          {statsByLine.map((characterStat: CharacterStatTypes) => (
+            <BuildFiltersTextFieldProps
+              data={{ stat: characterStat, value: buildFilters[characterStat] }}
+              key={characterStat}
               onChange={(e) => handleBuildFiltersChange(e, characterStat)}
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+            ></BuildFiltersTextFieldProps>
           ))}
         </div>
       ))}
@@ -125,17 +123,10 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
                   onChange={(e) => handleListedStatsChange(e, index)}
                 ></FormSelect>
               </Box>
-              <TextField
-                id={`${key}-text-field`}
-                className={classes.textField}
-                label={'Min ' + StringFormatter.formatStringWithUpperCase(selectedListedStats[index].stat)}
-                value={selectedListedStats[index].value != null ? selectedListedStats[index].value : ''}
+              <BuildFiltersTextFieldProps
+                data={selectedListedStats[index]}
                 onChange={(e) => handleListedStatsValueChange(e, index)}
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
+              ></BuildFiltersTextFieldProps>
             </Fragment>
           );
         })}
