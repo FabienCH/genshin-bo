@@ -1,4 +1,4 @@
-import { ArtifactData } from '../../domain/models/artifact-data';
+import { AllArtifactsData, ArtifactData } from '../../domain/models/artifact-data';
 import { CircletArtifactData } from '../../domain/models/circlet-artifact-data';
 import { GobletArtifactData } from '../../domain/models/goblet-artifact-data';
 import { MainStats } from '../../domain/models/main-statistics';
@@ -6,19 +6,17 @@ import { SandsArtifactData } from '../../domain/models/sands-artifact-data';
 import { SetNames } from '../../domain/models/sets-with-effects';
 import { SubStats } from '../../domain/models/sub-statistics';
 import { ArtifactsRepository } from '../../domain/artifacts-repository';
-import { CircletArtifact } from '../../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../../domain/entities/flower-artifact';
-import { GobletArtifact } from '../../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../../domain/entities/plume-artifact';
-import { SandsArtifact } from '../../domain/entities/sands-artifact';
-import { Artifact } from '../../domain/entities/artifact';
 
 export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private flowerArtifactsData: ArtifactData[] = [
     {
       id: '0',
+      type: 'flower',
       set: SetNames.retracingBolide,
       level: 2,
+      mainStatType: FlowerArtifact.mainStat,
       subStats: {
         [SubStats.flatAtk]: 5,
         [SubStats.critRate]: 3.2,
@@ -28,8 +26,10 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '1',
+      type: 'flower',
       set: SetNames.thunderingFury,
       level: 8,
+      mainStatType: FlowerArtifact.mainStat,
       subStats: {
         [SubStats.energyRecharge]: 3,
         [SubStats.percentHp]: 6,
@@ -41,8 +41,10 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private plumeArtifactsData: ArtifactData[] = [
     {
       id: '2',
+      type: 'plume',
       set: SetNames.retracingBolide,
       level: 7,
+      mainStatType: PlumeArtifact.mainStat,
       subStats: {
         [SubStats.energyRecharge]: 4,
         [SubStats.flatDef]: 7,
@@ -52,8 +54,10 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '3',
+      type: 'plume',
       set: SetNames.blizzardStrayer,
       level: 12,
+      mainStatType: PlumeArtifact.mainStat,
       subStats: {
         [SubStats.percentAtk]: 5,
         [SubStats.flatHp]: 12,
@@ -65,6 +69,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private sandsArtifactsData: SandsArtifactData[] = [
     {
       id: '4',
+      type: 'sands',
       set: SetNames.thunderingFury,
       level: 12,
       mainStatType: MainStats.percentHp,
@@ -77,6 +82,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '5',
+      type: 'sands',
       set: SetNames.bloodstainedChivalry,
       level: 16,
       mainStatType: MainStats.percentAtk,
@@ -89,6 +95,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '6',
+      type: 'sands',
       set: SetNames.retracingBolide,
       level: 8,
       mainStatType: MainStats.elementalMastery,
@@ -103,6 +110,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private gobletArtifactsData: GobletArtifactData[] = [
     {
       id: '7',
+      type: 'goblet',
       set: SetNames.lavawalker,
       level: 15,
       mainStatType: MainStats.percentDef,
@@ -115,6 +123,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '8',
+      type: 'goblet',
       set: SetNames.archaicPetra,
       level: 12,
       mainStatType: MainStats.percentDef,
@@ -127,6 +136,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '9',
+      type: 'goblet',
       set: SetNames.blizzardStrayer,
       level: 8,
       mainStatType: MainStats.cryoDmg,
@@ -139,6 +149,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '10',
+      type: 'goblet',
       set: SetNames.wanderersTroupe,
       level: 4,
       mainStatType: MainStats.physicalDmg,
@@ -153,6 +164,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private circletArtifactsData: CircletArtifactData[] = [
     {
       id: '11',
+      type: 'circlet',
       set: SetNames.retracingBolide,
       level: 17,
       mainStatType: MainStats.healingBonus,
@@ -165,6 +177,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '12',
+      type: 'circlet',
       set: SetNames.gladiatorsFinale,
       level: 12,
       mainStatType: MainStats.critRate,
@@ -177,6 +190,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '13',
+      type: 'circlet',
       set: SetNames.retracingBolide,
       level: 14,
       mainStatType: MainStats.critRate,
@@ -189,16 +203,10 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
   ];
 
-  constructor(artifactsData?: {
-    flowerArtifacts?: ArtifactData[];
-    plumeArtifacts?: ArtifactData[];
-    sandsArtifacts?: SandsArtifactData[];
-    gobletArtifacts?: GobletArtifactData[];
-    circletArtifacts?: CircletArtifactData[];
-  }) {
+  constructor(artifactsData?: AllArtifactsData) {
     if (artifactsData) {
-      const { flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts } = artifactsData;
-      this.setArtifactsData(flowerArtifacts, plumeArtifacts, sandsArtifacts, gobletArtifacts, circletArtifacts);
+      const { flowers, plumes, sands, goblets, circlets } = artifactsData;
+      this.setArtifactsData(flowers, plumes, sands, goblets, circlets);
     }
   }
 
@@ -226,7 +234,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     }
   }
 
-  public getAll(): Artifact[] {
+  public getAll(): ArtifactData[] {
     return [
       ...this.getFlowerArtifacts(),
       ...this.getPlumeArtifacts(),
@@ -236,60 +244,19 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     ];
   }
 
-  public getFlowerArtifacts(): FlowerArtifact[] {
-    return this.flowerArtifactsData.map(
-      (artifactData) =>
-        new FlowerArtifact(artifactData.id, this.getSet(artifactData.set), artifactData.subStats, this.getLevel(artifactData.level)),
-    );
+  public getFlowerArtifacts(): ArtifactData[] {
+    return this.flowerArtifactsData;
   }
-  public getPlumeArtifacts(): PlumeArtifact[] {
-    return this.plumeArtifactsData.map(
-      (artifactData) =>
-        new PlumeArtifact(artifactData.id, this.getSet(artifactData.set), artifactData.subStats, this.getLevel(artifactData.level)),
-    );
+  public getPlumeArtifacts(): ArtifactData[] {
+    return this.plumeArtifactsData;
   }
-  public getSandsArtifacts(): SandsArtifact[] {
-    return this.sandsArtifactsData.map(
-      (artifactData) =>
-        new SandsArtifact(
-          artifactData.id,
-          this.getSet(artifactData.set),
-          artifactData.subStats,
-          this.getLevel(artifactData.level),
-          artifactData.mainStatType,
-        ),
-    );
+  public getSandsArtifacts(): SandsArtifactData[] {
+    return this.sandsArtifactsData;
   }
-  public getGobletArtifacts(): GobletArtifact[] {
-    return this.gobletArtifactsData.map(
-      (artifactData) =>
-        new GobletArtifact(
-          artifactData.id,
-          this.getSet(artifactData.set),
-          artifactData.subStats,
-          this.getLevel(artifactData.level),
-          artifactData.mainStatType,
-        ),
-    );
+  public getGobletArtifacts(): GobletArtifactData[] {
+    return this.gobletArtifactsData;
   }
-  public getCircletArtifacts(): CircletArtifact[] {
-    return this.circletArtifactsData.map(
-      (artifactData) =>
-        new CircletArtifact(
-          artifactData.id,
-          this.getSet(artifactData.set),
-          artifactData.subStats,
-          this.getLevel(artifactData.level),
-          artifactData.mainStatType,
-        ),
-    );
-  }
-
-  private getSet(artifactSet: SetNames = SetNames.retracingBolide): SetNames {
-    return artifactSet;
-  }
-
-  private getLevel(artifactLevel = 0): number {
-    return artifactLevel;
+  public getCircletArtifacts(): CircletArtifactData[] {
+    return this.circletArtifactsData;
   }
 }

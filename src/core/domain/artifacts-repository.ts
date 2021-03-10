@@ -1,15 +1,13 @@
-import { Artifact } from './entities/artifact';
-import { CircletArtifact } from './entities/circlet-artifact';
-import { FlowerArtifact } from './entities/flower-artifact';
-import { GobletArtifact } from './entities/goblet-artifact';
-import { PlumeArtifact } from './entities/plume-artifact';
-import { SandsArtifact } from './entities/sands-artifact';
+import { ArtifactData } from './models/artifact-data';
+import { CircletArtifactData } from './models/circlet-artifact-data';
+import { GobletArtifactData } from './models/goblet-artifact-data';
+import { SandsArtifactData } from './models/sands-artifact-data';
 
 export interface ArtifactsRepository {
-  getAll(): Artifact[];
-  getFlowerArtifacts(): FlowerArtifact[];
-  getPlumeArtifacts(): PlumeArtifact[];
-  getSandsArtifacts(): SandsArtifact[];
-  getGobletArtifacts(): GobletArtifact[];
-  getCircletArtifacts(): CircletArtifact[];
+  getAll(): ArtifactData[];
+  getFlowerArtifacts(): ArtifactData[];
+  getPlumeArtifacts(): ArtifactData[];
+  getSandsArtifacts(): SandsArtifactData[];
+  getGobletArtifacts(): GobletArtifactData[];
+  getCircletArtifacts(): CircletArtifactData[];
 }
