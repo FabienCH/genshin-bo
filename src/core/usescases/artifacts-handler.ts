@@ -12,14 +12,21 @@ import { GobletMainStatType } from '../domain/models/goblet-artifact-data';
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStatsValues } from '../domain/models/sub-statistics';
+import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
+import { addAllArtifactsAction } from '../adapters/redux/artifacts/artifacts-action';
+import { appStore } from '../adapters/redux/store';
 
 export class ArtifactsHandler {
   private artifacts: Artifact[] = [];
 
-  constructor(private readonly artifactsRepository: ArtifactsRepository) {}
+  constructor(private readonly artifactsRepository: ArtifactsRepository) {
+    if (!isArtifactsStateInitialized()) {
+      appStore.dispatch(addAllArtifactsAction(this.artifactsRepository.getAll()));
+    }
+  }
 
   public getAll(): ArtifactView[] {
-    return this.artifactsRepository.getAll().map((artifact) => ArtifactMapper.mapToArtifactView(artifact));
+    return selectAllArtifacts().map((artifact) => ArtifactMapper.mapDataToView(artifact));
   }
 
   public getById(id: string): Artifact {

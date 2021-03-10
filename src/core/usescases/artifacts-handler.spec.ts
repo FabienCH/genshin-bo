@@ -14,7 +14,7 @@ import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
 
-describe('ArtifactsHandler.addArtifact', () => {
+fdescribe('ArtifactsHandler.addArtifact', () => {
   let artifactsHandler: ArtifactsHandler;
 
   beforeEach(() => {
@@ -24,11 +24,11 @@ describe('ArtifactsHandler.addArtifact', () => {
   describe('Retrieving all artifacts', () => {
     it('should give an empty list if there is no artifacts', () => {
       const emptyArtifactsData = {
-        flowerArtifacts: [],
-        plumeArtifacts: [],
-        sandsArtifacts: [],
-        gobletArtifacts: [],
-        circletArtifacts: [],
+        flowers: [],
+        plumes: [],
+        sands: [],
+        goblets: [],
+        circlets: [],
       };
       const emptyArtifactsHandler = new ArtifactsHandler(new InMemoryArtifactsRepository(emptyArtifactsData));
       const expectedArtifacts = emptyArtifactsHandler.getAll();
