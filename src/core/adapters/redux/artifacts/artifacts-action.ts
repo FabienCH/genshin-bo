@@ -3,4 +3,6 @@ import { ArtifactData } from '../../../domain/models/artifact-data';
 
 export const addAllArtifactsAction = createAction<ArtifactData[]>('[Entities/Artifacts] Add All Artifacts');
 
-export type ArtifactsActionTypes = typeof addAllArtifactsAction;
+export const addOneArtifactAction = createAction<ArtifactData>('[Entities/Artifacts] Add One Artifact');
+
+export type ArtifactsActionTypes = typeof addAllArtifactsAction | typeof addOneArtifactAction;

@@ -1,6 +1,6 @@
 import { createEntityAdapter, createReducer, EntityState } from '@reduxjs/toolkit';
 import { ArtifactData } from '../../../domain/models/artifact-data';
-import { addAllArtifactsAction } from './artifacts-action';
+import { addAllArtifactsAction, addOneArtifactAction } from './artifacts-action';
 
 export interface ArtifactsState extends EntityState<ArtifactData> {
   isInitialized: boolean;
@@ -15,5 +15,6 @@ const initialState: ArtifactsState = artifactsAdapter.getInitialState({
 export const artifactsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(addAllArtifactsAction, (state, action) => artifactsAdapter.setAll(state, action.payload))
+    .addCase(addOneArtifactAction, (state, action) => artifactsAdapter.addOne(state, action.payload))
     .addDefaultCase((state) => state);
 });

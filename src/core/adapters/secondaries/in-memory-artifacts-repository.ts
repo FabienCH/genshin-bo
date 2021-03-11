@@ -236,27 +236,31 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
 
   public getAll(): ArtifactData[] {
     return [
-      ...this.getFlowerArtifacts(),
-      ...this.getPlumeArtifacts(),
-      ...this.getSandsArtifacts(),
-      ...this.getGobletArtifacts(),
-      ...this.getCircletArtifacts(),
+      ...this.flowerArtifactsData,
+      ...this.plumeArtifactsData,
+      ...this.sandsArtifactsData,
+      ...this.gobletArtifactsData,
+      ...this.circletArtifactsData,
     ];
   }
 
-  public getFlowerArtifacts(): ArtifactData[] {
-    return this.flowerArtifactsData;
-  }
-  public getPlumeArtifacts(): ArtifactData[] {
-    return this.plumeArtifactsData;
-  }
-  public getSandsArtifacts(): SandsArtifactData[] {
-    return this.sandsArtifactsData;
-  }
-  public getGobletArtifacts(): GobletArtifactData[] {
-    return this.gobletArtifactsData;
-  }
-  public getCircletArtifacts(): CircletArtifactData[] {
-    return this.circletArtifactsData;
+  public addOne(artifactData: ArtifactData): void {
+    switch (artifactData.type) {
+      case 'flower':
+        this.flowerArtifactsData = [...this.flowerArtifactsData, artifactData];
+        break;
+      case 'plume':
+        this.plumeArtifactsData = [...this.plumeArtifactsData, artifactData];
+        break;
+      case 'sands':
+        this.sandsArtifactsData = [...this.sandsArtifactsData, artifactData as SandsArtifactData];
+        break;
+      case 'goblet':
+        this.gobletArtifactsData = [...this.gobletArtifactsData, artifactData as GobletArtifactData];
+        break;
+      case 'circlet':
+        this.circletArtifactsData = [...this.circletArtifactsData, artifactData as CircletArtifactData];
+        break;
+    }
   }
 }
