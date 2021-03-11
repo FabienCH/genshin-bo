@@ -4,12 +4,13 @@ import { AllArtifactsData } from '../domain/models/artifact-data';
 import { ArtifactsHandler } from '../usescases/artifacts-handler';
 
 export abstract class ArtifactsDI {
-  public static artifactsHandler: ArtifactsHandler = new ArtifactsHandler();
+  public static artifactsHandler: ArtifactsHandler;
 
   private static artifactsRepository: ArtifactsRepository;
 
   public static registerRepository(artifactsData?: AllArtifactsData): void {
     ArtifactsDI.artifactsRepository = new InMemoryArtifactsRepository(artifactsData);
+    ArtifactsDI.artifactsHandler = new ArtifactsHandler();
   }
 
   public static getRepository(): ArtifactsRepository {
