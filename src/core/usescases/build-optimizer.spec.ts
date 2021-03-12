@@ -2,7 +2,6 @@ import { BuildOptimizer } from './build-optimizer';
 import { CharacterStats } from '../domain/models/character-statistics';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
 import { Character } from '../domain/models/character';
-import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
 import {
   atkGeoDmgEmBuildArtifactsData,
   bolideLavawalkerBuildArtifactsData,
@@ -14,9 +13,9 @@ import {
   multipleArtifactsBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { AllArtifacts } from '../domain/models/all-artifacts';
 import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
 import { ArtifactStatsTypes } from '../domain/models/main-statistics';
+import { ArtifactsDI } from '../di/artifacts-di';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
@@ -43,7 +42,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
   };
 
   beforeEach(() => {
-    buildOptimizer = new BuildOptimizer(defaultBuildArtifactsData);
+    ArtifactsDI.registerRepository(defaultBuildArtifactsData);
+    buildOptimizer = new BuildOptimizer();
     charactersRepository = new InMemoryCharactersRepository();
 
     razor = charactersRepository.getCharacter('razor', '80a', { name: 'snowTombedStarsilver', level: '90' });
@@ -51,7 +51,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
-      buildOptimizer = new BuildOptimizer(defPhyDmgAtkBuildArtifactsData);
+      ArtifactsDI.registerRepository(defPhyDmgAtkBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer();
 
       expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
@@ -69,7 +70,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
-      buildOptimizer = new BuildOptimizer(atkGeoDmgEmBuildArtifactsData);
+      ArtifactsDI.registerRepository(atkGeoDmgEmBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer();
 
       expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
@@ -90,7 +92,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
   describe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
-      buildOptimizer = new BuildOptimizer(lvl134820BuildArtifactsData);
+      ArtifactsDI.registerRepository(lvl134820BuildArtifactsData);
+      buildOptimizer = new BuildOptimizer();
 
       expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
@@ -109,7 +112,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with levels 2, 7, 12, 15, 17', () => {
-      buildOptimizer = new BuildOptimizer(lvl27121517BuildArtifactsData);
+      ArtifactsDI.registerRepository(lvl27121517BuildArtifactsData);
+      buildOptimizer = new BuildOptimizer();
 
       expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
@@ -128,7 +132,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with gladiator and thundering sets effects', () => {
-      buildOptimizer = new BuildOptimizer(gladiatorThunderingBuildArtifactsData);
+      ArtifactsDI.registerRepository(gladiatorThunderingBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer();
 
       expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
@@ -147,7 +152,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with bolide and Lavawalker sets effects', () => {
-      buildOptimizer = new BuildOptimizer(bolideLavawalkerBuildArtifactsData);
+      ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer();
 
       expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
@@ -167,8 +173,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 1 Amber', () => {
+      ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
       const amber = charactersRepository.getCharacter('amber', '1', { name: 'rust', level: '1' });
-      buildOptimizer = new BuildOptimizer(bolideLavawalkerBuildArtifactsData);
+      buildOptimizer = new BuildOptimizer();
 
       expect(buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
         {
@@ -309,7 +316,8 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 
   it('should compute build stats of multiple artifacts for each type', () => {
-    buildOptimizer = new BuildOptimizer(multipleArtifactsBuildArtifactsData);
+    ArtifactsDI.registerRepository(multipleArtifactsBuildArtifactsData);
+    buildOptimizer = new BuildOptimizer();
 
     expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
       {
@@ -421,6 +429,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     let buildOptimizer: BuildOptimizer;
 
     beforeEach(() => {
+      ArtifactsDI.registerRepository();
       buildOptimizer = new BuildOptimizer();
     });
 
@@ -474,6 +483,7 @@ describe('BuildOptimizer.computeBuildStats', () => {
     let buildOptimizer: BuildOptimizer;
 
     beforeEach(() => {
+      ArtifactsDI.registerRepository();
       buildOptimizer = new BuildOptimizer();
     });
 
@@ -495,16 +505,16 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 
   describe('return number of possible builds', () => {
-    const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
-    const buildOptimizer: BuildOptimizer = new BuildOptimizer();
-    const allArtifacts: AllArtifacts = {
-      flowers: artifactsRepository.getFlowerArtifacts(),
-      plumes: artifactsRepository.getPlumeArtifacts(),
-      sands: artifactsRepository.getSandsArtifacts(),
-      goblets: artifactsRepository.getGobletArtifacts(),
-      circlets: artifactsRepository.getCircletArtifacts(),
-    };
+    let buildOptimizer: BuildOptimizer;
 
-    expect(buildOptimizer.getBuilds(allArtifacts)).toEqual(144);
+    beforeEach(() => {
+      ArtifactsDI.registerRepository();
+      buildOptimizer = new BuildOptimizer();
+    });
+
+    it('should return 144 with default in memory artifacts', () => {
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, {});
+      expect(buildOptimizer.getBuilds()).toEqual(144);
+    });
   });
 });

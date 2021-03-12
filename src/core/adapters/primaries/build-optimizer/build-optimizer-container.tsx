@@ -193,7 +193,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     const { name, level } = this.state.currentCharacter;
     const character = CharactersDI.charactersHandler.getCharacter(name, level, this.state.currentWeapon);
     const artifactsFilters = { ...this.state.artifactsFilters, currentSets: Object.values(this.state.artifactsFilters.currentSets) };
-    const builds = BuildOptimizerDI.buildOptimizer.computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
+    const builds = BuildOptimizerDI.getBuildOptimizer().computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
 
     this.setState((state) => ({
       ...state,

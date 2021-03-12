@@ -349,7 +349,7 @@ export const lvl27121517BuildArtifactsData: AllArtifactsData = {
       id: '4',
       type: 'circlet',
       set: SetNames.retracingBolide,
-      level: 0,
+      level: 17,
       mainStatType: MainStats.healingBonus as CircletMainStatType,
       subStats: {
         [SubStats.percentDef]: 4,
