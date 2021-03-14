@@ -4,7 +4,7 @@ import { CharacterStatsValues } from '../../../domain/models/character-statistic
 import { AgGridColumn } from 'ag-grid-react/lib/agGridColumn';
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
 import { ColDef, GridApi, GridReadyEvent, RowNode } from 'ag-grid-community';
-import { BuildFilter } from '../../../usescases/build-filter';
+import { BuildFilter } from '../../../domain/build-filter';
 
 interface BuildsResultsGridProps {
   builds: CharacterStatsValues[];

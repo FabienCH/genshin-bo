@@ -1,4 +1,4 @@
-import { CharacterStatsValues, CharacterStats } from '../domain/models/character-statistics';
+import { CharacterStatsValues, CharacterStats } from './models/character-statistics';
 
 export abstract class BuildFilter {
   public static filterBuilds(statsFilter: Partial<CharacterStatsValues>, buildStats: CharacterStatsValues): boolean {
