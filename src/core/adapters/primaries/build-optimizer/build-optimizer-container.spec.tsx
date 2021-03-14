@@ -15,7 +15,7 @@ import { waitFor } from '@testing-library/react';
 import { AgGridReact } from 'ag-grid-react';
 import { ArtifactsDI } from '../../../di/artifacts-di';
 
-fdescribe('Build Optimizer container', () => {
+describe('Build Optimizer container', () => {
   let wrapper: ReactWrapper;
   let charactersNames: ExistingCharacters[];
   let weaponsNames: string[];
@@ -30,7 +30,7 @@ fdescribe('Build Optimizer container', () => {
     weaponsNames = weaponsHandler.getWeaponsNames();
   });
 
-  fit('should renders characters and weapons initialized', () => {
+  it('should renders characters and weapons initialized', () => {
     const charactersFormSelect = wrapper.find(FormSelect).at(0);
     const weaponsFormSelect = wrapper.find(FormSelect).at(2);
 
