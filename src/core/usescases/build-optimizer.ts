@@ -1,15 +1,12 @@
 import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
-import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
-import { ArtifactsRepository } from '../domain/artifacts-repository';
+import { loadArtifacts } from '../adapters/redux/artifacts/artifacts-middleware';
+import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
+import { appStore } from '../adapters/redux/store';
 import { Artifact } from '../domain/entities/artifact';
-import { AllArtifacts } from '../domain/models/all-artifacts';
-import { ArtifactData } from '../domain/models/artifact-data';
+import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { Character } from '../domain/models/character';
 import { CharacterStatsValues } from '../domain/models/character-statistics';
-import { CircletArtifactData } from '../domain/models/circlet-artifact-data';
-import { GobletArtifactData } from '../domain/models/goblet-artifact-data';
 import { ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
-import { SandsArtifactData } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { StatsComputation } from '../domain/stats-computation';
 import { ArtifactsFilter } from './artifacts-filter';
@@ -22,7 +19,6 @@ interface SetFilter {
 
 export class BuildOptimizer {
   private readonly statsComputation: StatsComputation;
-  private readonly artifactsRepository: ArtifactsRepository;
 
   private allBuilds!: CharacterStatsValues[];
   private character!: Character;
@@ -30,15 +26,11 @@ export class BuildOptimizer {
   private setFilter!: SetFilter;
   private statsFilter!: Partial<CharacterStatsValues>;
 
-  constructor(artifactsData?: {
-    flowerArtifacts?: ArtifactData[];
-    plumeArtifacts?: ArtifactData[];
-    sandsArtifacts?: SandsArtifactData[];
-    gobletArtifacts?: GobletArtifactData[];
-    circletArtifacts?: CircletArtifactData[];
-  }) {
+  constructor() {
+    if (!isArtifactsStateInitialized()) {
+      appStore.dispatch(loadArtifacts());
+    }
     this.statsComputation = new StatsComputation();
-    this.artifactsRepository = new InMemoryArtifactsRepository(artifactsData);
   }
 
   public computeBuildsStats(
@@ -64,14 +56,7 @@ export class BuildOptimizer {
 
     this.allBuilds = [];
     this.character = character;
-    const allArtifacts = {
-      flowers: this.artifactsRepository.getFlowerArtifacts(),
-      plumes: this.artifactsRepository.getPlumeArtifacts(),
-      sands: this.artifactsRepository.getSandsArtifacts(),
-      goblets: this.artifactsRepository.getGobletArtifacts(),
-      circlets: this.artifactsRepository.getCircletArtifacts(),
-    };
-    this.artifactsRepository.getFlowerArtifacts();
+    const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(selectAllArtifacts());
     const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
 
     const mainStats = {
@@ -81,15 +66,18 @@ export class BuildOptimizer {
     };
 
     this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
-
     this.iterateOverAllBuilds([], 0);
     return this.allBuilds;
   }
 
-  public getBuilds(artifacts: AllArtifacts): number {
-    return (
-      artifacts.flowers.length * artifacts.plumes.length * artifacts.sands.length * artifacts.goblets.length * artifacts.circlets.length
-    );
+  public getBuilds(): number {
+    if (!this.allArtifacts) {
+      return 0;
+    }
+    return this.allArtifacts.reduce((numberOfBuilds, artifacts) => {
+      numberOfBuilds *= artifacts.length;
+      return numberOfBuilds;
+    }, 1);
   }
 
   private getTotalSetFilterPieces(setFilter: SetFilter) {

@@ -4,6 +4,7 @@ import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { GobletArtifact } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { SandsArtifact } from '../domain/entities/sands-artifact';
+import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 
 import { AllArtifacts } from '../domain/models/all-artifacts';
 import { MainStats } from '../domain/models/main-statistics';
@@ -13,17 +14,10 @@ import { ArtifactsFilter } from './artifacts-filter';
 
 describe('Artifacts Filter', () => {
   const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository();
-
   let allArtifacts: AllArtifacts;
 
   beforeEach(() => {
-    allArtifacts = {
-      flowers: artifactsRepository.getFlowerArtifacts(),
-      plumes: artifactsRepository.getPlumeArtifacts(),
-      sands: artifactsRepository.getSandsArtifacts(),
-      goblets: artifactsRepository.getGobletArtifacts(),
-      circlets: artifactsRepository.getCircletArtifacts(),
-    };
+    allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(artifactsRepository.getAll());
   });
 
   describe('filter artifacts by main stat should set possible builds', () => {

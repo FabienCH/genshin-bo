@@ -13,6 +13,7 @@ import BuildFiltersForm from './build-filters-form';
 import BuildsResultsGrid from './builds-results-grid';
 import { waitFor } from '@testing-library/react';
 import { AgGridReact } from 'ag-grid-react';
+import { ArtifactsDI } from '../../../di/artifacts-di';
 
 describe('Build Optimizer container', () => {
   let wrapper: ReactWrapper;
@@ -20,6 +21,7 @@ describe('Build Optimizer container', () => {
   let weaponsNames: string[];
 
   beforeEach(() => {
+    ArtifactsDI.registerRepository();
     wrapper = mount(<BuildOptimizerContainer />);
 
     const charactersHandler = new CharactersHandler(new InMemoryCharactersRepository());
