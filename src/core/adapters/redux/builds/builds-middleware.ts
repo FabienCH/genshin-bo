@@ -1,20 +1,17 @@
 import { Artifact } from '../../../domain/entities/artifact';
 import { CharacterStatsValues } from '../../../domain/models/character-statistics';
 import { MainStatsValues } from '../../../domain/models/main-statistics';
-import { SetNames } from '../../../domain/models/sets-with-effects';
 import { appStore } from '../store';
 import { addBuildsAction, removeAllBuildsAction } from './builds-action';
 import { v4 as uuidv4 } from 'uuid';
 import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
+import { SetFilter } from '../../../domain/build-filter';
 
 export function runBuildOptimizer(
   allArtifacts: Artifact[][],
   baseStats: CharacterStatsValues,
   characterBonusStat: MainStatsValues,
-  setFilter: {
-    setNames: SetNames[];
-    pieces: 2 | 4;
-  },
+  setFilter: SetFilter,
   statsFilter: Partial<CharacterStatsValues>,
 ) {
   return (): void => {

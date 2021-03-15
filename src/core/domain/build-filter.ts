@@ -2,6 +2,11 @@ import { Artifact } from './entities/artifact';
 import { CharacterStatsValues, CharacterStats } from './models/character-statistics';
 import { SetNames } from './models/sets-with-effects';
 
+export interface SetFilter {
+  setNames: SetNames[];
+  pieces: 2 | 4;
+}
+
 export abstract class BuildFilter {
   public static filterBuilds(statsFilter: Partial<CharacterStatsValues>, buildStats: CharacterStatsValues): boolean {
     const getStatValue = (statValue: number | undefined): number => (!statValue || isNaN(statValue) ? 0 : statValue);
@@ -14,13 +19,7 @@ export abstract class BuildFilter {
     );
   }
 
-  public static setFilterMatch(
-    setFilter: {
-      setNames: SetNames[];
-      pieces: 2 | 4;
-    },
-    artifactsToCompute: Artifact[],
-  ): boolean {
+  public static setFilterMatch(setFilter: SetFilter, artifactsToCompute: Artifact[]): boolean {
     const setsMatchingFilterCount = (): number => {
       const setsMatchingPieces = setFilter.setNames.filter((setName) => {
         const artifactsMatchingSetName = artifactsToCompute.filter((artifact) => artifact.set === setName);

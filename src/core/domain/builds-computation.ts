@@ -1,10 +1,9 @@
 import { BehaviorSubject, from, Observable } from 'rxjs';
 import { StatsComputation } from './stats-computation';
-import { BuildFilter } from './build-filter';
+import { BuildFilter, SetFilter } from './build-filter';
 import { Artifact } from './entities/artifact';
 import { CharacterStatsValues } from './models/character-statistics';
 import { MainStatsValues } from './models/main-statistics';
-import { SetNames } from './models/sets-with-effects';
 
 export class BuildsComputation {
   private statsComputation: StatsComputation;
@@ -13,10 +12,7 @@ export class BuildsComputation {
   private allArtifacts!: Artifact[][];
   private baseStats!: CharacterStatsValues;
   private characterBonusStat!: MainStatsValues;
-  private setFilter!: {
-    setNames: SetNames[];
-    pieces: 2 | 4;
-  };
+  private setFilter!: SetFilter;
   private statsFilter!: Partial<CharacterStatsValues>;
   private artifactsPerBuilds!: number;
 
@@ -27,10 +23,7 @@ export class BuildsComputation {
     allArtifacts: Artifact[][],
     baseStats: CharacterStatsValues,
     characterBonusStat: MainStatsValues,
-    setFilter: {
-      setNames: SetNames[];
-      pieces: 2 | 4;
-    },
+    setFilter: SetFilter,
     statsFilter: Partial<CharacterStatsValues>,
   ): void {
     this.allArtifacts = allArtifacts;

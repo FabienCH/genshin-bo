@@ -11,11 +11,7 @@ import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsFilter } from './artifacts-filter';
 import { StatsComputation } from '../domain/stats-computation';
 import { runBuildOptimizer } from '../adapters/redux/builds/builds-middleware';
-
-interface SetFilter {
-  setNames: SetNames[];
-  pieces: 2 | 4;
-}
+import { SetFilter } from '../domain/build-filter';
 
 export class BuildOptimizer {
   private allArtifacts!: Artifact[][];
