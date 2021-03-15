@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/react-app/index.tsx",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "test:adapters": "npm test --runTestsByPath src/core/adapters",
@@ -12,9 +12,9 @@
     "mutation-testing": "stryker run --buildCommand jest",
     "lint": "eslint --ext js,jsx,ts,tsx src",
     "lint:fix": "eslint --ext js,jsx,ts,tsx --fix src",
-    "build": "react-scripts build",
+    "build": "react-app-rewired build",
     "build:test": "env-cmd -f .env.test npm run build",
-    "eject": "react-scripts eject"
+    "eject": "react-app-rewired eject"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
       "last 1 safari version"
     ]
   },
+  "config-overrides-path": "react-app-rewired.config.js",
   "devDependencies": {
     "@stryker-mutator/core": "^4.4.1",
     "@stryker-mutator/jest-runner": "^4.4.1",
@@ -39,14 +40,17 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.14",
     "@types/react-redux": "^7.1.16",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
     "eslint": "^7.15.0",
     "jest": "26.6.0",
     "nodemon": "^2.0.6",
+    "react-app-rewired": "^2.1.8",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "worker-loader": "^3.0.0"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -67,10 +71,12 @@
     "node-sass": "^5.0.0",
     "prettier": "^2.2.1",
     "react": "^17.0.1",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
-    "react-scripts": "4.0.2",
+    "react-scripts": "^4.0.2",
     "redux-devtools-extension": "^2.13.9",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"
   }
 }

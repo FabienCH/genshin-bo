@@ -2,14 +2,15 @@ import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-
 import { loadArtifacts } from '../adapters/redux/artifacts/artifacts-middleware';
 import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
-import { BuildsComputation } from '../domain/builds-computation';
 import { Artifact } from '../domain/entities/artifact';
 import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { Character } from '../domain/models/character';
 import { CharacterStatsValues } from '../domain/models/character-statistics';
-import { ArtifactStatsTypes } from '../domain/models/main-statistics';
+import { ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsFilter } from './artifacts-filter';
+import { StatsComputation } from '../domain/stats-computation';
+import { runBuildOptimizer } from '../adapters/redux/builds/builds-middleware';
 
 interface SetFilter {
   setNames: SetNames[];
@@ -17,16 +18,12 @@ interface SetFilter {
 }
 
 export class BuildOptimizer {
-  private readonly buildsComputation: BuildsComputation;
-
-  private allBuilds!: CharacterStatsValues[];
   private allArtifacts!: Artifact[][];
 
   constructor() {
     if (!isArtifactsStateInitialized()) {
       appStore.dispatch(loadArtifacts());
     }
-    this.buildsComputation = new BuildsComputation();
   }
 
   public computeBuildsStats(
@@ -39,7 +36,7 @@ export class BuildOptimizer {
       minArtifactLevel: number;
     },
     statsFilter: Partial<CharacterStatsValues>,
-  ): CharacterStatsValues[] {
+  ): void {
     const setFilter = {
       setNames: artifactsFilters.currentSets,
       pieces: artifactsFilters.setPieces,
@@ -48,6 +45,9 @@ export class BuildOptimizer {
     if (totalSetFilterPieces > 5) {
       throw new Error('total pieces can not be higher than 5');
     }
+
+    const baseStats = { ...character.stats, atk: character.stats.atk + character.weapon.atk };
+    const characterBonusStat = this.computeCharacterBonusStats(character);
 
     const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
     const mainStats = {
@@ -58,7 +58,7 @@ export class BuildOptimizer {
 
     const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(selectAllArtifacts());
     this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
-    return this.buildsComputation.computeBuilds(this.allArtifacts, character, setFilter, statsFilter);
+    appStore.dispatch(runBuildOptimizer(this.allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter));
   }
 
   public getBuilds(): number {
@@ -78,5 +78,23 @@ export class BuildOptimizer {
       return totalPieces;
     }, 0);
     return totalSetFilterPieces;
+  }
+
+  private computeCharacterBonusStats(character: Character): MainStatsValues {
+    const statsComputation = new StatsComputation();
+    const weaponBonusStat = character.weapon.bonusStat;
+    const characterBonusStat = character.bonusStat;
+    if (!characterBonusStat) {
+      return weaponBonusStat;
+    }
+
+    const characterBonusKey = Object.keys(characterBonusStat)[0];
+    const withSameCharAndWeaponStat = (): MainStatsValues => ({
+      [characterBonusKey]: statsComputation.addStats([characterBonusStat[characterBonusKey], weaponBonusStat[characterBonusKey]]),
+    });
+
+    return characterBonusKey === Object.keys(weaponBonusStat)[0]
+      ? withSameCharAndWeaponStat()
+      : { ...characterBonusStat, ...weaponBonusStat };
   }
 }
