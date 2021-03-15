@@ -5,6 +5,8 @@ import { theme } from './theme';
 import GboHeader from '../core/adapters/primaries/layout/header';
 import { MainContainer } from '../core/adapters/primaries/layout/main-container';
 import { ArtifactsDI } from '../core/di/artifacts-di';
+import { appStore } from '../core/adapters/redux/store';
+import { Provider } from 'react-redux';
 
 type AppState = {
   tabId: number;
@@ -26,11 +28,13 @@ class App extends Component<unknown, AppState> {
 
   render(): ReactElement {
     return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <GboHeader tabId={this.state.tabId} onTabChange={this.handleTabChange}></GboHeader>
-        <MainContainer tabId={this.state.tabId}></MainContainer>
-      </ThemeProvider>
+      <Provider store={appStore}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <GboHeader tabId={this.state.tabId} onTabChange={this.handleTabChange}></GboHeader>
+          <MainContainer tabId={this.state.tabId}></MainContainer>
+        </ThemeProvider>
+      </Provider>
     );
   }
 }
