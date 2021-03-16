@@ -1,9 +1,9 @@
 import { BuildsComputation } from '../core/domain/builds-computation';
-import { CharacterStatsValues } from '../core/domain/models/character-statistics';
+import { Build } from '../core/domain/models/build';
 import { BcMessage } from '../core/domain/worker/builds-computation.worker';
 
 export class BcWorkerMock {
-  public onmessage: (ev: { data: { builds: CharacterStatsValues[] } }) => any;
+  public onmessage: (ev: { data: { builds: Build[] } }) => any;
   constructor() {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.onmessage = () => {};

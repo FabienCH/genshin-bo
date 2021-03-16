@@ -6,6 +6,7 @@ import { addBuildsAction, removeAllBuildsAction } from './builds-action';
 import { v4 as uuidv4 } from 'uuid';
 import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
 import { SetFilter } from '../../../domain/build-filter';
+import { Build } from '../../../domain/models/build';
 
 export function runBuildOptimizer(
   allArtifacts: Artifact[][],
@@ -20,7 +21,7 @@ export function runBuildOptimizer(
 
     bcWorker.onmessage = ({ data }) => {
       if (data.builds) {
-        appStore.dispatch(addBuildsAction(data.builds.map((build: CharacterStatsValues) => ({ ...build, id: uuidv4() }))));
+        appStore.dispatch(addBuildsAction(data.builds.map((build: Build) => ({ ...build, id: uuidv4() }))));
       }
     };
     bcWorker.postMessage({ allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter });

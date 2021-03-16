@@ -56,17 +56,20 @@ describe('BuildOptimizer.computeBuildStats', () => {
       buildOptimizer = new BuildOptimizer();
       buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 11951,
-          [CharacterStats.atk]: 931,
-          [CharacterStats.def]: 906,
-          [CharacterStats.physicalDmg]: 73.2,
-          [CharacterStats.critRate]: 16,
-          [CharacterStats.elementalMastery]: 6,
-          [CharacterStats.critDmg]: 53.7,
-          [CharacterStats.energyRecharge]: 100,
-          [CharacterStats.powerfulShield]: 35,
+          stats: {
+            [CharacterStats.hp]: 11951,
+            [CharacterStats.atk]: 931,
+            [CharacterStats.def]: 906,
+            [CharacterStats.physicalDmg]: 73.2,
+            [CharacterStats.critRate]: 16,
+            [CharacterStats.elementalMastery]: 6,
+            [CharacterStats.critDmg]: 53.7,
+            [CharacterStats.energyRecharge]: 100,
+            [CharacterStats.powerfulShield]: 35,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -76,18 +79,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
       buildOptimizer = new BuildOptimizer();
       buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 12430,
-          [CharacterStats.atk]: 947,
-          [CharacterStats.critRate]: 16.6,
-          [CharacterStats.energyRecharge]: 103,
-          [CharacterStats.def]: 797,
-          [CharacterStats.elementalMastery]: 35,
-          [CharacterStats.geoDmg]: 7,
-          [CharacterStats.critDmg]: 53.2,
-          [CharacterStats.physicalDmg]: 64.5,
-          [CharacterStats.powerfulShield]: 35,
+          stats: {
+            [CharacterStats.hp]: 12430,
+            [CharacterStats.atk]: 947,
+            [CharacterStats.critRate]: 16.6,
+            [CharacterStats.energyRecharge]: 103,
+            [CharacterStats.def]: 797,
+            [CharacterStats.elementalMastery]: 35,
+            [CharacterStats.geoDmg]: 7,
+            [CharacterStats.critDmg]: 53.2,
+            [CharacterStats.physicalDmg]: 64.5,
+            [CharacterStats.powerfulShield]: 35,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -99,18 +105,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
       buildOptimizer = new BuildOptimizer();
       buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 13190,
-          [CharacterStats.atk]: 1048,
-          [CharacterStats.critRate]: 16.6,
-          [CharacterStats.energyRecharge]: 103,
-          [CharacterStats.def]: 797,
-          [CharacterStats.elementalMastery]: 194,
-          [CharacterStats.geoDmg]: 22.8,
-          [CharacterStats.critDmg]: 59.3,
-          [CharacterStats.powerfulShield]: 35,
-          [CharacterStats.physicalDmg]: 64.5,
+          stats: {
+            [CharacterStats.hp]: 13190,
+            [CharacterStats.atk]: 1048,
+            [CharacterStats.critRate]: 16.6,
+            [CharacterStats.energyRecharge]: 103,
+            [CharacterStats.def]: 797,
+            [CharacterStats.elementalMastery]: 194,
+            [CharacterStats.geoDmg]: 22.8,
+            [CharacterStats.critDmg]: 59.3,
+            [CharacterStats.powerfulShield]: 35,
+            [CharacterStats.physicalDmg]: 64.5,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -120,18 +129,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
       buildOptimizer = new BuildOptimizer();
       buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 16825,
-          [CharacterStats.atk]: 1024,
-          [CharacterStats.critRate]: 16.6,
-          [CharacterStats.energyRecharge]: 103,
-          [CharacterStats.def]: 1097,
-          [CharacterStats.elementalMastery]: 7,
-          [CharacterStats.healingBonus]: 31.3,
-          [CharacterStats.critDmg]: 59.3,
-          [CharacterStats.powerfulShield]: 35,
-          [CharacterStats.physicalDmg]: 64.5,
+          stats: {
+            [CharacterStats.hp]: 16825,
+            [CharacterStats.atk]: 1024,
+            [CharacterStats.critRate]: 16.6,
+            [CharacterStats.energyRecharge]: 103,
+            [CharacterStats.def]: 1097,
+            [CharacterStats.elementalMastery]: 7,
+            [CharacterStats.healingBonus]: 31.3,
+            [CharacterStats.critDmg]: 59.3,
+            [CharacterStats.powerfulShield]: 35,
+            [CharacterStats.physicalDmg]: 64.5,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -141,18 +153,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
       buildOptimizer = new BuildOptimizer();
       buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 16825,
-          [CharacterStats.atk]: 1126,
-          [CharacterStats.critRate]: 16.6,
-          [CharacterStats.energyRecharge]: 103,
-          [CharacterStats.def]: 1125,
-          [CharacterStats.elementalMastery]: 7,
-          [CharacterStats.healingBonus]: 31.3,
-          [CharacterStats.critDmg]: 59.3,
-          [CharacterStats.electroDmg]: 15,
-          [CharacterStats.physicalDmg]: 64.5,
+          stats: {
+            [CharacterStats.hp]: 16825,
+            [CharacterStats.atk]: 1126,
+            [CharacterStats.critRate]: 16.6,
+            [CharacterStats.energyRecharge]: 103,
+            [CharacterStats.def]: 1125,
+            [CharacterStats.elementalMastery]: 7,
+            [CharacterStats.healingBonus]: 31.3,
+            [CharacterStats.critDmg]: 59.3,
+            [CharacterStats.electroDmg]: 15,
+            [CharacterStats.physicalDmg]: 64.5,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -162,19 +177,22 @@ describe('BuildOptimizer.computeBuildStats', () => {
       buildOptimizer = new BuildOptimizer();
       buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 16825,
-          [CharacterStats.atk]: 985,
-          [CharacterStats.critRate]: 16.6,
-          [CharacterStats.energyRecharge]: 103,
-          [CharacterStats.def]: 1097,
-          [CharacterStats.elementalMastery]: 7,
-          [CharacterStats.healingBonus]: 31.3,
-          [CharacterStats.critDmg]: 63.2,
-          [CharacterStats.powerfulShield]: 35,
-          [CharacterStats.physicalDmg]: 64.5,
-          [CharacterStats.pyroRes]: 40,
+          stats: {
+            [CharacterStats.hp]: 16825,
+            [CharacterStats.atk]: 985,
+            [CharacterStats.critRate]: 16.6,
+            [CharacterStats.energyRecharge]: 103,
+            [CharacterStats.def]: 1097,
+            [CharacterStats.elementalMastery]: 7,
+            [CharacterStats.healingBonus]: 31.3,
+            [CharacterStats.critDmg]: 63.2,
+            [CharacterStats.powerfulShield]: 35,
+            [CharacterStats.physicalDmg]: 64.5,
+            [CharacterStats.pyroRes]: 40,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -185,18 +203,21 @@ describe('BuildOptimizer.computeBuildStats', () => {
       buildOptimizer = new BuildOptimizer();
       buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 2244,
-          [CharacterStats.atk]: 219,
-          [CharacterStats.critRate]: 16.6,
-          [CharacterStats.energyRecharge]: 103,
-          [CharacterStats.def]: 85,
-          [CharacterStats.elementalMastery]: 7,
-          [CharacterStats.healingBonus]: 31.3,
-          [CharacterStats.critDmg]: 63.2,
-          [CharacterStats.powerfulShield]: 35,
-          [CharacterStats.pyroRes]: 40,
+          stats: {
+            [CharacterStats.hp]: 2244,
+            [CharacterStats.atk]: 219,
+            [CharacterStats.critRate]: 16.6,
+            [CharacterStats.energyRecharge]: 103,
+            [CharacterStats.def]: 85,
+            [CharacterStats.elementalMastery]: 7,
+            [CharacterStats.healingBonus]: 31.3,
+            [CharacterStats.critDmg]: 63.2,
+            [CharacterStats.powerfulShield]: 35,
+            [CharacterStats.pyroRes]: 40,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -205,16 +226,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
       const amber = charactersRepository.getCharacter('amber', '20a', { name: 'rust', level: '40' });
       buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 6112,
-          [CharacterStats.atk]: 794,
-          [CharacterStats.def]: 217,
-          [CharacterStats.elementalMastery]: 56,
-          [CharacterStats.critRate]: 11.6,
-          [CharacterStats.critDmg]: 69.5,
-          [CharacterStats.energyRecharge]: 120,
-          [CharacterStats.pyroDmg]: 7,
+          stats: {
+            [CharacterStats.hp]: 6112,
+            [CharacterStats.atk]: 794,
+            [CharacterStats.def]: 217,
+            [CharacterStats.elementalMastery]: 56,
+            [CharacterStats.critRate]: 11.6,
+            [CharacterStats.critDmg]: 69.5,
+            [CharacterStats.energyRecharge]: 120,
+            [CharacterStats.pyroDmg]: 7,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -223,16 +247,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
       const amber = charactersRepository.getCharacter('amber', '50', { name: 'rust', level: '60a' });
       buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 8610,
-          [CharacterStats.atk]: 1279,
-          [CharacterStats.def]: 379,
-          [CharacterStats.elementalMastery]: 56,
-          [CharacterStats.critRate]: 11.6,
-          [CharacterStats.critDmg]: 69.5,
-          [CharacterStats.energyRecharge]: 120,
-          [CharacterStats.pyroDmg]: 7,
+          stats: {
+            [CharacterStats.hp]: 8610,
+            [CharacterStats.atk]: 1279,
+            [CharacterStats.def]: 379,
+            [CharacterStats.elementalMastery]: 56,
+            [CharacterStats.critRate]: 11.6,
+            [CharacterStats.critDmg]: 69.5,
+            [CharacterStats.energyRecharge]: 120,
+            [CharacterStats.pyroDmg]: 7,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -240,17 +267,20 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with level 80 ascended Razor', () => {
       buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 15015,
-          [CharacterStats.atk]: 1680,
-          [CharacterStats.def]: 789,
-          [CharacterStats.elementalMastery]: 56,
-          [CharacterStats.critRate]: 11.6,
-          [CharacterStats.critDmg]: 69.5,
-          [CharacterStats.energyRecharge]: 120,
-          [CharacterStats.pyroDmg]: 7,
-          [CharacterStats.physicalDmg]: 64.5,
+          stats: {
+            [CharacterStats.hp]: 15015,
+            [CharacterStats.atk]: 1680,
+            [CharacterStats.def]: 789,
+            [CharacterStats.elementalMastery]: 56,
+            [CharacterStats.critRate]: 11.6,
+            [CharacterStats.critDmg]: 69.5,
+            [CharacterStats.energyRecharge]: 120,
+            [CharacterStats.pyroDmg]: 7,
+            [CharacterStats.physicalDmg]: 64.5,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -259,17 +289,20 @@ describe('BuildOptimizer.computeBuildStats', () => {
       const albedo = charactersRepository.getCharacter('albedo', '60a', { name: 'darkIronSword', level: '70' });
       buildOptimizer.computeBuildsStats(albedo, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 12998,
-          [CharacterStats.atk]: 1132,
-          [CharacterStats.def]: 693,
-          [CharacterStats.elementalMastery]: 172,
-          [CharacterStats.critRate]: 11.6,
-          [CharacterStats.critDmg]: 69.5,
-          [CharacterStats.energyRecharge]: 120,
-          [CharacterStats.pyroDmg]: 7,
-          [CharacterStats.geoDmg]: 14.4,
+          stats: {
+            [CharacterStats.hp]: 12998,
+            [CharacterStats.atk]: 1132,
+            [CharacterStats.def]: 693,
+            [CharacterStats.elementalMastery]: 172,
+            [CharacterStats.critRate]: 11.6,
+            [CharacterStats.critDmg]: 69.5,
+            [CharacterStats.energyRecharge]: 120,
+            [CharacterStats.pyroDmg]: 7,
+            [CharacterStats.geoDmg]: 14.4,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -278,16 +311,19 @@ describe('BuildOptimizer.computeBuildStats', () => {
       const fischl = charactersRepository.getCharacter('fischl', '70', { name: 'favoniusWarbow', level: '70a' });
       buildOptimizer.computeBuildsStats(fischl, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 10791,
-          [CharacterStats.atk]: 1343,
-          [CharacterStats.def]: 531,
-          [CharacterStats.elementalMastery]: 56,
-          [CharacterStats.critRate]: 11.6,
-          [CharacterStats.critDmg]: 69.5,
-          [CharacterStats.energyRecharge]: 170.5,
-          [CharacterStats.pyroDmg]: 7,
+          stats: {
+            [CharacterStats.hp]: 10791,
+            [CharacterStats.atk]: 1343,
+            [CharacterStats.def]: 531,
+            [CharacterStats.elementalMastery]: 56,
+            [CharacterStats.critRate]: 11.6,
+            [CharacterStats.critDmg]: 69.5,
+            [CharacterStats.energyRecharge]: 170.5,
+            [CharacterStats.pyroDmg]: 7,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -296,17 +332,20 @@ describe('BuildOptimizer.computeBuildStats', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '1' });
       buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 15015,
-          [CharacterStats.atk]: 736,
-          [CharacterStats.def]: 789,
-          [CharacterStats.elementalMastery]: 56,
-          [CharacterStats.critRate]: 11.6,
-          [CharacterStats.critDmg]: 69.5,
-          [CharacterStats.energyRecharge]: 120,
-          [CharacterStats.pyroDmg]: 7,
-          [CharacterStats.physicalDmg]: 30,
+          stats: {
+            [CharacterStats.hp]: 15015,
+            [CharacterStats.atk]: 736,
+            [CharacterStats.def]: 789,
+            [CharacterStats.elementalMastery]: 56,
+            [CharacterStats.critRate]: 11.6,
+            [CharacterStats.critDmg]: 69.5,
+            [CharacterStats.energyRecharge]: 120,
+            [CharacterStats.pyroDmg]: 7,
+            [CharacterStats.physicalDmg]: 30,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -315,17 +354,20 @@ describe('BuildOptimizer.computeBuildStats', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '40a' });
       buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(getStatsFromAllBuilds()).toEqual([
+      expect(getBuildsWithoutId()).toEqual([
         {
-          [CharacterStats.hp]: 15015,
-          [CharacterStats.atk]: 1177,
-          [CharacterStats.def]: 789,
-          [CharacterStats.elementalMastery]: 56,
-          [CharacterStats.critRate]: 11.6,
-          [CharacterStats.critDmg]: 69.5,
-          [CharacterStats.energyRecharge]: 120,
-          [CharacterStats.pyroDmg]: 7,
-          [CharacterStats.physicalDmg]: 30,
+          stats: {
+            [CharacterStats.hp]: 15015,
+            [CharacterStats.atk]: 1177,
+            [CharacterStats.def]: 789,
+            [CharacterStats.elementalMastery]: 56,
+            [CharacterStats.critRate]: 11.6,
+            [CharacterStats.critDmg]: 69.5,
+            [CharacterStats.energyRecharge]: 120,
+            [CharacterStats.pyroDmg]: 7,
+            [CharacterStats.physicalDmg]: 30,
+          },
+          artifactIds: ['0', '1', '2', '3', '4'],
         },
       ]);
     });
@@ -336,108 +378,132 @@ describe('BuildOptimizer.computeBuildStats', () => {
     buildOptimizer = new BuildOptimizer();
     buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-    expect(getStatsFromAllBuilds()).toEqual([
+    expect(getBuildsWithoutId()).toEqual([
       {
-        [CharacterStats.hp]: 16825,
-        [CharacterStats.atk]: 985,
-        [CharacterStats.critRate]: 16.6,
-        [CharacterStats.energyRecharge]: 104,
-        [CharacterStats.def]: 1097,
-        [CharacterStats.elementalMastery]: 7,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 64.3,
-        [CharacterStats.powerfulShield]: 35,
-        [CharacterStats.physicalDmg]: 64.5,
-        [CharacterStats.pyroRes]: 40,
+        stats: {
+          [CharacterStats.hp]: 16825,
+          [CharacterStats.atk]: 985,
+          [CharacterStats.critRate]: 16.6,
+          [CharacterStats.energyRecharge]: 104,
+          [CharacterStats.def]: 1097,
+          [CharacterStats.elementalMastery]: 7,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 64.3,
+          [CharacterStats.powerfulShield]: 35,
+          [CharacterStats.physicalDmg]: 64.5,
+          [CharacterStats.pyroRes]: 40,
+        },
+        artifactIds: ['0', '2', '4', '5', '7'],
       },
       {
-        [CharacterStats.hp]: 16822,
-        [CharacterStats.atk]: 985,
-        [CharacterStats.critRate]: 14.1,
-        [CharacterStats.energyRecharge]: 104,
-        [CharacterStats.def]: 776,
-        [CharacterStats.elementalMastery]: 11,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 67.3,
-        [CharacterStats.powerfulShield]: 35,
-        [CharacterStats.physicalDmg]: 64.5,
-        [CharacterStats.cryoDmg]: 22.8,
+        stats: {
+          [CharacterStats.hp]: 16822,
+          [CharacterStats.atk]: 985,
+          [CharacterStats.critRate]: 14.1,
+          [CharacterStats.energyRecharge]: 104,
+          [CharacterStats.def]: 776,
+          [CharacterStats.elementalMastery]: 11,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 67.3,
+          [CharacterStats.powerfulShield]: 35,
+          [CharacterStats.physicalDmg]: 64.5,
+          [CharacterStats.cryoDmg]: 22.8,
+        },
+        artifactIds: ['0', '2', '4', '6', '7'],
       },
       {
-        [CharacterStats.hp]: 16837,
-        [CharacterStats.atk]: 1090,
-        [CharacterStats.critRate]: 13.9,
-        [CharacterStats.energyRecharge]: 100,
-        [CharacterStats.def]: 1152,
-        [CharacterStats.elementalMastery]: 7,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 59.3,
-        [CharacterStats.pyroRes]: 40,
-        [CharacterStats.physicalDmg]: 64.5,
+        stats: {
+          [CharacterStats.hp]: 16837,
+          [CharacterStats.atk]: 1090,
+          [CharacterStats.critRate]: 13.9,
+          [CharacterStats.energyRecharge]: 100,
+          [CharacterStats.def]: 1152,
+          [CharacterStats.elementalMastery]: 7,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 59.3,
+          [CharacterStats.pyroRes]: 40,
+          [CharacterStats.physicalDmg]: 64.5,
+        },
+        artifactIds: ['0', '3', '4', '5', '7'],
       },
       {
-        [CharacterStats.hp]: 16834,
-        [CharacterStats.atk]: 1090,
-        [CharacterStats.critRate]: 11.4,
-        [CharacterStats.energyRecharge]: 100,
-        [CharacterStats.def]: 831,
-        [CharacterStats.elementalMastery]: 11,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 62.3,
-        [CharacterStats.cryoDmg]: 37.8,
-        [CharacterStats.physicalDmg]: 64.5,
+        stats: {
+          [CharacterStats.hp]: 16834,
+          [CharacterStats.atk]: 1090,
+          [CharacterStats.critRate]: 11.4,
+          [CharacterStats.energyRecharge]: 100,
+          [CharacterStats.def]: 831,
+          [CharacterStats.elementalMastery]: 11,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 62.3,
+          [CharacterStats.cryoDmg]: 37.8,
+          [CharacterStats.physicalDmg]: 64.5,
+        },
+        artifactIds: ['0', '3', '4', '6', '7'],
       },
       {
-        [CharacterStats.hp]: 18509,
-        [CharacterStats.atk]: 1011,
-        [CharacterStats.critRate]: 13.4,
-        [CharacterStats.energyRecharge]: 107,
-        [CharacterStats.def]: 1097,
-        [CharacterStats.elementalMastery]: 7,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 65,
-        [CharacterStats.powerfulShield]: 35,
-        [CharacterStats.electroDmg]: 15,
-        [CharacterStats.physicalDmg]: 64.5,
+        stats: {
+          [CharacterStats.hp]: 18509,
+          [CharacterStats.atk]: 1011,
+          [CharacterStats.critRate]: 13.4,
+          [CharacterStats.energyRecharge]: 107,
+          [CharacterStats.def]: 1097,
+          [CharacterStats.elementalMastery]: 7,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 65,
+          [CharacterStats.powerfulShield]: 35,
+          [CharacterStats.electroDmg]: 15,
+          [CharacterStats.physicalDmg]: 64.5,
+        },
+        artifactIds: ['1', '2', '4', '5', '7'],
       },
       {
-        [CharacterStats.hp]: 18506,
-        [CharacterStats.atk]: 1011,
-        [CharacterStats.critRate]: 10.9,
-        [CharacterStats.energyRecharge]: 107,
-        [CharacterStats.def]: 776,
-        [CharacterStats.elementalMastery]: 11,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 68,
-        [CharacterStats.powerfulShield]: 35,
-        [CharacterStats.electroDmg]: 15,
-        [CharacterStats.cryoDmg]: 22.8,
-        [CharacterStats.physicalDmg]: 64.5,
+        stats: {
+          [CharacterStats.hp]: 18506,
+          [CharacterStats.atk]: 1011,
+          [CharacterStats.critRate]: 10.9,
+          [CharacterStats.energyRecharge]: 107,
+          [CharacterStats.def]: 776,
+          [CharacterStats.elementalMastery]: 11,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 68,
+          [CharacterStats.powerfulShield]: 35,
+          [CharacterStats.electroDmg]: 15,
+          [CharacterStats.cryoDmg]: 22.8,
+          [CharacterStats.physicalDmg]: 64.5,
+        },
+        artifactIds: ['1', '2', '4', '6', '7'],
       },
       {
-        [CharacterStats.hp]: 18521,
-        [CharacterStats.atk]: 1116,
-        [CharacterStats.critRate]: 10.7,
-        [CharacterStats.energyRecharge]: 103,
-        [CharacterStats.def]: 1152,
-        [CharacterStats.elementalMastery]: 7,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 60,
-        [CharacterStats.electroDmg]: 15,
-        [CharacterStats.physicalDmg]: 64.5,
+        stats: {
+          [CharacterStats.hp]: 18521,
+          [CharacterStats.atk]: 1116,
+          [CharacterStats.critRate]: 10.7,
+          [CharacterStats.energyRecharge]: 103,
+          [CharacterStats.def]: 1152,
+          [CharacterStats.elementalMastery]: 7,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 60,
+          [CharacterStats.electroDmg]: 15,
+          [CharacterStats.physicalDmg]: 64.5,
+        },
+        artifactIds: ['1', '3', '4', '5', '7'],
       },
       {
-        [CharacterStats.hp]: 18518,
-        [CharacterStats.atk]: 1116,
-        [CharacterStats.critRate]: 8.2,
-        [CharacterStats.energyRecharge]: 103,
-        [CharacterStats.def]: 831,
-        [CharacterStats.elementalMastery]: 11,
-        [CharacterStats.healingBonus]: 31.3,
-        [CharacterStats.critDmg]: 63,
-        [CharacterStats.electroDmg]: 15,
-        [CharacterStats.cryoDmg]: 37.8,
-        [CharacterStats.physicalDmg]: 64.5,
+        stats: {
+          [CharacterStats.hp]: 18518,
+          [CharacterStats.atk]: 1116,
+          [CharacterStats.critRate]: 8.2,
+          [CharacterStats.energyRecharge]: 103,
+          [CharacterStats.def]: 831,
+          [CharacterStats.elementalMastery]: 11,
+          [CharacterStats.healingBonus]: 31.3,
+          [CharacterStats.critDmg]: 63,
+          [CharacterStats.electroDmg]: 15,
+          [CharacterStats.cryoDmg]: 37.8,
+          [CharacterStats.physicalDmg]: 64.5,
+        },
+        artifactIds: ['1', '3', '4', '6', '7'],
       },
     ]);
   });
@@ -530,9 +596,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
   });
 });
 
-function getStatsFromAllBuilds() {
-  return selectAllBuilds().map((build) => {
-    const { id, ...stats } = build;
-    return stats;
+function getBuildsWithoutId() {
+  return selectAllBuilds().map((buildItem) => {
+    const { id, ...build } = buildItem;
+    return build;
   });
 }
