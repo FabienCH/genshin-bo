@@ -16,6 +16,8 @@ import BuildFiltersForm from './build-filters-form';
 import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
 import { SetNames } from '../../../domain/models/sets-with-effects';
 import BuildsResultsContainer from './builds-results-container';
+import { connect } from 'react-redux';
+import { selectAllBuilds } from '../../redux/builds/builds-selectors';
 
 const styles = createStyles({
   form: {
@@ -26,7 +28,9 @@ const styles = createStyles({
   },
 });
 
-type BuildOptimizerProps = WithStyles<typeof styles>;
+interface BuildOptimizerProps extends WithStyles<typeof styles> {
+  builds: CharacterStatsValues[];
+}
 
 export type ArtifactsMainStats = {
   sandsMain?: SandsMainStatType;
@@ -47,7 +51,6 @@ type State = {
     minArtifactLevel: number;
   };
   buildFilters: Partial<CharacterStatsValues>;
-  builds?: CharacterStatsValues[];
 };
 
 class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
@@ -193,22 +196,15 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     const { name, level } = this.state.currentCharacter;
     const character = CharactersDI.charactersHandler.getCharacter(name, level, this.state.currentWeapon);
     const artifactsFilters = { ...this.state.artifactsFilters, currentSets: Object.values(this.state.artifactsFilters.currentSets) };
-    const builds = BuildOptimizerDI.getBuildOptimizer().computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
-
-    this.setState((state) => ({
-      ...state,
-      builds,
-    }));
+    BuildOptimizerDI.getBuildOptimizer().computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
   }
 
   render(): ReactElement {
-    const { classes } = this.props;
+    const { classes, builds } = this.props;
 
     let buildsResultsContainer;
-    if (this.state.builds) {
-      buildsResultsContainer = (
-        <BuildsResultsContainer builds={this.state.builds} buildFilters={this.state.buildFilters}></BuildsResultsContainer>
-      );
+    if (builds.length > 0) {
+      buildsResultsContainer = <BuildsResultsContainer builds={builds} buildFilters={this.state.buildFilters}></BuildsResultsContainer>;
     }
 
     return (
@@ -256,4 +252,8 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
   }
 }
 
-export default withStyles(styles)(BuildOptimizerContainer);
+const mapStateToProps = () => {
+  return { builds: selectAllBuilds() };
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(BuildOptimizerContainer));

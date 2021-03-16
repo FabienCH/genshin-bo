@@ -16,6 +16,7 @@ import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
 import { ArtifactStatsTypes } from '../domain/models/main-statistics';
 import { ArtifactsDI } from '../di/artifacts-di';
+import { selectAllBuilds } from '../adapters/redux/builds/builds-selectors';
 
 describe('BuildOptimizer.computeBuildStats', () => {
   let buildOptimizer: BuildOptimizer;
@@ -53,8 +54,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
       ArtifactsDI.registerRepository(defPhyDmgAtkBuildArtifactsData);
       buildOptimizer = new BuildOptimizer();
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 11951,
           [CharacterStats.atk]: 931,
@@ -72,8 +74,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
       ArtifactsDI.registerRepository(atkGeoDmgEmBuildArtifactsData);
       buildOptimizer = new BuildOptimizer();
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 12430,
           [CharacterStats.atk]: 947,
@@ -94,8 +97,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
       ArtifactsDI.registerRepository(lvl134820BuildArtifactsData);
       buildOptimizer = new BuildOptimizer();
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 13190,
           [CharacterStats.atk]: 1048,
@@ -114,8 +118,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with levels 2, 7, 12, 15, 17', () => {
       ArtifactsDI.registerRepository(lvl27121517BuildArtifactsData);
       buildOptimizer = new BuildOptimizer();
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 16825,
           [CharacterStats.atk]: 1024,
@@ -134,8 +139,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with gladiator and thundering sets effects', () => {
       ArtifactsDI.registerRepository(gladiatorThunderingBuildArtifactsData);
       buildOptimizer = new BuildOptimizer();
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 16825,
           [CharacterStats.atk]: 1126,
@@ -154,8 +160,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     it('with bolide and Lavawalker sets effects', () => {
       ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
       buildOptimizer = new BuildOptimizer();
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 16825,
           [CharacterStats.atk]: 985,
@@ -176,8 +183,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
       ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
       const amber = charactersRepository.getCharacter('amber', '1', { name: 'rust', level: '1' });
       buildOptimizer = new BuildOptimizer();
+      buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 2244,
           [CharacterStats.atk]: 219,
@@ -195,8 +203,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 20 ascended Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '20a', { name: 'rust', level: '40' });
+      buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 6112,
           [CharacterStats.atk]: 794,
@@ -212,8 +221,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 50 Amber', () => {
       const amber = charactersRepository.getCharacter('amber', '50', { name: 'rust', level: '60a' });
+      buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 8610,
           [CharacterStats.atk]: 1279,
@@ -228,7 +238,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('with level 80 ascended Razor', () => {
-      expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 15015,
           [CharacterStats.atk]: 1680,
@@ -245,8 +257,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 60 ascended Albedo', () => {
       const albedo = charactersRepository.getCharacter('albedo', '60a', { name: 'darkIronSword', level: '70' });
+      buildOptimizer.computeBuildsStats(albedo, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(albedo, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 12998,
           [CharacterStats.atk]: 1132,
@@ -263,8 +276,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 70 Fischl', () => {
       const fischl = charactersRepository.getCharacter('fischl', '70', { name: 'favoniusWarbow', level: '70a' });
+      buildOptimizer.computeBuildsStats(fischl, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(fischl, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 10791,
           [CharacterStats.atk]: 1343,
@@ -280,8 +294,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 1 Prototype Archaic', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '1' });
+      buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 15015,
           [CharacterStats.atk]: 736,
@@ -298,8 +313,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
 
     it('with level 40 ascended Prototype Archaic', () => {
       const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '40a' });
+      buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter);
 
-      expect(buildOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+      expect(getStatsFromAllBuilds()).toEqual([
         {
           [CharacterStats.hp]: 15015,
           [CharacterStats.atk]: 1177,
@@ -318,8 +334,9 @@ describe('BuildOptimizer.computeBuildStats', () => {
   it('should compute build stats of multiple artifacts for each type', () => {
     ArtifactsDI.registerRepository(multipleArtifactsBuildArtifactsData);
     buildOptimizer = new BuildOptimizer();
+    buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
 
-    expect(buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter)).toEqual([
+    expect(getStatsFromAllBuilds()).toEqual([
       {
         [CharacterStats.hp]: 16825,
         [CharacterStats.atk]: 985,
@@ -434,47 +451,43 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('that must have 2 thunderingFury set pieces', () => {
-      expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury], setPieces: 2 },
-          defaultStatsFilter,
-        ).length,
-      ).toEqual(24);
+      buildOptimizer.computeBuildsStats(
+        razor,
+        { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury], setPieces: 2 },
+        defaultStatsFilter,
+      );
+      expect(selectAllBuilds().length).toEqual(24);
     });
 
     it('that must have 4 retracingBolide set pieces', () => {
-      expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          { ...defaultArtifactsFilters, currentSets: [SetNames.retracingBolide], setPieces: 4 },
-          defaultStatsFilter,
-        ).length,
-      ).toEqual(8);
+      buildOptimizer.computeBuildsStats(
+        razor,
+        { ...defaultArtifactsFilters, currentSets: [SetNames.retracingBolide], setPieces: 4 },
+        defaultStatsFilter,
+      );
+      expect(selectAllBuilds().length).toEqual(8);
     });
 
     it('that must have 2 thunderingFury and 2 blizzardStrayer set pieces', () => {
-      expect(
-        buildOptimizer.computeBuildsStats(
-          razor,
-          { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer], setPieces: 2 },
-          defaultStatsFilter,
-        ).length,
-      ).toEqual(3);
+      buildOptimizer.computeBuildsStats(
+        razor,
+        { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer], setPieces: 2 },
+        defaultStatsFilter,
+      );
+      expect(selectAllBuilds().length).toEqual(3);
     });
 
     it('must not run with total pieces higher than 5', () => {
-      expect(
-        () =>
-          buildOptimizer.computeBuildsStats(
-            razor,
-            {
-              ...defaultArtifactsFilters,
-              currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer],
-              setPieces: 4,
-            },
-            defaultStatsFilter,
-          ).length,
+      expect(() =>
+        buildOptimizer.computeBuildsStats(
+          razor,
+          {
+            ...defaultArtifactsFilters,
+            currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer],
+            setPieces: 4,
+          },
+          defaultStatsFilter,
+        ),
       ).toThrowError('total pieces can not be higher than 5');
     });
   });
@@ -488,19 +501,17 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
 
     it('that must have at least 17000 hp', () => {
-      expect(
-        buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, { ...defaultStatsFilter, [CharacterStats.hp]: 17000 }).length,
-      ).toEqual(24);
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, { ...defaultStatsFilter, [CharacterStats.hp]: 17000 });
+      expect(selectAllBuilds().length).toEqual(24);
     });
 
     it('that must have at least 16000 hp and 30 crit rate', () => {
-      expect(
-        buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, {
-          ...defaultStatsFilter,
-          [CharacterStats.hp]: 16000,
-          [CharacterStats.critRate]: 30,
-        }).length,
-      ).toEqual(26);
+      buildOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, {
+        ...defaultStatsFilter,
+        [CharacterStats.hp]: 16000,
+        [CharacterStats.critRate]: 30,
+      });
+      expect(selectAllBuilds().length).toEqual(26);
     });
   });
 
@@ -518,3 +529,10 @@ describe('BuildOptimizer.computeBuildStats', () => {
     });
   });
 });
+
+function getStatsFromAllBuilds() {
+  return selectAllBuilds().map((build) => {
+    const { id, ...stats } = build;
+    return stats;
+  });
+}

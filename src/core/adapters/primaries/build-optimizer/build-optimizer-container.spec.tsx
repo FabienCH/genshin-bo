@@ -14,6 +14,8 @@ import BuildsResultsGrid from './builds-results-grid';
 import { waitFor } from '@testing-library/react';
 import { AgGridReact } from 'ag-grid-react';
 import { ArtifactsDI } from '../../../di/artifacts-di';
+import { appStore } from '../../redux/store';
+import { Provider } from 'react-redux';
 
 describe('Build Optimizer container', () => {
   let wrapper: ReactWrapper;
@@ -22,7 +24,11 @@ describe('Build Optimizer container', () => {
 
   beforeEach(() => {
     ArtifactsDI.registerRepository();
-    wrapper = mount(<BuildOptimizerContainer />);
+    wrapper = mount(
+      <Provider store={appStore}>
+        <BuildOptimizerContainer />
+      </Provider>,
+    );
 
     const charactersHandler = new CharactersHandler(new InMemoryCharactersRepository());
     const weaponsHandler = new WeaponsHandler(new InMemoryWeaponsRepository());

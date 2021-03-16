@@ -8,29 +8,18 @@ import { Character } from '../domain/models/character';
 import { CharacterStatsValues } from '../domain/models/character-statistics';
 import { ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { StatsComputation } from '../domain/stats-computation';
 import { ArtifactsFilter } from './artifacts-filter';
-import { BuildFilter } from './build-filter';
-
-interface SetFilter {
-  setNames: SetNames[];
-  pieces: 2 | 4;
-}
+import { StatsComputation } from '../domain/stats-computation';
+import { runBuildOptimizer } from '../adapters/redux/builds/builds-middleware';
+import { SetFilter } from '../domain/build-filter';
 
 export class BuildOptimizer {
-  private readonly statsComputation: StatsComputation;
-
-  private allBuilds!: CharacterStatsValues[];
-  private character!: Character;
   private allArtifacts!: Artifact[][];
-  private setFilter!: SetFilter;
-  private statsFilter!: Partial<CharacterStatsValues>;
 
   constructor() {
     if (!isArtifactsStateInitialized()) {
       appStore.dispatch(loadArtifacts());
     }
-    this.statsComputation = new StatsComputation();
   }
 
   public computeBuildsStats(
@@ -43,31 +32,29 @@ export class BuildOptimizer {
       minArtifactLevel: number;
     },
     statsFilter: Partial<CharacterStatsValues>,
-  ): CharacterStatsValues[] {
-    this.setFilter = {
+  ): void {
+    const setFilter = {
       setNames: artifactsFilters.currentSets,
       pieces: artifactsFilters.setPieces,
     };
-    const totalSetFilterPieces = this.getTotalSetFilterPieces(this.setFilter);
+    const totalSetFilterPieces = this.getTotalSetFilterPieces(setFilter);
     if (totalSetFilterPieces > 5) {
       throw new Error('total pieces can not be higher than 5');
     }
-    this.statsFilter = statsFilter;
 
-    this.allBuilds = [];
-    this.character = character;
-    const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(selectAllArtifacts());
+    const baseStats = { ...character.stats, atk: character.stats.atk + character.weapon.atk };
+    const characterBonusStat = this.computeCharacterBonusStats(character);
+
     const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
-
     const mainStats = {
       sandsMain: mainsStats.sandsMain,
       gobletMain: mainsStats.gobletMain,
       circletMain: mainsStats.circletMain,
     };
 
+    const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(selectAllArtifacts());
     this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
-    this.iterateOverAllBuilds([], 0);
-    return this.allBuilds;
+    appStore.dispatch(runBuildOptimizer(this.allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter));
   }
 
   public getBuilds(): number {
@@ -89,54 +76,21 @@ export class BuildOptimizer {
     return totalSetFilterPieces;
   }
 
-  private iterateOverAllBuilds(artifacts: Artifact[], i: number) {
-    const baseStats: CharacterStatsValues = { ...this.character.stats, atk: this.character.stats.atk + this.character.weapon.atk };
-    const characterBonusStats: MainStatsValues = this.computeCharacterBonusStats();
-    const max = this.allArtifacts.length - 1;
-
-    this.allArtifacts[i].forEach((artifact: Artifact) => {
-      const artifactsToCompute = [...artifacts];
-      artifactsToCompute.push(artifact);
-      if (i === max) {
-        if (this.setFilterMatch(this.setFilter, artifactsToCompute)) {
-          const buildStats = this.statsComputation.computeStats({ ...baseStats }, characterBonusStats, artifactsToCompute);
-          if (BuildFilter.filterBuilds(this.statsFilter, buildStats)) {
-            this.allBuilds.push(buildStats);
-          }
-        }
-
-        return;
-      }
-      this.iterateOverAllBuilds(artifactsToCompute, i + 1);
-    });
-  }
-
-  private computeCharacterBonusStats(): MainStatsValues {
-    const weaponBonusStat = this.character.weapon.bonusStat;
-    const characterBonusStat = this.character.bonusStat;
+  private computeCharacterBonusStats(character: Character): MainStatsValues {
+    const statsComputation = new StatsComputation();
+    const weaponBonusStat = character.weapon.bonusStat;
+    const characterBonusStat = character.bonusStat;
     if (!characterBonusStat) {
       return weaponBonusStat;
     }
 
     const characterBonusKey = Object.keys(characterBonusStat)[0];
     const withSameCharAndWeaponStat = (): MainStatsValues => ({
-      [characterBonusKey]: this.statsComputation.addStats([characterBonusStat[characterBonusKey], weaponBonusStat[characterBonusKey]]),
+      [characterBonusKey]: statsComputation.addStats([characterBonusStat[characterBonusKey], weaponBonusStat[characterBonusKey]]),
     });
 
     return characterBonusKey === Object.keys(weaponBonusStat)[0]
       ? withSameCharAndWeaponStat()
       : { ...characterBonusStat, ...weaponBonusStat };
-  }
-
-  private setFilterMatch(setFilter: SetFilter, artifactsToCompute: Artifact[]): boolean {
-    const setsMatchingFilterCount = (): number => {
-      const setsMatchingPieces = setFilter.setNames.filter((setName) => {
-        const artifactsMatchingSetName = artifactsToCompute.filter((artifact) => artifact.set === setName);
-        return artifactsMatchingSetName.length >= setFilter.pieces;
-      });
-      return setsMatchingPieces.length;
-    };
-
-    return !setFilter || setsMatchingFilterCount() >= setFilter.setNames.length;
   }
 }
