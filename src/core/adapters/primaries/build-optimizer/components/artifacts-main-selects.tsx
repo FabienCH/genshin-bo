@@ -4,7 +4,7 @@ import FormSelect from '../../shared/form-select';
 import { CircletMainStatType, circletMainStats } from '../../../../domain/models/circlet-artifact-data';
 import { SandsMainStatType, sandsMainStats } from '../../../../domain/models/sands-artifact-data';
 import { gobletMainStats, GobletMainStatType } from '../../../../domain/models/goblet-artifact-data';
-import { ArtifactsMainStats } from '../containers/build-optimizer-container';
+import { ArtifactsMainStats } from '../../../../domain/models/main-statistics';
 
 const styles = createStyles({
   mainStatDiv: {

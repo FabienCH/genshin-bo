@@ -7,10 +7,7 @@ import ArtifactsForm from '../components/artifacts-form';
 import { ExistingCharacters } from '../../../../domain/models/character';
 import { Levels } from '../../../../domain/models/levels';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
-import { CircletMainStatType } from '../../../../domain/models/circlet-artifact-data';
-import { GobletMainStatType } from '../../../../domain/models/goblet-artifact-data';
-import { SandsMainStatType } from '../../../../domain/models/sands-artifact-data';
+import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
 import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import BuildFiltersForm from '../components/build-filters-form';
 import { BuildOptimizerDI } from '../../../../di/build-optimizer-di';
@@ -32,12 +29,6 @@ const styles = createStyles({
 interface BuildOptimizerProps extends WithStyles<typeof styles> {
   builds: Build[];
 }
-
-export type ArtifactsMainStats = {
-  sandsMain?: SandsMainStatType;
-  gobletMain?: GobletMainStatType;
-  circletMain?: CircletMainStatType;
-};
 
 type State = {
   charactersNames: ExistingCharacters[];

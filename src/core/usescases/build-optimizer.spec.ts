@@ -13,8 +13,7 @@ import {
   multipleArtifactsBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/containers/build-optimizer-container';
-import { ArtifactStatsTypes } from '../domain/models/main-statistics';
+import { ArtifactsMainStats, ArtifactStatsTypes } from '../domain/models/main-statistics';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { selectAllBuilds } from '../adapters/redux/builds/builds-selectors';
 
