@@ -1,13 +1,13 @@
 import { ReactElement, useRef } from 'react';
 import { Container, createStyles, WithStyles, withStyles } from '@material-ui/core';
-import { CharacterStatsValues } from '../../../domain/models/character-statistics';
+import { CharacterStatsValues } from '../../../../domain/models/character-statistics';
 import { AgGridColumn } from 'ag-grid-react/lib/agGridColumn';
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
 import { ColDef, GridApi, GridReadyEvent, RowNode } from 'ag-grid-community';
-import { BuildFilter } from '../../../domain/build-filter';
+import { BuildFilter } from '../../../../domain/build-filter';
 import { BuildArtifactsCellRenderer } from './build-artifacts-cell-renderer';
-import { Build } from '../../../domain/models/build';
-import { ArtifactData } from '../../../domain/models/artifact-data';
+import { Build } from '../../../../domain/models/build';
+import { ArtifactData } from '../../../../domain/models/artifact-data';
 
 const styles = createStyles({
   gridHeader: {

@@ -1,6 +1,6 @@
 import { ChangeEvent, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { SetNames } from '../../../domain/models/sets-with-effects';
+import { SetNames } from '../../../../domain/models/sets-with-effects';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';

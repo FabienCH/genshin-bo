@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { selectArtifactById } from '../../redux/artifacts/artifacts-selectors';
+import { selectArtifactById } from '../../../redux/artifacts/artifacts-selectors';
 import { ICellRendererParams } from 'ag-grid-community';
 import React from 'react';
-import { ArtifactData } from '../../../domain/models/artifact-data';
+import { ArtifactData } from '../../../../domain/models/artifact-data';
 
 type BuildArtifactsCellProps = ICellRendererParams;
 

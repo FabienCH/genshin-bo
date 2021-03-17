@@ -1,7 +1,7 @@
 import { createStyles, withStyles, WithStyles, Box, Container } from '@material-ui/core';
-import { Levels } from '../../../domain/models/levels';
-import { ExistingCharacters } from '../../../domain/models/character';
-import FormSelect from '../shared/form-select';
+import { Levels } from '../../../../domain/models/levels';
+import { ExistingCharacters } from '../../../../domain/models/character';
+import FormSelect from '../../shared/form-select';
 import { ReactElement } from 'react';
 
 const styles = createStyles({

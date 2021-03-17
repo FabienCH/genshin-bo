@@ -1,4 +1,4 @@
-import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
+import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/containers/build-optimizer-container';
 import { loadArtifacts } from '../adapters/redux/artifacts/artifacts-middleware';
 import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';

@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import FormSelect from '../shared/form-select';
-import { CircletMainStatType, circletMainStats } from '../../../domain/models/circlet-artifact-data';
-import { SandsMainStatType, sandsMainStats } from '../../../domain/models/sands-artifact-data';
-import { gobletMainStats, GobletMainStatType } from '../../../domain/models/goblet-artifact-data';
-import { ArtifactsMainStats } from './build-optimizer-container';
+import FormSelect from '../../shared/form-select';
+import { CircletMainStatType, circletMainStats } from '../../../../domain/models/circlet-artifact-data';
+import { SandsMainStatType, sandsMainStats } from '../../../../domain/models/sands-artifact-data';
+import { gobletMainStats, GobletMainStatType } from '../../../../domain/models/goblet-artifact-data';
+import { ArtifactsMainStats } from '../containers/build-optimizer-container';
 
 const styles = createStyles({
   mainStatDiv: {

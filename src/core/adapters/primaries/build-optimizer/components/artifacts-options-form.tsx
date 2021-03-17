@@ -14,9 +14,9 @@ import {
   Box,
 } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
-import { artifactStats, ArtifactStatsTypes } from '../../../domain/models/main-statistics';
-import { StringFormatter } from '../../../domain/mappers/string-formatter';
-import FormSelect from '../shared/form-select';
+import { artifactStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
+import { StringFormatter } from '../../../../domain/mappers/string-formatter';
+import FormSelect from '../../shared/form-select';
 import HelpIcon from '@material-ui/icons/Help';
 
 const styles = createStyles({

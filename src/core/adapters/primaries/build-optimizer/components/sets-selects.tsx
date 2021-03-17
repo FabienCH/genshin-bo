@@ -1,6 +1,6 @@
 import { Fragment, ReactElement } from 'react';
-import { SetNames } from '../../../domain/models/sets-with-effects';
-import FormSelect from '../shared/form-select';
+import { SetNames } from '../../../../domain/models/sets-with-effects';
+import FormSelect from '../../shared/form-select';
 
 interface SetsSelectsProps {
   currentSets: { [index: number]: SetNames };

@@ -1,8 +1,8 @@
 import { Fragment, ReactElement } from 'react';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 import Popover from '@material-ui/core/Popover';
-import { ArtifactView } from '../../../domain/models/artifact-view';
-import { StringFormatter } from '../../../domain/mappers/string-formatter';
+import { ArtifactView } from '../../../../domain/models/artifact-view';
+import { StringFormatter } from '../../../../domain/mappers/string-formatter';
 
 const styles = ({ palette }: Theme) =>
   createStyles({

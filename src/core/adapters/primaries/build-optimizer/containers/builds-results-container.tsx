@@ -1,15 +1,15 @@
 import { Fragment, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
+import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import InfoIcon from '@material-ui/icons/Info';
-import BuildsResultsGrid from './builds-results-grid';
-import { Build } from '../../../domain/models/build';
+import BuildsResultsGrid from '../components/builds-results-grid';
+import { Build } from '../../../../domain/models/build';
 import { ColDef } from 'ag-grid-community';
-import ArtifactPopover from './artifact-popover';
+import ArtifactPopover from '../components/artifact-popover';
 import React from 'react';
-import { ArtifactMapper } from '../../../domain/mappers/artifact-mapper';
-import { ArtifactData } from '../../../domain/models/artifact-data';
-import { ArtifactView } from '../../../domain/models/artifact-view';
+import { ArtifactMapper } from '../../../../domain/mappers/artifact-mapper';
+import { ArtifactData } from '../../../../domain/models/artifact-data';
+import { ArtifactView } from '../../../../domain/models/artifact-view';
 
 const styles = createStyles({
   infoIcon: {

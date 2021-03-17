@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { ArtifactStatsTypes } from '../../../domain/models/main-statistics';
+import { ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
 import ArtifactsMainSelects from './artifacts-main-selects';
 import ArtifactsOptionsForm from './artifacts-options-form';
-import { ArtifactsMainStats } from './build-optimizer-container';
+import { ArtifactsMainStats } from '../containers/build-optimizer-container';
 
 const styles = createStyles({
   container: {
