@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { Fragment, ReactElement } from 'react';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 import Popover from '@material-ui/core/Popover';
 import { ArtifactView } from '../../../domain/models/artifact-view';
@@ -24,7 +24,7 @@ const styles = ({ palette }: Theme) =>
   });
 
 interface ArtifactPopoverProps extends WithStyles<typeof styles> {
-  artifact: ArtifactView;
+  artifact: ArtifactView | null;
   anchorEl: SVGElement | null;
 }
 
@@ -34,34 +34,38 @@ function ArtifactPopover(props: ArtifactPopoverProps): ReactElement {
   const open = !!anchorEl;
 
   return (
-    <Popover
-      id="mouse-over-popover"
-      className={classes.popover}
-      open={open}
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      transformOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-      classes={{ paper: classes.popoverContent }}
-      disableRestoreFocus
-    >
-      {StringFormatter.upperCaseFirstChar(artifact.type)}
-      <br />
-      <span className={classes.mainStat}>{artifact.mainStat}</span>
-      <br />+ {artifact.level} <br />
-      <ul className={classes.subStats}>
-        <li>{artifact.subStat1}</li>
-        <li>{artifact.subStat2}</li>
-        <li>{artifact.subStat3}</li>
-        <li>{artifact.subStat4}</li>
-      </ul>
-      {artifact.set}
-    </Popover>
+    <Fragment>
+      {artifact ? (
+        <Popover
+          id="mouse-over-popover"
+          className={classes.popover}
+          open={open}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          classes={{ paper: classes.popoverContent }}
+          disableRestoreFocus
+        >
+          {StringFormatter.upperCaseFirstChar(artifact.type)}
+          <br />
+          <span className={classes.mainStat}>{artifact.mainStat}</span>
+          <br />+ {artifact.level} <br />
+          <ul className={classes.subStats}>
+            <li>{artifact.subStat1}</li>
+            <li>{artifact.subStat2}</li>
+            <li>{artifact.subStat3}</li>
+            <li>{artifact.subStat4}</li>
+          </ul>
+          {artifact.set}
+        </Popover>
+      ) : null}
+    </Fragment>
   );
 }
 

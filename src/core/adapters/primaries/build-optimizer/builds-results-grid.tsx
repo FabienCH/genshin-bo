@@ -7,6 +7,7 @@ import { ColDef, GridApi, GridReadyEvent, RowNode } from 'ag-grid-community';
 import { BuildFilter } from '../../../domain/build-filter';
 import { BuildArtifactsCellRenderer } from './build-artifacts-cell-renderer';
 import { Build } from '../../../domain/models/build';
+import { ArtifactData } from '../../../domain/models/artifact-data';
 
 const styles = createStyles({
   gridHeader: {
@@ -21,10 +22,12 @@ interface BuildsResultsGridProps extends WithStyles<typeof styles> {
   builds: Build[];
   buildFilters: Partial<CharacterStatsValues>;
   columnDefs: ColDef[];
+  onMouseEnterArtifact: (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  onMouseLeaveArtifact: () => void;
 }
 
 function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
-  const { builds, columnDefs, classes } = props;
+  const { builds, columnDefs, classes, onMouseEnterArtifact, onMouseLeaveArtifact } = props;
   const gridApi = useRef<GridApi | undefined>();
   const refBuildFilters = useRef<Partial<CharacterStatsValues>>(props.buildFilters);
 
@@ -56,6 +59,7 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
   };
 
   const doesExternalFilterPass = (node: RowNode) => BuildFilter.filterBuilds(refBuildFilters.current, node.data);
+
   return (
     <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
       <AgGridReact
@@ -64,6 +68,10 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
         defaultColDef={defaultColDef}
         frameworkComponents={{
           buildArtifactsCellRenderer: BuildArtifactsCellRenderer,
+        }}
+        context={{
+          onMouseEnterArtifact,
+          onMouseLeaveArtifact,
         }}
         onGridReady={onGridReady}
         onGridColumnsChanged={externalFilterChanged}

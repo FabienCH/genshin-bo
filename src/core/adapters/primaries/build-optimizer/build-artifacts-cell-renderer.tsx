@@ -3,9 +3,6 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import { selectArtifactById } from '../../redux/artifacts/artifacts-selectors';
 import { ICellRendererParams } from 'ag-grid-community';
 import React from 'react';
-import ArtifactPopover from './artifact-popover';
-import { ArtifactView } from '../../../domain/models/artifact-view';
-import { ArtifactMapper } from '../../../domain/mappers/artifact-mapper';
 import { ArtifactData } from '../../../domain/models/artifact-data';
 
 type BuildArtifactsCellProps = ICellRendererParams;
@@ -41,17 +38,13 @@ export function BuildArtifactsCellRenderer(props: BuildArtifactsCellProps): Reac
       viewBox: '0 0 640 512',
     },
   };
-  const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
-  const [currentArtifact, setCurrentArtifact] = React.useState<ArtifactView | null>(null);
 
   const handlePopoverOpen = (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
-    setAnchorEl(event.currentTarget);
-    setCurrentArtifact(ArtifactMapper.mapDataToView(artifactData));
+    props.context.onMouseEnterArtifact(artifactData, event);
   };
 
   const handlePopoverClose = () => {
-    setAnchorEl(null);
-    setCurrentArtifact(null);
+    props.context.onMouseLeaveArtifact();
   };
 
   return (
@@ -79,7 +72,6 @@ export function BuildArtifactsCellRenderer(props: BuildArtifactsCellProps): Reac
             </SvgIcon>
           ) : null,
         )}
-      {currentArtifact ? <ArtifactPopover artifact={currentArtifact} anchorEl={anchorEl}></ArtifactPopover> : null}
     </div>
   );
 }

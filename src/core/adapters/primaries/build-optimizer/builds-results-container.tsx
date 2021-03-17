@@ -5,6 +5,11 @@ import InfoIcon from '@material-ui/icons/Info';
 import BuildsResultsGrid from './builds-results-grid';
 import { Build } from '../../../domain/models/build';
 import { ColDef } from 'ag-grid-community';
+import ArtifactPopover from './artifact-popover';
+import React from 'react';
+import { ArtifactMapper } from '../../../domain/mappers/artifact-mapper';
+import { ArtifactData } from '../../../domain/models/artifact-data';
+import { ArtifactView } from '../../../domain/models/artifact-view';
 
 const styles = createStyles({
   infoIcon: {
@@ -25,6 +30,19 @@ interface BuildsResultsContainerProps extends WithStyles<typeof styles> {
 
 function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElement {
   const { builds, buildFilters, classes } = props;
+
+  const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
+  const [currentArtifact, setCurrentArtifact] = React.useState<ArtifactView | null>(null);
+
+  const handlePopoverOpen = (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentArtifact(ArtifactMapper.mapDataToView(artifactData));
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setCurrentArtifact(null);
+  };
 
   let columnDefs: ColDef[] = [
     {
@@ -80,8 +98,15 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
           <br />
           Only statistics are calculated for now, so 4 pieces set effects are ignored.
         </p>
-        <BuildsResultsGrid builds={builds} buildFilters={buildFilters} columnDefs={columnDefs}></BuildsResultsGrid>
+        <BuildsResultsGrid
+          builds={builds}
+          buildFilters={buildFilters}
+          columnDefs={columnDefs}
+          onMouseEnterArtifact={handlePopoverOpen}
+          onMouseLeaveArtifact={handlePopoverClose}
+        ></BuildsResultsGrid>
       </Container>
+      <ArtifactPopover artifact={currentArtifact} anchorEl={anchorEl}></ArtifactPopover>
     </Fragment>
   );
 }
