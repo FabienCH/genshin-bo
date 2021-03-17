@@ -18,6 +18,7 @@ import { SetNames } from '../../../domain/models/sets-with-effects';
 import BuildsResultsContainer from './builds-results-container';
 import { connect } from 'react-redux';
 import { selectAllBuilds } from '../../redux/builds/builds-selectors';
+import { Build } from '../../../domain/models/build';
 
 const styles = createStyles({
   form: {
@@ -29,7 +30,7 @@ const styles = createStyles({
 });
 
 interface BuildOptimizerProps extends WithStyles<typeof styles> {
-  builds: CharacterStatsValues[];
+  builds: Build[];
 }
 
 export type ArtifactsMainStats = {

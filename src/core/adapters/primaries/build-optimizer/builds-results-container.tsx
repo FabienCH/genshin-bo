@@ -3,6 +3,8 @@ import { Container, createStyles, withStyles, WithStyles } from '@material-ui/co
 import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
 import InfoIcon from '@material-ui/icons/Info';
 import BuildsResultsGrid from './builds-results-grid';
+import { Build } from '../../../domain/models/build';
+import { ColDef } from 'ag-grid-community';
 
 const styles = createStyles({
   infoIcon: {
@@ -17,14 +19,21 @@ const styles = createStyles({
 });
 
 interface BuildsResultsContainerProps extends WithStyles<typeof styles> {
-  builds: CharacterStatsValues[];
+  builds: Build[];
   buildFilters: Partial<CharacterStatsValues>;
 }
 
 function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElement {
   const { builds, buildFilters, classes } = props;
 
-  let columnDefs = [
+  let columnDefs: ColDef[] = [
+    {
+      field: 'artifactIds',
+      headerName: 'Artifacts',
+      cellRenderer: 'buildArtifactsCellRenderer',
+      width: 150,
+      minWidth: 140,
+    },
     {
       field: 'hp',
       width: 100,
