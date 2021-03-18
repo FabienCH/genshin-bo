@@ -2,6 +2,7 @@ import { SetStats } from './set-statistics';
 
 export enum SetNames {
   gladiatorsFinale = 'gladiatorsFinale',
+  noblesseOblige = 'noblesseOblige',
   wanderersTroupe = 'wanderersTroupe',
   maidenBeloved = 'maidenBeloved',
   retracingBolide = 'retracingBolide',
