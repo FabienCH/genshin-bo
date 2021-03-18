@@ -33,6 +33,8 @@ import { zhongli } from './characters-stats/zhongli';
 import { Levels } from '../../domain/models/levels';
 import { InMemoryWeaponsRepository } from './in-memory-weapons-repository';
 import { CharacterStats, CharacterStatsPerLevel } from '../../domain/models/character-statistics';
+import { xiao } from './characters-stats/xiao';
+import { huTao } from './characters-stats/hu-tao';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly weaponsRepository: InMemoryWeaponsRepository;
@@ -52,6 +54,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       diona,
       fischl,
       ganyu,
+      huTao,
       jean,
       kaeya,
       keqing,
@@ -67,6 +70,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       traveler,
       venti,
       xiangling,
+      xiao,
       xingqiu,
       xinyan,
       zhongli,
