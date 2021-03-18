@@ -1,23 +1,21 @@
 import { Component, ReactElement } from 'react';
-import { CharactersDI } from '../../../di/characters-di';
-import { WeaponsDI } from '../../../di/weapons-di';
-import CharacterForm from './character-form';
-import SetsForm from './sets-form';
-import ArtifactsForm from './artifacts-form';
-import { ExistingCharacters } from '../../../domain/models/character';
-import { Levels } from '../../../domain/models/levels';
+import { CharactersDI } from '../../../../di/characters-di';
+import { WeaponsDI } from '../../../../di/weapons-di';
+import CharacterForm from '../components/character-form';
+import SetsForm from '../components/sets-form';
+import ArtifactsForm from '../components/artifacts-form';
+import { ExistingCharacters } from '../../../../domain/models/character';
+import { Levels } from '../../../../domain/models/levels';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { ArtifactStatsTypes } from '../../../domain/models/main-statistics';
-import { CircletMainStatType } from '../../../domain/models/circlet-artifact-data';
-import { GobletMainStatType } from '../../../domain/models/goblet-artifact-data';
-import { SandsMainStatType } from '../../../domain/models/sands-artifact-data';
-import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
-import BuildFiltersForm from './build-filters-form';
-import { BuildOptimizerDI } from '../../../di/build-optimizer-di';
-import { SetNames } from '../../../domain/models/sets-with-effects';
+import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
+import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
+import BuildFiltersForm from '../components/build-filters-form';
+import { BuildOptimizerDI } from '../../../../di/build-optimizer-di';
+import { SetNames } from '../../../../domain/models/sets-with-effects';
 import BuildsResultsContainer from './builds-results-container';
 import { connect } from 'react-redux';
-import { selectAllBuilds } from '../../redux/builds/builds-selectors';
+import { Build } from '../../../../domain/models/build';
+import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
 
 const styles = createStyles({
   form: {
@@ -29,14 +27,8 @@ const styles = createStyles({
 });
 
 interface BuildOptimizerProps extends WithStyles<typeof styles> {
-  builds: CharacterStatsValues[];
+  builds: Build[];
 }
-
-export type ArtifactsMainStats = {
-  sandsMain?: SandsMainStatType;
-  gobletMain?: GobletMainStatType;
-  circletMain?: CircletMainStatType;
-};
 
 type State = {
   charactersNames: ExistingCharacters[];

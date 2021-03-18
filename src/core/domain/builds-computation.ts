@@ -4,17 +4,19 @@ import { BuildFilter, SetFilter } from './build-filter';
 import { Artifact } from './entities/artifact';
 import { CharacterStatsValues } from './models/character-statistics';
 import { MainStatsValues } from './models/main-statistics';
+import { Build } from './models/build';
+import { v4 as uuidv4 } from 'uuid';
 
 export class BuildsComputation {
   private statsComputation: StatsComputation;
-  private buildsSub: BehaviorSubject<CharacterStatsValues[]> = new BehaviorSubject<CharacterStatsValues[]>([]);
-  private builds!: CharacterStatsValues[];
+  private buildsSub: BehaviorSubject<Build[]> = new BehaviorSubject<Build[]>([]);
+  private builds!: Build[];
   private allArtifacts!: Artifact[][];
   private baseStats!: CharacterStatsValues;
   private characterBonusStat!: MainStatsValues;
   private setFilter!: SetFilter;
   private statsFilter!: Partial<CharacterStatsValues>;
-  private artifactsPerBuilds!: number;
+  private artifactsPerBuild!: number;
 
   constructor() {
     this.statsComputation = new StatsComputation();
@@ -32,13 +34,13 @@ export class BuildsComputation {
     this.setFilter = setFilter;
     this.statsFilter = statsFilter;
     this.builds = [];
-    this.artifactsPerBuilds = allArtifacts.length - 1;
+    this.artifactsPerBuild = allArtifacts.length - 1;
 
     this.iterateOverAllBuilds([], 0);
     this.emitBuildsSub();
   }
 
-  public getBuilds(): Observable<CharacterStatsValues[]> {
+  public getBuilds(): Observable<Build[]> {
     return from(this.buildsSub);
   }
 
@@ -46,7 +48,7 @@ export class BuildsComputation {
     this.allArtifacts[i].forEach((artifact: Artifact) => {
       const artifactsToCompute = [...artifacts];
       artifactsToCompute.push(artifact);
-      if (i === this.artifactsPerBuilds) {
+      if (i === this.artifactsPerBuild) {
         if (BuildFilter.setFilterMatch(this.setFilter, artifactsToCompute)) {
           this.computeBuildStats(artifactsToCompute);
         }
@@ -60,7 +62,8 @@ export class BuildsComputation {
   private computeBuildStats(artifactsToCompute: Artifact[]) {
     const buildStats = this.statsComputation.computeStats({ ...this.baseStats }, this.characterBonusStat, artifactsToCompute);
     if (BuildFilter.filterBuilds(this.statsFilter, buildStats)) {
-      this.builds.push(buildStats);
+      const artifactIds = artifactsToCompute.map((artifact) => artifact.id);
+      this.builds.push({ id: uuidv4(), stats: buildStats, artifactIds });
       if (this.builds.length > 10) {
         this.emitBuildsSub();
       }

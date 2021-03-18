@@ -1,6 +1,7 @@
 import { SetFilter } from '../build-filter';
 import { BuildsComputation } from '../builds-computation';
 import { Artifact } from '../entities/artifact';
+import { Build } from '../models/build';
 import { CharacterStatsValues } from '../models/character-statistics';
 import { MainStatsValues } from '../models/main-statistics';
 
@@ -13,7 +14,7 @@ export type BcMessage = {
 };
 
 export interface BcWorker {
-  onmessage: ((this: Worker, ev: MessageEvent<{ builds: CharacterStatsValues[] }>) => any) | null;
+  onmessage: ((this: Worker, ev: MessageEvent<{ builds: Build[] }>) => any) | null;
   postMessage(message: BcMessage, options?: PostMessageOptions | undefined): void;
 }
 

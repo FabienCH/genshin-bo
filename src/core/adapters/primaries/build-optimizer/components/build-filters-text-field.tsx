@@ -1,7 +1,7 @@
 import { ChangeEvent, ReactElement } from 'react';
 import { createStyles, TextField, withStyles, WithStyles } from '@material-ui/core';
-import { StringFormatter } from '../../../domain/mappers/string-formatter';
-import { CharacterStatTypes } from '../../../domain/models/character-statistics';
+import { StringFormatter } from '../../../../domain/mappers/string-formatter';
+import { CharacterStatTypes } from '../../../../domain/models/character-statistics';
 
 const styles = createStyles({
   textField: {

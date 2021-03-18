@@ -1,3 +1,6 @@
+import { CircletMainStatType } from './circlet-artifact-data';
+import { GobletMainStatType } from './goblet-artifact-data';
+import { SandsMainStatType } from './sands-artifact-data';
 import { SubStatTypes, SubStatsValues, SubStats } from './sub-statistics';
 
 export enum MainStats {
@@ -33,3 +36,9 @@ export type ArtifactStatsValues = MainStatsValues & SubStatsValues;
 
 export type ArtifactStatsTypes = MainStatTypes | SubStatTypes;
 export const artifactStats: ArtifactStatsTypes[] = [...new Set([...Object.values(MainStats), ...Object.values(SubStats)])];
+
+export type ArtifactsMainStats = {
+  sandsMain?: SandsMainStatType;
+  gobletMain?: GobletMainStatType;
+  circletMain?: CircletMainStatType;
+};

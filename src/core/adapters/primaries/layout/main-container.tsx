@@ -1,6 +1,6 @@
 import { Fragment, ReactElement } from 'react';
 import ArtifactsContainer from '../artifacts/artifacts-container';
-import BuildOptimizerContainer from '../build-optimizer/build-optimizer-container';
+import BuildOptimizerContainer from '../build-optimizer/containers/build-optimizer-container';
 import TabPanel from './tab-panel';
 
 interface MainContainerProps {

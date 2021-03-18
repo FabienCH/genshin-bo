@@ -1,8 +1,15 @@
 import { Fragment, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
+import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import InfoIcon from '@material-ui/icons/Info';
-import BuildsResultsGrid from './builds-results-grid';
+import BuildsResultsGrid from '../components/builds-results-grid';
+import { Build } from '../../../../domain/models/build';
+import { ColDef } from 'ag-grid-community';
+import ArtifactPopover from '../components/artifact-popover';
+import React from 'react';
+import { ArtifactMapper } from '../../../../domain/mappers/artifact-mapper';
+import { ArtifactData } from '../../../../domain/models/artifact-data';
+import { ArtifactView } from '../../../../domain/models/artifact-view';
 
 const styles = createStyles({
   infoIcon: {
@@ -17,14 +24,34 @@ const styles = createStyles({
 });
 
 interface BuildsResultsContainerProps extends WithStyles<typeof styles> {
-  builds: CharacterStatsValues[];
+  builds: Build[];
   buildFilters: Partial<CharacterStatsValues>;
 }
 
 function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElement {
   const { builds, buildFilters, classes } = props;
 
-  let columnDefs = [
+  const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
+  const [currentArtifact, setCurrentArtifact] = React.useState<ArtifactView | null>(null);
+
+  const handlePopoverOpen = (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentArtifact(ArtifactMapper.mapDataToView(artifactData));
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setCurrentArtifact(null);
+  };
+
+  let columnDefs: ColDef[] = [
+    {
+      field: 'artifactIds',
+      headerName: 'Artifacts',
+      cellRenderer: 'buildArtifactsCellRenderer',
+      width: 150,
+      minWidth: 140,
+    },
     {
       field: 'hp',
       width: 100,
@@ -71,8 +98,15 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
           <br />
           Only statistics are calculated for now, so 4 pieces set effects are ignored.
         </p>
-        <BuildsResultsGrid builds={builds} buildFilters={buildFilters} columnDefs={columnDefs}></BuildsResultsGrid>
+        <BuildsResultsGrid
+          builds={builds}
+          buildFilters={buildFilters}
+          columnDefs={columnDefs}
+          onMouseEnterArtifact={handlePopoverOpen}
+          onMouseLeaveArtifact={handlePopoverClose}
+        ></BuildsResultsGrid>
       </Container>
+      <ArtifactPopover artifact={currentArtifact} anchorEl={anchorEl}></ArtifactPopover>
     </Fragment>
   );
 }

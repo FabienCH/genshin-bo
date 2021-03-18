@@ -1,7 +1,7 @@
 import { ChangeEvent, Fragment, ReactElement } from 'react';
 import { Box, Button, Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../domain/models/character-statistics';
-import FormSelect from '../shared/form-select';
+import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
+import FormSelect from '../../shared/form-select';
 import BuildFiltersTextFieldProps from './build-filters-text-field';
 
 const styles = createStyles({

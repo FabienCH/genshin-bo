@@ -1,20 +1,20 @@
-import { CharactersHandler } from '../../../usescases/characters-handler';
-import { WeaponsHandler } from '../../../usescases/weapons-handler';
-import { InMemoryCharactersRepository } from '../../secondaries/in-memory-characters-repository';
-import { InMemoryWeaponsRepository } from '../../secondaries/in-memory-weapons-repository';
+import { CharactersHandler } from '../../../../usescases/characters-handler';
+import { WeaponsHandler } from '../../../../usescases/weapons-handler';
+import { InMemoryCharactersRepository } from '../../../secondaries/in-memory-characters-repository';
+import { InMemoryWeaponsRepository } from '../../../secondaries/in-memory-weapons-repository';
 import BuildOptimizerContainer from './build-optimizer-container';
-import FormSelect from '../shared/form-select';
+import FormSelect from '../../shared/form-select';
 import { mount, ReactWrapper } from 'enzyme';
-import { ExistingCharacters } from '../../../domain/models/character';
-import SetsForm from './sets-form';
-import ArtifactsForm from './artifacts-form';
+import { ExistingCharacters } from '../../../../domain/models/character';
+import SetsForm from '../components/sets-form';
+import ArtifactsForm from '../components/artifacts-form';
 import { Button, Chip } from '@material-ui/core';
-import BuildFiltersForm from './build-filters-form';
-import BuildsResultsGrid from './builds-results-grid';
+import BuildFiltersForm from '../components/build-filters-form';
+import BuildsResultsGrid from '../components/builds-results-grid';
 import { waitFor } from '@testing-library/react';
 import { AgGridReact } from 'ag-grid-react';
-import { ArtifactsDI } from '../../../di/artifacts-di';
-import { appStore } from '../../redux/store';
+import { ArtifactsDI } from '../../../../di/artifacts-di';
+import { appStore } from '../../../redux/store';
 import { Provider } from 'react-redux';
 
 describe('Build Optimizer container', () => {

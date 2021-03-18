@@ -1,4 +1,3 @@
-import { ArtifactsMainStats } from '../adapters/primaries/build-optimizer/build-optimizer-container';
 import { loadArtifacts } from '../adapters/redux/artifacts/artifacts-middleware';
 import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
@@ -6,7 +5,7 @@ import { Artifact } from '../domain/entities/artifact';
 import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { Character } from '../domain/models/character';
 import { CharacterStatsValues } from '../domain/models/character-statistics';
-import { ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
+import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsFilter } from './artifacts-filter';
 import { StatsComputation } from '../domain/stats-computation';
