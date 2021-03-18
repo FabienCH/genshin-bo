@@ -39,11 +39,6 @@ export type CharacterStatTypes = keyof typeof CharacterStats;
 
 export type CharacterStatsValues = CharacterStatsPerLevel & Partial<{ [key in CharacterStats]: number }>;
 
-export const characterStatsValues: CharacterStatsValues = Object.values(CharacterStats).reduce((characterStats, characterStat) => {
-  characterStats = { ...characterStats, [characterStat]: 0 };
-  return characterStats;
-}, {} as CharacterStatsValues);
-
 export const allBuildStats = { ...CharacterStats, ...MainStats, ...SubStats, ...SetStats };
 
 export type AllBuildStatTypes = keyof typeof allBuildStats;

@@ -32,7 +32,13 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
   const refBuildFilters = useRef<Partial<CharacterStatsValues>>(props.buildFilters);
 
   const rowData = builds.map((build) => ({ ...build.stats, artifactIds: build.artifactIds }));
-  const defaultColDef = { resizable: true, sortable: true, cellStyle: { padding: '0 10px' }, headerClass: classes.gridHeader };
+  const defaultColDef: ColDef = {
+    resizable: true,
+    sortable: true,
+    cellStyle: { padding: '0 10px' },
+    headerClass: classes.gridHeader,
+    valueFormatter: (params) => (params.value != null ? params.value : 0),
+  };
 
   refBuildFilters.current = props.buildFilters;
 
