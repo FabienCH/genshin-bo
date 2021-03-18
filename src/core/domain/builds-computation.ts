@@ -5,6 +5,7 @@ import { Artifact } from './entities/artifact';
 import { CharacterStatsValues } from './models/character-statistics';
 import { MainStatsValues } from './models/main-statistics';
 import { Build } from './models/build';
+import { v4 as uuidv4 } from 'uuid';
 
 export class BuildsComputation {
   private statsComputation: StatsComputation;
@@ -62,7 +63,7 @@ export class BuildsComputation {
     const buildStats = this.statsComputation.computeStats({ ...this.baseStats }, this.characterBonusStat, artifactsToCompute);
     if (BuildFilter.filterBuilds(this.statsFilter, buildStats)) {
       const artifactIds = artifactsToCompute.map((artifact) => artifact.id);
-      this.builds.push({ id: '', stats: buildStats, artifactIds });
+      this.builds.push({ id: uuidv4(), stats: buildStats, artifactIds });
       if (this.builds.length > 10) {
         this.emitBuildsSub();
       }
