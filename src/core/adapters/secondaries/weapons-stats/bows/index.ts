@@ -3,6 +3,7 @@ import { amosBow } from './amos-bow';
 import { blackcliffWarbow } from './blackcliff-warbow';
 import { compoundBow } from './compound-bow';
 import { ebonyBow } from './ebony-bow';
+import { elegyfortheEnd } from './elegy-for-the-end';
 import { favoniusWarbow } from './favonius-warbow';
 import { messenger } from './messenger';
 import { prototypeCrescent } from './prototype-crescent';
@@ -36,4 +37,5 @@ export const allBows = [
   messenger,
   recurveBow,
   amosBow,
+  elegyfortheEnd,
 ];
