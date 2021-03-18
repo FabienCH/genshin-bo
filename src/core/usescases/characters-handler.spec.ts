@@ -8,6 +8,7 @@ import { diluc } from '../adapters/secondaries/characters-stats/diluc';
 import { diona } from '../adapters/secondaries/characters-stats/diona';
 import { fischl } from '../adapters/secondaries/characters-stats/fischl';
 import { ganyu } from '../adapters/secondaries/characters-stats/ganyu';
+import { huTao } from '../adapters/secondaries/characters-stats/hu-tao';
 import { jean } from '../adapters/secondaries/characters-stats/jean';
 import { kaeya } from '../adapters/secondaries/characters-stats/kaeya';
 import { keqing } from '../adapters/secondaries/characters-stats/keqing';
@@ -23,6 +24,7 @@ import { tartaglia } from '../adapters/secondaries/characters-stats/tartaglia';
 import { traveler } from '../adapters/secondaries/characters-stats/traveler';
 import { venti } from '../adapters/secondaries/characters-stats/venti';
 import { xiangling } from '../adapters/secondaries/characters-stats/xiangling';
+import { xiao } from '../adapters/secondaries/characters-stats/xiao';
 import { xingqiu } from '../adapters/secondaries/characters-stats/xingqiu';
 import { xinyan } from '../adapters/secondaries/characters-stats/xinyan';
 import { zhongli } from '../adapters/secondaries/characters-stats/zhongli';
@@ -42,6 +44,7 @@ describe('CharactersHandler.getCharactersNames', () => {
     diona,
     fischl,
     ganyu,
+    huTao,
     jean,
     kaeya,
     keqing,
@@ -57,6 +60,7 @@ describe('CharactersHandler.getCharactersNames', () => {
     traveler,
     venti,
     xiangling,
+    xiao,
     xingqiu,
     xinyan,
     zhongli,

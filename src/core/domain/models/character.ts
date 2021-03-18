@@ -13,6 +13,7 @@ export type ExistingCharacters =
   | 'diona'
   | 'fischl'
   | 'ganyu'
+  | 'huTao'
   | 'jean'
   | 'kaeya'
   | 'keqing'
@@ -28,6 +29,7 @@ export type ExistingCharacters =
   | 'traveler'
   | 'venti'
   | 'xiangling'
+  | 'xiao'
   | 'xingqiu'
   | 'xinyan'
   | 'zhongli';

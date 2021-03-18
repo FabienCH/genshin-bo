@@ -8,6 +8,7 @@ import { filletBlade } from './fillet-blade';
 import { harbingerofDawn } from './harbinger-of-dawn';
 import { ironSting } from './iron-sting';
 import { lionsRoar } from './lions-roar';
+import { primordialJadeCutter } from './primordial-jade-cutter';
 import { prototypeRancour } from './prototype-rancour';
 import { royalLongsword } from './royal-longsword';
 import { sacrificialSword } from './sacrificial-sword';
@@ -42,4 +43,5 @@ export const allSwords = [
   harbingerofDawn,
   darkIronSword,
   coolSteel,
+  primordialJadeCutter,
 ];

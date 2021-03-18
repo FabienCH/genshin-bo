@@ -11,6 +11,7 @@ import { primordialJadeWingedSpear } from './primordial-jade-winged-spear';
 import { prototypeStarglitter } from './prototype-starglitter';
 import { royalSpear } from './royal-spear';
 import { skywardSpine } from './skyward-spine';
+import { staffofHoma } from './staff-of-homa';
 import { vortexVanquisher } from './vortex-vanquisher';
 import { whiteTassel } from './white-tassel';
 
@@ -30,4 +31,5 @@ export const allPolearms = [
   halberd,
   whiteTassel,
   skywardSpine,
+  staffofHoma,
 ];
