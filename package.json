@@ -1,6 +1,6 @@
 {
-  "name": "typescript-jest-setup",
-  "version": "0.0.1",
+  "name": "genshin-builds-optimizer",
+  "version": "0.1.0",
   "description": "",
   "main": "src/react-app/index.tsx",
   "scripts": {

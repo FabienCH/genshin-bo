@@ -34,7 +34,7 @@ function GboHeader(props: HeaderProps): ReactElement {
       <img src={logo} alt="app logo" className={classes.logo} />
       <Tabs value={tabId} onChange={handleChange} aria-label="simple tabs example">
         <Tab className={classes.tab} label="Artifacts" />
-        <Tab className={classes.tab} label="Build Optimizer" />
+        <Tab className={classes.tab} label="Builds Optimizer" />
       </Tabs>
     </AppBar>
   );

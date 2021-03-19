@@ -10,12 +10,12 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
 import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import BuildFiltersForm from '../components/build-filters-form';
-import { BuildOptimizerDI } from '../../../../di/build-optimizer-di';
 import { SetNames } from '../../../../domain/models/sets-with-effects';
 import BuildsResultsContainer from './builds-results-container';
 import { connect } from 'react-redux';
 import { Build } from '../../../../domain/models/build';
 import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
+import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
 
 const styles = createStyles({
   form: {
@@ -26,7 +26,7 @@ const styles = createStyles({
   },
 });
 
-interface BuildOptimizerProps extends WithStyles<typeof styles> {
+interface BuildsOptimizerProps extends WithStyles<typeof styles> {
   builds: Build[];
 }
 
@@ -45,8 +45,8 @@ type State = {
   buildFilters: Partial<CharacterStatsValues>;
 };
 
-class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
-  constructor(props: BuildOptimizerProps) {
+class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
+  constructor(props: BuildsOptimizerProps) {
     super(props);
     this.state = {
       charactersNames: [],
@@ -188,7 +188,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
     const { name, level } = this.state.currentCharacter;
     const character = CharactersDI.charactersHandler.getCharacter(name, level, this.state.currentWeapon);
     const artifactsFilters = { ...this.state.artifactsFilters, currentSets: Object.values(this.state.artifactsFilters.currentSets) };
-    BuildOptimizerDI.getBuildOptimizer().computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
+    BuildsOptimizerDI.getBuildsOptimizer().computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
   }
 
   render(): ReactElement {
@@ -201,7 +201,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
 
     return (
       <section>
-        <h2>Build Optimizer</h2>
+        <h2>Builds Optimizer</h2>
         <h3>Build Setup</h3>
         <form className={classes.form}>
           <div className={classes.buildSetup}>
@@ -248,4 +248,4 @@ const mapStateToProps = () => {
   return { builds: selectAllBuilds() };
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(BuildOptimizerContainer));
+export default connect(mapStateToProps)(withStyles(styles)(BuildsOptimizerContainer));

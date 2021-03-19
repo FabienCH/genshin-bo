@@ -2,7 +2,7 @@ import { CharactersHandler } from '../../../../usescases/characters-handler';
 import { WeaponsHandler } from '../../../../usescases/weapons-handler';
 import { InMemoryCharactersRepository } from '../../../secondaries/in-memory-characters-repository';
 import { InMemoryWeaponsRepository } from '../../../secondaries/in-memory-weapons-repository';
-import BuildOptimizerContainer from './build-optimizer-container';
+import BuildsOptimizerContainer from './builds-optimizer-container';
 import FormSelect from '../../shared/form-select';
 import { mount, ReactWrapper } from 'enzyme';
 import { ExistingCharacters } from '../../../../domain/models/character';
@@ -17,7 +17,7 @@ import { ArtifactsDI } from '../../../../di/artifacts-di';
 import { appStore } from '../../../redux/store';
 import { Provider } from 'react-redux';
 
-describe('Build Optimizer container', () => {
+describe('Builds Optimizer container', () => {
   let wrapper: ReactWrapper;
   let charactersNames: ExistingCharacters[];
   let weaponsNames: string[];
@@ -26,7 +26,7 @@ describe('Build Optimizer container', () => {
     ArtifactsDI.registerRepository();
     wrapper = mount(
       <Provider store={appStore}>
-        <BuildOptimizerContainer />
+        <BuildsOptimizerContainer />
       </Provider>,
     );
 
