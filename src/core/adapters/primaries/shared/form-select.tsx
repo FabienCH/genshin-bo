@@ -37,7 +37,7 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
       </MenuItem>,
     );
   }
-  const value = selectedValue ? selectedValue : '-';
+  const value = selectedValue != null ? selectedValue : '-';
   const selectId = label.toLowerCase().replace(' ', '');
 
   return (

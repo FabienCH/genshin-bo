@@ -58,7 +58,7 @@ class BuildOptimizerContainer extends Component<BuildOptimizerProps, State> {
         setPieces: 2,
         mainsStats: {},
         focusStats: [],
-        minArtifactLevel: 1,
+        minArtifactLevel: 0,
       },
       buildFilters: {},
     };

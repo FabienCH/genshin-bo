@@ -69,7 +69,7 @@ interface ArtifactsOptionsFormProps extends WithStyles<typeof styles> {
 }
 
 function ArtifactsOptionsForm(props: ArtifactsOptionsFormProps): ReactElement {
-  const levels = Array.from(Array(20), (_, i) => i + 1);
+  const levels = Array.from(Array(21), (_, i) => i);
   const theme = useTheme();
   const { focusStats, minLevel, classes } = props;
 
