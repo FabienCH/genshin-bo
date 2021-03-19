@@ -5,6 +5,7 @@
   "coverageAnalysis": "off",
   "checkers": ["typescript"],
   "tsconfigFile": "tsconfig.json",
+  "tempDirName": "stryker-tmp",
   "mutate": [
     "src/**/*.ts",
     "!src/**/*.spec.ts",
