@@ -9,10 +9,10 @@ import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from '../doma
 import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsFilter } from './artifacts-filter';
 import { StatsComputation } from '../domain/stats-computation';
-import { runBuildOptimizer } from '../adapters/redux/builds/builds-middleware';
+import { runBuildsOptimizer } from '../adapters/redux/builds/builds-middleware';
 import { SetFilter } from '../domain/build-filter';
 
-export class BuildOptimizer {
+export class BuildsOptimizer {
   private allArtifacts!: Artifact[][];
 
   constructor() {
@@ -53,7 +53,7 @@ export class BuildOptimizer {
 
     const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(selectAllArtifacts());
     this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
-    appStore.dispatch(runBuildOptimizer(this.allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter));
+    appStore.dispatch(runBuildsOptimizer(this.allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter));
   }
 
   public getBuilds(): number {

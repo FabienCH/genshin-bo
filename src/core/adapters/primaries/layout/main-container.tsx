@@ -1,6 +1,6 @@
 import { Fragment, ReactElement } from 'react';
 import ArtifactsContainer from '../artifacts/artifacts-container';
-import BuildOptimizerContainer from '../build-optimizer/containers/build-optimizer-container';
+import BuildsOptimizerContainer from '../builds-optimizer/containers/builds-optimizer-container';
 import TabPanel from './tab-panel';
 
 interface MainContainerProps {
@@ -14,7 +14,7 @@ export const MainContainer = (props: MainContainerProps): ReactElement => {
         <ArtifactsContainer></ArtifactsContainer>
       </TabPanel>
       <TabPanel value={props.tabId} index={1}>
-        <BuildOptimizerContainer></BuildOptimizerContainer>
+        <BuildsOptimizerContainer></BuildsOptimizerContainer>
       </TabPanel>
     </Fragment>
   );
