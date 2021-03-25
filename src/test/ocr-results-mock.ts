@@ -1,0 +1,28 @@
+export const ocrResultsMock = [
+  [
+    "Conductor's Top Hat\n",
+    'Circlet of Logos\n\n',
+    'CRIT Rate\n\n',
+    '31.14\n\n',
+    '+20\n\n',
+    ' HP+508\n\n',
+    '. CRIT DMG+13.2%\n\n',
+    '. DEF+19.0%\n\n',
+    '. Energy Recharge+9.14\n',
+    "Wanderer's Troupe:\n",
+    '11 Equipped. Ningguang\n',
+  ],
+  [
+    "Gladiator's Nostalgia\n",
+    'Flower of Life\n\n',
+    'HP\n\n',
+    '3,967\n\n',
+    '+16\n\n',
+    '. CRIT DMG+14.0%\n\n',
+    '. DEF+32\n\n',
+    '. ATK+8.2%\n\n',
+    '. Elemental Mastery+42\n',
+    "Gladiator's Finale:\n",
+    '9 Equipped: Amber\n',
+  ],
+];
