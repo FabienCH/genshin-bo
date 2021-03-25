@@ -1,5 +1,6 @@
 import { ArtifactImageOcr } from '../domain/artifact-image-ocr';
 import { OcrData, VideoToFrames } from '../domain/video-to-frames.bck';
+import { Observable } from 'rxjs';
 
 export class ArtifactsImporter {
   private readonly artifactImageOcr: ArtifactImageOcr;
@@ -12,7 +13,11 @@ export class ArtifactsImporter {
     return await VideoToFrames.getFrames(video, 10);
   }
 
-  public async importFromImage(image: string): Promise<string[]> {
-    return await this.artifactImageOcr.getArtifactFromImage(image);
+  public importFromImages(images: string[]): void {
+    this.artifactImageOcr.runArtifactsOcrFromImages(images);
+  }
+
+  public getOcrResults(): Observable<string[][]> {
+    return this.artifactImageOcr.getOcrResults();
   }
 }

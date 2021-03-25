@@ -1,10 +1,12 @@
 import Jimp from 'jimp';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorker } from './worker/artifacts-ocr.worker-mock';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 
 export class ArtifactImageOcr {
   private lastImage!: Jimp;
   private ocrWorker: OcrWorker;
+  private ocrResultsSub: BehaviorSubject<string[][]> = new BehaviorSubject<string[][]>([]);
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
@@ -17,11 +19,19 @@ export class ArtifactImageOcr {
     this.ocrWorker = ArtifactsDI.getOcrWorker();
   }
 
-  public async getArtifactFromImage(image: string): Promise<string[]> {
-    return await this.getArtifactLines(image);
+  public runArtifactsOcrFromImages(images: string[]): void {
+    return images.forEach((image) =>
+      this.getArtifactOcrResults(image).then((ocrResults) => {
+        this.ocrResultsSub.next([...this.ocrResultsSub.value, ocrResults]);
+      }),
+    );
   }
 
-  private async getArtifactLines(image: string): Promise<string[]> {
+  public getOcrResults(): Observable<string[][]> {
+    return from(this.ocrResultsSub);
+  }
+
+  private async getArtifactOcrResults(image: string): Promise<string[]> {
     const jimpImage = await Jimp.create(image);
 
     if (!this.lastImage || Jimp.diff(jimpImage, this.lastImage).percent > 0.05) {

@@ -4,6 +4,9 @@ import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorker } from '../domain/worker/artifacts-ocr.worker-mock';
 import { ArtifactsImporter } from './artifacts-importer';
 import artifact0 from '../../test/artifact0.png';
+import artifact0bis from '../../test/artifact0bis.png';
+import artifact1 from '../../test/artifact1.png';
+import { skip } from 'rxjs/operators';
 
 fdescribe('ArtifactsImporter.importFromVideo', () => {
   let artifactsImporter: ArtifactsImporter;
@@ -14,11 +17,19 @@ fdescribe('ArtifactsImporter.importFromVideo', () => {
     ocrWorker = ArtifactsDI.getOcrWorker();
   });
 
-  it('should give lines contained in an artifact image from pd', async () => {
+  it('should give lines contained in each artifacts images', (done) => {
     const ocrWorkerSpy = jest.spyOn(ocrWorker, 'recognize');
-    const importResults = await artifactsImporter.importFromImage(artifact0);
 
-    expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
-    expect(importResults).toEqual(ocrResultsMock[0]);
+    artifactsImporter
+      .getOcrResults()
+      .pipe(skip(2))
+      .subscribe((ocrResults) => {
+        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
+        expect(ocrResults).toEqual(ocrResultsMock);
+        done();
+      });
+
+    artifactsImporter.importFromImages([artifact0, artifact1]);
   });
 });
