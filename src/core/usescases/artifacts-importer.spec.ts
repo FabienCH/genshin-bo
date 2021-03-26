@@ -11,15 +11,16 @@ import { skip } from 'rxjs/operators';
 fdescribe('ArtifactsImporter.importFromVideo', () => {
   let artifactsImporter: ArtifactsImporter;
   let ocrWorker: OcrWorker;
+  let ocrWorkerSpy: jest.SpyInstance;
+
   beforeEach(() => {
     ArtifactsDI.registerOcrWorker();
     artifactsImporter = ArtifactsDI.getArtifactsImporter();
     ocrWorker = ArtifactsDI.getOcrWorker();
+    ocrWorkerSpy = jest.spyOn(ocrWorker, 'recognize');
   });
 
   it('should give lines contained in each artifacts images', (done) => {
-    const ocrWorkerSpy = jest.spyOn(ocrWorker, 'recognize');
-
     artifactsImporter
       .getOcrResults()
       .pipe(skip(2))
@@ -31,5 +32,18 @@ fdescribe('ArtifactsImporter.importFromVideo', () => {
       });
 
     artifactsImporter.importFromImages([artifact0, artifact1]);
+  });
+
+  it('should give filter duplicated artifacts images', (done) => {
+    artifactsImporter
+      .getOcrResults()
+      .pipe(skip(1))
+      .subscribe((ocrResults) => {
+        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+        expect(ocrResults).toEqual([ocrResultsMock[0]]);
+        done();
+      });
+
+    artifactsImporter.importFromImages([artifact0, artifact0bis]);
   });
 });
