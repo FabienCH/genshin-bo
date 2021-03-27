@@ -15,6 +15,7 @@ class App extends Component<unknown, AppState> {
   constructor(props: unknown) {
     super(props);
     ArtifactsDI.registerRepository();
+    ArtifactsDI.registerOcrWorker();
     this.state = { tabId: 0 };
     this.handleTabChange = this.handleTabChange.bind(this);
   }

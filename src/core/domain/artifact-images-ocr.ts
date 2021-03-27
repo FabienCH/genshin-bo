@@ -23,8 +23,7 @@ export class ArtifactImagesOcr {
 
   public async runArtifactsOcrFromImages(images: string[]): Promise<void> {
     await this.ocrWorker.initialize('genshin');
-
-    this.runOcrSub.pipe(withLatestFrom(this.ocrResultsSub)).subscribe(async ([_, currentOcrResults]) => {
+    const subscription = this.runOcrSub.pipe(withLatestFrom(this.ocrResultsSub)).subscribe(async ([_, currentOcrResults]) => {
       if (images[0]) {
         const imageForOcr = await this.getImageForOcr(images[0]);
         if (imageForOcr.length) {
@@ -35,6 +34,7 @@ export class ArtifactImagesOcr {
         images.shift();
       } else {
         this.ocrWorker.terminate();
+        subscription.unsubscribe();
       }
     });
 
