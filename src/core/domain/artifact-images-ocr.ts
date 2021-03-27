@@ -1,12 +1,14 @@
 import Jimp from 'jimp';
 import { ArtifactsDI } from '../di/artifacts-di';
-import { OcrWorker } from './worker/artifacts-ocr.worker-mock';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { OcrWorkerHandler } from './artifact-ocr-worker-handler';
+import { Subject, Observable, from } from 'rxjs';
+import { withLatestFrom } from 'rxjs/operators';
 
-export class ArtifactImageOcr {
+export class ArtifactImagesOcr {
   private lastImage!: Jimp;
-  private ocrWorker: OcrWorker;
-  private ocrResultsSub: BehaviorSubject<string[][]> = new BehaviorSubject<string[][]>([]);
+  private ocrWorker: OcrWorkerHandler;
+  private ocrResultsSub: Subject<string[][]> = new Subject<string[][]>();
+  private runOcrSub: Subject<void> = new Subject<void>();
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
@@ -16,31 +18,51 @@ export class ArtifactImageOcr {
   private readonly bottomOverlay: Jimp = new Jimp(475, 230, '#ffffff');
 
   constructor() {
-    this.ocrWorker = ArtifactsDI.getOcrWorker();
+    this.ocrWorker = ArtifactsDI.getOcrWorkerHandler();
   }
 
-  public runArtifactsOcrFromImages(images: string[]): void {
-    return images.forEach((image) =>
-      this.getArtifactOcrResults(image).then((ocrResults) => {
-        this.ocrResultsSub.next([...this.ocrResultsSub.value, ocrResults]);
-      }),
-    );
+  public async runArtifactsOcrFromImages(images: string[]): Promise<void> {
+    await this.ocrWorker.initialize('genshin');
+
+    this.runOcrSub.pipe(withLatestFrom(this.ocrResultsSub)).subscribe(async ([_, currentOcrResults]) => {
+      if (images[0]) {
+        const imageForOcr = await this.getImageForOcr(images[0]);
+        if (imageForOcr.length) {
+          this.runOcrRecognize(imageForOcr, currentOcrResults);
+        } else {
+          this.runOcrSub.next();
+        }
+        images.shift();
+      } else {
+        this.ocrWorker.terminate();
+      }
+    });
+
+    this.ocrResultsSub.next([]);
+    this.runOcrSub.next();
   }
 
   public getOcrResults(): Observable<string[][]> {
     return from(this.ocrResultsSub);
   }
 
-  private async getArtifactOcrResults(image: string): Promise<string[]> {
+  private async getImageForOcr(image: string): Promise<Buffer> {
     const jimpImage = await Jimp.create(image);
 
-    if (!this.lastImage || Jimp.diff(jimpImage, this.lastImage).percent > 0.05) {
+    if (!this.lastImage || Jimp.diff(jimpImage, this.lastImage, 0.01).percent > 0.01) {
       this.lastImage = await Jimp.create(image);
       const framesForOcr = await this.transformForOcr(jimpImage);
 
-      return await this.ocrWorker.recognize(await framesForOcr.getBufferAsync(Jimp.MIME_PNG));
+      return await framesForOcr.getBufferAsync(Jimp.MIME_PNG);
     }
-    return await [];
+    return Buffer.from([]);
+  }
+
+  private runOcrRecognize(imageForOcr: Buffer, currentOcrResults: string[][]): void {
+    this.ocrWorker.recognize(imageForOcr).then((ocrResults) => {
+      this.ocrResultsSub.next([...currentOcrResults, ocrResults]);
+      this.runOcrSub.next();
+    });
   }
 
   private async transformForOcr(image: Jimp): Promise<Jimp> {

@@ -1,8 +1,8 @@
-import { OcrWorker } from '../core/domain/worker/artifacts-ocr.worker-mock';
+import { OcrWorkerHandler } from '../core/domain/artifact-ocr-worker-handler';
 import { ocrResultsMock } from './ocr-results-mock';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
-export class OcrWorkerMock implements OcrWorker {
+export class OcrWorkerHandlerMock implements OcrWorkerHandler {
   private mockImgId = 0;
   initialize(_: string): void {}
   recognize(_: Buffer): Promise<string[]> {

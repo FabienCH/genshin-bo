@@ -1,16 +1,17 @@
-import { ArtifactImageOcr } from '../domain/artifact-image-ocr';
-import { OcrData, VideoToFrames } from '../domain/video-to-frames.bck';
+import { ArtifactImagesOcr } from '../domain/artifact-images-ocr';
 import { Observable } from 'rxjs';
+import { VideoToFrames } from '../domain/mappers/video-to-frames';
 
 export class ArtifactsImporter {
-  private readonly artifactImageOcr: ArtifactImageOcr;
+  private readonly artifactImageOcr: ArtifactImagesOcr;
 
   constructor() {
-    this.artifactImageOcr = new ArtifactImageOcr();
+    this.artifactImageOcr = new ArtifactImagesOcr();
   }
 
-  public async importFromVideo(video: File): Promise<OcrData> {
-    return await VideoToFrames.getFrames(video, 10);
+  public async importFromVideo(video: File): Promise<void> {
+    const frames = await VideoToFrames.getFrames(video, 10);
+    this.artifactImageOcr.runArtifactsOcrFromImages(frames);
   }
 
   public importFromImages(images: string[]): void {

@@ -1,7 +1,7 @@
 import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images.mock';
 import { ocrResultsMock } from '../../test/ocr-results-mock';
 import { ArtifactsDI } from '../di/artifacts-di';
-import { OcrWorker } from '../domain/worker/artifacts-ocr.worker-mock';
+import { OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
 import { ArtifactsImporter } from './artifacts-importer';
 import artifact0 from '../../test/artifact0.png';
 import artifact0bis from '../../test/artifact0bis.png';
@@ -10,14 +10,14 @@ import { skip } from 'rxjs/operators';
 
 fdescribe('ArtifactsImporter.importFromVideo', () => {
   let artifactsImporter: ArtifactsImporter;
-  let ocrWorker: OcrWorker;
+  let ocrWorkerHandler: OcrWorkerHandler;
   let ocrWorkerSpy: jest.SpyInstance;
 
   beforeEach(() => {
     ArtifactsDI.registerOcrWorker();
     artifactsImporter = ArtifactsDI.getArtifactsImporter();
-    ocrWorker = ArtifactsDI.getOcrWorker();
-    ocrWorkerSpy = jest.spyOn(ocrWorker, 'recognize');
+    ocrWorkerHandler = ArtifactsDI.getOcrWorkerHandler();
+    ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
   });
 
   it('should give lines contained in each artifacts images', (done) => {
