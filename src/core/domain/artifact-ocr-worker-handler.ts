@@ -1,7 +1,7 @@
-import { createWorker, Worker } from 'tesseract.js';
+import { createWorker, Worker, WorkerOptions } from 'tesseract.js';
 
 export interface OcrWorkerHandler {
-  initialize(lang: string): void;
+  initialize(lang: string, options?: Partial<WorkerOptions>): void;
   recognize(image: Buffer): Promise<string[]>;
   terminate(): void;
 }
@@ -9,11 +9,8 @@ export interface OcrWorkerHandler {
 export class ArtifactOcrWorkerHandler implements OcrWorkerHandler {
   private tesseractWorker!: Worker;
 
-  public async initialize(lang: string): Promise<void> {
-    this.tesseractWorker = createWorker({
-      cacheMethod: 'none',
-      langPath: './',
-    });
+  public async initialize(lang: string, options?: Partial<WorkerOptions>): Promise<void> {
+    this.tesseractWorker = createWorker(options);
     await this.tesseractWorker.load();
     await this.tesseractWorker.loadLanguage(lang);
     await this.tesseractWorker.initialize(lang);
