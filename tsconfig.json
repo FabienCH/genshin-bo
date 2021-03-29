@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "outDir": "dist",
     "module": "esnext",
     "skipLibCheck": true,
@@ -12,13 +16,16 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": true,
-    "allowJs": true
+    "allowJs": true,
+    "isolatedModules": true
   },
-  "include": ["src", "src/index.tsx"]
+  "include": [
+    "src",
+    "src/index.tsx"
+  ]
 }

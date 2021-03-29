@@ -21,6 +21,7 @@ describe('Artifacts container', () => {
   let agGridReact: AgGridReact;
   beforeEach(() => {
     ArtifactsDI.registerRepository();
+    ArtifactsDI.registerOcrWorker();
     wrapper = mount(<ArtifactsContainer />);
     agGridReact = wrapper.find(AgGridReact).instance();
   });
