@@ -39,6 +39,6 @@ export class VideoToFrames {
   private static getFrame(video: HTMLVideoElement, canvas: Canvas): string {
     const context = canvas.getContext('2d') as CanvasRenderingContext2D;
     context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-    return canvas.toDataURL();
+    return canvas.toDataURL('image/jpeg');
   }
 }

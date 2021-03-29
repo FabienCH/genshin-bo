@@ -3,12 +3,12 @@ import { ocrResultsMock } from '../../test/ocr-results-mock';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
 import { ArtifactsImporter } from './artifacts-importer';
-import artifact0 from '../../test/artifact0.png';
-import artifact0bis from '../../test/artifact0bis.png';
-import artifact1 from '../../test/artifact1.png';
+import artifact0 from '../../test/artifact0.jpg';
+import artifact0bis from '../../test/artifact0bis.jpg';
+import artifact1 from '../../test/artifact1.jpg';
 import { skip } from 'rxjs/operators';
 
-fdescribe('ArtifactsImporter.importFromVideo', () => {
+describe('ArtifactsImporter.importFromVideo', () => {
   let artifactsImporter: ArtifactsImporter;
   let ocrWorkerHandler: OcrWorkerHandler;
   let ocrWorkerSpy: jest.SpyInstance;
