@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images.mock';
+import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images-mock';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { ArtifactOcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
 

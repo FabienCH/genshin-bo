@@ -13,7 +13,8 @@ export class ArtifactImagesOcr {
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
   private readonly topOverlay2: Jimp = new Jimp(460, 67, '#ffffff');
-  private readonly mainOverlay: Jimp = new Jimp(242, 29, '#ffffff');
+  private readonly mainStatOverlay: Jimp = new Jimp(242, 29, '#ffffff');
+  private readonly mainValueOverlay: Jimp = new Jimp(202, 52, '#ffffff');
   private readonly levelOverlay: Jimp = new Jimp(60, 30, '#ffffff');
   private readonly bottomOverlay: Jimp = new Jimp(475, 230, '#ffffff');
 
@@ -51,10 +52,10 @@ export class ArtifactImagesOcr {
 
   private async getImageForOcr(image: string): Promise<Buffer> {
     const jimpImage = await Jimp.create(image);
+    const framesForOcr = await this.transformForOcr(jimpImage);
 
-    if (!this.lastImage || Jimp.diff(jimpImage, this.lastImage, 0.01).percent > 0.01) {
-      this.lastImage = await Jimp.create(image);
-      const framesForOcr = await this.transformForOcr(jimpImage);
+    if (!this.lastImage || Jimp.diff(framesForOcr, this.lastImage, 0.01).percent > 0.003) {
+      this.lastImage = framesForOcr;
 
       return await framesForOcr.getBufferAsync(Jimp.MIME_PNG);
     }
@@ -76,6 +77,9 @@ export class ArtifactImagesOcr {
     }
     const mainStatType = await Jimp.create(image);
     mainStatType.crop(30, 158, 240, 27).scale(1.2).threshold({ max: 130 }).invert().threshold({ max: 125 });
+
+    const mainStatValue = await Jimp.create(image);
+    mainStatValue.crop(30, 186, 220, 50).scale(0.7).threshold({ max: 150 }).invert().threshold({ max: 105 });
 
     const top = await Jimp.create(image);
     top
@@ -99,8 +103,10 @@ export class ArtifactImagesOcr {
       .invert()
       .composite(top, 7, 7)
       .composite(this.artifactOverlay, 270, 65)
-      .composite(this.mainOverlay, 29, 157)
+      .composite(this.mainStatOverlay, 29, 157)
       .composite(mainStatType, 30, 140)
+      .composite(this.mainValueOverlay, 29, 185)
+      .composite(mainStatValue, 30, 186)
       .composite(this.levelOverlay, 34, 314)
       .composite(level, 51, 320)
       .composite(this.bottomOverlay, 20, 562);

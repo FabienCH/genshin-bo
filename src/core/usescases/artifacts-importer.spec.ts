@@ -1,4 +1,4 @@
-import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images.mock';
+import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images-mock';
 import { ocrResultsMock } from '../../test/ocr-results-mock';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
@@ -34,7 +34,7 @@ describe('ArtifactsImporter.importFromVideo', () => {
     artifactsImporter.importFromImages([artifact0, artifact1]);
   });
 
-  it('should give filter duplicated artifacts images', (done) => {
+  it('should filter duplicated artifacts images', (done) => {
     artifactsImporter
       .getOcrResults()
       .pipe(skip(1))
