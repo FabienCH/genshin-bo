@@ -9,9 +9,14 @@ fdescribe('OcrResultsParser', () => {
     ocrResultsParser = new OcrResultsParser();
   });
 
-  fit('should parse artifact type', () => {
+  it('should parse artifact type', () => {
     goodOcrResultsMock.forEach((ocrResults, index) => {
-      expect(ocrResultsParser.parseToArtifactData(ocrResults)).toEqual(importedArtifactDataMock[index].type);
+      expect(ocrResultsParser.parseToArtifactData(ocrResults).type).toEqual(importedArtifactDataMock[index].type);
+    });
+  });
+  fit('should parse artifact main stat type', () => {
+    goodOcrResultsMock.forEach((ocrResults, index) => {
+      expect(ocrResultsParser.parseToArtifactData(ocrResults).mainStatType).toEqual(importedArtifactDataMock[index].mainStatType);
     });
   });
 });

@@ -98,7 +98,7 @@ export const goodOcrResultsMock = [
     "Gladiator's Longing\n",
     'Sands of Eon\n',
     'ATK\n',
-    '30.85\n',
+    '30.8%\n',
     '+12\n',
     '. CRIT DMG+14.0%\n',
     '. CRIT Rate+3.9%\n',
