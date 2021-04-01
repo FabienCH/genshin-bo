@@ -14,7 +14,8 @@ fdescribe('OcrResultsParser', () => {
       expect(ocrResultsParser.parseToArtifactData(ocrResults).type).toEqual(importedArtifactDataMock[index].type);
     });
   });
-  fit('should parse artifact main stat type', () => {
+
+  it('should parse artifact main stat type', () => {
     goodOcrResultsMock.forEach((ocrResults, index) => {
       expect(ocrResultsParser.parseToArtifactData(ocrResults).mainStatType).toEqual(importedArtifactDataMock[index].mainStatType);
     });
