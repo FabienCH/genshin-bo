@@ -67,7 +67,7 @@ describe('ArtifactsHandler.addArtifact', () => {
     it('should succeed with flat HP in main stat', () => {
       const artifactValues: ArtifactData = {
         id: '20',
-        type: 'flower',
+        type: ArtifactType.flower,
         set: SetNames.gladiatorsFinale,
         level: 2,
         mainStatType: FlowerArtifact.mainStat,
@@ -86,7 +86,7 @@ describe('ArtifactsHandler.addArtifact', () => {
     it('should succeed with flat atk in main stat if main stat is not specified', () => {
       const artifactValues: ArtifactData = {
         id: '20',
-        type: 'plume',
+        type: ArtifactType.plume,
         set: SetNames.thundersoother,
         level: 8,
         mainStatType: PlumeArtifact.mainStat,
@@ -108,7 +108,7 @@ describe('ArtifactsHandler.addArtifact', () => {
 
   describe('Adding a sands artifact', () => {
     const commonValues = {
-      type: 'sands' as ArtifactType,
+      type: ArtifactType.sands,
       set: SetNames.thundersoother,
       level: 12,
       subStats: {
@@ -167,7 +167,7 @@ describe('ArtifactsHandler.addArtifact', () => {
 
   describe('Adding a goblet artifact', () => {
     const commonValues = {
-      type: 'goblet' as ArtifactType,
+      type: ArtifactType.goblet,
       set: SetNames.thundersoother,
       level: 12,
       subStats: {
@@ -230,7 +230,7 @@ describe('ArtifactsHandler.addArtifact', () => {
 
   describe('Adding a circlet artifact', () => {
     const commonValues = {
-      type: 'circlet' as ArtifactType,
+      type: ArtifactType.circlet,
       set: SetNames.thundersoother,
       level: 12,
       subStats: {
@@ -301,7 +301,7 @@ describe('ArtifactsHandler.addArtifact', () => {
         const artifactsValues = [
           {
             id: '21',
-            type: 'sands' as ArtifactType,
+            type: ArtifactType.sands,
             set: SetNames.thundersoother,
             level: 3,
             mainStatType: MainStats.percentHp,
@@ -314,7 +314,7 @@ describe('ArtifactsHandler.addArtifact', () => {
           },
           {
             id: '22',
-            type: 'circlet' as ArtifactType,
+            type: ArtifactType.circlet,
             set: SetNames.thundersoother,
             level: 4,
             mainStatType: MainStats.percentDef,
@@ -340,7 +340,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       it('should failed if no values are found for main stat', () => {
         const artifactValues = {
           id: '1',
-          type: 'sands' as ArtifactType,
+          type: ArtifactType.sands,
           set: SetNames.gladiatorsFinale,
           level: 4,
           mainStatType: 'notExistingMainStat' as MainStatTypes,
@@ -357,7 +357,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       it('should failed if it has more than 4 substat', () => {
         const artifactValues = {
           id: '1',
-          type: 'flower' as ArtifactType,
+          type: ArtifactType.flower,
           set: SetNames.gladiatorsFinale,
           level: 4,
           mainStatType: FlowerArtifact.mainStat,
@@ -375,7 +375,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       it('should failed if it has les than 3 substats', () => {
         const artifactValues = {
           id: '1',
-          type: 'flower' as ArtifactType,
+          type: ArtifactType.flower,
           set: SetNames.gladiatorsFinale,
           level: 4,
           mainStatType: FlowerArtifact.mainStat,
@@ -387,7 +387,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       it('should failed if it has 3 substats and level higher than 3', () => {
         const artifactValues = {
           id: '1',
-          type: 'plume' as ArtifactType,
+          type: ArtifactType.plume,
           set: SetNames.gladiatorsFinale,
           level: 4,
           mainStatType: PlumeArtifact.mainStat,
@@ -399,7 +399,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       it('should failed if 1 of the substats is the same than the main stat', () => {
         const artifactValues = {
           id: '1',
-          type: 'goblet' as ArtifactType,
+          type: ArtifactType.goblet,
           set: SetNames.gladiatorsFinale,
           level: 4,
           mainStatType: MainStats.percentDef,
