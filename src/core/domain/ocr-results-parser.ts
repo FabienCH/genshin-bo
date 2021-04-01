@@ -14,27 +14,8 @@ export class OcrResultsParser {
     const ocrMainStat = this.parseMainStatType(ocrResults[2], type);
     const mainStatType = Object.values(MainStats).find((mainStat) => mainStat === ocrMainStat);
     const level = parseInt(ocrResults[4].replace(/\n/g, ''));
-    const ocrSubsStats = [ocrResults[5], ocrResults[6], ocrResults[7], ocrResults[8]].map((ocrSubStat) =>
-      ocrSubStat.toLowerCase().replace(/\n/g, '').replace(/ /g, '').split('+'),
-    );
-    const subsStats = ocrSubsStats.reduce((subsStatsAcc, ocrSubStat) => {
-      const isPercent = ocrSubStat[1] && (ocrSubStat[1].includes('.') || ocrSubStat[1].includes('%'));
-
-      const subStatType = Object.values(SubStats).find((subStat) => {
-        let ocrSubStatType = ocrSubStat[0];
-
-        if (this.flatOrPercentStats.find((stat) => ocrSubStatType.includes(stat))) {
-          ocrSubStatType = `${isPercent ? 'percent' : 'flat'}${ocrSubStatType}`;
-        }
-
-        return ocrSubStatType.replace(/\./g, '').includes(subStat.toLowerCase());
-      });
-      const subStatValue = isPercent ? parseFloat(ocrSubStat[1]) : parseInt(ocrSubStat[1]);
-      if (subStatType) {
-        subsStatsAcc = { ...subsStatsAcc, [`${subStatType}`]: subStatValue };
-      }
-      return subsStatsAcc;
-    }, {});
+    const ocrSubsStats = [ocrResults[5], ocrResults[6], ocrResults[7], ocrResults[8]];
+    const subsStats = this.parseSubsStats(ocrSubsStats);
 
     return {
       id: '0',
@@ -45,7 +26,6 @@ export class OcrResultsParser {
       subStats: subsStats,
     };
   }
-
   private parseMainStatType(ocrMainStat: string, type: ArtifactType | undefined) {
     const mainWords = ocrMainStat.toLowerCase().replace(/\n/g, '').split(' ');
 
@@ -59,5 +39,30 @@ export class OcrResultsParser {
       .map((mainWord, i) => (i > 0 ? StringFormatter.upperCaseFirstChar(mainWord) : mainWord))
       .join('')
       .replace(/ /g, '');
+  }
+
+  private parseSubsStats(ocrSubsStats: string[]) {
+    const typeValueSplitedSubsStats = ocrSubsStats.map((ocrSubStat) =>
+      ocrSubStat.toLowerCase().replace(/\n/g, '').replace(/ /g, '').split('+'),
+    );
+    return typeValueSplitedSubsStats.reduce((subsStatsAcc, ocrSubStat) => {
+      const isPercent = ocrSubStat[1] && (ocrSubStat[1].includes('.') || ocrSubStat[1].includes('%'));
+      const subStatType = this.parseSubStatType(ocrSubStat[0], isPercent);
+      const subStatValue = isPercent ? parseFloat(ocrSubStat[1]) : parseInt(ocrSubStat[1]);
+      if (subStatType) {
+        subsStatsAcc = { ...subsStatsAcc, [`${subStatType}`]: subStatValue };
+      }
+      return subsStatsAcc;
+    }, {});
+  }
+
+  private parseSubStatType(ocrSubStatType: string, isPercent: string | boolean) {
+    return Object.values(SubStats).find((subStat) => {
+      if (this.flatOrPercentStats.find((stat) => ocrSubStatType.includes(stat))) {
+        ocrSubStatType = `${isPercent ? 'percent' : 'flat'}${ocrSubStatType}`;
+      }
+
+      return ocrSubStatType.replace(/\./g, '').includes(subStat.toLowerCase());
+    });
   }
 }
