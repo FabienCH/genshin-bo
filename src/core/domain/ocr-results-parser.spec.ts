@@ -1,9 +1,8 @@
 import { importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
 import { goodOcrResultsMock } from '../../test/ocr-results-mock';
-import { SubStats } from './models/sub-statistics';
 import { OcrResultsParser } from './ocr-results-parser';
 
-fdescribe('OcrResultsParser', () => {
+describe('OcrResultsParser', () => {
   let ocrResultsParser: OcrResultsParser;
 
   beforeEach(() => {
@@ -28,13 +27,15 @@ fdescribe('OcrResultsParser', () => {
     });
   });
 
-  fit('should parse artifact substats', () => {
+  it('should parse artifact substats', () => {
     goodOcrResultsMock.forEach((ocrResults, index) => {
-      const parsedSubs = ocrResultsParser.parseToArtifactData(ocrResults).subStats;
-      const expectedSubs = importedArtifactDataMock[index].subStats;
-      Object.keys(parsedSubs).forEach((subKey) => {
-        expect(parsedSubs[subKey as SubStats]).toEqual(expectedSubs[subKey as SubStats]);
-      });
+      expect(ocrResultsParser.parseToArtifactData(ocrResults).subStats).toEqual(importedArtifactDataMock[index].subStats);
+    });
+  });
+
+  it('should parse artifact set', () => {
+    goodOcrResultsMock.forEach((ocrResults, index) => {
+      expect(ocrResultsParser.parseToArtifactData(ocrResults).set).toEqual(importedArtifactDataMock[index].set);
     });
   });
 });

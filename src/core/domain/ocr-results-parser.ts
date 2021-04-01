@@ -9,21 +9,25 @@ export class OcrResultsParser {
   private readonly maxStatWords: number = 2;
   private readonly flatOrPercentStats: string[] = ['atk', 'def', 'hp'];
 
-  public parseToArtifactData(ocrResults: string[]): ArtifactData {
+  public parseToArtifactData(ocrResults: string[]): Partial<ArtifactData> {
     const type = Object.values(ArtifactType).find((type) => ocrResults[1].toLowerCase().includes(type));
     const ocrMainStat = this.parseMainStatType(ocrResults[2], type);
     const mainStatType = Object.values(MainStats).find((mainStat) => mainStat === ocrMainStat);
     const level = parseInt(ocrResults[4].replace(/\n/g, ''));
     const ocrSubsStats = [ocrResults[5], ocrResults[6], ocrResults[7], ocrResults[8]];
-    const subsStats = this.parseSubsStats(ocrSubsStats);
+    const subStats = this.parseSubsStats(ocrSubsStats);
+    const ocrSetIndex = Object.values(subStats).length === 4 ? 9 : 8;
+    const set = Object.values(SetNames).find((setName) => {
+      const ocrSet = ocrResults[ocrSetIndex].replace(/ |'/g, '').toLowerCase();
+      return ocrSet.includes(setName.toLowerCase());
+    });
 
     return {
-      id: '0',
-      type: type ? type : ArtifactType.flower,
-      set: SetNames.archaicPetra,
-      mainStatType: mainStatType ? mainStatType : MainStats.percentAtk,
+      type,
+      set,
+      mainStatType,
       level,
-      subStats: subsStats,
+      subStats,
     };
   }
   private parseMainStatType(ocrMainStat: string, type: ArtifactType | undefined) {
