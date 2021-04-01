@@ -1,4 +1,4 @@
-import { OcrWorkerHandlerMock } from '../../test/artifacts-ocr.worker-mock';
+import { OcrWorkerHandlerMock } from '../../test/artifacts-ocr-worker-mock';
 import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
 import { ArtifactsRepository } from '../domain/artifacts-repository';
 import { AllArtifactsData } from '../domain/models/artifact-data';
