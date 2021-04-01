@@ -11,6 +11,6 @@ export class PlumeArtifact extends Artifact {
   }
 
   public getType(): ArtifactType {
-    return 'plume';
+    return ArtifactType.plume;
   }
 }

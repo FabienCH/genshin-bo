@@ -2,7 +2,13 @@ import { ArtifactStatsTypes, MainStat, MainStats, MainStatTypes } from '../model
 import { SetNames } from '../models/sets-with-effects';
 import { SubStats, SubStatsValues } from '../models/sub-statistics';
 
-export type ArtifactType = 'flower' | 'plume' | 'sands' | 'goblet' | 'circlet';
+export enum ArtifactType {
+  flower = 'flower',
+  plume = 'plume',
+  sands = 'sands',
+  goblet = 'goblet',
+  circlet = 'circlet',
+}
 
 export abstract class Artifact {
   public id: string;

@@ -4,7 +4,7 @@ import { Artifact, ArtifactType } from './artifact';
 
 export class CircletArtifact extends Artifact {
   public getType(): ArtifactType {
-    return 'circlet';
+    return ArtifactType.circlet;
   }
 
   public matchFiltersWithMain(minLevel: number, focusStats: ArtifactStatsTypes[], mainStat?: CircletMainStatType): boolean {

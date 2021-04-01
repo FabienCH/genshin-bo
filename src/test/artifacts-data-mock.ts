@@ -7,12 +7,13 @@ import { CircletMainStatType } from '../core/domain/models/circlet-artifact-data
 import { AllArtifactsData } from '../core/domain/models/artifact-data';
 import { FlowerArtifact } from '../core/domain/entities/flower-artifact';
 import { PlumeArtifact } from '../core/domain/entities/plume-artifact';
+import { ArtifactType } from '../core/domain/entities/artifact';
 
 export const defaultBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.gladiatorsFinale,
       level: 8,
       mainStatType: FlowerArtifact.mainStat,
@@ -27,7 +28,7 @@ export const defaultBuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '1',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.crimsonWitchOfFlames,
       level: 8,
       mainStatType: PlumeArtifact.mainStat,
@@ -42,7 +43,7 @@ export const defaultBuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '2',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.archaicPetra,
       level: 8,
       mainStatType: MainStats.percentAtk as SandsMainStatType,
@@ -57,7 +58,7 @@ export const defaultBuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '3',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.bloodstainedChivalry,
       level: 0,
       mainStatType: MainStats.pyroDmg as GobletMainStatType,
@@ -72,7 +73,7 @@ export const defaultBuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '4',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.gladiatorsFinale,
       level: 16,
       mainStatType: MainStats.percentAtk as CircletMainStatType,
@@ -90,7 +91,7 @@ export const defPhyDmgAtkBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: FlowerArtifact.mainStat,
@@ -100,7 +101,7 @@ export const defPhyDmgAtkBuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '1',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: PlumeArtifact.mainStat,
@@ -114,7 +115,7 @@ export const defPhyDmgAtkBuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '2',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: MainStats.percentDef as SandsMainStatType,
@@ -124,7 +125,7 @@ export const defPhyDmgAtkBuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '3',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: MainStats.physicalDmg as GobletMainStatType,
@@ -138,7 +139,7 @@ export const defPhyDmgAtkBuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '4',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: MainStats.percentAtk as CircletMainStatType,
@@ -156,7 +157,7 @@ export const atkGeoDmgEmBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: FlowerArtifact.mainStat,
@@ -166,7 +167,7 @@ export const atkGeoDmgEmBuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '1',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: PlumeArtifact.mainStat,
@@ -176,7 +177,7 @@ export const atkGeoDmgEmBuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '2',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: MainStats.percentAtk as SandsMainStatType,
@@ -186,7 +187,7 @@ export const atkGeoDmgEmBuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '3',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: MainStats.geoDmg as GobletMainStatType,
@@ -201,7 +202,7 @@ export const atkGeoDmgEmBuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '4',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 0,
       mainStatType: MainStats.elementalMastery as CircletMainStatType,
@@ -214,7 +215,7 @@ export const lvl134820BuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.retracingBolide,
       level: 1,
       mainStatType: FlowerArtifact.mainStat,
@@ -229,7 +230,7 @@ export const lvl134820BuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '1',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 3,
       mainStatType: PlumeArtifact.mainStat,
@@ -239,7 +240,7 @@ export const lvl134820BuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '2',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.retracingBolide,
       level: 4,
       mainStatType: MainStats.percentAtk as SandsMainStatType,
@@ -254,7 +255,7 @@ export const lvl134820BuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '3',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.retracingBolide,
       level: 8,
       mainStatType: MainStats.geoDmg as GobletMainStatType,
@@ -269,7 +270,7 @@ export const lvl134820BuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '4',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 20,
       mainStatType: MainStats.elementalMastery as CircletMainStatType,
@@ -287,7 +288,7 @@ export const lvl27121517BuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.retracingBolide,
       level: 2,
       mainStatType: FlowerArtifact.mainStat,
@@ -302,7 +303,7 @@ export const lvl27121517BuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '1',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 7,
       mainStatType: PlumeArtifact.mainStat,
@@ -317,7 +318,7 @@ export const lvl27121517BuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '2',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.retracingBolide,
       level: 12,
       mainStatType: MainStats.percentHp as SandsMainStatType,
@@ -332,7 +333,7 @@ export const lvl27121517BuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '3',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.bloodstainedChivalry,
       level: 15,
       mainStatType: MainStats.percentDef as GobletMainStatType,
@@ -347,7 +348,7 @@ export const lvl27121517BuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '4',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 17,
       mainStatType: MainStats.healingBonus as CircletMainStatType,
@@ -365,7 +366,7 @@ export const gladiatorThunderingBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.gladiatorsFinale,
       level: 2,
       mainStatType: FlowerArtifact.mainStat,
@@ -380,7 +381,7 @@ export const gladiatorThunderingBuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '1',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 7,
       mainStatType: PlumeArtifact.mainStat,
@@ -395,7 +396,7 @@ export const gladiatorThunderingBuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '2',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.thunderingFury,
       level: 12,
       mainStatType: MainStats.percentHp as SandsMainStatType,
@@ -410,7 +411,7 @@ export const gladiatorThunderingBuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '3',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.thunderingFury,
       level: 15,
       mainStatType: MainStats.percentDef as GobletMainStatType,
@@ -425,7 +426,7 @@ export const gladiatorThunderingBuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '4',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.gladiatorsFinale,
       level: 17,
       mainStatType: MainStats.healingBonus as CircletMainStatType,
@@ -443,7 +444,7 @@ export const bolideLavawalkerBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.lavawalker,
       level: 2,
       mainStatType: FlowerArtifact.mainStat,
@@ -458,7 +459,7 @@ export const bolideLavawalkerBuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '1',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 7,
       mainStatType: PlumeArtifact.mainStat,
@@ -473,7 +474,7 @@ export const bolideLavawalkerBuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '2',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.thunderingFury,
       level: 12,
       mainStatType: MainStats.percentHp as SandsMainStatType,
@@ -488,7 +489,7 @@ export const bolideLavawalkerBuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '3',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.lavawalker,
       level: 15,
       mainStatType: MainStats.percentDef as GobletMainStatType,
@@ -503,7 +504,7 @@ export const bolideLavawalkerBuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '4',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 17,
       mainStatType: MainStats.healingBonus as CircletMainStatType,
@@ -521,7 +522,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.lavawalker,
       level: 2,
       mainStatType: FlowerArtifact.mainStat,
@@ -534,7 +535,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
     },
     {
       id: '1',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.thunderingFury,
       level: 7,
       mainStatType: FlowerArtifact.mainStat,
@@ -549,7 +550,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
   plumes: [
     {
       id: '2',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 7,
       mainStatType: PlumeArtifact.mainStat,
@@ -562,7 +563,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
     },
     {
       id: '3',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.blizzardStrayer,
       level: 12,
       mainStatType: PlumeArtifact.mainStat,
@@ -577,7 +578,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
   sands: [
     {
       id: '4',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.thunderingFury,
       level: 12,
       mainStatType: MainStats.percentHp as SandsMainStatType,
@@ -592,7 +593,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
   goblets: [
     {
       id: '5',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.lavawalker,
       level: 15,
       mainStatType: MainStats.percentDef as GobletMainStatType,
@@ -605,7 +606,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
     },
     {
       id: '6',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.blizzardStrayer,
       level: 8,
       mainStatType: MainStats.cryoDmg as GobletMainStatType,
@@ -620,7 +621,7 @@ export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
   circlets: [
     {
       id: '7',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 17,
       mainStatType: MainStats.healingBonus as CircletMainStatType,

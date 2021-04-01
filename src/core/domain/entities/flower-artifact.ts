@@ -11,6 +11,6 @@ export class FlowerArtifact extends Artifact {
   }
 
   public getType(): ArtifactType {
-    return 'flower';
+    return ArtifactType.flower;
   }
 }

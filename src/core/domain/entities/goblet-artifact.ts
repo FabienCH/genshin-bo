@@ -4,7 +4,7 @@ import { Artifact, ArtifactType } from './artifact';
 
 export class GobletArtifact extends Artifact {
   public getType(): ArtifactType {
-    return 'goblet';
+    return ArtifactType.goblet;
   }
 
   public matchFiltersWithMain(minLevel: number, focusStats: ArtifactStatsTypes[], mainStat?: GobletMainStatType): boolean {
