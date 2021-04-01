@@ -56,6 +56,8 @@ export abstract class ArtifactMapper {
         return ArtifactMapper.newGobletArtifact(artifactData);
       case 'circlet':
         return ArtifactMapper.newCircletArtifact(artifactData);
+      default:
+        throw new Error('incorrect artifact type');
     }
   }
   public static mapAllDataToAllArtifactsByType(artifactsData: ArtifactData[]): AllArtifacts {
