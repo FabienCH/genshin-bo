@@ -1,5 +1,9 @@
-import { misrecognizedMainImportedArtifactMock, properlyImportedArtifactMock } from '../../test/imported-artifacts-data-mock';
-import { goodOcrResultsMock, wrongMainValuesOcrResultsMock } from '../../test/ocr-results-mock';
+import {
+  misrecognizedMainImportedArtifactMock,
+  misrecognizedSubsImportedArtifactMock,
+  properlyImportedArtifactMock,
+} from '../../test/imported-artifacts-data-mock';
+import { goodOcrResultsMock, wrongMainValuesOcrResultsMock, wrongSubsOcrResultsMock } from '../../test/ocr-results-mock';
 import { OcrResultsParser } from './ocr-results-parser';
 
 describe('OcrResultsParser', () => {
@@ -24,6 +28,12 @@ describe('OcrResultsParser', () => {
   it('should return an error when main stat value and level are not consistent', () => {
     wrongMainValuesOcrResultsMock.forEach((ocrResults, index) => {
       expect(ocrResultsParser.parseToArtifactData(ocrResults).errors).toEqual(misrecognizedMainImportedArtifactMock[index].errors);
+    });
+  });
+
+  it('should parse artifacts sub stats when not properly recognized', () => {
+    wrongSubsOcrResultsMock.forEach((ocrResults, index) => {
+      expect(ocrResultsParser.parseToArtifactData(ocrResults)).toEqual(misrecognizedSubsImportedArtifactMock[index]);
     });
   });
 });

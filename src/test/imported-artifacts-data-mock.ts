@@ -166,3 +166,96 @@ export const misrecognizedMainImportedArtifactMock: OcrArtifactData[] = [
     },
   },
 ];
+
+export const misrecognizedSubsImportedArtifactMock: OcrArtifactData[] = [
+  {
+    type: ArtifactType.goblet,
+    set: SetNames.archaicPetra,
+    level: 20,
+    mainStatType: MainStats.geoDmg,
+    mainStatValue: 46.6,
+    subStats: {
+      [SubStats.elementalMastery]: 58,
+      [SubStats.energyRecharge]: 5.2,
+      [SubStats.critDmg]: 20.2,
+      [SubStats.flatHp]: 269,
+    },
+  },
+  {
+    type: ArtifactType.goblet,
+    set: SetNames.wanderersTroupe,
+    level: 20,
+    mainStatType: MainStats.geoDmg,
+    mainStatValue: 46.6,
+    subStats: {
+      [SubStats.critDmg]: 13.2,
+      [SubStats.critRate]: 8.9,
+      [SubStats.flatHp]: 598,
+      [SubStats.flatAtk]: 35,
+    },
+  },
+  {
+    type: ArtifactType.circlet,
+    set: SetNames.bloodstainedChivalry,
+    level: 16,
+    mainStatType: MainStats.percentAtk,
+    mainStatValue: 38.7,
+    subStats: {
+      [SubStats.energyRecharge]: 15.5,
+      [SubStats.flatAtk]: 33,
+      [SubStats.flatDef]: 21,
+      [SubStats.percentHp]: 4.1,
+    },
+  },
+  {
+    type: ArtifactType.plume,
+    set: SetNames.maidenBeloved,
+    level: 20,
+    mainStatType: MainStats.flatAtk,
+    mainStatValue: 311,
+    subStats: {
+      [SubStats.energyRecharge]: 4.5,
+      [SubStats.percentAtk]: 26.8,
+      [SubStats.flatHp]: 538,
+      [SubStats.flatDef]: 21,
+    },
+  },
+  {
+    type: ArtifactType.sands,
+    set: SetNames.bloodstainedChivalry,
+    level: 0,
+    mainStatType: MainStats.percentAtk,
+    mainStatValue: 7.0,
+    subStats: {
+      [SubStats.flatHp]: 269,
+      [SubStats.critDmg]: 7.0,
+      [SubStats.flatAtk]: 16,
+      [SubStats.percentHp]: 5.8,
+    },
+  },
+  {
+    type: ArtifactType.goblet,
+    set: SetNames.bloodstainedChivalry,
+    level: 0,
+    mainStatType: MainStats.percentDef,
+    mainStatValue: 8.7,
+    subStats: {
+      [SubStats.elementalMastery]: 23,
+      [SubStats.flatDef]: 23,
+      [SubStats.percentHp]: 4.1,
+      [SubStats.flatAtk]: 19,
+    },
+  },
+  {
+    type: ArtifactType.plume,
+    set: SetNames.noblesseOblige,
+    level: 8,
+    mainStatType: MainStats.flatAtk,
+    mainStatValue: 152,
+    subStats: {
+      [SubStats.percentAtk]: 4.7,
+      [SubStats.percentDef]: 11.7,
+      [SubStats.critDmg]: 13.2,
+    },
+  },
+];

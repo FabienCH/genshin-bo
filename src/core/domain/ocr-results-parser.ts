@@ -1,5 +1,4 @@
 import { ArtifactType } from './entities/artifact';
-import { ArtifactMapper } from './mappers/artifact-mapper';
 import { StringFormatter } from './mappers/string-formatter';
 import { OcrArtifactData } from './models/artifact-data';
 import { MainStats, MainStatTypes } from './models/main-statistics';
@@ -120,8 +119,11 @@ export class OcrResultsParser {
     return typeValueSplitedSubsStats.reduce((subsStatsAcc, ocrSubStat) => {
       const isPercent = ocrSubStat[1] && (ocrSubStat[1].includes('.') || ocrSubStat[1].includes('%'));
       const subStatType = this.parseSubStatType(ocrSubStat[0], isPercent);
-      const subStatValue = isPercent ? parseFloat(ocrSubStat[1]) : parseInt(ocrSubStat[1]);
+
       if (subStatType) {
+        const subStatValue = isPercent
+          ? Math.trunc(parseFloat(ocrSubStat[1].replace(/\.\./g, '.')) * 10) / 10
+          : parseInt(ocrSubStat[1].replace(/\.\./g, '.'));
         subsStatsAcc = { ...subsStatsAcc, [`${subStatType}`]: subStatValue };
       }
       return subsStatsAcc;
@@ -129,12 +131,13 @@ export class OcrResultsParser {
   }
 
   private parseSubStatType(ocrSubStatType: string, isPercent: string | boolean) {
+    let subStatTypePrefix = '';
+    if (this.flatOrPercentStats.find((stat) => ocrSubStatType.includes(stat))) {
+      subStatTypePrefix = isPercent ? 'percent' : 'flat';
+    }
     return Object.values(SubStats).find((subStat) => {
-      if (this.flatOrPercentStats.find((stat) => ocrSubStatType.includes(stat))) {
-        ocrSubStatType = `${isPercent ? 'percent' : 'flat'}${ocrSubStatType}`;
-      }
-
-      return ocrSubStatType.replace(/\./g, '').includes(subStat.toLowerCase());
+      const parsedSubStatType = `${subStatTypePrefix}${ocrSubStatType}`.replace(/[.\-:]/g, '');
+      return parsedSubStatType.includes(subStat.toLowerCase());
     });
   }
 }
