@@ -25,12 +25,6 @@ describe('OcrResultsParser', () => {
     });
   });
 
-  it('should return an error when main stat value and level are not consistent', () => {
-    wrongMainValuesOcrResultsMock.forEach((ocrResults, index) => {
-      expect(ocrResultsParser.parseToArtifactData(ocrResults).errors).toEqual(misrecognizedMainImportedArtifactMock[index].errors);
-    });
-  });
-
   it('should parse artifacts sub stats when not properly recognized', () => {
     wrongSubsOcrResultsMock.forEach((ocrResults, index) => {
       expect(ocrResultsParser.parseToArtifactData(ocrResults)).toEqual(misrecognizedSubsImportedArtifactMock[index]);

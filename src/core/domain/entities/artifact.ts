@@ -65,7 +65,14 @@ export abstract class Artifact {
     },
   ];
 
-  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatType: MainStatTypes) {
+  constructor(
+    id: string,
+    set: SetNames,
+    subStats: SubStatsValues,
+    level: number,
+    mainStatType: MainStatTypes,
+    mainStatValueFromOcr: number,
+  ) {
     if (Object.keys(subStats).length < 3) {
       throw new Error('an artifact can not have less than 3 substats');
     }
@@ -78,6 +85,12 @@ export abstract class Artifact {
 
     if (Object.keys(subStats).find((subStat) => subStat === mainStatType)) {
       throw new Error('main stat can not be the same as one of the substats');
+    }
+
+    const mainStat = this.getMainStat(mainStatType);
+    const mainStatValue = Object.values(mainStat)[0];
+    if (mainStatValueFromOcr && mainStatValue !== mainStatValueFromOcr) {
+      throw new Error(`inconsistent main stat value, value from level is ${mainStatValue}`);
     }
 
     this.id = id;

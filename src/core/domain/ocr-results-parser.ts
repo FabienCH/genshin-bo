@@ -55,6 +55,7 @@ export class OcrResultsParser {
       values: [47, 60, 73, 86, 100, 113, 126, 139, 152, 166, 179, 192, 205, 219, 232, 245, 258, 272, 285, 298, 311],
     },
   ];
+
   public parseToArtifactData(ocrResults: string[]): OcrArtifactData {
     const noNewLineCharOcrResults = ocrResults.map((line) => line.replace(/\n/g, ''));
     const type = Object.values(ArtifactType).find((type) => noNewLineCharOcrResults[1].toLowerCase().includes(type));
@@ -68,12 +69,6 @@ export class OcrResultsParser {
       noNewLineCharOcrResults[8],
     ]);
     const set = this.parseSet(subStats, noNewLineCharOcrResults);
-    const mainStatValue = mainStatType && this.mainStatsValues.find((mainStatValues) => mainStatValues.stats.includes(mainStatType));
-
-    const errors =
-      mainStatValue?.values[level] !== parsedMainStatValue
-        ? [`inconsistent main stat value, value from level is ${mainStatValue?.values[level]}`]
-        : undefined;
 
     return {
       type,
@@ -82,7 +77,6 @@ export class OcrResultsParser {
       mainStatValue: parsedMainStatValue,
       level,
       subStats,
-      errors,
     };
   }
 

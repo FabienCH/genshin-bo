@@ -30,5 +30,4 @@ export interface OcrArtifactData {
   mainStatType?: MainStatTypes;
   mainStatValue?: number;
   subStats?: SubStatsValues;
-  errors?: string[];
 }
