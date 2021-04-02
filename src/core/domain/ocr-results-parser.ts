@@ -1,6 +1,6 @@
 import { ArtifactType } from './entities/artifact';
 import { StringFormatter } from './mappers/string-formatter';
-import { ArtifactData } from './models/artifact-data';
+import { OcrArtifactData } from './models/artifact-data';
 import { MainStats } from './models/main-statistics';
 import { SetNames } from './models/sets-with-effects';
 import { SubStats } from './models/sub-statistics';
@@ -9,10 +9,13 @@ export class OcrResultsParser {
   private readonly maxStatWords: number = 2;
   private readonly flatOrPercentStats: string[] = ['atk', 'def', 'hp'];
 
-  public parseToArtifactData(ocrResults: string[]): Partial<ArtifactData> {
+  public parseToArtifactData(ocrResults: string[]): OcrArtifactData {
     const type = Object.values(ArtifactType).find((type) => ocrResults[1].toLowerCase().includes(type));
     const ocrMainStat = this.parseMainStatType(ocrResults[2], type);
     const mainStatType = Object.values(MainStats).find((mainStat) => mainStat === ocrMainStat);
+    const isMainPercent = ocrResults[3].includes('.') || ocrResults[3].includes('%');
+    const ocrMainStatValue = isMainPercent ? ocrResults[3].replace(/\n|%/g, '') : ocrResults[3].replace(/\n|,/g, '');
+    const mainStatValue = isMainPercent ? parseFloat(ocrMainStatValue) : parseInt(ocrMainStatValue);
     const level = parseInt(ocrResults[4].replace(/\n/g, ''));
     const ocrSubsStats = [ocrResults[5], ocrResults[6], ocrResults[7], ocrResults[8]];
     const subStats = this.parseSubsStats(ocrSubsStats);
@@ -26,6 +29,7 @@ export class OcrResultsParser {
       type,
       set,
       mainStatType,
+      mainStatValue,
       level,
       subStats,
     };

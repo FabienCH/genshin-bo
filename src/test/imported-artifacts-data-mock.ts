@@ -1,16 +1,16 @@
 import { ArtifactType } from '../core/domain/entities/artifact';
-import { ArtifactData } from '../core/domain/models/artifact-data';
+import { OcrArtifactData } from '../core/domain/models/artifact-data';
 import { MainStats } from '../core/domain/models/main-statistics';
 import { SetNames } from '../core/domain/models/sets-with-effects';
 import { SubStats } from '../core/domain/models/sub-statistics';
 
-export const importedArtifactDataMock: ArtifactData[] = [
+export const properlyImportedArtifactMock: OcrArtifactData[] = [
   {
-    id: '0',
     type: ArtifactType.circlet,
     set: SetNames.wanderersTroupe,
     level: 20,
     mainStatType: MainStats.critRate,
+    mainStatValue: 31.1,
     subStats: {
       [SubStats.flatHp]: 508,
       [SubStats.critDmg]: 13.2,
@@ -19,11 +19,11 @@ export const importedArtifactDataMock: ArtifactData[] = [
     },
   },
   {
-    id: '1',
     type: ArtifactType.flower,
     set: SetNames.gladiatorsFinale,
     level: 16,
     mainStatType: MainStats.flatHp,
+    mainStatValue: 3967,
     subStats: {
       [SubStats.critDmg]: 14.0,
       [SubStats.flatDef]: 32,
@@ -32,11 +32,11 @@ export const importedArtifactDataMock: ArtifactData[] = [
     },
   },
   {
-    id: '2',
     type: ArtifactType.plume,
     set: SetNames.maidenBeloved,
     level: 20,
     mainStatType: MainStats.flatAtk,
+    mainStatValue: 311,
     subStats: {
       [SubStats.energyRecharge]: 4.5,
       [SubStats.percentAtk]: 26.8,
@@ -45,11 +45,12 @@ export const importedArtifactDataMock: ArtifactData[] = [
     },
   },
   {
-    id: '3',
     type: ArtifactType.goblet,
     set: SetNames.wanderersTroupe,
     level: 20,
     mainStatType: MainStats.geoDmg,
+    mainStatValue: 46.8,
+
     subStats: {
       [SubStats.critDmg]: 13.2,
       [SubStats.critRate]: 8.9,
@@ -58,11 +59,11 @@ export const importedArtifactDataMock: ArtifactData[] = [
     },
   },
   {
-    id: '4',
     type: ArtifactType.goblet,
     set: SetNames.gladiatorsFinale,
     level: 4,
     mainStatType: MainStats.physicalDmg,
+    mainStatValue: 18.6,
     subStats: {
       [SubStats.critDmg]: 7.0,
       [SubStats.percentHp]: 4.7,
@@ -71,11 +72,11 @@ export const importedArtifactDataMock: ArtifactData[] = [
     },
   },
   {
-    id: '5',
     type: ArtifactType.sands,
     set: SetNames.gladiatorsFinale,
     level: 12,
     mainStatType: MainStats.percentAtk,
+    mainStatValue: 30.8,
     subStats: {
       [SubStats.critDmg]: 14.0,
       [SubStats.critRate]: 3.9,
@@ -84,11 +85,11 @@ export const importedArtifactDataMock: ArtifactData[] = [
     },
   },
   {
-    id: '6',
     type: ArtifactType.flower,
     set: SetNames.crimsonWitchOfFlames,
     level: 0,
     mainStatType: MainStats.flatHp,
+    mainStatValue: 717,
     subStats: {
       [SubStats.flatDef]: 19,
       [SubStats.percentAtk]: 5.8,

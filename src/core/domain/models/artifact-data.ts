@@ -22,3 +22,12 @@ export interface AllArtifactsData {
   goblets: GobletArtifactData[];
   circlets: CircletArtifactData[];
 }
+
+export interface OcrArtifactData {
+  type?: ArtifactType;
+  set?: SetNames;
+  level?: number;
+  mainStatType?: MainStatTypes;
+  mainStatValue?: number;
+  subStats?: SubStatsValues;
+}
