@@ -49,8 +49,7 @@ export const properlyImportedArtifactMock: OcrArtifactData[] = [
     set: SetNames.wanderersTroupe,
     level: 20,
     mainStatType: MainStats.geoDmg,
-    mainStatValue: 46.8,
-
+    mainStatValue: 46.6,
     subStats: {
       [SubStats.critDmg]: 13.2,
       [SubStats.critRate]: 8.9,
@@ -123,6 +122,7 @@ export const misrecognizedMainImportedArtifactMock: OcrArtifactData[] = [
       [SubStats.percentAtk]: 5.8,
       [SubStats.percentDef]: 5.8,
     },
+    errors: ['inconsistent main stat value, value from level is 717'],
   },
   {
     type: ArtifactType.plume,
@@ -136,6 +136,7 @@ export const misrecognizedMainImportedArtifactMock: OcrArtifactData[] = [
       [SubStats.flatHp]: 538,
       [SubStats.flatDef]: 21,
     },
+    errors: ['inconsistent main stat value, value from level is 311'],
   },
   {
     type: ArtifactType.goblet,
@@ -149,6 +150,7 @@ export const misrecognizedMainImportedArtifactMock: OcrArtifactData[] = [
       [SubStats.flatHp]: 598,
       [SubStats.flatAtk]: 35,
     },
+    errors: ['inconsistent main stat value, value from level is 46.6'],
   },
   {
     type: ArtifactType.sands,

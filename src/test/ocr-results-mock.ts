@@ -71,7 +71,7 @@ export const goodOcrResultsMock = [
     "Wanderer's String-Kettle\n",
     'Goblet of Eonothem\n',
     'Geo DMG Bonus\n',
-    '46.8%\n\n',
+    '46.6%\n\n',
     '+20\n\n',
     '. CRIT DMG+13.2%\n\n',
     '. CRIT Rate+8.9%\n\n',
