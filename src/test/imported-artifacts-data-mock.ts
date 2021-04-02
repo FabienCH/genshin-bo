@@ -97,3 +97,70 @@ export const properlyImportedArtifactMock: OcrArtifactData[] = [
     },
   },
 ];
+
+export const misrecognizedMainImportedArtifactMock: OcrArtifactData[] = [
+  {
+    type: ArtifactType.circlet,
+    set: SetNames.wanderersTroupe,
+    level: 20,
+    mainStatType: MainStats.critRate,
+    mainStatValue: 31.1,
+    subStats: {
+      [SubStats.flatHp]: 508,
+      [SubStats.critDmg]: 13.2,
+      [SubStats.percentDef]: 19.0,
+      [SubStats.energyRecharge]: 9.1,
+    },
+  },
+  {
+    type: ArtifactType.flower,
+    set: SetNames.crimsonWitchOfFlames,
+    level: 0,
+    mainStatType: MainStats.flatHp,
+    mainStatValue: 711,
+    subStats: {
+      [SubStats.flatDef]: 19,
+      [SubStats.percentAtk]: 5.8,
+      [SubStats.percentDef]: 5.8,
+    },
+  },
+  {
+    type: ArtifactType.plume,
+    set: SetNames.maidenBeloved,
+    level: 20,
+    mainStatType: MainStats.flatAtk,
+    mainStatValue: 317,
+    subStats: {
+      [SubStats.energyRecharge]: 4.5,
+      [SubStats.percentAtk]: 26.8,
+      [SubStats.flatHp]: 538,
+      [SubStats.flatDef]: 21,
+    },
+  },
+  {
+    type: ArtifactType.goblet,
+    set: SetNames.wanderersTroupe,
+    level: 20,
+    mainStatType: MainStats.geoDmg,
+    mainStatValue: 46.0,
+    subStats: {
+      [SubStats.critDmg]: 13.2,
+      [SubStats.critRate]: 8.9,
+      [SubStats.flatHp]: 598,
+      [SubStats.flatAtk]: 35,
+    },
+  },
+  {
+    type: ArtifactType.sands,
+    set: SetNames.gladiatorsFinale,
+    level: 8,
+    mainStatType: MainStats.percentAtk,
+    mainStatValue: 22.8,
+    subStats: {
+      [SubStats.percentDef]: 5.8,
+      [SubStats.flatHp]: 239,
+      [SubStats.critRate]: 5.4,
+      [SubStats.flatAtk]: 14,
+    },
+  },
+];

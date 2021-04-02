@@ -15,7 +15,7 @@ export class OcrResultsParser {
     const mainStatType = Object.values(MainStats).find((mainStat) => mainStat === ocrMainStat);
     const isMainPercent = ocrResults[3].includes('.') || ocrResults[3].includes('%');
     const ocrMainStatValue = isMainPercent ? ocrResults[3].replace(/\n|%/g, '') : ocrResults[3].replace(/\n|,/g, '');
-    const mainStatValue = isMainPercent ? parseFloat(ocrMainStatValue) : parseInt(ocrMainStatValue);
+    const mainStatValue = isMainPercent ? Math.trunc(parseFloat(ocrMainStatValue) * 10) / 10 : parseInt(ocrMainStatValue);
     const level = parseInt(ocrResults[4].replace(/\n/g, ''));
     const ocrSubsStats = [ocrResults[5], ocrResults[6], ocrResults[7], ocrResults[8]];
     const subStats = this.parseSubsStats(ocrSubsStats);
