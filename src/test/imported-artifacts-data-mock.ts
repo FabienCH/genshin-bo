@@ -4,6 +4,35 @@ import { MainStats } from '../core/domain/models/main-statistics';
 import { SetNames } from '../core/domain/models/sets-with-effects';
 import { SubStats } from '../core/domain/models/sub-statistics';
 
+export const ocrArtifactDataMock = [
+  {
+    type: ArtifactType.circlet,
+    set: SetNames.wanderersTroupe,
+    level: 20,
+    mainStatType: MainStats.critRate,
+    mainStatValue: 31.1,
+    subStats: {
+      [SubStats.flatHp]: 508,
+      [SubStats.critDmg]: 13.2,
+      [SubStats.percentDef]: 19.0,
+      [SubStats.energyRecharge]: 9.1,
+    },
+  },
+  {
+    type: ArtifactType.flower,
+    set: SetNames.gladiatorsFinale,
+    level: 16,
+    mainStatType: MainStats.flatHp,
+    mainStatValue: 3967,
+    subStats: {
+      [SubStats.critDmg]: 14.0,
+      [SubStats.flatDef]: 32,
+      [SubStats.percentAtk]: 8.2,
+      [SubStats.elementalMastery]: 42,
+    },
+  },
+];
+
 export const properlyImportedArtifactMock: OcrArtifactData[] = [
   {
     type: ArtifactType.circlet,

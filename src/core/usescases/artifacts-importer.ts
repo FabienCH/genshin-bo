@@ -1,6 +1,7 @@
 import { ArtifactImagesOcr } from '../domain/artifact-images-ocr';
 import { Observable } from 'rxjs';
 import { VideoToFrames } from '../domain/mappers/video-to-frames';
+import { OcrArtifactData } from '../domain/models/artifact-data';
 
 export class ArtifactsImporter {
   private readonly artifactImageOcr: ArtifactImagesOcr;
@@ -18,7 +19,7 @@ export class ArtifactsImporter {
     this.artifactImageOcr.runArtifactsOcrFromImages(images);
   }
 
-  public getOcrResults(): Observable<string[][]> {
+  public getOcrResults(): Observable<OcrArtifactData[]> {
     return this.artifactImageOcr.getOcrResults();
   }
 }

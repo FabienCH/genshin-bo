@@ -3,11 +3,14 @@ import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from './artifact-ocr-worker-handler';
 import { Subject, Observable, from } from 'rxjs';
 import { withLatestFrom } from 'rxjs/operators';
+import { OcrArtifactData } from './models/artifact-data';
+import { OcrResultsParser } from './ocr-results-parser';
 
 export class ArtifactImagesOcr {
   private lastImage!: Jimp;
   private ocrWorker: OcrWorkerHandler;
-  private ocrResultsSub: Subject<string[][]> = new Subject<string[][]>();
+  private ocrResultsParser: OcrResultsParser;
+  private ocrResultsSub: Subject<OcrArtifactData[]> = new Subject<OcrArtifactData[]>();
   private runOcrSub: Subject<void> = new Subject<void>();
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
@@ -20,6 +23,7 @@ export class ArtifactImagesOcr {
 
   constructor() {
     this.ocrWorker = ArtifactsDI.getOcrWorkerHandler();
+    this.ocrResultsParser = new OcrResultsParser();
   }
 
   public async runArtifactsOcrFromImages(images: string[]): Promise<void> {
@@ -46,7 +50,7 @@ export class ArtifactImagesOcr {
     this.runOcrSub.next();
   }
 
-  public getOcrResults(): Observable<string[][]> {
+  public getOcrResults(): Observable<OcrArtifactData[]> {
     return from(this.ocrResultsSub);
   }
 
@@ -62,9 +66,10 @@ export class ArtifactImagesOcr {
     return Buffer.from([]);
   }
 
-  private runOcrRecognize(imageForOcr: Buffer, currentOcrResults: string[][]): void {
+  private runOcrRecognize(imageForOcr: Buffer, currentOcrResults: OcrArtifactData[]): void {
     this.ocrWorker.recognize(imageForOcr).then((ocrResults) => {
-      this.ocrResultsSub.next([...currentOcrResults, ocrResults]);
+      const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults);
+      this.ocrResultsSub.next([...currentOcrResults, parsedOcrResults]);
       this.runOcrSub.next();
     });
   }

@@ -1,5 +1,4 @@
 import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images-mock';
-import { ocrResultsMock } from '../../test/ocr-results-mock';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
 import { ArtifactsImporter } from './artifacts-importer';
@@ -7,6 +6,7 @@ import artifact0 from '../../test/artifact0.jpg';
 import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
 import { skip } from 'rxjs/operators';
+import { ocrArtifactDataMock } from '../../test/imported-artifacts-data-mock';
 
 describe('ArtifactsImporter.importFromVideo', () => {
   let artifactsImporter: ArtifactsImporter;
@@ -27,7 +27,7 @@ describe('ArtifactsImporter.importFromVideo', () => {
       .subscribe((ocrResults) => {
         expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
         expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
-        expect(ocrResults).toEqual(ocrResultsMock);
+        expect(ocrResults).toEqual(ocrArtifactDataMock);
         done();
       });
 
@@ -40,7 +40,7 @@ describe('ArtifactsImporter.importFromVideo', () => {
       .pipe(skip(1))
       .subscribe((ocrResults) => {
         expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
-        expect(ocrResults).toEqual([ocrResultsMock[0]]);
+        expect(ocrResults).toEqual([ocrArtifactDataMock[0]]);
         done();
       });
 
