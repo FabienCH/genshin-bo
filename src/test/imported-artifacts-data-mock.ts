@@ -4,7 +4,7 @@ import { MainStats } from '../core/domain/models/main-statistics';
 import { SetNames } from '../core/domain/models/sets-with-effects';
 import { SubStats } from '../core/domain/models/sub-statistics';
 
-export const ocrArtifactDataMock = [
+export const ocrArtifactDataMock: OcrArtifactData[] = [
   {
     type: ArtifactType.circlet,
     set: SetNames.wanderersTroupe,
@@ -285,3 +285,16 @@ export const misrecognizedSubsImportedArtifactMock: OcrArtifactData[] = [
     },
   },
 ];
+export const artifactWith2LinesNameMock = {
+  type: ArtifactType.flower,
+  set: SetNames.viridescentVenerer,
+  level: 12,
+  mainStatType: MainStats.flatHp,
+  mainStatValue: 3155,
+  subStats: {
+    [SubStats.critRate]: 7.0,
+    [SubStats.critDmg]: 7.0,
+    [SubStats.elementalMastery]: 37,
+    [SubStats.flatAtk]: 37,
+  },
+};

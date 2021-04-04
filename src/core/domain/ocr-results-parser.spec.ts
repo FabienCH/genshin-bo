@@ -1,9 +1,15 @@
 import {
+  artifactWith2LinesNameMock,
   misrecognizedMainImportedArtifactMock,
   misrecognizedSubsImportedArtifactMock,
   properlyImportedArtifactMock,
 } from '../../test/imported-artifacts-data-mock';
-import { goodOcrResultsMock, wrongMainValuesOcrResultsMock, wrongSubsOcrResultsMock } from '../../test/ocr-results-mock';
+import {
+  goodOcrResultsMock,
+  ocrResultsWith2LinesNameMock,
+  wrongMainValuesOcrResultsMock,
+  wrongSubsOcrResultsMock,
+} from '../../test/ocr-results-mock';
 import { OcrResultsParser } from './ocr-results-parser';
 
 describe('OcrResultsParser', () => {
@@ -29,5 +35,9 @@ describe('OcrResultsParser', () => {
     wrongSubsOcrResultsMock.forEach((ocrResults, index) => {
       expect(ocrResultsParser.parseToArtifactData(ocrResults)).toEqual(misrecognizedSubsImportedArtifactMock[index]);
     });
+  });
+
+  it('should parse an artifact with 2 lines name', () => {
+    expect(ocrResultsParser.parseToArtifactData(ocrResultsWith2LinesNameMock)).toEqual(artifactWith2LinesNameMock);
   });
 });

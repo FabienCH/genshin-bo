@@ -287,3 +287,18 @@ export const wrongSubsOcrResultsMock = [
     'on hunts. It still stands proudly as\n',
   ],
 ];
+
+export const ocrResultsWith2LinesNameMock = [
+  'In Remembrance of Viridescent\n',
+  'Fields\n',
+  'Flower of Life\n',
+  'HP\n',
+  '3,155\n',
+  '+12\n',
+  '. CRIT Rate+7.0%\n',
+  '. CRIT DMG+7.05%\n',
+  '. Elemental Mastery+37\n',
+  '. ATK+37\n',
+  'Viridescent Venerer:\n',
+  '+ Equipped: Venti\n',
+];
