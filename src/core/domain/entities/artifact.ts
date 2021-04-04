@@ -23,6 +23,7 @@ export abstract class Artifact {
         MainStats.percentAtk,
         MainStats.percentHp,
         MainStats.pyroDmg,
+        MainStats.hydroDmg,
         MainStats.dendroDmg,
         MainStats.electroDmg,
         MainStats.anemoDmg,
@@ -33,7 +34,7 @@ export abstract class Artifact {
     },
     {
       stats: [MainStats.percentDef, MainStats.physicalDmg],
-      values: [8.7, 11.2, 13.7, 16.2, 28.6, 21.1, 23.6, 26.1, 28.6, 31, 33.5, 36, 38.5, 40.9, 43.4, 45.9, 48.4, 50.8, 53.3, 55.8, 58.3],
+      values: [8.7, 11.2, 13.7, 16.2, 18.6, 21.1, 23.6, 26.1, 28.6, 31, 33.5, 36, 38.5, 40.9, 43.4, 45.9, 48.4, 50.8, 53.3, 55.8, 58.3],
     },
     {
       stats: [MainStats.elementalMastery],
@@ -45,11 +46,11 @@ export abstract class Artifact {
     },
     {
       stats: [MainStats.critRate],
-      values: [4.7, 6, 7.4, 8.7, 10.0, 11.4, 12.7, 14, 15.4, 16.7, 18, 19.3, 20.7, 22, 23.3, 24.7, 26, 27.3, 28.7, 30, 31.1],
+      values: [4.7, 6, 7.4, 8.7, 9.9, 11.3, 12.7, 14, 15.4, 16.7, 18, 19.3, 20.7, 22, 23.3, 24.7, 25.8, 27.3, 28.7, 30, 31.1],
     },
     {
       stats: [MainStats.critDmg],
-      values: [9.3, 11.9, 14.6, 17.2, 19.9, 22.5, 25.5, 27.8, 30.5, 33.1, 35.8, 38.4, 41.1, 43.7, 46.3, 49, 51.6, 54.3, 56.9, 59.6, 62.2],
+      values: [9.3, 11.9, 14.6, 17.2, 19.9, 22.5, 25.5, 27.8, 30.5, 33.1, 35.8, 38.4, 41, 43.7, 46.3, 49, 51.6, 54.3, 56.9, 59.6, 62.2],
     },
     {
       stats: [MainStats.healingBonus],
@@ -71,7 +72,7 @@ export abstract class Artifact {
     subStats: SubStatsValues,
     level: number,
     mainStatType: MainStatTypes,
-    mainStatValueFromOcr: number,
+    mainStatValueFromOcr?: number,
   ) {
     if (Object.keys(subStats).length < 3) {
       throw new Error('an artifact can not have less than 3 substats');
@@ -87,9 +88,12 @@ export abstract class Artifact {
       throw new Error('main stat can not be the same as one of the substats');
     }
 
-    const mainStat = this.getMainStat(mainStatType);
+    const mainStat = this.getMainStat(mainStatType, level);
     const mainStatValue = Object.values(mainStat)[0];
     if (mainStatValueFromOcr && mainStatValue !== mainStatValueFromOcr) {
+      console.log('mainStatValueFromOcr', mainStatValueFromOcr);
+      console.log('mainStat', mainStat);
+      console.log(' Object.values(mainStat)[0]', Object.values(mainStat)[0]);
       throw new Error(`inconsistent main stat value, value from level is ${mainStatValue}`);
     }
 
@@ -97,7 +101,7 @@ export abstract class Artifact {
     this.set = set;
     this.level = level;
     this.subStats = subStats;
-    this.mainStat = this.getMainStat(mainStatType);
+    this.mainStat = this.getMainStat(mainStatType, this.level);
   }
 
   public matchFilters(minLevel = 0, focusStats: ArtifactStatsTypes[]): boolean {
@@ -115,12 +119,12 @@ export abstract class Artifact {
     );
   }
 
-  private getMainStat(mainStatType: MainStatTypes): MainStat {
+  private getMainStat(mainStatType: MainStatTypes, level: number): MainStat {
     const mainStat = this.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType));
     if (!mainStat) {
       throw new Error(`could not find values for main stat ${mainStatType}`);
     }
 
-    return { [mainStatType]: mainStat.values[this.level] };
+    return { [mainStatType]: mainStat.values[level] };
   }
 }

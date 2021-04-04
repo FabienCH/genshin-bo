@@ -5,6 +5,7 @@ import { Subject, Observable, from } from 'rxjs';
 import { withLatestFrom } from 'rxjs/operators';
 import { OcrArtifactData } from './models/artifact-data';
 import { OcrResultsParser } from './ocr-results-parser';
+import { ArtifactMapper } from './mappers/artifact-mapper';
 
 export class ArtifactImagesOcr {
   private lastImage!: Jimp;
@@ -67,9 +68,14 @@ export class ArtifactImagesOcr {
   }
 
   private runOcrRecognize(imageForOcr: Buffer, currentOcrResults: OcrArtifactData[]): void {
-    this.ocrWorker.recognize(imageForOcr).then((ocrResults) => {
+    this.ocrWorker.recognize(imageForOcr).then(async (ocrResults) => {
       const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults);
-      this.ocrResultsSub.next([...currentOcrResults, parsedOcrResults]);
+      try {
+        ArtifactMapper.mapOcrDataToArtifact(parsedOcrResults);
+        this.ocrResultsSub.next([...currentOcrResults, parsedOcrResults]);
+      } catch (error) {
+        console.log('error while parsing artifact', error.message);
+      }
       this.runOcrSub.next();
     });
   }
@@ -80,31 +86,32 @@ export class ArtifactImagesOcr {
     if (height < 850 || height > 854 || width < 498 || width > 502) {
       image.resize(500, 852);
     }
+
     const mainStatType = await Jimp.create(image);
-    mainStatType.crop(30, 158, 240, 27).scale(1.2).threshold({ max: 130 }).invert().threshold({ max: 125 });
+    mainStatType.crop(30, 158, 240, 27).scale(1.2).threshold({ max: 140 }).invert().threshold({ max: 115 });
 
     const mainStatValue = await Jimp.create(image);
-    mainStatValue.crop(30, 186, 220, 50).scale(0.7).threshold({ max: 150 }).invert().threshold({ max: 105 });
+    mainStatValue.crop(30, 186, 220, 50).scale(0.7).threshold({ max: 180 }).invert().threshold({ max: 75 });
 
     const top = await Jimp.create(image);
     top
       .crop(7, 7, 500, 280)
-      .threshold({ max: 150 })
+      .threshold({ max: 140 })
       .invert()
-      .threshold({ max: 105 })
+      .threshold({ max: 115 })
       .composite(this.topOverlay1, 195, 173)
       .composite(this.topOverlay2, 7, 225);
 
     const level = await Jimp.create(image);
-    level.crop(36, 316, 53, 25).invert().threshold({ max: 140 });
+    level.crop(36, 316, 53, 25).invert().threshold({ max: 130 });
 
     const imageWithSetBlack = this.setNameGreenToBlack(image);
 
-    const frameForOcr = imageWithSetBlack
+    return imageWithSetBlack
       .normalize()
-      .threshold({ max: 155 })
+      .threshold({ max: 135 })
       .invert()
-      .threshold({ max: 60 })
+      .threshold({ max: 120 })
       .invert()
       .composite(top, 7, 7)
       .composite(this.artifactOverlay, 270, 65)
@@ -114,9 +121,8 @@ export class ArtifactImagesOcr {
       .composite(mainStatValue, 30, 186)
       .composite(this.levelOverlay, 34, 314)
       .composite(level, 51, 320)
-      .composite(this.bottomOverlay, 20, 562);
-
-    return frameForOcr;
+      .composite(this.bottomOverlay, 20, 562)
+      .crop(7, 7, image.getWidth() - 14, image.getHeight() - 14);
   }
 
   private setNameGreenToBlack(image: Jimp): Jimp {

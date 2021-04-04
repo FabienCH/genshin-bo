@@ -6,8 +6,8 @@ import { Artifact, ArtifactType } from './artifact';
 export class PlumeArtifact extends Artifact {
   public static readonly mainStat = MainStats.flatAtk;
 
-  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number) {
-    super(id, set, subStats, level, PlumeArtifact.mainStat);
+  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatValueFromOcr?: number) {
+    super(id, set, subStats, level, PlumeArtifact.mainStat, mainStatValueFromOcr);
   }
 
   public getType(): ArtifactType {
