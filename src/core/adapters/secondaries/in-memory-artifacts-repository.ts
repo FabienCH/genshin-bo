@@ -264,4 +264,18 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
         break;
     }
   }
+
+  public addMany(artifactsData: ArtifactData[]): void {
+    artifactsData.forEach((artifactData) => {
+      this.addOne(artifactData);
+    });
+  }
+
+  public deleteAll(): void {
+    this.flowerArtifactsData = [];
+    this.plumeArtifactsData = [];
+    this.sandsArtifactsData = [];
+    this.gobletArtifactsData = [];
+    this.circletArtifactsData = [];
+  }
 }
