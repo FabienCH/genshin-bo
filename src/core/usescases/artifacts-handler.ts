@@ -2,15 +2,14 @@ import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { Artifact } from '../domain/entities/artifact';
 import { ArtifactView } from '../domain/models/artifact-view';
 import { isArtifactsStateInitialized, selectAllArtifacts, selectArtifactById } from '../adapters/redux/artifacts/artifacts-selectors';
-import { addOneArtifactAction } from '../adapters/redux/artifacts/artifacts-action';
+import { addOneArtifactAction, loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
 import { appStore } from '../adapters/redux/store';
 import { ArtifactData } from '../domain/models/artifact-data';
-import { loadArtifacts } from '../adapters/redux/artifacts/artifacts-middleware';
 
 export class ArtifactsHandler {
   constructor() {
     if (!isArtifactsStateInitialized()) {
-      appStore.dispatch(loadArtifacts());
+      appStore.dispatch(loadArtifactsActions());
     }
   }
 

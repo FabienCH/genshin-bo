@@ -3,14 +3,12 @@
  */
 
 import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images-mock';
-import { ArtifactsDI } from '../di/artifacts-di';
 import { ArtifactOcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
 
 describe('ArtifactOcrWorkerHandler', () => {
   let ocrWorkerHandler: ArtifactOcrWorkerHandler;
 
   beforeEach(() => {
-    ArtifactsDI.registerOcrWorker();
     ocrWorkerHandler = new ArtifactOcrWorkerHandler();
   });
 
@@ -20,7 +18,7 @@ describe('ArtifactOcrWorkerHandler', () => {
     });
     const ocrResults = await ocrWorkerHandler.recognize(artifactsOcrImagesMock[0]);
     expect(ocrResults.length).toEqual(11);
-  }, 10000);
+  }, 15000);
 
   afterEach(() => {
     ocrWorkerHandler.terminate();

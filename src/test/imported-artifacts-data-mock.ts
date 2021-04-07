@@ -4,13 +4,12 @@ import { MainStats } from '../core/domain/models/main-statistics';
 import { SetNames } from '../core/domain/models/sets-with-effects';
 import { SubStats } from '../core/domain/models/sub-statistics';
 
-export const ocrArtifactDataMock: OcrArtifactData[] = [
+export const importedArtifactDataMock = [
   {
     type: ArtifactType.circlet,
     set: SetNames.wanderersTroupe,
     level: 20,
     mainStatType: MainStats.critRate,
-    mainStatValue: 31.1,
     subStats: {
       [SubStats.flatHp]: 508,
       [SubStats.critDmg]: 13.2,
@@ -23,7 +22,6 @@ export const ocrArtifactDataMock: OcrArtifactData[] = [
     set: SetNames.gladiatorsFinale,
     level: 16,
     mainStatType: MainStats.flatHp,
-    mainStatValue: 3967,
     subStats: {
       [SubStats.critDmg]: 14.0,
       [SubStats.flatDef]: 32,
