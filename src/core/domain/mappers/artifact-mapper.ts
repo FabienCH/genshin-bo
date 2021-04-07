@@ -62,12 +62,18 @@ export abstract class ArtifactMapper {
     }
   }
 
-  public static mapOcrDataToArtifact(ocrArtifactData: OcrArtifactData): Artifact {
+  public static mapOcrDataToArtifactData(ocrArtifactData: OcrArtifactData): ArtifactData {
     const { type, set, level, mainStatType, subStats, mainStatValue } = ocrArtifactData;
     if (type && set && level && mainStatType && subStats) {
-      return ArtifactMapper.mapDataToArtifact({ id: uuidv4(), type, set, level, mainStatType, subStats }, mainStatValue);
+      const artifactData = { id: uuidv4(), type, set, level, mainStatType, subStats };
+      ArtifactMapper.mapDataToArtifact({ id: uuidv4(), type, set, level, mainStatType, subStats }, mainStatValue);
+      return artifactData;
     }
-    throw new Error(`missing artifact data (type:${type}, set:${set}, level:${level}, mainStatType:${mainStatType}, subStats:${subStats})`);
+    throw new Error(
+      `missing artifact data (type:${type}, set:${set}, level:${level}, mainStatType:${mainStatType}, subStats:${JSON.stringify(
+        subStats,
+      )})`,
+    );
   }
 
   public static mapAllDataToAllArtifactsByType(artifactsData: ArtifactData[]): AllArtifacts {

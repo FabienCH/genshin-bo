@@ -91,9 +91,6 @@ export abstract class Artifact {
     const mainStat = this.getMainStat(mainStatType, level);
     const mainStatValue = Object.values(mainStat)[0];
     if (mainStatValueFromOcr && mainStatValue !== mainStatValueFromOcr) {
-      console.log('mainStatValueFromOcr', mainStatValueFromOcr);
-      console.log('mainStat', mainStat);
-      console.log(' Object.values(mainStat)[0]', Object.values(mainStat)[0]);
       throw new Error(`inconsistent main stat value, value from level is ${mainStatValue}`);
     }
 
