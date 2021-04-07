@@ -1,25 +1,52 @@
-import { Artifact } from '../../../domain/entities/artifact';
-import { CharacterStatsValues } from '../../../domain/models/character-statistics';
-import { MainStatsValues } from '../../../domain/models/main-statistics';
-import { appStore } from '../store';
-import { addBuildsAction, removeAllBuildsAction } from './builds-action';
+import {
+  addBuildsAction,
+  buildsLimitReached,
+  buildsOptimizationDone,
+  removeAllBuildsAction,
+  runBuildsOptimizerAction,
+  updateBuildsComputationProgress,
+} from './builds-action';
 import { BuildsOptimizerDI } from '../../../di/builds-optimizer-di';
-import { SetFilter } from '../../../domain/build-filter';
+import { Middleware } from '@reduxjs/toolkit';
+import { AppState } from '../reducer';
+import { BuildsComputation } from '../../../domain/builds-computation';
+import { selectAllBuilds } from './builds-selectors';
 
-export function runBuildsOptimizer(
-  allArtifacts: Artifact[][],
-  baseStats: CharacterStatsValues,
-  characterBonusStat: MainStatsValues,
-  setFilter: SetFilter,
-  statsFilter: Partial<CharacterStatsValues>,
-): void {
-  appStore.dispatch(removeAllBuildsAction());
+export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (next) => (action) => {
   const bcWorker = BuildsOptimizerDI.getBcWorker();
 
-  bcWorker.onmessage = ({ data }) => {
-    if (data.builds) {
-      appStore.dispatch(addBuildsAction(data.builds));
+  switch (action.type) {
+    case runBuildsOptimizerAction.type: {
+      dispatch(removeAllBuildsAction());
+
+      bcWorker.onmessage = ({ data }) => {
+        const { builds, progress } = data.buildsResults;
+        dispatch(updateBuildsComputationProgress({ buildsComputationProgress: progress }));
+
+        if (builds) {
+          dispatch(addBuildsAction(builds));
+        }
+        if (selectAllBuilds().length >= BuildsComputation.buildsLimit) {
+          dispatch(buildsLimitReached());
+        }
+        if (progress.computed === progress.total) {
+          dispatch(buildsOptimizationDone());
+        }
+      };
+      bcWorker.postMessage(action.payload);
+
+      next(action);
+      break;
     }
-  };
-  bcWorker.postMessage({ allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter });
-}
+    case buildsLimitReached.type:
+    case buildsOptimizationDone.type: {
+      bcWorker.terminate();
+
+      next(action);
+      break;
+    }
+    default:
+      next(action);
+      break;
+  }
+};
