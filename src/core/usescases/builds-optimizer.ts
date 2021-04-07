@@ -1,4 +1,3 @@
-import { loadArtifacts } from '../adapters/redux/artifacts/artifacts-middleware';
 import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
 import { Artifact } from '../domain/entities/artifact';
@@ -11,13 +10,14 @@ import { ArtifactsFilter } from './artifacts-filter';
 import { StatsComputation } from '../domain/stats-computation';
 import { runBuildsOptimizer } from '../adapters/redux/builds/builds-middleware';
 import { SetFilter } from '../domain/build-filter';
+import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
 
 export class BuildsOptimizer {
   private allArtifacts!: Artifact[][];
 
   constructor() {
     if (!isArtifactsStateInitialized()) {
-      appStore.dispatch(loadArtifacts());
+      appStore.dispatch(loadArtifactsActions());
     }
   }
 
@@ -53,7 +53,7 @@ export class BuildsOptimizer {
 
     const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(selectAllArtifacts());
     this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
-    appStore.dispatch(runBuildsOptimizer(this.allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter));
+    runBuildsOptimizer(this.allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter);
   }
 
   public getBuilds(): number {

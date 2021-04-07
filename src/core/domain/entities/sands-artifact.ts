@@ -4,7 +4,7 @@ import { Artifact, ArtifactType } from './artifact';
 
 export class SandsArtifact extends Artifact {
   public getType(): ArtifactType {
-    return 'sands';
+    return ArtifactType.sands;
   }
 
   public matchFiltersWithMain(minLevel: number, focusStats: ArtifactStatsTypes[], mainStat?: SandsMainStatType): boolean {

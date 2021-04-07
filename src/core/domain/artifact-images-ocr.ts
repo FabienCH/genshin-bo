@@ -2,23 +2,31 @@ import Jimp from 'jimp';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from './artifact-ocr-worker-handler';
 import { Subject, Observable, from } from 'rxjs';
-import { withLatestFrom } from 'rxjs/operators';
+import { ArtifactData } from './models/artifact-data';
+import { OcrResultsParser } from './ocr-results-parser';
+import { ArtifactMapper } from './mappers/artifact-mapper';
 
 export class ArtifactImagesOcr {
   private lastImage!: Jimp;
   private ocrWorker: OcrWorkerHandler;
-  private ocrResultsSub: Subject<string[][]> = new Subject<string[][]>();
+  private ocrResultsParser: OcrResultsParser;
+  private ocrResultsSub: Subject<{ artifact?: ArtifactData; isDone: boolean }> = new Subject<{
+    artifact?: ArtifactData;
+    isDone: boolean;
+  }>();
   private runOcrSub: Subject<void> = new Subject<void>();
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
   private readonly topOverlay2: Jimp = new Jimp(460, 67, '#ffffff');
-  private readonly mainOverlay: Jimp = new Jimp(242, 29, '#ffffff');
+  private readonly mainStatOverlay: Jimp = new Jimp(242, 29, '#ffffff');
+  private readonly mainValueOverlay: Jimp = new Jimp(202, 52, '#ffffff');
   private readonly levelOverlay: Jimp = new Jimp(60, 30, '#ffffff');
   private readonly bottomOverlay: Jimp = new Jimp(475, 230, '#ffffff');
 
   constructor() {
     this.ocrWorker = ArtifactsDI.getOcrWorkerHandler();
+    this.ocrResultsParser = new OcrResultsParser();
   }
 
   public async runArtifactsOcrFromImages(images: string[]): Promise<void> {
@@ -26,44 +34,53 @@ export class ArtifactImagesOcr {
       cacheMethod: 'none',
       langPath: '.',
     });
-    const subscription = this.runOcrSub.pipe(withLatestFrom(this.ocrResultsSub)).subscribe(async ([_, currentOcrResults]) => {
+
+    const subscription = this.runOcrSub.subscribe(async () => {
       if (images[0]) {
         const imageForOcr = await this.getImageForOcr(images[0]);
+        images.shift();
         if (imageForOcr.length) {
-          this.runOcrRecognize(imageForOcr, currentOcrResults);
+          this.runOcrRecognize(imageForOcr);
         } else {
           this.runOcrSub.next();
         }
-        images.shift();
       } else {
+        this.ocrResultsSub.next({ isDone: true });
+
         this.ocrWorker.terminate();
         subscription.unsubscribe();
       }
     });
 
-    this.ocrResultsSub.next([]);
+    this.ocrResultsSub.next({ isDone: false });
     this.runOcrSub.next();
   }
 
-  public getOcrResults(): Observable<string[][]> {
+  public getOcrResults(): Observable<{ artifact?: ArtifactData; isDone: boolean }> {
     return from(this.ocrResultsSub);
   }
 
   private async getImageForOcr(image: string): Promise<Buffer> {
     const jimpImage = await Jimp.create(image);
+    const framesForOcr = await this.transformForOcr(jimpImage);
 
-    if (!this.lastImage || Jimp.diff(jimpImage, this.lastImage, 0.01).percent > 0.01) {
-      this.lastImage = await Jimp.create(image);
-      const framesForOcr = await this.transformForOcr(jimpImage);
+    if (!this.lastImage || Jimp.diff(framesForOcr, this.lastImage, 0.01).percent > 0.003) {
+      this.lastImage = framesForOcr;
 
       return await framesForOcr.getBufferAsync(Jimp.MIME_PNG);
     }
     return Buffer.from([]);
   }
 
-  private runOcrRecognize(imageForOcr: Buffer, currentOcrResults: string[][]): void {
+  private runOcrRecognize(imageForOcr: Buffer): void {
     this.ocrWorker.recognize(imageForOcr).then((ocrResults) => {
-      this.ocrResultsSub.next([...currentOcrResults, ocrResults]);
+      const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults);
+      try {
+        const artifactData = ArtifactMapper.mapOcrDataToArtifactData(parsedOcrResults);
+        this.ocrResultsSub.next({ artifact: artifactData, isDone: false });
+      } catch (error) {
+        console.log('error while parsing artifact', error.message);
+      }
       this.runOcrSub.next();
     });
   }
@@ -74,38 +91,43 @@ export class ArtifactImagesOcr {
     if (height < 850 || height > 854 || width < 498 || width > 502) {
       image.resize(500, 852);
     }
+
     const mainStatType = await Jimp.create(image);
-    mainStatType.crop(30, 158, 240, 27).scale(1.2).threshold({ max: 130 }).invert().threshold({ max: 125 });
+    mainStatType.crop(30, 158, 240, 27).scale(1.2).threshold({ max: 140 }).invert().threshold({ max: 115 });
+
+    const mainStatValue = await Jimp.create(image);
+    mainStatValue.crop(30, 186, 220, 50).scale(0.7).threshold({ max: 180 }).invert().threshold({ max: 75 });
 
     const top = await Jimp.create(image);
     top
       .crop(7, 7, 500, 280)
-      .threshold({ max: 150 })
+      .threshold({ max: 140 })
       .invert()
-      .threshold({ max: 105 })
+      .threshold({ max: 115 })
       .composite(this.topOverlay1, 195, 173)
       .composite(this.topOverlay2, 7, 225);
 
     const level = await Jimp.create(image);
-    level.crop(36, 316, 53, 25).invert().threshold({ max: 140 });
+    level.crop(36, 316, 53, 25).invert().threshold({ max: 130 });
 
     const imageWithSetBlack = this.setNameGreenToBlack(image);
 
-    const frameForOcr = imageWithSetBlack
+    return imageWithSetBlack
       .normalize()
-      .threshold({ max: 155 })
+      .threshold({ max: 135 })
       .invert()
-      .threshold({ max: 60 })
+      .threshold({ max: 120 })
       .invert()
       .composite(top, 7, 7)
       .composite(this.artifactOverlay, 270, 65)
-      .composite(this.mainOverlay, 29, 157)
+      .composite(this.mainStatOverlay, 29, 157)
       .composite(mainStatType, 30, 140)
+      .composite(this.mainValueOverlay, 29, 185)
+      .composite(mainStatValue, 30, 186)
       .composite(this.levelOverlay, 34, 314)
       .composite(level, 51, 320)
-      .composite(this.bottomOverlay, 20, 562);
-
-    return frameForOcr;
+      .composite(this.bottomOverlay, 20, 562)
+      .crop(7, 7, image.getWidth() - 14, image.getHeight() - 14);
   }
 
   private setNameGreenToBlack(image: Jimp): Jimp {

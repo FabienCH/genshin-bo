@@ -5,10 +5,11 @@ import { GobletArtifact } from '../entities/goblet-artifact';
 import { PlumeArtifact } from '../entities/plume-artifact';
 import { SandsArtifact } from '../entities/sands-artifact';
 import { AllArtifacts } from '../models/all-artifacts';
-import { ArtifactData } from '../models/artifact-data';
+import { ArtifactData, OcrArtifactData } from '../models/artifact-data';
 import { ArtifactView } from '../models/artifact-view';
 import { ArtifactStatsValues } from '../models/main-statistics';
 import { StringFormatter } from './string-formatter';
+import { v4 as uuidv4 } from 'uuid';
 
 export abstract class ArtifactMapper {
   public static mapDataToView(artifactData: ArtifactData): ArtifactView {
@@ -44,20 +45,37 @@ export abstract class ArtifactMapper {
     };
   }
 
-  public static mapDataToArtifact(artifactData: ArtifactData): Artifact {
+  public static mapDataToArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): Artifact {
     switch (artifactData.type) {
       case 'flower':
-        return ArtifactMapper.newFlowerArtifact(artifactData);
+        return ArtifactMapper.newFlowerArtifact(artifactData, mainValueFromOcr);
       case 'plume':
-        return ArtifactMapper.newPlumeArtifact(artifactData);
+        return ArtifactMapper.newPlumeArtifact(artifactData, mainValueFromOcr);
       case 'sands':
-        return ArtifactMapper.newSandsArtifact(artifactData);
+        return ArtifactMapper.newSandsArtifact(artifactData, mainValueFromOcr);
       case 'goblet':
-        return ArtifactMapper.newGobletArtifact(artifactData);
+        return ArtifactMapper.newGobletArtifact(artifactData, mainValueFromOcr);
       case 'circlet':
-        return ArtifactMapper.newCircletArtifact(artifactData);
+        return ArtifactMapper.newCircletArtifact(artifactData, mainValueFromOcr);
+      default:
+        throw new Error('incorrect artifact type');
     }
   }
+
+  public static mapOcrDataToArtifactData(ocrArtifactData: OcrArtifactData): ArtifactData {
+    const { type, set, level, mainStatType, subStats, mainStatValue } = ocrArtifactData;
+    if (type && set && level && mainStatType && subStats) {
+      const artifactData = { id: uuidv4(), type, set, level, mainStatType, subStats };
+      ArtifactMapper.mapDataToArtifact({ id: uuidv4(), type, set, level, mainStatType, subStats }, mainStatValue);
+      return artifactData;
+    }
+    throw new Error(
+      `missing artifact data (type:${type}, set:${set}, level:${level}, mainStatType:${mainStatType}, subStats:${JSON.stringify(
+        subStats,
+      )})`,
+    );
+  }
+
   public static mapAllDataToAllArtifactsByType(artifactsData: ArtifactData[]): AllArtifacts {
     const emptyAllArtifacts: AllArtifacts = { flowers: [], plumes: [], sands: [], goblets: [], circlets: [] };
     return artifactsData.reduce((allArtifacts, artifactData): AllArtifacts => {
@@ -82,24 +100,45 @@ export abstract class ArtifactMapper {
     }, emptyAllArtifacts);
   }
 
-  private static newCircletArtifact(artifactData: ArtifactData): CircletArtifact {
-    return new CircletArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, artifactData.mainStatType);
+  private static newCircletArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): CircletArtifact {
+    return new CircletArtifact(
+      artifactData.id,
+      artifactData.set,
+      artifactData.subStats,
+      artifactData.level,
+      artifactData.mainStatType,
+      mainValueFromOcr,
+    );
   }
 
-  private static newGobletArtifact(artifactData: ArtifactData): GobletArtifact {
-    return new GobletArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, artifactData.mainStatType);
+  private static newGobletArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): GobletArtifact {
+    return new GobletArtifact(
+      artifactData.id,
+      artifactData.set,
+      artifactData.subStats,
+      artifactData.level,
+      artifactData.mainStatType,
+      mainValueFromOcr,
+    );
   }
 
-  private static newSandsArtifact(artifactData: ArtifactData): SandsArtifact {
-    return new SandsArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, artifactData.mainStatType);
+  private static newSandsArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): SandsArtifact {
+    return new SandsArtifact(
+      artifactData.id,
+      artifactData.set,
+      artifactData.subStats,
+      artifactData.level,
+      artifactData.mainStatType,
+      mainValueFromOcr,
+    );
   }
 
-  private static newPlumeArtifact(artifactData: ArtifactData): PlumeArtifact {
-    return new PlumeArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level);
+  private static newPlumeArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): PlumeArtifact {
+    return new PlumeArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, mainValueFromOcr);
   }
 
-  private static newFlowerArtifact(artifactData: ArtifactData): FlowerArtifact {
-    return new FlowerArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level);
+  private static newFlowerArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): FlowerArtifact {
+    return new FlowerArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, mainValueFromOcr);
   }
 
   private static statToString(stat: ArtifactStatsValues): string {

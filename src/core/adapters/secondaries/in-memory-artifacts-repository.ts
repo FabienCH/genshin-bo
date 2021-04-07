@@ -8,12 +8,13 @@ import { SubStats } from '../../domain/models/sub-statistics';
 import { ArtifactsRepository } from '../../domain/artifacts-repository';
 import { FlowerArtifact } from '../../domain/entities/flower-artifact';
 import { PlumeArtifact } from '../../domain/entities/plume-artifact';
+import { ArtifactType } from '../../domain/entities/artifact';
 
 export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private flowerArtifactsData: ArtifactData[] = [
     {
       id: '0',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.retracingBolide,
       level: 2,
       mainStatType: FlowerArtifact.mainStat,
@@ -26,7 +27,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '1',
-      type: 'flower',
+      type: ArtifactType.flower,
       set: SetNames.thunderingFury,
       level: 8,
       mainStatType: FlowerArtifact.mainStat,
@@ -41,7 +42,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private plumeArtifactsData: ArtifactData[] = [
     {
       id: '2',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.retracingBolide,
       level: 7,
       mainStatType: PlumeArtifact.mainStat,
@@ -54,7 +55,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '3',
-      type: 'plume',
+      type: ArtifactType.plume,
       set: SetNames.blizzardStrayer,
       level: 12,
       mainStatType: PlumeArtifact.mainStat,
@@ -69,7 +70,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private sandsArtifactsData: SandsArtifactData[] = [
     {
       id: '4',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.thunderingFury,
       level: 12,
       mainStatType: MainStats.percentHp,
@@ -82,7 +83,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '5',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.bloodstainedChivalry,
       level: 16,
       mainStatType: MainStats.percentAtk,
@@ -95,7 +96,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '6',
-      type: 'sands',
+      type: ArtifactType.sands,
       set: SetNames.retracingBolide,
       level: 8,
       mainStatType: MainStats.elementalMastery,
@@ -110,7 +111,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private gobletArtifactsData: GobletArtifactData[] = [
     {
       id: '7',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.lavawalker,
       level: 15,
       mainStatType: MainStats.percentDef,
@@ -123,7 +124,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '8',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.archaicPetra,
       level: 12,
       mainStatType: MainStats.percentDef,
@@ -136,7 +137,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '9',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.blizzardStrayer,
       level: 8,
       mainStatType: MainStats.cryoDmg,
@@ -149,7 +150,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '10',
-      type: 'goblet',
+      type: ArtifactType.goblet,
       set: SetNames.wanderersTroupe,
       level: 4,
       mainStatType: MainStats.physicalDmg,
@@ -164,7 +165,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private circletArtifactsData: CircletArtifactData[] = [
     {
       id: '11',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 17,
       mainStatType: MainStats.healingBonus,
@@ -177,7 +178,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '12',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.gladiatorsFinale,
       level: 12,
       mainStatType: MainStats.critRate,
@@ -190,7 +191,7 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
     },
     {
       id: '13',
-      type: 'circlet',
+      type: ArtifactType.circlet,
       set: SetNames.retracingBolide,
       level: 14,
       mainStatType: MainStats.critRate,
@@ -246,21 +247,35 @@ export class InMemoryArtifactsRepository implements ArtifactsRepository {
 
   public addOne(artifactData: ArtifactData): void {
     switch (artifactData.type) {
-      case 'flower':
+      case ArtifactType.flower:
         this.flowerArtifactsData = [...this.flowerArtifactsData, artifactData];
         break;
-      case 'plume':
+      case ArtifactType.plume:
         this.plumeArtifactsData = [...this.plumeArtifactsData, artifactData];
         break;
-      case 'sands':
+      case ArtifactType.sands:
         this.sandsArtifactsData = [...this.sandsArtifactsData, artifactData as SandsArtifactData];
         break;
-      case 'goblet':
+      case ArtifactType.goblet:
         this.gobletArtifactsData = [...this.gobletArtifactsData, artifactData as GobletArtifactData];
         break;
-      case 'circlet':
+      case ArtifactType.circlet:
         this.circletArtifactsData = [...this.circletArtifactsData, artifactData as CircletArtifactData];
         break;
     }
+  }
+
+  public addMany(artifactsData: ArtifactData[]): void {
+    artifactsData.forEach((artifactData) => {
+      this.addOne(artifactData);
+    });
+  }
+
+  public deleteAll(): void {
+    this.flowerArtifactsData = [];
+    this.plumeArtifactsData = [];
+    this.sandsArtifactsData = [];
+    this.gobletArtifactsData = [];
+    this.circletArtifactsData = [];
   }
 }

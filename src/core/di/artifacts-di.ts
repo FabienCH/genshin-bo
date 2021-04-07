@@ -1,10 +1,11 @@
-import { OcrWorkerHandlerMock } from '../../test/artifacts-ocr.worker-mock';
+import { OcrWorkerHandlerMock } from '../../test/artifacts-ocr-worker-mock';
 import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
 import { ArtifactsRepository } from '../domain/artifacts-repository';
 import { AllArtifactsData } from '../domain/models/artifact-data';
 import { ArtifactOcrWorkerHandler, OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
 import { ArtifactsHandler } from '../usescases/artifacts-handler';
 import { ArtifactsImporter } from '../usescases/artifacts-importer';
+import { LocalStorageArtifactsRepository } from '../adapters/secondaries/local-storage-artifacts-repository';
 
 export abstract class ArtifactsDI {
   public static artifactsHandler: ArtifactsHandler;
@@ -15,6 +16,13 @@ export abstract class ArtifactsDI {
 
   public static registerRepository(artifactsData?: AllArtifactsData): void {
     ArtifactsDI.artifactsRepository = new InMemoryArtifactsRepository(artifactsData);
+    switch (process.env.NODE_ENV) {
+      case 'test':
+        ArtifactsDI.artifactsRepository = new InMemoryArtifactsRepository(artifactsData);
+        break;
+      default:
+        ArtifactsDI.artifactsRepository = new LocalStorageArtifactsRepository();
+    }
     ArtifactsDI.artifactsHandler = new ArtifactsHandler();
   }
 

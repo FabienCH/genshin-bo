@@ -193,7 +193,6 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
 
   render(): ReactElement {
     const { classes, builds } = this.props;
-
     let buildsResultsContainer;
     if (builds.length > 0) {
       buildsResultsContainer = <BuildsResultsContainer builds={builds} buildFilters={this.state.buildFilters}></BuildsResultsContainer>;

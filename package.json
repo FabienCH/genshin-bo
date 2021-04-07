@@ -7,6 +7,7 @@
     "start": "react-app-rewired start",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
+    "test:dev": "jest --watch --onlyChanged",
     "test:adapters": "npm test --runTestsByPath src/core/adapters",
     "test:domain": "npm test --runTestsByPath src/core/domain src/core/usescases",
     "mutation-testing": "stryker run --buildCommand jest",
