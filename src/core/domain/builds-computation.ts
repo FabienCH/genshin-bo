@@ -21,6 +21,7 @@ export class BuildsComputation {
   constructor() {
     this.statsComputation = new StatsComputation();
   }
+
   public computeBuilds(
     allArtifacts: Artifact[][],
     baseStats: CharacterStatsValues,

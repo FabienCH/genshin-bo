@@ -12,16 +12,14 @@ export function runBuildsOptimizer(
   characterBonusStat: MainStatsValues,
   setFilter: SetFilter,
   statsFilter: Partial<CharacterStatsValues>,
-) {
-  return (): void => {
-    appStore.dispatch(removeAllBuildsAction());
-    const bcWorker = BuildsOptimizerDI.getBcWorker();
+): void {
+  appStore.dispatch(removeAllBuildsAction());
+  const bcWorker = BuildsOptimizerDI.getBcWorker();
 
-    bcWorker.onmessage = ({ data }) => {
-      if (data.builds) {
-        appStore.dispatch(addBuildsAction(data.builds));
-      }
-    };
-    bcWorker.postMessage({ allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter });
+  bcWorker.onmessage = ({ data }) => {
+    if (data.builds) {
+      appStore.dispatch(addBuildsAction(data.builds));
+    }
   };
+  bcWorker.postMessage({ allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter });
 }

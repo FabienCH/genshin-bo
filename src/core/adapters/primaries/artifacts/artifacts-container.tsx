@@ -36,7 +36,6 @@ class ArtifactsContainer extends Component<unknown, State> {
   importArtifacts(): void {
     if (this.state.video) {
       this.state.artifactsImporter.importFromVideo(this.state.video);
-      this.state.artifactsImporter.getOcrResults();
     }
   }
 
