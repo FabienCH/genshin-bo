@@ -3,19 +3,23 @@
  */
 
 import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images-mock';
-import { ArtifactOcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
+import { ArtifactOcrWorkersHandler } from '../domain/artifact-ocr-worker-handler';
 
 describe('ArtifactOcrWorkerHandler', () => {
-  let ocrWorkerHandler: ArtifactOcrWorkerHandler;
+  let ocrWorkerHandler: ArtifactOcrWorkersHandler;
 
   beforeEach(() => {
-    ocrWorkerHandler = new ArtifactOcrWorkerHandler();
+    ocrWorkerHandler = new ArtifactOcrWorkersHandler();
   });
 
   it('should initialize tesseract lang and run recognize without error', async () => {
-    await ocrWorkerHandler.initialize('eng', {
-      cacheMethod: 'readOnly',
-    });
+    await ocrWorkerHandler.initialize(
+      'eng',
+      {
+        cacheMethod: 'readOnly',
+      },
+      1,
+    );
     const ocrResults = await ocrWorkerHandler.recognize(artifactsOcrImagesMock[0]);
     expect(ocrResults.length).toEqual(11);
   }, 15000);

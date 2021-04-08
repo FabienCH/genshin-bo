@@ -1,20 +1,14 @@
 import Jimp from 'jimp';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from './artifact-ocr-worker-handler';
-import { Subject, Observable, from } from 'rxjs';
 import { ArtifactData } from './models/artifact-data';
 import { OcrResultsParser } from './ocr-results-parser';
 import { ArtifactMapper } from './mappers/artifact-mapper';
 
-export class ArtifactImagesOcr {
+export class ArtifactImageOcr {
   private lastImage!: Jimp;
   private ocrWorker: OcrWorkerHandler;
   private ocrResultsParser: OcrResultsParser;
-  private ocrResultsSub: Subject<{ artifact?: ArtifactData; isDone: boolean }> = new Subject<{
-    artifact?: ArtifactData;
-    isDone: boolean;
-  }>();
-  private runOcrSub: Subject<void> = new Subject<void>();
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
@@ -29,38 +23,22 @@ export class ArtifactImagesOcr {
     this.ocrResultsParser = new OcrResultsParser();
   }
 
-  public async runArtifactsOcrFromImages(images: string[]): Promise<void> {
-    await this.ocrWorker.initialize('genshin', {
-      cacheMethod: 'none',
-      langPath: '.',
-    });
-
-    const subscription = this.runOcrSub.subscribe(async () => {
-      if (images[0]) {
-        const imageForOcr = await this.getImageForOcr(images[0]);
-        images.shift();
-        if (imageForOcr.length) {
-          this.runOcrRecognize(imageForOcr);
-        } else {
-          this.runOcrSub.next();
-        }
-      } else {
-        this.ocrResultsSub.next({ isDone: true });
-
-        this.ocrWorker.terminate();
-        subscription.unsubscribe();
-      }
-    });
-
-    this.ocrResultsSub.next({ isDone: false });
-    this.runOcrSub.next();
-  }
-
-  public getOcrResults(): Observable<{ artifact?: ArtifactData; isDone: boolean }> {
-    return from(this.ocrResultsSub);
+  public async runArtifactOcrFromImage(image: string): Promise<{ artifact?: ArtifactData; isDone: boolean }> {
+    const imageForOcr = await this.getImageForOcr(image);
+    if (imageForOcr.length) {
+      return { artifact: await this.runOcrRecognize(imageForOcr), isDone: false };
+    }
+    if (image) {
+      return { isDone: false };
+    }
+    this.ocrWorker.terminate();
+    return { isDone: true };
   }
 
   private async getImageForOcr(image: string): Promise<Buffer> {
+    if (!image) {
+      return Buffer.from([]);
+    }
     const jimpImage = await Jimp.create(image);
     const framesForOcr = await this.transformForOcr(jimpImage);
 
@@ -72,17 +50,16 @@ export class ArtifactImagesOcr {
     return Buffer.from([]);
   }
 
-  private runOcrRecognize(imageForOcr: Buffer): void {
-    this.ocrWorker.recognize(imageForOcr).then((ocrResults) => {
-      const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults);
-      try {
-        const artifactData = ArtifactMapper.mapOcrDataToArtifactData(parsedOcrResults);
-        this.ocrResultsSub.next({ artifact: artifactData, isDone: false });
-      } catch (error) {
-        console.log('error while parsing artifact', error.message);
-      }
-      this.runOcrSub.next();
-    });
+  private async runOcrRecognize(imageForOcr: Buffer): Promise<ArtifactData | undefined> {
+    const ocrResults = await this.ocrWorker.recognize(imageForOcr);
+
+    const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults);
+    try {
+      return ArtifactMapper.mapOcrDataToArtifactData(parsedOcrResults);
+    } catch (error) {
+      console.log('error while parsing artifact', error.message);
+      return undefined;
+    }
   }
 
   private async transformForOcr(image: Jimp): Promise<Jimp> {

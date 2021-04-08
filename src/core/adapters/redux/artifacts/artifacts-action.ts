@@ -9,10 +9,10 @@ export const addOneArtifactAction = createAction<ArtifactData>('[Entities/Artifa
 
 export const deleteAllArtifactsAction = createAction('[Entities/Artifacts] Delete All Artifact');
 
-export const importArtifactsFromImagesAction = createAction<string[]>('[Entities/Artifacts] Import Artifacts From Images');
+export const runOcrOnImageAction = createAction<string>('[Entities/Artifacts] Run OCR On Image');
 
 export type ArtifactsActionTypes =
   | typeof addAllArtifactsAction
   | typeof addOneArtifactAction
-  | typeof importArtifactsFromImagesAction
+  | typeof runOcrOnImageAction
   | typeof deleteAllArtifactsAction;

@@ -1,7 +1,6 @@
 import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images-mock';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
-import { ArtifactsImporter } from './artifacts-importer';
 import artifact0 from '../../test/artifact0.jpg';
 import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
@@ -12,11 +11,11 @@ import { Subject } from 'rxjs';
 import { skip, take } from 'rxjs/operators';
 import { ArtifactData } from '../domain/models/artifact-data';
 import { Unsubscribe } from '@reduxjs/toolkit';
+import { runOcrOnImageAction } from '../adapters/redux/artifacts/artifacts-action';
 
 describe('ArtifactsImporter.importFromVideo', () => {
   const artifactsStateChangesSub: Subject<ArtifactData[]> = new Subject();
   let appStoreUnsubscribe: Unsubscribe;
-  let artifactsImporter: ArtifactsImporter;
   let ocrWorkerHandler: OcrWorkerHandler;
   let ocrWorkerSpy: jest.SpyInstance;
 
@@ -25,13 +24,18 @@ describe('ArtifactsImporter.importFromVideo', () => {
       artifactsStateChangesSub.next(selectAllArtifacts());
     });
     ArtifactsDI.registerOcrWorker();
-    ArtifactsDI.registerRepository();
-    artifactsImporter = ArtifactsDI.getArtifactsImporter();
+    ArtifactsDI.registerRepository({
+      flowers: [],
+      plumes: [],
+      sands: [],
+      goblets: [],
+      circlets: [],
+    });
     ocrWorkerHandler = ArtifactsDI.getOcrWorkerHandler();
     ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
   });
 
-  it('should update stored artifacts with artifacts contained in each  images', (done) => {
+  it('should update stored artifacts with artifacts contained in each images', (done) => {
     artifactsStateChangesSub.pipe(skip(3), take(1)).subscribe((artifactsData) => {
       expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
       expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
@@ -39,7 +43,8 @@ describe('ArtifactsImporter.importFromVideo', () => {
       done();
     });
 
-    artifactsImporter.importFromImages([artifact0, artifact1]);
+    appStore.dispatch(runOcrOnImageAction(artifact0));
+    appStore.dispatch(runOcrOnImageAction(artifact1));
   });
 
   it('should filter duplicated artifacts images', (done) => {
@@ -49,7 +54,8 @@ describe('ArtifactsImporter.importFromVideo', () => {
       done();
     });
 
-    artifactsImporter.importFromImages([artifact0, artifact0bis]);
+    appStore.dispatch(runOcrOnImageAction(artifact0));
+    appStore.dispatch(runOcrOnImageAction(artifact0bis));
   });
 
   afterEach(() => {

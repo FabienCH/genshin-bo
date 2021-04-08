@@ -1,37 +1,26 @@
 import { ArtifactsDI } from '../../../di/artifacts-di';
-import { ArtifactImagesOcr } from '../../../domain/artifact-images-ocr';
 import {
   addAllArtifactsAction,
   addOneArtifactAction,
   deleteAllArtifactsAction,
-  importArtifactsFromImagesAction,
+  runOcrOnImageAction,
   loadArtifactsActions,
 } from './artifacts-action';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Middleware } from '@reduxjs/toolkit';
 import { AppState } from '../reducer';
 import { selectAllArtifacts } from './artifacts-selectors';
 
-export const artifactsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (next) => (action) => {
+export const artifactsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (next) => async (action) => {
   switch (action.type) {
-    case importArtifactsFromImagesAction.type: {
-      dispatch(deleteAllArtifactsAction());
-      const artifactImageOcr = new ArtifactImagesOcr();
-      const importIsDone = new Subject<void>();
-      artifactImageOcr.runArtifactsOcrFromImages(action.payload);
-      artifactImageOcr
-        .getOcrResults()
-        .pipe(takeUntil(importIsDone))
-        .subscribe((ocrResults) => {
-          if (ocrResults.isDone) {
-            importIsDone.next();
-            ArtifactsDI.getRepository().addMany(selectAllArtifacts());
-          }
-          if (ocrResults.artifact) {
-            dispatch(addOneArtifactAction(ocrResults.artifact));
-          }
-        });
+    case runOcrOnImageAction.type: {
+      const ocrResults = await ArtifactsDI.getArtifactImageOcr().runArtifactOcrFromImage(action.payload);
+
+      if (ocrResults.isDone) {
+        ArtifactsDI.getRepository().addMany(selectAllArtifacts());
+      }
+      if (ocrResults.artifact) {
+        dispatch(addOneArtifactAction(ocrResults.artifact));
+      }
       next(action);
       break;
     }

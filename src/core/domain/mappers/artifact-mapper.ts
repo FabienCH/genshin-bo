@@ -14,19 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 export abstract class ArtifactMapper {
   public static mapDataToView(artifactData: ArtifactData): ArtifactView {
     const artifact = ArtifactMapper.mapDataToArtifact(artifactData);
-    const subValues = Object.values(artifact.subStats);
-    const subStats = Object.keys(artifact.subStats).map((key, index) => ({ [key]: subValues[index] }));
-    return {
-      id: artifact.id,
-      type: artifact.getType(),
-      set: StringFormatter.formatStringWithUpperCase(artifact.set),
-      level: artifact.level,
-      mainStat: ArtifactMapper.statToString(artifact.mainStat),
-      subStat1: ArtifactMapper.statToString(subStats[0]),
-      subStat2: ArtifactMapper.statToString(subStats[1]),
-      subStat3: ArtifactMapper.statToString(subStats[2]),
-      subStat4: subStats[3] ? ArtifactMapper.statToString(subStats[3]) : '-',
-    };
+    return ArtifactMapper.mapArtifactToView(artifact);
   }
 
   public static mapArtifactToView(artifact: Artifact): ArtifactView {
@@ -34,7 +22,7 @@ export abstract class ArtifactMapper {
     const subStats = Object.keys(artifact.subStats).map((key, index) => ({ [key]: subValues[index] }));
     return {
       id: artifact.id,
-      type: artifact.getType(),
+      type: StringFormatter.upperCaseFirstChar(artifact.getType()),
       set: StringFormatter.formatStringWithUpperCase(artifact.set),
       level: artifact.level,
       mainStat: ArtifactMapper.statToString(artifact.mainStat),

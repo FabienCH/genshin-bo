@@ -1,35 +1,36 @@
 import { Canvas, createCanvas } from 'canvas';
+import { Subject, Observable, from } from 'rxjs';
 
-export class VideoToFrames {
-  public static getFrames(videoFile: File, fps: number): Promise<string[]> {
-    return new Promise((resolve: (base64Images: string[]) => void) => {
-      const video = document.createElement('video');
-      video.preload = 'auto';
-      const base64Images: string[] = [];
+export abstract class VideoToFrames {
+  private static readonly frameSub: Subject<string> = new Subject<string>();
 
-      video.addEventListener('loadeddata', async () => {
-        const canvas: Canvas = createCanvas(video.videoWidth, video.videoHeight);
-        const duration = video.duration;
-        const totalFrames = duration * fps;
-        const timeInterval = duration / totalFrames;
+  public static getFrames(videoFile: File, fps: number): Observable<string> {
+    const video = document.createElement('video');
+    video.preload = 'auto';
 
-        for (let time = 0; time < duration; time += timeInterval) {
-          const frame = await VideoToFrames.getVideoFrame(video, canvas, time);
-          base64Images.push(frame);
-        }
-        resolve(base64Images);
-      });
+    video.addEventListener('loadeddata', async () => {
+      const canvas: Canvas = createCanvas(video.videoWidth, video.videoHeight);
+      const duration = video.duration;
+      const totalFrames = duration * fps;
+      const timeInterval = duration / totalFrames;
 
-      video.src = URL.createObjectURL(videoFile);
-      video.load();
+      for (let time = 0; time < duration; time += timeInterval) {
+        const frame = await VideoToFrames.getVideoFrame(video, canvas, time);
+        VideoToFrames.frameSub.next(frame);
+      }
+      VideoToFrames.frameSub.next('');
     });
+
+    video.src = URL.createObjectURL(videoFile);
+    video.load();
+    return from(VideoToFrames.frameSub);
   }
 
   private static getVideoFrame(video: HTMLVideoElement, canvas: Canvas, time: number): Promise<string> {
     return new Promise((resolve: (frame: string) => void) => {
       const eventCallback = () => {
         video.removeEventListener('seeked', eventCallback);
-        resolve(this.getFrame(video, canvas));
+        resolve(VideoToFrames.getFrame(video, canvas));
       };
       video.addEventListener('seeked', eventCallback);
       video.currentTime = time;
