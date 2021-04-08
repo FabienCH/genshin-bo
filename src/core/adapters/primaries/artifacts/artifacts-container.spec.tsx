@@ -2,6 +2,8 @@ import ArtifactsContainer from './artifacts-container';
 import { AgGridReact } from 'ag-grid-react';
 import { mount, ReactWrapper } from 'enzyme';
 import { ArtifactsDI } from '../../../di/artifacts-di';
+import { appStore } from '../../redux/store';
+import { Provider } from 'react-redux';
 
 const ensureGridApiHasBeenSet = (wrapper: AgGridReact) => {
   return new Promise((resolve) => {
@@ -22,7 +24,11 @@ describe('Artifacts container', () => {
   beforeEach(() => {
     ArtifactsDI.registerRepository();
     ArtifactsDI.registerOcrWorker();
-    wrapper = mount(<ArtifactsContainer />);
+    wrapper = mount(
+      <Provider store={appStore}>
+        <ArtifactsContainer />
+      </Provider>,
+    );
     agGridReact = wrapper.find(AgGridReact).instance();
   });
 

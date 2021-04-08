@@ -4,6 +4,9 @@ import { Container, createStyles, Theme, withStyles, WithStyles } from '@materia
 
 const styles = ({ palette }: Theme) =>
   createStyles({
+    container: {
+      marginBottom: 20,
+    },
     uploadVideoInput: {
       display: 'none',
     },
@@ -42,7 +45,7 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
 
   const videoName = video ? video.name : '';
   return (
-    <Container>
+    <Container className={classes.container}>
       <label htmlFor="upload-video">
         <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
 

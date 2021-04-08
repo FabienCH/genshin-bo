@@ -4,26 +4,24 @@ import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { ArtifactView } from '../../../domain/models/artifact-view';
 import { Container } from '@material-ui/core';
 import ArtifactsImport from './artifacts-import';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridReadyEvent } from 'ag-grid-community';
 import { ArtifactsImporter } from '../../../usescases/artifacts-importer';
+import { connect } from 'react-redux';
 
 type State = {
   artifactsImporter: ArtifactsImporter;
-  artifacts: ArtifactView[];
   video?: File;
 };
 
-class ArtifactsContainer extends Component<unknown, State> {
-  constructor(props: unknown) {
+type ArtifactsContainerProps = { artifacts: ArtifactView[] };
+
+class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
+  constructor(props: ArtifactsContainerProps) {
     super(props);
-    this.state = { artifactsImporter: ArtifactsDI.getArtifactsImporter(), artifacts: [] };
+    this.state = { artifactsImporter: ArtifactsDI.getArtifactsImporter() };
     this.videoFileChange = this.videoFileChange.bind(this);
     this.importArtifacts = this.importArtifacts.bind(this);
-  }
-
-  componentDidMount(): void {
-    const artifacts = ArtifactsDI.artifactsHandler.getAll();
-    this.setState({ artifacts });
+    this.onGridReady = this.onGridReady.bind(this);
   }
 
   videoFileChange(video: File): void {
@@ -39,20 +37,31 @@ class ArtifactsContainer extends Component<unknown, State> {
     }
   }
 
+  onGridReady(params: GridReadyEvent): void {
+    params.api.sizeColumnsToFit();
+  }
+
   render(): ReactElement {
+    const { artifacts } = this.props;
+
     const defaultColDef: ColDef = {
       resizable: true,
       sortable: true,
+      lockVisible: true,
     };
 
     const columnDefs: ColDef[] = [
       {
-        field: 'set',
-        width: 170,
+        field: 'type',
+        width: 100,
       },
       {
         field: 'level',
         width: 80,
+      },
+      {
+        field: 'set',
+        width: 170,
       },
       {
         field: 'mainStat',
@@ -79,7 +88,7 @@ class ArtifactsContainer extends Component<unknown, State> {
         width: 170,
       },
     ];
-    const gridWidth = this.state.artifacts.length > 13 ? 1169 : 1152;
+    const gridWidth = artifacts.length > 13 ? 1269 : 1252;
     return (
       <section>
         <h2>Import Artifacts</h2>
@@ -89,9 +98,10 @@ class ArtifactsContainer extends Component<unknown, State> {
           importArtifacts={this.importArtifacts}
         ></ArtifactsImport>
         <Container style={{ height: 750, width: gridWidth }} className="ag-theme-material">
-          <AgGridReact rowData={this.state.artifacts} defaultColDef={defaultColDef} columnDefs={columnDefs}>
-            <AgGridColumn field="set" checkboxSelection={true}></AgGridColumn>
+          <AgGridReact rowData={artifacts} defaultColDef={defaultColDef} columnDefs={columnDefs} onGridReady={this.onGridReady}>
+            <AgGridColumn field="type"></AgGridColumn>
             <AgGridColumn field="level"></AgGridColumn>
+            <AgGridColumn field="set"></AgGridColumn>
             <AgGridColumn field="mainStat"></AgGridColumn>
             <AgGridColumn field="subStat1"></AgGridColumn>
             <AgGridColumn field="subStat2"></AgGridColumn>
@@ -104,4 +114,8 @@ class ArtifactsContainer extends Component<unknown, State> {
   }
 }
 
-export default ArtifactsContainer;
+const mapStateToProps = () => {
+  return { artifacts: ArtifactsDI.artifactsHandler.getAll() };
+};
+
+export default connect(mapStateToProps)(ArtifactsContainer);
