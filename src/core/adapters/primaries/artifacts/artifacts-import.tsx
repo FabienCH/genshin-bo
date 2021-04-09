@@ -1,5 +1,7 @@
 import { ChangeEvent, ReactElement } from 'react';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Container, createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 
 const styles = ({ palette }: Theme) =>
@@ -26,6 +28,7 @@ interface ArtifactsImportProps extends WithStyles<typeof styles> {
   video?: File;
   handleFileChange: (video: File) => void;
   importArtifacts: () => void;
+  handleOverrideArtifactsChange: (checked: boolean) => void;
 }
 
 function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
@@ -43,6 +46,10 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
     }
   };
 
+  const handleOverrideArtifactsChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    props.handleOverrideArtifactsChange(event.target.checked);
+  };
+
   const videoName = video ? video.name : '';
   return (
     <Container className={classes.container}>
@@ -57,6 +64,10 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
       <Button className={classes.importButton} color="primary" variant="contained" disabled={!video} onClick={importArtifacts}>
         Import Artifacts
       </Button>
+      <FormControlLabel
+        control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
+        label="Override current artifacts"
+      />
     </Container>
   );
 }

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 
 type State = {
   artifactsImporter: ArtifactsImporter;
+  overrideCurrentArtifacts: boolean;
   video?: File;
 };
 
@@ -18,9 +19,10 @@ type ArtifactsContainerProps = { artifacts: ArtifactView[] };
 class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   constructor(props: ArtifactsContainerProps) {
     super(props);
-    this.state = { artifactsImporter: ArtifactsDI.getArtifactsImporter() };
+    this.state = { artifactsImporter: ArtifactsDI.getArtifactsImporter(), overrideCurrentArtifacts: false };
     this.videoFileChange = this.videoFileChange.bind(this);
     this.importArtifacts = this.importArtifacts.bind(this);
+    this.overrideArtifactsChange = this.overrideArtifactsChange.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
   }
 
@@ -33,8 +35,15 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
 
   importArtifacts(): void {
     if (this.state.video) {
-      this.state.artifactsImporter.importFromVideo(this.state.video);
+      this.state.artifactsImporter.importFromVideo(this.state.video, this.state.overrideCurrentArtifacts);
     }
+  }
+
+  overrideArtifactsChange(checked: boolean): void {
+    this.setState((state) => ({
+      ...state,
+      overrideCurrentArtifacts: checked,
+    }));
   }
 
   onGridReady(params: GridReadyEvent): void {
@@ -96,6 +105,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           video={this.state.video}
           handleFileChange={this.videoFileChange}
           importArtifacts={this.importArtifacts}
+          handleOverrideArtifactsChange={this.overrideArtifactsChange}
         ></ArtifactsImport>
         <Container style={{ height: 750, width: gridWidth }} className="ag-theme-material">
           <AgGridReact rowData={artifacts} defaultColDef={defaultColDef} columnDefs={columnDefs} onGridReady={this.onGridReady}>

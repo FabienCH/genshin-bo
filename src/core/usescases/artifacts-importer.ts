@@ -8,9 +8,12 @@ import { takeUntil } from 'rxjs/operators';
 export class ArtifactsImporter {
   private readonly lastImagePast: Subject<void> = new Subject();
 
-  public async importFromVideo(video: File): Promise<void> {
+  public async importFromVideo(video: File, overrideCurrentArtifacts = false): Promise<void> {
     await ArtifactsDI.getArtifactImageOcr().initializeOcr();
-    appStore.dispatch(deleteAllArtifactsAction());
+
+    if (overrideCurrentArtifacts) {
+      appStore.dispatch(deleteAllArtifactsAction());
+    }
 
     VideoToFrames.getFrames(video, 10)
       .pipe(takeUntil(this.lastImagePast))
