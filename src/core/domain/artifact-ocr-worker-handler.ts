@@ -9,7 +9,7 @@ export interface OcrWorkerHandler {
 export class ArtifactOcrWorkersHandler implements OcrWorkerHandler {
   private tesseractScheduler!: Scheduler;
 
-  public async initialize(lang: string, options?: Partial<WorkerOptions>, nbOfWorker = 5): Promise<void> {
+  public async initialize(lang: string, options?: Partial<WorkerOptions>, nbOfWorker = 3): Promise<void> {
     this.tesseractScheduler = createScheduler();
     for (let i = 0; i < nbOfWorker; i++) {
       const worker = createWorker(options);

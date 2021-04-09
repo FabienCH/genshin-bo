@@ -52,7 +52,7 @@ export abstract class ArtifactMapper {
 
   public static mapOcrDataToArtifactData(ocrArtifactData: OcrArtifactData): ArtifactData {
     const { type, set, level, mainStatType, subStats, mainStatValue } = ocrArtifactData;
-    if (type && set && level && mainStatType && subStats) {
+    if (type != null && set != null && level != null && mainStatType != null && subStats != null) {
       const artifactData = { id: uuidv4(), type, set, level, mainStatType, subStats };
       ArtifactMapper.mapDataToArtifact({ id: uuidv4(), type, set, level, mainStatType, subStats }, mainStatValue);
       return artifactData;

@@ -6,9 +6,11 @@ import { OcrResultsParser } from './ocr-results-parser';
 import { ArtifactMapper } from './mappers/artifact-mapper';
 
 export class ArtifactImageOcr {
-  private lastImage!: Jimp;
+  private previousImage!: Jimp;
   private ocrWorker: OcrWorkerHandler;
   private ocrResultsParser: OcrResultsParser;
+  private processingImagesCount!: number;
+  private lastImageProcessed!: boolean;
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
@@ -23,16 +25,30 @@ export class ArtifactImageOcr {
     this.ocrResultsParser = new OcrResultsParser();
   }
 
-  public async runArtifactOcrFromImage(image: string): Promise<{ artifact?: ArtifactData; isDone: boolean }> {
-    const imageForOcr = await this.getImageForOcr(image);
+  public async initializeOcr(): Promise<void> {
+    this.processingImagesCount = 0;
+    this.lastImageProcessed = false;
+    await this.ocrWorker.initialize('genshin', {
+      cacheMethod: 'none',
+      langPath: '.',
+    });
+  }
+
+  public async runArtifactOcrFromImage(imageData: {
+    frame: string;
+    isLast: boolean;
+  }): Promise<{ artifact?: ArtifactData; isDone: boolean }> {
+    this.processingImagesCount++;
+    let artifact: ArtifactData | undefined;
+    const imageForOcr = await this.getImageForOcr(imageData.frame);
     if (imageForOcr.length) {
-      return { artifact: await this.runOcrRecognize(imageForOcr), isDone: false };
+      artifact = await this.runOcrRecognize(imageForOcr);
     }
-    if (image) {
-      return { isDone: false };
+    const isDone = this.areAllImagesProcessed(imageData.isLast);
+    if (isDone) {
+      this.ocrWorker.terminate();
     }
-    this.ocrWorker.terminate();
-    return { isDone: true };
+    return { artifact, isDone };
   }
 
   private async getImageForOcr(image: string): Promise<Buffer> {
@@ -42,8 +58,8 @@ export class ArtifactImageOcr {
     const jimpImage = await Jimp.create(image);
     const framesForOcr = await this.transformForOcr(jimpImage);
 
-    if (!this.lastImage || Jimp.diff(framesForOcr, this.lastImage, 0.01).percent > 0.003) {
-      this.lastImage = framesForOcr;
+    if (!this.previousImage || Jimp.diff(framesForOcr, this.previousImage, 0.01).percent > 0.003) {
+      this.previousImage = framesForOcr;
 
       return await framesForOcr.getBufferAsync(Jimp.MIME_PNG);
     }
@@ -60,6 +76,15 @@ export class ArtifactImageOcr {
       console.log('error while parsing artifact', error.message);
       return undefined;
     }
+  }
+
+  private areAllImagesProcessed(isLast: boolean): boolean {
+    this.processingImagesCount--;
+    if (isLast) {
+      this.lastImageProcessed = true;
+    }
+
+    return this.lastImageProcessed && this.processingImagesCount === 0;
   }
 
   private async transformForOcr(image: Jimp): Promise<Jimp> {

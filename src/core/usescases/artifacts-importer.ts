@@ -2,17 +2,23 @@ import { deleteAllArtifactsAction, runOcrOnImageAction } from '../adapters/redux
 import { appStore } from '../adapters/redux/store';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { VideoToFrames } from '../domain/mappers/video-to-frames';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export class ArtifactsImporter {
+  private readonly lastImagePast: Subject<void> = new Subject();
+
   public async importFromVideo(video: File): Promise<void> {
-    await ArtifactsDI.getOcrWorkerHandler().initialize('genshin', {
-      cacheMethod: 'none',
-      langPath: '.',
-    });
+    await ArtifactsDI.getArtifactImageOcr().initializeOcr();
     appStore.dispatch(deleteAllArtifactsAction());
 
-    VideoToFrames.getFrames(video, 10).subscribe((frame) => {
-      appStore.dispatch(runOcrOnImageAction(frame));
-    });
+    VideoToFrames.getFrames(video, 10)
+      .pipe(takeUntil(this.lastImagePast))
+      .subscribe((frameData) => {
+        appStore.dispatch(runOcrOnImageAction(frameData));
+        if (frameData.isLast) {
+          this.lastImagePast.next();
+        }
+      });
   }
 }
