@@ -18,21 +18,32 @@ const styles = ({ palette }: Theme) =>
       marginLeft: 10,
       border: 'none',
     },
+    importButtonsContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
     importButton: {
       display: 'block',
       marginTop: 20,
+    },
+    cancelButton: {
+      display: 'block',
+      marginTop: 20,
+      marginRight: 20,
     },
   });
 
 interface ArtifactsImportProps extends WithStyles<typeof styles> {
   video?: File;
+  isImportRunning: boolean;
   handleFileChange: (video: File) => void;
   importArtifacts: () => void;
+  cancelImport: () => void;
   handleOverrideArtifactsChange: (checked: boolean) => void;
 }
 
 function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
-  const { video, classes } = props;
+  const { video, isImportRunning, classes } = props;
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
@@ -46,11 +57,16 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
     }
   };
 
+  const cancelImport = (): void => {
+    props.cancelImport();
+  };
+
   const handleOverrideArtifactsChange = (event: ChangeEvent<HTMLInputElement>): void => {
     props.handleOverrideArtifactsChange(event.target.checked);
   };
 
   const videoName = video ? video.name : '';
+  const importButtonLabel = isImportRunning ? 'Running' : 'Import Artifacts';
   return (
     <Container className={classes.container}>
       <label htmlFor="upload-video">
@@ -61,13 +77,26 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
         </Button>
         <input className={classes.videoNameInput} id="video-name" name="video-name" type="text" value={videoName} disabled={true} />
       </label>
-      <Button className={classes.importButton} color="primary" variant="contained" disabled={!video} onClick={importArtifacts}>
-        Import Artifacts
-      </Button>
       <FormControlLabel
         control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
         label="Override current artifacts"
       />
+      <div className={classes.importButtonsContainer}>
+        {isImportRunning ? (
+          <Button className={classes.cancelButton} color="primary" onClick={cancelImport}>
+            Cancel
+          </Button>
+        ) : null}
+        <Button
+          className={classes.importButton}
+          color="primary"
+          variant="contained"
+          disabled={!video || isImportRunning}
+          onClick={importArtifacts}
+        >
+          {importButtonLabel}
+        </Button>
+      </div>
     </Container>
   );
 }

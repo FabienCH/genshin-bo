@@ -26,6 +26,7 @@ export class ArtifactOcrWorkersHandler implements OcrWorkerHandler {
   }
 
   public terminate(): void {
+    console.log('this.tesseractScheduler.getQueueLen()', this.tesseractScheduler.getQueueLen());
     this.tesseractScheduler.terminate();
   }
 }

@@ -8,8 +8,10 @@ export interface FrameData {
 
 export abstract class VideoToFrames {
   private static readonly frameSub: Subject<FrameData> = new Subject<FrameData>();
+  private static importCancelled: boolean;
 
   public static getFrames(videoFile: File, fps: number): Observable<FrameData> {
+    VideoToFrames.importCancelled = false;
     const video = document.createElement('video');
     video.preload = 'auto';
 
@@ -18,16 +20,22 @@ export abstract class VideoToFrames {
       const duration = video.duration;
       const totalFrames = duration * fps;
       const timeInterval = duration / totalFrames;
-
       for (let time = 0; time < duration; time += timeInterval) {
         const frame = await VideoToFrames.getVideoFrame(video, canvas, time);
-        VideoToFrames.frameSub.next({ frame, isLast: time + timeInterval >= duration });
+        VideoToFrames.frameSub.next({ frame, isLast: time + timeInterval >= duration || VideoToFrames.importCancelled });
+        if (VideoToFrames.importCancelled) {
+          time = duration;
+        }
       }
     });
 
     video.src = URL.createObjectURL(videoFile);
     video.load();
     return from(VideoToFrames.frameSub);
+  }
+
+  public static cancel(): void {
+    VideoToFrames.importCancelled = true;
   }
 
   private static getVideoFrame(video: HTMLVideoElement, canvas: Canvas, time: number): Promise<string> {

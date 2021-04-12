@@ -11,6 +11,7 @@ export class ArtifactImageOcr {
   private ocrResultsParser: OcrResultsParser;
   private processingImagesCount!: number;
   private lastImageProcessed!: boolean;
+  private cancelImport!: boolean;
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
@@ -28,6 +29,8 @@ export class ArtifactImageOcr {
   public async initializeOcr(): Promise<void> {
     this.processingImagesCount = 0;
     this.lastImageProcessed = false;
+    this.cancelImport = false;
+
     await this.ocrWorker.initialize('genshin', {
       cacheMethod: 'none',
       langPath: '.',
@@ -44,11 +47,16 @@ export class ArtifactImageOcr {
     if (imageForOcr.length) {
       artifact = await this.runOcrRecognize(imageForOcr);
     }
-    const isDone = this.areAllImagesProcessed(imageData.isLast);
+
+    const isDone = this.areAllImagesProcessed(imageData.isLast) || this.cancelImport;
     if (isDone) {
       this.ocrWorker.terminate();
     }
     return { artifact, isDone };
+  }
+
+  public cancelOcr(): void {
+    this.cancelImport = true;
   }
 
   private async getImageForOcr(image: string): Promise<Buffer> {

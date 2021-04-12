@@ -6,6 +6,7 @@ import {
   runOcrOnImageAction,
   loadArtifactsActions,
   saveAllArtifactsAction,
+  importArtifactsDoneAction,
 } from './artifacts-action';
 import { Middleware } from '@reduxjs/toolkit';
 import { AppState } from '../reducer';
@@ -20,8 +21,14 @@ export const artifactsMiddleware: Middleware<void, AppState> = ({ dispatch }) =>
         dispatch(addOneArtifactAction(ocrResults.artifact));
       }
       if (ocrResults.isDone) {
-        dispatch(saveAllArtifactsAction());
+        console.log('importArtifactsDoneAction!!!');
+        dispatch(importArtifactsDoneAction());
       }
+      next(action);
+      break;
+    }
+    case importArtifactsDoneAction.type: {
+      dispatch(saveAllArtifactsAction());
       next(action);
       break;
     }

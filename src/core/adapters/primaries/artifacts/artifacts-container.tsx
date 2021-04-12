@@ -14,7 +14,7 @@ type State = {
   video?: File;
 };
 
-type ArtifactsContainerProps = { artifacts: ArtifactView[] };
+type ArtifactsContainerProps = { artifacts: ArtifactView[]; isImportRunning: boolean };
 
 class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   constructor(props: ArtifactsContainerProps) {
@@ -22,6 +22,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     this.state = { artifactsImporter: ArtifactsDI.getArtifactsImporter(), overrideCurrentArtifacts: false };
     this.videoFileChange = this.videoFileChange.bind(this);
     this.importArtifacts = this.importArtifacts.bind(this);
+    this.cancelImport = this.cancelImport.bind(this);
     this.overrideArtifactsChange = this.overrideArtifactsChange.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
   }
@@ -39,6 +40,10 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     }
   }
 
+  cancelImport(): void {
+    this.state.artifactsImporter.cancelImport();
+  }
+
   overrideArtifactsChange(checked: boolean): void {
     this.setState((state) => ({
       ...state,
@@ -51,7 +56,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   }
 
   render(): ReactElement {
-    const { artifacts } = this.props;
+    const { artifacts, isImportRunning } = this.props;
 
     const defaultColDef: ColDef = {
       resizable: true,
@@ -103,8 +108,10 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
         <h2>Import Artifacts</h2>
         <ArtifactsImport
           video={this.state.video}
+          isImportRunning={isImportRunning}
           handleFileChange={this.videoFileChange}
           importArtifacts={this.importArtifacts}
+          cancelImport={this.cancelImport}
           handleOverrideArtifactsChange={this.overrideArtifactsChange}
         ></ArtifactsImport>
         <Container style={{ height: 750, width: gridWidth }} className="ag-theme-material">
@@ -125,7 +132,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
 }
 
 const mapStateToProps = () => {
-  return { artifacts: ArtifactsDI.artifactsHandler.getAll() };
+  return { artifacts: ArtifactsDI.artifactsHandler.getAll(), isImportRunning: ArtifactsDI.getArtifactsImporter().isImportRunning() };
 };
 
 export default connect(mapStateToProps)(ArtifactsContainer);

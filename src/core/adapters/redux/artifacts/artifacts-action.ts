@@ -12,6 +12,10 @@ export const saveAllArtifactsAction = createAction('[Entities/Artifacts] Save Al
 
 export const deleteAllArtifactsAction = createAction('[Entities/Artifacts] Delete All Artifacts');
 
+export const importArtifactsFromVideoAction = createAction('[Entities/Artifacts] Import From Video');
+
+export const importArtifactsDoneAction = createAction('[Entities/Artifacts] Import Artifacts Done');
+
 export const runOcrOnImageAction = createAction<FrameData>('[Entities/Artifacts] Run OCR On Image');
 
 export type ArtifactsActionTypes =
@@ -19,4 +23,6 @@ export type ArtifactsActionTypes =
   | typeof addOneArtifactAction
   | typeof runOcrOnImageAction
   | typeof saveAllArtifactsAction
-  | typeof deleteAllArtifactsAction;
+  | typeof deleteAllArtifactsAction
+  | typeof importArtifactsFromVideoAction
+  | typeof importArtifactsDoneAction;
