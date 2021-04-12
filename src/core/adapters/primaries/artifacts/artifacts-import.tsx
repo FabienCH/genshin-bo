@@ -83,8 +83,8 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
         control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
         label="Override current artifacts"
       />
-      <span>Frames found {importInfos.framesFound}</span>
-      <span>Artifacts found {importInfos.artifactsFound}</span>
+      <span>Found frames {importInfos.foundFrames}</span>
+      <span>Imported Artifacts {importInfos.importedArtifacts}</span>
       <div className={classes.importButtonsContainer}>
         {isImportRunning ? (
           <Button className={classes.cancelButton} color="primary" onClick={cancelImport}>

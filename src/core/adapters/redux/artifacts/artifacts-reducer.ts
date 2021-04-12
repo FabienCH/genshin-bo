@@ -10,8 +10,8 @@ import {
 } from './artifacts-action';
 
 export interface ImportInfos {
-  framesFound: number;
-  artifactsFound: number;
+  foundFrames: number;
+  importedArtifacts: number;
 }
 
 export interface ArtifactsState extends EntityState<ArtifactData> {
@@ -25,7 +25,7 @@ export const artifactsAdapter = createEntityAdapter<ArtifactData>();
 const initialState: ArtifactsState = artifactsAdapter.getInitialState({
   isInitialized: false,
   isImportRunning: false,
-  importInfos: { framesFound: 0, artifactsFound: 0 },
+  importInfos: { foundFrames: 0, importedArtifacts: 0 },
 });
 
 export const artifactsReducer = createReducer(initialState, (builder) => {
@@ -37,7 +37,7 @@ export const artifactsReducer = createReducer(initialState, (builder) => {
           ...state,
           importInfos: {
             ...state.importInfos,
-            artifactsFound: state.importInfos.artifactsFound + 1,
+            artifactsFound: state.importInfos.importedArtifacts + 1,
           },
         },
         action.payload,
@@ -47,14 +47,14 @@ export const artifactsReducer = createReducer(initialState, (builder) => {
     .addCase(importArtifactsFromVideoAction, (state) => ({
       ...state,
       isImportRunning: true,
-      importInfos: { framesFound: 0, artifactsFound: 0 },
+      importInfos: { foundFrames: 0, importedArtifacts: 0 },
     }))
     .addCase(importArtifactsDoneAction, (state) => ({ ...state, isImportRunning: false }))
     .addCase(runOcrOnImageAction, (state) => ({
       ...state,
       importInfos: {
         ...state.importInfos,
-        framesFound: state.importInfos.framesFound + 1,
+        foundFrames: state.importInfos.foundFrames + 1,
       },
     }))
     .addDefaultCase((state) => state);

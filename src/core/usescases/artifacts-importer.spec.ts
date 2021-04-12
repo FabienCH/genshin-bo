@@ -148,7 +148,7 @@ describe('ArtifactsImporter', () => {
       videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
 
       artifactsStateChangesSub.pipe(skip(7), take(1)).subscribe(() => {
-        expect(artifactsImporter.geImportInfos()).toEqual({ framesFound: 3, artifactsFound: 2 });
+        expect(artifactsImporter.geImportInfos()).toEqual({ foundFrames: 3, importedArtifacts: 2 });
         done();
       });
 
