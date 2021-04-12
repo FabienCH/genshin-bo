@@ -7,6 +7,7 @@ import ArtifactsImport from './artifacts-import';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
 import { ArtifactsImporter } from '../../../usescases/artifacts-importer';
 import { connect } from 'react-redux';
+import { ImportInfos } from '../../redux/artifacts/artifacts-reducer';
 
 type State = {
   artifactsImporter: ArtifactsImporter;
@@ -14,7 +15,7 @@ type State = {
   video?: File;
 };
 
-type ArtifactsContainerProps = { artifacts: ArtifactView[]; isImportRunning: boolean; importedFramesFound: number };
+type ArtifactsContainerProps = { artifacts: ArtifactView[]; isImportRunning: boolean; importInfos: ImportInfos };
 
 class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   constructor(props: ArtifactsContainerProps) {
@@ -56,7 +57,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   }
 
   render(): ReactElement {
-    const { artifacts, isImportRunning, importedFramesFound } = this.props;
+    const { artifacts, isImportRunning, importInfos } = this.props;
 
     const defaultColDef: ColDef = {
       resizable: true,
@@ -109,7 +110,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
         <ArtifactsImport
           video={this.state.video}
           isImportRunning={isImportRunning}
-          importedFramesFound={importedFramesFound}
+          importInfos={importInfos}
           handleFileChange={this.videoFileChange}
           importArtifacts={this.importArtifacts}
           cancelImport={this.cancelImport}
@@ -136,7 +137,7 @@ const mapStateToProps = () => {
   return {
     artifacts: ArtifactsDI.artifactsHandler.getAll(),
     isImportRunning: ArtifactsDI.getArtifactsImporter().isImportRunning(),
-    importedFramesFound: ArtifactsDI.getArtifactsImporter().geImportedFramesFound(),
+    importInfos: ArtifactsDI.getArtifactsImporter().geImportInfos(),
   };
 };
 

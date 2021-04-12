@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { ArtifactData } from '../../../domain/models/artifact-data';
 import { AppState } from '../reducer';
 import { appStore } from '../store';
-import { artifactsAdapter } from './artifacts-reducer';
+import { artifactsAdapter, ImportInfos } from './artifacts-reducer';
 
 const artifactsState = (state: AppState) => state.artifacts;
 
@@ -12,7 +12,7 @@ const isArtifactsInitializedSelector = createSelector(artifactsState, (state) =>
 
 const isArtifactsImportRunningSelector = createSelector(artifactsState, (state) => state.isImportRunning);
 
-const importedFramesFoundSelector = createSelector(artifactsState, (state) => state.importedFramesFound);
+const importInfosSelector = createSelector(artifactsState, (state) => state.importInfos);
 
 export const selectAllArtifacts = (): ArtifactData[] => artifactsSelectors.selectAll(appStore.getState());
 
@@ -22,4 +22,4 @@ export const isArtifactsStateInitialized = (): boolean => isArtifactsInitialized
 
 export const isArtifactsImportRunning = (): boolean => isArtifactsImportRunningSelector(appStore.getState());
 
-export const importedFramesFound = (): number => importedFramesFoundSelector(appStore.getState());
+export const importInfos = (): ImportInfos => importInfosSelector(appStore.getState());

@@ -138,8 +138,8 @@ describe('ArtifactsImporter', () => {
     });
   });
 
-  describe('geImportedFramesFound', () => {
-    it('should update the number of frames found in video', (done) => {
+  describe('geImportInfos', () => {
+    it('should update the import informations (number of frames and artifacts)', (done) => {
       const frames = [
         { frame: artifact0, isLast: false },
         { frame: artifact0bis, isLast: false },
@@ -148,7 +148,7 @@ describe('ArtifactsImporter', () => {
       videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
 
       artifactsStateChangesSub.pipe(skip(7), take(1)).subscribe(() => {
-        expect(artifactsImporter.geImportedFramesFound()).toEqual(3);
+        expect(artifactsImporter.geImportInfos()).toEqual({ framesFound: 3, artifactsFound: 2 });
         done();
       });
 

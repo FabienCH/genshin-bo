@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Container, createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
+import { ImportInfos } from '../../redux/artifacts/artifacts-reducer';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -36,7 +37,7 @@ const styles = ({ palette }: Theme) =>
 interface ArtifactsImportProps extends WithStyles<typeof styles> {
   video?: File;
   isImportRunning: boolean;
-  importedFramesFound: number;
+  importInfos: ImportInfos;
   handleFileChange: (video: File) => void;
   importArtifacts: () => void;
   cancelImport: () => void;
@@ -44,7 +45,7 @@ interface ArtifactsImportProps extends WithStyles<typeof styles> {
 }
 
 function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
-  const { video, isImportRunning, importedFramesFound, classes } = props;
+  const { video, isImportRunning, importInfos, classes } = props;
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
@@ -82,7 +83,8 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
         control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
         label="Override current artifacts"
       />
-      <span>Frames found {importedFramesFound}</span>
+      <span>Frames found {importInfos.framesFound}</span>
+      <span>Artifacts found {importInfos.artifactsFound}</span>
       <div className={classes.importButtonsContainer}>
         {isImportRunning ? (
           <Button className={classes.cancelButton} color="primary" onClick={cancelImport}>

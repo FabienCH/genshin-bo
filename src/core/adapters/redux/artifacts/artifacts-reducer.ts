@@ -9,10 +9,15 @@ import {
   runOcrOnImageAction,
 } from './artifacts-action';
 
+export interface ImportInfos {
+  framesFound: number;
+  artifactsFound: number;
+}
+
 export interface ArtifactsState extends EntityState<ArtifactData> {
   isInitialized: boolean;
   isImportRunning: boolean;
-  importedFramesFound: number;
+  importInfos: ImportInfos;
 }
 
 export const artifactsAdapter = createEntityAdapter<ArtifactData>();
@@ -20,16 +25,37 @@ export const artifactsAdapter = createEntityAdapter<ArtifactData>();
 const initialState: ArtifactsState = artifactsAdapter.getInitialState({
   isInitialized: false,
   isImportRunning: false,
-  importedFramesFound: 0,
+  importInfos: { framesFound: 0, artifactsFound: 0 },
 });
 
 export const artifactsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(addAllArtifactsAction, (state, action) => artifactsAdapter.setAll(state, action.payload))
-    .addCase(addOneArtifactAction, (state, action) => artifactsAdapter.addOne(state, action.payload))
+    .addCase(addOneArtifactAction, (state, action) => ({
+      ...artifactsAdapter.addOne(
+        {
+          ...state,
+          importInfos: {
+            ...state.importInfos,
+            artifactsFound: state.importInfos.artifactsFound + 1,
+          },
+        },
+        action.payload,
+      ),
+    }))
     .addCase(deleteAllArtifactsAction, (state) => artifactsAdapter.removeAll(state))
-    .addCase(importArtifactsFromVideoAction, (state) => ({ ...state, isImportRunning: true, importedFramesFound: 0 }))
+    .addCase(importArtifactsFromVideoAction, (state) => ({
+      ...state,
+      isImportRunning: true,
+      importInfos: { framesFound: 0, artifactsFound: 0 },
+    }))
     .addCase(importArtifactsDoneAction, (state) => ({ ...state, isImportRunning: false }))
-    .addCase(runOcrOnImageAction, (state) => ({ ...state, importedFramesFound: state.importedFramesFound + 1 }))
+    .addCase(runOcrOnImageAction, (state) => ({
+      ...state,
+      importInfos: {
+        ...state.importInfos,
+        framesFound: state.importInfos.framesFound + 1,
+      },
+    }))
     .addDefaultCase((state) => state);
 });
