@@ -5,14 +5,13 @@ import artifact0 from '../../test/artifact0.jpg';
 import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
 import { importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
-import { isArtifactsImportRunning, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
+import { selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
-import { Subject, interval } from 'rxjs';
-import { skip, take, map } from 'rxjs/operators';
 import { ArtifactData } from '../domain/models/artifact-data';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { VideoToFrames } from '../domain/mappers/video-to-frames';
-import { from } from 'rxjs';
+import { Subject, from, interval } from 'rxjs';
+import { skip, take, map } from 'rxjs/operators';
 import { ArtifactsImporter } from './artifacts-importer';
 
 describe('ArtifactsImporter', () => {
@@ -24,15 +23,16 @@ describe('ArtifactsImporter', () => {
   let videoToFramesSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    appStoreUnsubscribe = appStore.subscribe(() => {
-      artifactsStateChangesSub.next(selectAllArtifacts());
-    });
     ArtifactsDI.registerOcrWorker();
     ArtifactsDI.registerRepository();
     ocrWorkerHandler = ArtifactsDI.getOcrWorkerHandler();
     artifactsImporter = new ArtifactsImporter();
     ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
     videoToFramesSpy = jest.spyOn(VideoToFrames, 'getFrames');
+    appStoreUnsubscribe = appStore.subscribe(() => {
+      console.log(appStore.getState());
+      artifactsStateChangesSub.next(selectAllArtifacts());
+    });
   });
 
   describe('importFromVideo', () => {
@@ -104,7 +104,7 @@ describe('ArtifactsImporter', () => {
       let changeCount1 = 0;
       artifactsStateChangesSub.pipe(take(7)).subscribe(() => {
         const shouldImportRunning = changeCount1 < 6;
-        expect(isArtifactsImportRunning()).toBe(shouldImportRunning);
+        expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
         if (!shouldImportRunning) {
           done();
         }
@@ -127,11 +127,29 @@ describe('ArtifactsImporter', () => {
         }
         const shouldImportRunning = changeCount2 < 3;
 
-        expect(isArtifactsImportRunning()).toBe(shouldImportRunning);
+        expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
         if (!shouldImportRunning) {
           done();
         }
         changeCount2++;
+      });
+
+      artifactsImporter.importFromVideo(new File([], 'filename'));
+    });
+  });
+
+  describe('geImportedFramesFound', () => {
+    it('should update the number of frames found in video', (done) => {
+      const frames = [
+        { frame: artifact0, isLast: false },
+        { frame: artifact0bis, isLast: false },
+        { frame: artifact1, isLast: true },
+      ];
+      videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
+
+      artifactsStateChangesSub.pipe(skip(7), take(1)).subscribe(() => {
+        expect(artifactsImporter.geImportedFramesFound()).toEqual(3);
+        done();
       });
 
       artifactsImporter.importFromVideo(new File([], 'filename'));

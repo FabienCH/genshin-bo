@@ -36,6 +36,7 @@ const styles = ({ palette }: Theme) =>
 interface ArtifactsImportProps extends WithStyles<typeof styles> {
   video?: File;
   isImportRunning: boolean;
+  importedFramesFound: number;
   handleFileChange: (video: File) => void;
   importArtifacts: () => void;
   cancelImport: () => void;
@@ -43,7 +44,7 @@ interface ArtifactsImportProps extends WithStyles<typeof styles> {
 }
 
 function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
-  const { video, isImportRunning, classes } = props;
+  const { video, isImportRunning, importedFramesFound, classes } = props;
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
@@ -81,6 +82,7 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
         control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
         label="Override current artifacts"
       />
+      <span>Frames found {importedFramesFound}</span>
       <div className={classes.importButtonsContainer}>
         {isImportRunning ? (
           <Button className={classes.cancelButton} color="primary" onClick={cancelImport}>

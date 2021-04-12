@@ -14,7 +14,7 @@ type State = {
   video?: File;
 };
 
-type ArtifactsContainerProps = { artifacts: ArtifactView[]; isImportRunning: boolean };
+type ArtifactsContainerProps = { artifacts: ArtifactView[]; isImportRunning: boolean; importedFramesFound: number };
 
 class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   constructor(props: ArtifactsContainerProps) {
@@ -56,7 +56,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   }
 
   render(): ReactElement {
-    const { artifacts, isImportRunning } = this.props;
+    const { artifacts, isImportRunning, importedFramesFound } = this.props;
 
     const defaultColDef: ColDef = {
       resizable: true,
@@ -109,6 +109,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
         <ArtifactsImport
           video={this.state.video}
           isImportRunning={isImportRunning}
+          importedFramesFound={importedFramesFound}
           handleFileChange={this.videoFileChange}
           importArtifacts={this.importArtifacts}
           cancelImport={this.cancelImport}
@@ -132,7 +133,11 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
 }
 
 const mapStateToProps = () => {
-  return { artifacts: ArtifactsDI.artifactsHandler.getAll(), isImportRunning: ArtifactsDI.getArtifactsImporter().isImportRunning() };
+  return {
+    artifacts: ArtifactsDI.artifactsHandler.getAll(),
+    isImportRunning: ArtifactsDI.getArtifactsImporter().isImportRunning(),
+    importedFramesFound: ArtifactsDI.getArtifactsImporter().geImportedFramesFound(),
+  };
 };
 
 export default connect(mapStateToProps)(ArtifactsContainer);

@@ -8,7 +8,7 @@ import { ArtifactsDI } from '../di/artifacts-di';
 import { VideoToFrames } from '../domain/mappers/video-to-frames';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { isArtifactsImportRunning } from '../adapters/redux/artifacts/artifacts-selectors';
+import { importedFramesFound, isArtifactsImportRunning } from '../adapters/redux/artifacts/artifacts-selectors';
 
 export class ArtifactsImporter {
   private readonly lastImagePast: Subject<void> = new Subject();
@@ -33,6 +33,10 @@ export class ArtifactsImporter {
 
   public isImportRunning(): boolean {
     return isArtifactsImportRunning();
+  }
+
+  public geImportedFramesFound(): number {
+    return importedFramesFound();
   }
 
   public cancelImport(): void {

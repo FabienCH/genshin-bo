@@ -25,4 +25,5 @@ export type ArtifactsActionTypes =
   | typeof saveAllArtifactsAction
   | typeof deleteAllArtifactsAction
   | typeof importArtifactsFromVideoAction
-  | typeof importArtifactsDoneAction;
+  | typeof importArtifactsDoneAction
+  | typeof importArtifactsFromVideoAction;
