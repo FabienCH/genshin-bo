@@ -40,7 +40,7 @@ export class ArtifactImageOcr {
   public async runArtifactOcrFromImage(imageData: {
     frame: string;
     isLast: boolean;
-  }): Promise<{ artifact?: ArtifactData; isDone: boolean }> {
+  }): Promise<{ artifact?: ArtifactData; inError: boolean; isDone: boolean }> {
     this.processingImagesCount++;
     let artifact: ArtifactData | undefined;
     const imageForOcr = await this.getImageForOcr(imageData.frame);
@@ -52,7 +52,7 @@ export class ArtifactImageOcr {
     if (isDone) {
       this.ocrWorker.terminate();
     }
-    return { artifact, isDone };
+    return { artifact, inError: !!imageForOcr.length && !artifact, isDone };
   }
 
   public cancelOcr(): void {
@@ -122,7 +122,7 @@ export class ArtifactImageOcr {
 
     const imageWithSetBlack = this.setNameGreenToBlack(image);
 
-    return imageWithSetBlack
+    const toto = imageWithSetBlack
       .normalize()
       .threshold({ max: 135 })
       .invert()
@@ -138,6 +138,8 @@ export class ArtifactImageOcr {
       .composite(level, 51, 320)
       .composite(this.bottomOverlay, 20, 562)
       .crop(7, 7, image.getWidth() - 14, image.getHeight() - 14);
+
+    return toto;
   }
 
   private setNameGreenToBlack(image: Jimp): Jimp {

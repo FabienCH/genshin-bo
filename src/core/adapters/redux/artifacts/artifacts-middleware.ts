@@ -7,6 +7,7 @@ import {
   loadArtifactsActions,
   saveAllArtifactsAction,
   importArtifactsDoneAction,
+  incrementArtifactsInError,
 } from './artifacts-action';
 import { Middleware } from '@reduxjs/toolkit';
 import { AppState } from '../reducer';
@@ -20,8 +21,10 @@ export const artifactsMiddleware: Middleware<void, AppState> = ({ dispatch }) =>
       if (ocrResults.artifact) {
         dispatch(addOneArtifactAction(ocrResults.artifact));
       }
+      if (ocrResults.inError) {
+        dispatch(incrementArtifactsInError());
+      }
       if (ocrResults.isDone) {
-        console.log('importArtifactsDoneAction!!!');
         dispatch(importArtifactsDoneAction());
       }
       next(action);

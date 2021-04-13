@@ -25,6 +25,19 @@ export const ocrResultsMock = [
     "Gladiator's Finale:\n",
     '9 Equipped: Amber\n',
   ],
+  [
+    "Gladiator's Nostalgia\n",
+    'Flower of Life\n\n',
+    'HP\n\n',
+    '3,967\n\n',
+    '+16\n\n',
+    ' HP+508\n\n',
+    '. CRIT DMG+13.2%\n\n',
+    '. ATK+8.2%\n\n',
+    '. Elemental Mastery+42\n',
+    'Gladiato Finale:\n',
+    '9 Equipped: Amber\n',
+  ],
 ];
 
 export const goodOcrResultsMock = [

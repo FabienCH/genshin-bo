@@ -10,6 +10,9 @@ const styles = ({ palette }: Theme) =>
     container: {
       marginBottom: 20,
     },
+    uploadVideo: {
+      display: 'block',
+    },
     uploadVideoInput: {
       display: 'none',
     },
@@ -18,6 +21,17 @@ const styles = ({ palette }: Theme) =>
       color: palette.text.primary,
       marginLeft: 10,
       border: 'none',
+    },
+    importFlex: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+    },
+    importInfos: {
+      margin: '0 10px',
+    },
+    artifactsInError: {
+      color: palette.error.light,
     },
     importButtonsContainer: {
       display: 'flex',
@@ -71,7 +85,7 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   const importButtonLabel = isImportRunning ? 'Running' : 'Import Artifacts';
   return (
     <Container className={classes.container}>
-      <label htmlFor="upload-video">
+      <label className={classes.uploadVideo} htmlFor="upload-video">
         <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
 
         <Button color="primary" variant="contained" component="span">
@@ -79,27 +93,37 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
         </Button>
         <input className={classes.videoNameInput} id="video-name" name="video-name" type="text" value={videoName} disabled={true} />
       </label>
-      <FormControlLabel
-        control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
-        label="Override current artifacts"
-      />
-      <span>Found frames {importInfos.foundFrames}</span>
-      <span>Imported Artifacts {importInfos.importedArtifacts}</span>
-      <div className={classes.importButtonsContainer}>
-        {isImportRunning ? (
-          <Button className={classes.cancelButton} color="primary" onClick={cancelImport}>
-            Cancel
-          </Button>
+
+      <div className={classes.importFlex}>
+        <FormControlLabel
+          control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
+          label="Override current artifacts"
+        />
+        {video ? (
+          <div>
+            <span className={classes.importInfos}>Found frames: {importInfos.foundFrames}</span>
+            <span className={classes.importInfos}>Imported artifacts: {importInfos.importedArtifacts}</span>
+            <span className={importInfos.artifactsInError > 0 ? classes.importInfos + ' ' + classes.artifactsInError : classes.importInfos}>
+              Artifacts in error: {importInfos.artifactsInError}
+            </span>
+          </div>
         ) : null}
-        <Button
-          className={classes.importButton}
-          color="primary"
-          variant="contained"
-          disabled={!video || isImportRunning}
-          onClick={importArtifacts}
-        >
-          {importButtonLabel}
-        </Button>
+        <div className={classes.importButtonsContainer}>
+          {isImportRunning ? (
+            <Button className={classes.cancelButton} color="primary" onClick={cancelImport}>
+              Cancel
+            </Button>
+          ) : null}
+          <Button
+            className={classes.importButton}
+            color="primary"
+            variant="contained"
+            disabled={!video || isImportRunning}
+            onClick={importArtifacts}
+          >
+            {importButtonLabel}
+          </Button>
+        </div>
       </div>
     </Container>
   );

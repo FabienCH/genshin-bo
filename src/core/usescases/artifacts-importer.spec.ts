@@ -4,6 +4,7 @@ import { OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
 import artifact0 from '../../test/artifact0.jpg';
 import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
+import artifactWithError from '../../test/artifact-error.jpg';
 import { importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
 import { selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
@@ -11,7 +12,7 @@ import { ArtifactData } from '../domain/models/artifact-data';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { VideoToFrames } from '../domain/mappers/video-to-frames';
 import { Subject, from, interval } from 'rxjs';
-import { skip, take, map } from 'rxjs/operators';
+import { skip, take, map, filter } from 'rxjs/operators';
 import { ArtifactsImporter } from './artifacts-importer';
 
 describe('ArtifactsImporter', () => {
@@ -30,7 +31,6 @@ describe('ArtifactsImporter', () => {
     ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
     videoToFramesSpy = jest.spyOn(VideoToFrames, 'getFrames');
     appStoreUnsubscribe = appStore.subscribe(() => {
-      console.log(appStore.getState());
       artifactsStateChangesSub.next(selectAllArtifacts());
     });
   });
@@ -44,14 +44,19 @@ describe('ArtifactsImporter', () => {
         ]),
       );
 
-      artifactsStateChangesSub.pipe(skip(3), take(1)).subscribe((artifactsData) => {
-        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
-        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
+      artifactsStateChangesSub
+        .pipe(
+          filter((artifactsData) => artifactsData.length === 16),
+          take(1),
+        )
+        .subscribe((artifactsData) => {
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
 
-        const expectedArtifactsData = artifactsData.filter((_, index) => index >= artifactsData.length - 2);
-        expect(getArtifactsWithoutId(expectedArtifactsData)).toEqual(importedArtifactDataMock);
-        done();
-      });
+          const expectedArtifactsData = artifactsData.filter((_, index) => index >= artifactsData.length - 2);
+          expect(getArtifactsWithoutId(expectedArtifactsData)).toEqual(importedArtifactDataMock);
+          done();
+        });
 
       artifactsImporter.importFromVideo(new File([], 'filename'));
     });
@@ -64,12 +69,17 @@ describe('ArtifactsImporter', () => {
         ]),
       );
 
-      artifactsStateChangesSub.pipe(skip(4), take(1)).subscribe((artifactsData) => {
-        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
-        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
-        expect(getArtifactsWithoutId(artifactsData)).toEqual(importedArtifactDataMock);
-        done();
-      });
+      artifactsStateChangesSub
+        .pipe(
+          filter((artifactsData) => artifactsData.length === 2),
+          take(1),
+        )
+        .subscribe((artifactsData) => {
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
+          expect(getArtifactsWithoutId(artifactsData)).toEqual(importedArtifactDataMock);
+          done();
+        });
 
       artifactsImporter.importFromVideo(new File([], 'filename'), true);
     });
@@ -101,14 +111,14 @@ describe('ArtifactsImporter', () => {
       ];
       videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
 
-      let changeCount1 = 0;
+      let changeCount = 0;
       artifactsStateChangesSub.pipe(take(7)).subscribe(() => {
-        const shouldImportRunning = changeCount1 < 6;
+        const shouldImportRunning = changeCount < 6;
         expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
         if (!shouldImportRunning) {
           done();
         }
-        changeCount1++;
+        changeCount++;
       });
 
       artifactsImporter.importFromVideo(new File([], 'filename'));
@@ -117,21 +127,21 @@ describe('ArtifactsImporter', () => {
 
   describe('cancelImport', () => {
     it('should stop artifacts import', (done) => {
-      let changeCount2 = 0;
+      let changeCount = 0;
       const frames = [artifact0, artifact0bis, artifact1];
-      videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => ({ frame: frames[val], isLast: changeCount2 >= 1 }))));
+      videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => ({ frame: frames[val], isLast: changeCount >= 1 }))));
 
       artifactsStateChangesSub.pipe(take(4)).subscribe(() => {
-        if (changeCount2 === 1) {
+        if (changeCount === 1) {
           artifactsImporter.cancelImport();
         }
-        const shouldImportRunning = changeCount2 < 3;
+        const shouldImportRunning = changeCount < 3;
 
         expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
         if (!shouldImportRunning) {
           done();
         }
-        changeCount2++;
+        changeCount++;
       });
 
       artifactsImporter.importFromVideo(new File([], 'filename'));
@@ -143,17 +153,18 @@ describe('ArtifactsImporter', () => {
       const frames = [
         { frame: artifact0, isLast: false },
         { frame: artifact0bis, isLast: false },
-        { frame: artifact1, isLast: true },
+        { frame: artifact1, isLast: false },
+        { frame: artifactWithError, isLast: true },
       ];
       videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
 
-      artifactsStateChangesSub.pipe(skip(7), take(1)).subscribe(() => {
-        expect(artifactsImporter.geImportInfos()).toEqual({ foundFrames: 3, importedArtifacts: 2 });
+      artifactsStateChangesSub.pipe(skip(9), take(1)).subscribe(() => {
+        expect(artifactsImporter.geImportInfos()).toEqual({ foundFrames: 4, importedArtifacts: 2, artifactsInError: 1 });
         done();
       });
 
       artifactsImporter.importFromVideo(new File([], 'filename'));
-    });
+    }, 10000);
   });
 
   afterEach(() => {

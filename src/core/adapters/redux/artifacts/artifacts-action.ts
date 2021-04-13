@@ -14,6 +14,8 @@ export const deleteAllArtifactsAction = createAction('[Entities/Artifacts] Delet
 
 export const importArtifactsFromVideoAction = createAction('[Entities/Artifacts] Import From Video');
 
+export const incrementArtifactsInError = createAction('[Entities/Artifacts] Increment Artifacts In Error');
+
 export const importArtifactsDoneAction = createAction('[Entities/Artifacts] Import Artifacts Done');
 
 export const runOcrOnImageAction = createAction<FrameData>('[Entities/Artifacts] Run OCR On Image');
