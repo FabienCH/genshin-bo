@@ -1,8 +1,6 @@
-import { ArtifactType } from '../entities/artifact';
-
 export interface ArtifactView {
   id: string;
-  type: ArtifactType;
+  type: string;
   set: string;
   level: number;
   mainStat: string;

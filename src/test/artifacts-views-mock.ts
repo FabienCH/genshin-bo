@@ -1,10 +1,9 @@
-import { ArtifactType } from '../core/domain/entities/artifact';
 import { ArtifactView } from '../core/domain/models/artifact-view';
 
 export const defaultArtifactsViews: ArtifactView[] = [
   {
     id: '0',
-    type: ArtifactType.flower,
+    type: 'Flower',
     set: 'Gladiators Finale',
     level: 8,
     mainStat: '2342 HP',
@@ -15,7 +14,7 @@ export const defaultArtifactsViews: ArtifactView[] = [
   },
   {
     id: '1',
-    type: ArtifactType.plume,
+    type: 'Plume',
     set: 'Crimson Witch Of Flames',
     level: 8,
     mainStat: '152 ATK',
@@ -26,7 +25,7 @@ export const defaultArtifactsViews: ArtifactView[] = [
   },
   {
     id: '2',
-    type: ArtifactType.sands,
+    type: 'Sands',
     set: 'Archaic Petra',
     level: 8,
     mainStat: '22.8% ATK',
@@ -37,7 +36,7 @@ export const defaultArtifactsViews: ArtifactView[] = [
   },
   {
     id: '3',
-    type: ArtifactType.goblet,
+    type: 'Goblet',
     set: 'Bloodstained Chivalry',
     level: 0,
     mainStat: '7% Pyro DMG',
@@ -48,7 +47,7 @@ export const defaultArtifactsViews: ArtifactView[] = [
   },
   {
     id: '4',
-    type: ArtifactType.circlet,
+    type: 'Circlet',
     set: 'Gladiators Finale',
     level: 16,
     mainStat: '38.7% ATK',

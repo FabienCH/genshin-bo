@@ -1,55 +1,170 @@
 import { artifactsOcrImagesMock } from '../../test/artifacts-ocr-images-mock';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { OcrWorkerHandler } from '../domain/artifact-ocr-worker-handler';
-import { ArtifactsImporter } from './artifacts-importer';
 import artifact0 from '../../test/artifact0.jpg';
 import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
+import artifactWithError from '../../test/artifact-error.jpg';
 import { importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
 import { selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
-import { Subject } from 'rxjs';
-import { skip, take } from 'rxjs/operators';
 import { ArtifactData } from '../domain/models/artifact-data';
 import { Unsubscribe } from '@reduxjs/toolkit';
+import { VideoToFrames } from '../domain/mappers/video-to-frames';
+import { Subject, from, interval } from 'rxjs';
+import { skip, take, map, filter } from 'rxjs/operators';
+import { ArtifactsImporter } from './artifacts-importer';
 
-describe('ArtifactsImporter.importFromVideo', () => {
+describe('ArtifactsImporter', () => {
   const artifactsStateChangesSub: Subject<ArtifactData[]> = new Subject();
   let appStoreUnsubscribe: Unsubscribe;
-  let artifactsImporter: ArtifactsImporter;
   let ocrWorkerHandler: OcrWorkerHandler;
+  let artifactsImporter: ArtifactsImporter;
   let ocrWorkerSpy: jest.SpyInstance;
+  let videoToFramesSpy: jest.SpyInstance;
 
   beforeEach(() => {
+    ArtifactsDI.registerOcrWorker();
+    ArtifactsDI.registerRepository();
+    ocrWorkerHandler = ArtifactsDI.getOcrWorkerHandler();
+    artifactsImporter = new ArtifactsImporter();
+    ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
+    videoToFramesSpy = jest.spyOn(VideoToFrames, 'getFrames');
     appStoreUnsubscribe = appStore.subscribe(() => {
       artifactsStateChangesSub.next(selectAllArtifacts());
     });
-    ArtifactsDI.registerOcrWorker();
-    ArtifactsDI.registerRepository();
-    artifactsImporter = ArtifactsDI.getArtifactsImporter();
-    ocrWorkerHandler = ArtifactsDI.getOcrWorkerHandler();
-    ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
   });
 
-  it('should update stored artifacts with artifacts contained in each  images', (done) => {
-    artifactsStateChangesSub.pipe(skip(3), take(1)).subscribe((artifactsData) => {
-      expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
-      expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
-      expect(getArtifactsWithoutId(artifactsData)).toEqual(importedArtifactDataMock);
-      done();
+  describe('importFromVideo', () => {
+    it('should add artifacts contained in each images to stored artifacts', (done) => {
+      videoToFramesSpy.mockReturnValue(
+        from([
+          { frame: artifact0, isLast: false },
+          { frame: artifact1, isLast: true },
+        ]),
+      );
+
+      artifactsStateChangesSub
+        .pipe(
+          filter((artifactsData) => artifactsData.length === 16),
+          take(1),
+        )
+        .subscribe((artifactsData) => {
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
+
+          const expectedArtifactsData = artifactsData.filter((_, index) => index >= artifactsData.length - 2);
+          expect(getArtifactsWithoutId(expectedArtifactsData)).toEqual(importedArtifactDataMock);
+          done();
+        });
+
+      artifactsImporter.importFromVideo(new File([], 'filename'));
     });
 
-    artifactsImporter.importFromImages([artifact0, artifact1]);
+    it('should override stored artifact with artifacts contained in each images', (done) => {
+      videoToFramesSpy.mockReturnValue(
+        from([
+          { frame: artifact0, isLast: false },
+          { frame: artifact1, isLast: true },
+        ]),
+      );
+
+      artifactsStateChangesSub
+        .pipe(
+          filter((artifactsData) => artifactsData.length === 2),
+          take(1),
+        )
+        .subscribe((artifactsData) => {
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[1]);
+          expect(getArtifactsWithoutId(artifactsData)).toEqual(importedArtifactDataMock);
+          done();
+        });
+
+      artifactsImporter.importFromVideo(new File([], 'filename'), true);
+    });
+
+    it('should filter duplicated artifacts images and add artifacts', (done) => {
+      videoToFramesSpy.mockReturnValue(
+        from([
+          { frame: artifact0, isLast: false },
+          { frame: artifact0bis, isLast: true },
+        ]),
+      );
+
+      artifactsStateChangesSub.pipe(skip(4), take(1)).subscribe((artifactsData) => {
+        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+        expect(getArtifactsWithoutId(artifactsData)).toEqual([importedArtifactDataMock[0]]);
+        done();
+      });
+
+      artifactsImporter.importFromVideo(new File([], 'filename'), true);
+    });
   });
 
-  it('should filter duplicated artifacts images', (done) => {
-    artifactsStateChangesSub.pipe(skip(2), take(1)).subscribe((artifactsData) => {
-      expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
-      expect(getArtifactsWithoutId(artifactsData)).toEqual([importedArtifactDataMock[0]]);
-      done();
-    });
+  describe('isImportRunning', () => {
+    it('should update importRunning state when import is running', (done) => {
+      const frames = [
+        { frame: artifact0, isLast: false },
+        { frame: artifact0bis, isLast: false },
+        { frame: artifact1, isLast: true },
+      ];
+      videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
 
-    artifactsImporter.importFromImages([artifact0, artifact0bis]);
+      let changeCount = 0;
+      artifactsStateChangesSub.pipe(take(7)).subscribe(() => {
+        const shouldImportRunning = changeCount < 6;
+        expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
+        if (!shouldImportRunning) {
+          done();
+        }
+        changeCount++;
+      });
+
+      artifactsImporter.importFromVideo(new File([], 'filename'));
+    });
+  });
+
+  describe('cancelImport', () => {
+    it('should stop artifacts import', (done) => {
+      let changeCount = 0;
+      const frames = [artifact0, artifact0bis, artifact1];
+      videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => ({ frame: frames[val], isLast: changeCount >= 1 }))));
+
+      artifactsStateChangesSub.pipe(take(4)).subscribe(() => {
+        if (changeCount === 1) {
+          artifactsImporter.cancelImport();
+        }
+        const shouldImportRunning = changeCount < 3;
+
+        expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
+        if (!shouldImportRunning) {
+          done();
+        }
+        changeCount++;
+      });
+
+      artifactsImporter.importFromVideo(new File([], 'filename'));
+    });
+  });
+
+  describe('geImportInfos', () => {
+    it('should update the import informations (number of frames and artifacts)', (done) => {
+      const frames = [
+        { frame: artifact0, isLast: false },
+        { frame: artifact0bis, isLast: false },
+        { frame: artifact1, isLast: false },
+        { frame: artifactWithError, isLast: true },
+      ];
+      videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
+
+      artifactsStateChangesSub.pipe(skip(9), take(1)).subscribe(() => {
+        expect(artifactsImporter.geImportInfos()).toEqual({ foundFrames: 4, importedArtifacts: 2, artifactsInError: 1 });
+        done();
+      });
+
+      artifactsImporter.importFromVideo(new File([], 'filename'));
+    }, 10000);
   });
 
   afterEach(() => {

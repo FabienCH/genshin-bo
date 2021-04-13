@@ -1,35 +1,48 @@
 import { Canvas, createCanvas } from 'canvas';
+import { Subject, Observable, from } from 'rxjs';
 
-export class VideoToFrames {
-  public static getFrames(videoFile: File, fps: number): Promise<string[]> {
-    return new Promise((resolve: (base64Images: string[]) => void) => {
-      const video = document.createElement('video');
-      video.preload = 'auto';
-      const base64Images: string[] = [];
+export interface FrameData {
+  frame: string;
+  isLast: boolean;
+}
 
-      video.addEventListener('loadeddata', async () => {
-        const canvas: Canvas = createCanvas(video.videoWidth, video.videoHeight);
-        const duration = video.duration;
-        const totalFrames = duration * fps;
-        const timeInterval = duration / totalFrames;
+export abstract class VideoToFrames {
+  private static readonly frameSub: Subject<FrameData> = new Subject<FrameData>();
+  private static importCancelled: boolean;
 
-        for (let time = 0; time < duration; time += timeInterval) {
-          const frame = await VideoToFrames.getVideoFrame(video, canvas, time);
-          base64Images.push(frame);
+  public static getFrames(videoFile: File, fps: number): Observable<FrameData> {
+    VideoToFrames.importCancelled = false;
+    const video = document.createElement('video');
+    video.preload = 'auto';
+
+    video.addEventListener('loadeddata', async () => {
+      const canvas: Canvas = createCanvas(video.videoWidth, video.videoHeight);
+      const duration = video.duration;
+      const totalFrames = duration * fps;
+      const timeInterval = duration / totalFrames;
+      for (let time = 0; time < duration; time += timeInterval) {
+        const frame = await VideoToFrames.getVideoFrame(video, canvas, time);
+        VideoToFrames.frameSub.next({ frame, isLast: time + timeInterval >= duration || VideoToFrames.importCancelled });
+        if (VideoToFrames.importCancelled) {
+          time = duration;
         }
-        resolve(base64Images);
-      });
-
-      video.src = URL.createObjectURL(videoFile);
-      video.load();
+      }
     });
+
+    video.src = URL.createObjectURL(videoFile);
+    video.load();
+    return from(VideoToFrames.frameSub);
+  }
+
+  public static cancel(): void {
+    VideoToFrames.importCancelled = true;
   }
 
   private static getVideoFrame(video: HTMLVideoElement, canvas: Canvas, time: number): Promise<string> {
     return new Promise((resolve: (frame: string) => void) => {
       const eventCallback = () => {
         video.removeEventListener('seeked', eventCallback);
-        resolve(this.getFrame(video, canvas));
+        resolve(VideoToFrames.getFrame(video, canvas));
       };
       video.addEventListener('seeked', eventCallback);
       video.currentTime = time;
