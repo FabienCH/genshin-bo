@@ -12,7 +12,7 @@ import { importInfos, isArtifactsImportRunning } from '../adapters/redux/artifac
 import { ImportInfos } from '../adapters/redux/artifacts/artifacts-reducer';
 
 export class ArtifactsImporter {
-  private readonly lastImagePast: Subject<void> = new Subject();
+  private readonly allFramesRetrieve: Subject<void> = new Subject();
 
   public async importFromVideo(video: File, overrideCurrentArtifacts = false): Promise<void> {
     appStore.dispatch(importArtifactsFromVideoAction());
@@ -23,11 +23,11 @@ export class ArtifactsImporter {
     }
 
     VideoToFrames.getFrames(video, 10)
-      .pipe(takeUntil(this.lastImagePast))
+      .pipe(takeUntil(this.allFramesRetrieve))
       .subscribe((frameData) => {
         appStore.dispatch(runOcrOnImageAction(frameData));
         if (frameData.isLast) {
-          this.lastImagePast.next();
+          this.allFramesRetrieve.next();
         }
       });
   }

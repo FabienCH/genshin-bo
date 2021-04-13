@@ -23,6 +23,8 @@ const styles = ({ palette }: Theme) =>
       color: palette.text.primary,
       marginLeft: 10,
       border: 'none',
+      textOverflow: 'ellipsis',
+      width: 200,
     },
     importFlex: {
       display: 'flex',

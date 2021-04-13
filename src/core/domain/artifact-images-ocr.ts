@@ -9,7 +9,7 @@ export class ArtifactImageOcr {
   private previousImage!: Jimp;
   private ocrWorker: OcrWorkerHandler;
   private ocrResultsParser: OcrResultsParser;
-  private processingImagesCount!: number;
+  private recognizingImagesCount!: number;
   private lastImageProcessed!: boolean;
   private cancelImport!: boolean;
 
@@ -27,7 +27,7 @@ export class ArtifactImageOcr {
   }
 
   public async initializeOcr(): Promise<void> {
-    this.processingImagesCount = 0;
+    this.recognizingImagesCount = 0;
     this.lastImageProcessed = false;
     this.cancelImport = false;
 
@@ -41,7 +41,7 @@ export class ArtifactImageOcr {
     frame: string;
     isLast: boolean;
   }): Promise<{ artifact?: ArtifactData; inError: boolean; isDone: boolean }> {
-    this.processingImagesCount++;
+    this.recognizingImagesCount++;
     let artifact: ArtifactData | undefined;
     const imageForOcr = await this.getImageForOcr(imageData.frame);
     if (imageForOcr.length) {
@@ -87,12 +87,12 @@ export class ArtifactImageOcr {
   }
 
   private areAllImagesProcessed(isLast: boolean): boolean {
-    this.processingImagesCount--;
+    this.recognizingImagesCount--;
     if (isLast) {
       this.lastImageProcessed = true;
     }
 
-    return this.lastImageProcessed && this.processingImagesCount === 0;
+    return this.lastImageProcessed && this.recognizingImagesCount === 0;
   }
 
   private async transformForOcr(image: Jimp): Promise<Jimp> {
@@ -122,7 +122,7 @@ export class ArtifactImageOcr {
 
     const imageWithSetBlack = this.setNameGreenToBlack(image);
 
-    const toto = imageWithSetBlack
+    return imageWithSetBlack
       .normalize()
       .threshold({ max: 135 })
       .invert()
@@ -138,8 +138,6 @@ export class ArtifactImageOcr {
       .composite(level, 51, 320)
       .composite(this.bottomOverlay, 20, 562)
       .crop(7, 7, image.getWidth() - 14, image.getHeight() - 14);
-
-    return toto;
   }
 
   private setNameGreenToBlack(image: Jimp): Jimp {
