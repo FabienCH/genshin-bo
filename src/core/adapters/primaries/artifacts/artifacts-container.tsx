@@ -3,7 +3,7 @@ import { ArtifactsDI } from '../../../di/artifacts-di';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { ArtifactView } from '../../../domain/models/artifact-view';
 import { Container } from '@material-ui/core';
-import ArtifactsImport from './artifacts-import';
+import ArtifactsImport from './components/artifacts-import';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
 import { ArtifactsImporter } from '../../../usescases/artifacts-importer';
 import { connect } from 'react-redux';

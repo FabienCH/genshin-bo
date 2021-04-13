@@ -3,7 +3,9 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Container, createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
-import { ImportInfos } from '../../redux/artifacts/artifacts-reducer';
+import { ImportInfos } from '../../../redux/artifacts/artifacts-reducer';
+import ArtifactsImportInfos from './artifacts-import-infos';
+import ImportButtons from './import-buttons';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -26,25 +28,6 @@ const styles = ({ palette }: Theme) =>
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'flex-end',
-    },
-    importInfos: {
-      margin: '0 10px',
-    },
-    artifactsInError: {
-      color: palette.error.light,
-    },
-    importButtonsContainer: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-    },
-    importButton: {
-      display: 'block',
-      marginTop: 20,
-    },
-    cancelButton: {
-      display: 'block',
-      marginTop: 20,
-      marginRight: 20,
     },
   });
 
@@ -82,7 +65,6 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   };
 
   const videoName = video ? video.name : '';
-  const importButtonLabel = isImportRunning ? 'Running' : 'Import Artifacts';
   return (
     <Container className={classes.container}>
       <label className={classes.uploadVideo} htmlFor="upload-video">
@@ -100,30 +82,18 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
           label="Override current artifacts"
         />
         {video ? (
-          <div>
-            <span className={classes.importInfos}>Found frames: {importInfos.foundFrames}</span>
-            <span className={classes.importInfos}>Imported artifacts: {importInfos.importedArtifacts}</span>
-            <span className={importInfos.artifactsInError > 0 ? classes.importInfos + ' ' + classes.artifactsInError : classes.importInfos}>
-              Artifacts in error: {importInfos.artifactsInError}
-            </span>
-          </div>
+          <ArtifactsImportInfos
+            foundFrames={importInfos.foundFrames}
+            importedArtifacts={importInfos.importedArtifacts}
+            artifactsInError={importInfos.artifactsInError}
+          ></ArtifactsImportInfos>
         ) : null}
-        <div className={classes.importButtonsContainer}>
-          {isImportRunning ? (
-            <Button className={classes.cancelButton} color="primary" onClick={cancelImport}>
-              Cancel
-            </Button>
-          ) : null}
-          <Button
-            className={classes.importButton}
-            color="primary"
-            variant="contained"
-            disabled={!video || isImportRunning}
-            onClick={importArtifacts}
-          >
-            {importButtonLabel}
-          </Button>
-        </div>
+        <ImportButtons
+          video={video}
+          isImportRunning={isImportRunning}
+          importArtifactsClicked={importArtifacts}
+          cancelImportClicked={cancelImport}
+        ></ImportButtons>
       </div>
     </Container>
   );
