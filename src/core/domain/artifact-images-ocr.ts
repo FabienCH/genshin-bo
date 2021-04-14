@@ -12,6 +12,8 @@ export class ArtifactImageOcr {
   private recognizingImagesCount!: number;
   private lastImageProcessed!: boolean;
   private cancelImport!: boolean;
+  private t0!: number;
+  private t1!: number;
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
@@ -27,6 +29,7 @@ export class ArtifactImageOcr {
   }
 
   public async initializeOcr(nbOfWorkers: number): Promise<void> {
+    this.t0 = performance.now();
     this.recognizingImagesCount = 0;
     this.lastImageProcessed = false;
     this.cancelImport = false;
@@ -51,6 +54,8 @@ export class ArtifactImageOcr {
     const isDone = this.areAllImagesProcessed(imageData.isLast) || this.cancelImport;
     if (isDone) {
       this.ocrWorker.terminate();
+      this.t1 = performance.now();
+      console.log('duration: ', (this.t1 - this.t0) / 1000);
     }
     return { artifact, inError: !!imageForOcr.length && !artifact, isDone };
   }
