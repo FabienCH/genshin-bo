@@ -119,7 +119,7 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
                 <FormSelect
                   label={listedStat.label}
                   selectedValue={selectedListedStats[index].stat}
-                  data={listedStat.stats}
+                  options={listedStat.stats}
                   onChange={(e) => handleListedStatsChange(e, index)}
                 ></FormSelect>
               </Box>

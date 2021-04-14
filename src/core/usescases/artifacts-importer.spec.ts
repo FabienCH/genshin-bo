@@ -58,7 +58,7 @@ describe('ArtifactsImporter', () => {
           done();
         });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'));
+      artifactsImporter.importFromVideo(new File([], 'filename'), 1);
     });
 
     it('should override stored artifact with artifacts contained in each images', (done) => {
@@ -81,7 +81,7 @@ describe('ArtifactsImporter', () => {
           done();
         });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'), true);
+      artifactsImporter.importFromVideo(new File([], 'filename'), 1, true);
     });
 
     it('should filter duplicated artifacts images and add artifacts', (done) => {
@@ -98,7 +98,7 @@ describe('ArtifactsImporter', () => {
         done();
       });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'), true);
+      artifactsImporter.importFromVideo(new File([], 'filename'), 1, true);
     });
   });
 
@@ -121,7 +121,7 @@ describe('ArtifactsImporter', () => {
         changeCount++;
       });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'));
+      artifactsImporter.importFromVideo(new File([], 'filename'), 1);
     });
   });
 
@@ -144,7 +144,7 @@ describe('ArtifactsImporter', () => {
         changeCount++;
       });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'));
+      artifactsImporter.importFromVideo(new File([], 'filename'), 1);
     });
   });
 
@@ -163,7 +163,7 @@ describe('ArtifactsImporter', () => {
         done();
       });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'));
+      artifactsImporter.importFromVideo(new File([], 'filename'), 1);
     }, 10000);
   });
 

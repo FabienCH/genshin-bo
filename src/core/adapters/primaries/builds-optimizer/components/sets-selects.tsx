@@ -18,7 +18,7 @@ function SetsSelects(props: SetsSelectsProps): ReactElement {
   const firstSetSelect = (
     <FormSelect
       label="Set 1"
-      data={setNames}
+      options={setNames}
       selectedValue={currentSets[0]}
       isOptional={true}
       onChange={(e) => handleSetNameChange(e, 0)}
@@ -31,7 +31,7 @@ function SetsSelects(props: SetsSelectsProps): ReactElement {
       {firstSetSelect}
       <FormSelect
         label="Set 2"
-        data={setNames}
+        options={setNames}
         selectedValue={currentSets[1]}
         isOptional={true}
         onChange={(e) => handleSetNameChange(e, 1)}

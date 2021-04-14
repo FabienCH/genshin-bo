@@ -40,8 +40,8 @@ describe('Builds Optimizer container', () => {
     const charactersFormSelect = wrapper.find(FormSelect).at(0);
     const weaponsFormSelect = wrapper.find(FormSelect).at(2);
 
-    expect(charactersFormSelect.prop('data')).toEqual(charactersNames);
-    expect(weaponsFormSelect.prop('data')).toEqual(weaponsNames);
+    expect(charactersFormSelect.prop('options')).toEqual(charactersNames);
+    expect(weaponsFormSelect.prop('options')).toEqual(weaponsNames);
   });
 
   it('should remove the second set select if set pieces equals 4', () => {

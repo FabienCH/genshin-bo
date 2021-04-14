@@ -26,12 +26,12 @@ export class ArtifactImageOcr {
     this.ocrResultsParser = new OcrResultsParser();
   }
 
-  public async initializeOcr(): Promise<void> {
+  public async initializeOcr(nbOfWorkers: number): Promise<void> {
     this.recognizingImagesCount = 0;
     this.lastImageProcessed = false;
     this.cancelImport = false;
 
-    await this.ocrWorker.initialize('genshin', {
+    await this.ocrWorker.initialize('genshin', nbOfWorkers, {
       cacheMethod: 'none',
       langPath: '.',
     });
