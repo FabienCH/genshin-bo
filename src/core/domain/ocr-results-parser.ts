@@ -13,8 +13,10 @@ export class OcrResultsParser {
     const noNewLineCharOcrResults = ocrResults.map((line) => line.replace(/\n/g, ''));
     let type = Object.values(ArtifactType).find((type) => noNewLineCharOcrResults[1].toLowerCase().includes(type));
     if (!type) {
-      noNewLineCharOcrResults.shift();
-      type = Object.values(ArtifactType).find((type) => noNewLineCharOcrResults[1].toLowerCase().includes(type));
+      type = Object.values(ArtifactType).find((type) => noNewLineCharOcrResults[2].toLowerCase().includes(type));
+      if (type) {
+        noNewLineCharOcrResults.shift();
+      }
     }
     const mainStatType = this.parseMainStatType(noNewLineCharOcrResults[2], type);
     const parsedMainStatValue = this.parseMainStatValue(noNewLineCharOcrResults);
