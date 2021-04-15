@@ -12,8 +12,9 @@ export class ArtifactImageOcr {
   private recognizingImagesCount!: number;
   private lastImageProcessed!: boolean;
   private cancelImport!: boolean;
-  private t0!: number;
-  private t1!: number;
+  private t0s: number[] = [];
+  private t1s: number[] = [];
+  private durations: number[] = [];
 
   private readonly artifactOverlay: Jimp = new Jimp(225, 290, '#ffffff');
   private readonly topOverlay1: Jimp = new Jimp(120, 145, '#ffffff');
@@ -29,7 +30,7 @@ export class ArtifactImageOcr {
   }
 
   public async initializeOcr(nbOfWorkers: number): Promise<void> {
-    this.t0 = performance.now();
+    this.t0s.push(performance.now());
     this.recognizingImagesCount = 0;
     this.lastImageProcessed = false;
     this.cancelImport = false;
@@ -54,8 +55,15 @@ export class ArtifactImageOcr {
     const isDone = this.areAllImagesProcessed(imageData.isLast) || this.cancelImport;
     if (isDone) {
       this.ocrWorker.terminate();
-      this.t1 = performance.now();
-      console.log('duration: ', (this.t1 - this.t0) / 1000);
+      this.t1s.push(performance.now());
+      this.durations.push((this.t1s[this.t1s.length - 1] - this.t0s[this.t0s.length - 1]) / 1000);
+      console.log('duration.length: ', this.durations.length);
+      console.log('duration: ', this.durations[this.durations.length - 1]);
+      const sum = this.durations.reduce((acc, duration) => {
+        acc += duration;
+        return acc;
+      }, 0);
+      console.log('average: ', sum / this.durations.length);
     }
     return { artifact, inError: !!imageForOcr.length && !artifact, isDone };
   }
