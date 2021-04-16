@@ -6,7 +6,10 @@ import { Container, createStyles, Theme, withStyles, WithStyles } from '@materia
 import { ImportInfos } from '../../../redux/artifacts/artifacts-reducer';
 import ArtifactsImportInfos from './artifacts-import-infos';
 import ImportButtons from './import-buttons';
+import ImportGuide from './import-guide';
 import FormSelect from '../../shared/form-select';
+import React from 'react';
+import Dialog from '@material-ui/core/Dialog';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -49,6 +52,15 @@ interface ArtifactsImportProps extends WithStyles<typeof styles> {
 
 function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   const { video, isImportRunning, importInfos, nbOfThreads, nbThreadsOptions, classes } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
@@ -75,6 +87,7 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   };
 
   const videoName = video ? video.name : '';
+  const ForwardImportGuide = React.forwardRef(() => <ImportGuide onClose={handleClose}></ImportGuide>);
   const tooltip = (
     <div>
       The more threads you use, the faster the import will be.
@@ -85,6 +98,18 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
 
   return (
     <Container className={classes.container}>
+      <Button color="primary" onClick={handleOpen}>
+        Read Guide
+      </Button>
+      <Dialog
+        open={open}
+        maxWidth="lg"
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <ForwardImportGuide />
+      </Dialog>
       <div className={classes.importFlex}>
         <label className={classes.uploadVideo} htmlFor="upload-video">
           <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
