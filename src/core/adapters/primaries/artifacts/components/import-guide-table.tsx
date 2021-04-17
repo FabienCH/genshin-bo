@@ -15,16 +15,17 @@ const styles = createStyles({
   },
 });
 
+export type Row = { value: string | number; colSpan?: number }[];
 interface ImportGuideTableProps extends WithStyles<typeof styles> {
   title?: string;
-  rows: { value: string | number; colSpan?: number }[][];
-  headerRows: { value: string | number; colSpan?: number }[][];
+  rows: Row[];
+  headerRows: Row[];
 }
 
 function ImportGuideTable(props: ImportGuideTableProps): ReactElement {
   const { title, rows, headerRows, classes } = props;
 
-  const mapRows = (rowsToMap: { value: string | number; colSpan?: number }[][]) =>
+  const mapRows = (rowsToMap: Row[]) =>
     rowsToMap.map((row) => (
       <TableRow key={`row${row[0].value}`}>
         {row.map((cell) => (

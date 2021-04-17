@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { Theme } from '@material-ui/core';
-import ImportGuideTable from './import-guide-table';
+import ImportGuideTable, { Row } from './import-guide-table';
 import outputTab from '../../../../../assets/import-guide-img/output-tab.jpg';
 import resolution from '../../../../../assets/import-guide-img/resolution.jpg';
 import source from '../../../../../assets/import-guide-img/source.jpg';
@@ -50,23 +50,23 @@ function ImportGuide(props: ImportGuideProps): ReactElement {
     props.onClose();
   };
 
-  const performanceHeaderRows = [
+  const performanceHeaderRows: Row[] = [
     [{ value: 'Nb of Artifacts' }, { value: 'Duration for each CPU and threads', colSpan: 3 }],
     [{ value: '' }, { value: 'i5-6500 – 3 threads' }, { value: 'i5-8250U – 7 threads' }, { value: 'i3-6100U – 3 threads' }],
   ];
-  const chromeRows = [
+  const chromeRows: Row[] = [
     [{ value: 210 }, { value: '6m42 (avg of 5)' }, { value: '8m31 (avg of 5)' }, { value: '17m26 (avg of 3)' }],
     [{ value: 630 }, { value: '20m56 (avg of 3)' }, { value: '29m33 (avg of 3)' }, { value: '50m38 (1)' }],
   ];
-  const firefoxRows = [
+  const firefoxRows: Row[] = [
     [{ value: 210 }, { value: '7m51 (avg of 5)' }, { value: '12m50 (avg of 5)' }, { value: '18m39 (avg of 3)' }],
     [{ value: 630 }, { value: '23m03 (avg of 3)' }, { value: '35m43 (avg of 3)' }, { value: '53m53 (1)' }],
   ];
 
-  const resolutionsHeaderRows = [
+  const resolutionsHeaderRows: Row[] = [
     [{ value: 'Game resolution' }, { value: 'Output resolution' }, { value: 'Filter values (Left, Top, Right, Bottom)' }],
   ];
-  const resolutionsRows = [
+  const resolutionsRows: Row[] = [
     [{ value: '1366 x 768' }, { value: '349 x 596' }, { value: '950 - 86 - 97 - 86' }],
     [{ value: '1920 x 1080' }, { value: '489 x 838' }, { value: '1294 - 121 - 137 - 121' }],
     [{ value: '2540 x 1440' }, { value: '652 x 1116' }, { value: '1725 - 162 - 183 - 162' }],
