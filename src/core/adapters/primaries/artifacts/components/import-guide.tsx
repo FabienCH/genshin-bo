@@ -9,12 +9,6 @@ import outputTab from '../../../../../assets/import-guide-img/output-tab.jpg';
 import resolution from '../../../../../assets/import-guide-img/resolution.jpg';
 import source from '../../../../../assets/import-guide-img/source.jpg';
 import cropFilter from '../../../../../assets/import-guide-img/crop-filter.jpg';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -38,10 +32,10 @@ const styles = ({ palette }: Theme) =>
       display: 'block',
       margin: 'auto',
     },
-    tableContainer: {
-      padding: 5,
-      margin: 'auto',
-      maxWidth: 800,
+    notesContainer: {
+      padding: '0 20px',
+      marginLeft: 30,
+      border: `1px solid ${palette.secondary.main}`,
     },
   });
 
@@ -66,7 +60,7 @@ function ImportGuide(props: ImportGuideProps): ReactElement {
   ];
   const firefoxRows = [
     [{ value: 210 }, { value: '7m51 (avg of 5)' }, { value: '12m50 (avg of 5)' }, { value: '18m39 (avg of 3)' }],
-    [{ value: 630 }, { value: ' (avg of 3)' }, { value: '35m43 (avg of 3)' }, { value: '53m53 (1)' }],
+    [{ value: 630 }, { value: '23m03 (avg of 3)' }, { value: '35m43 (avg of 3)' }, { value: '53m53 (1)' }],
   ];
 
   const resolutionsHeaderRows = [
@@ -82,7 +76,7 @@ function ImportGuide(props: ImportGuideProps): ReactElement {
   return (
     <Fragment>
       <AppBar className={classes.appBar}>
-        <h3 className={classes.title}>Genshin BO Import Guide</h3>
+        <h3 className={classes.title}>Artifacts Import Guide</h3>
         <IconButton color="inherit" onClick={handleClose} aria-label="close">
           <CloseIcon />
         </IconButton>
@@ -136,16 +130,20 @@ function ImportGuide(props: ImportGuideProps): ReactElement {
         <p>Configuration is now done, you’re ready to start recording</p>
 
         <h4>Recording</h4>
+        <div className={classes.notesContainer}>
+          <h5>Important notes</h5>
+          <p>
+            You can only import 5 starts artifacts.
+            <br />
+            Start by recording just a view artifacts and try to import them to make sure everything is properly setup. Also, the Start and
+            Stop recording hotkeys might not work if you don’t run OBS as administrator so if you have this issue, just close it and reopen
+            it as administrator.
+          </p>
+        </div>
         <p>
           To record your artifacts, open your artifacts inventory, press your Start Recording hotkey and click on each of your artifacts.
           You can do it fast, recording at 10 FPS means that a frame is captured every 100ms. Once you’re done, just press you Stop
           Recording hotkey, your video should look like the demo video.
-        </p>
-        <h5>Important notes</h5>
-        <p>
-          Start by recording just a view artifacts and try to import them to make sure everything is properly setup. Also, the Start and
-          Stop recording hotkeys might not work if you don’t run OBS as administrator so if you have this issue, just close it and reopen it
-          as administrator.
         </p>
       </section>
     </Fragment>

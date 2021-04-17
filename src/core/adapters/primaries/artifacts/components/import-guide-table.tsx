@@ -37,7 +37,7 @@ function ImportGuideTable(props: ImportGuideTableProps): ReactElement {
 
   return (
     <TableContainer className={classes.tableContainer}>
-      <h5>{title}</h5>
+      {title ? <h5>{title}</h5> : null}
       <Table size="small" aria-label="a dense table">
         <TableHead>{mapRows(headerRows)}</TableHead>
         <TableBody>{mapRows(rows)}</TableBody>

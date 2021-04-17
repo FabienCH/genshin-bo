@@ -4,9 +4,10 @@ import { StringFormatter } from '../../../domain/mappers/string-formatter';
 import HelpIconTooltip from './help-icon-tooltip';
 
 const styles = createStyles({
-  formControl: {
+  container: {
     display: 'flex',
     flex: 1,
+    flexDirection: 'column',
   },
 });
 
@@ -43,12 +44,12 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
   const selectId = label.toLowerCase().replace(' ', '');
 
   return (
-    <div>
+    <div className={classes.container}>
       <InputLabel htmlFor={selectId} shrink={!tooltipText}>
         {label}
         {tooltipText ? <HelpIconTooltip tooltipText={tooltipText}></HelpIconTooltip> : null}
       </InputLabel>
-      <FormControl className={classes.formControl}>
+      <FormControl>
         <Select id={selectId} value={value} defaultValue="-" onChange={handleChange}>
           {menuItems}
         </Select>

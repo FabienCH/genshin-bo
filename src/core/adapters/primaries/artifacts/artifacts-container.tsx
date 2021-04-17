@@ -119,7 +119,6 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
         width: 170,
       },
     ];
-    const gridWidth = artifacts.length > 13 ? 1269 : 1252;
     return (
       <section>
         <h2>Import Artifacts</h2>
@@ -135,7 +134,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           cancelImport={this.cancelImport}
           overrideArtifactsChanged={this.overrideArtifactsChange}
         ></ArtifactsImport>
-        <Container style={{ height: 750, width: gridWidth }} className="ag-theme-material">
+        <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
           <AgGridReact rowData={artifacts} defaultColDef={defaultColDef} columnDefs={columnDefs} onGridReady={this.onGridReady}>
             <AgGridColumn field="type"></AgGridColumn>
             <AgGridColumn field="level"></AgGridColumn>

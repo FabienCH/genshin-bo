@@ -11,7 +11,6 @@ const styles = createStyles({
   },
   div: {
     display: 'flex',
-    alignItems: 'baseline',
   },
   textField: {
     marginRight: 30,

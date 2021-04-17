@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement } from 'react';
+import { ChangeEvent, Fragment, ReactElement } from 'react';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -10,6 +10,7 @@ import ImportGuide from './import-guide';
 import FormSelect from '../../shared/form-select';
 import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -19,6 +20,18 @@ const styles = ({ palette }: Theme) =>
     uploadVideo: {
       alignSelf: 'center',
     },
+    demoVideoButton: {
+      marginLeft: 15,
+    },
+    downloadVideoLink: {
+      display: 'flex',
+      color: 'inherit',
+      textDecoration: 'none',
+    },
+    getAppIcon: {
+      marginRight: 5,
+    },
+    paperScrollPaper: { maxHeight: 'calc(100% - 128px)' },
     uploadVideoInput: {
       display: 'none',
     },
@@ -29,6 +42,10 @@ const styles = ({ palette }: Theme) =>
       border: 'none',
       textOverflow: 'ellipsis',
       width: 200,
+    },
+    threadsSelect: {
+      flex: 1,
+      maxWidth: 172,
     },
     importFlex: {
       display: 'flex',
@@ -97,58 +114,80 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   );
 
   return (
-    <Container className={classes.container}>
-      <Button color="primary" onClick={handleOpen}>
-        Read Guide
-      </Button>
-      <Dialog
-        open={open}
-        maxWidth="lg"
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        <ForwardImportGuide />
-      </Dialog>
-      <div className={classes.importFlex}>
-        <label className={classes.uploadVideo} htmlFor="upload-video">
-          <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
+    <Fragment>
+      <Container className={classes.container}>
+        <p>
+          Genshin BO gives you the possibility to import your artifacts from a video. If you just want to try it out you can download a demo
+          video containing 70 artifacts. Otherwise, please read the import guide to learn how to record your artifacts. Note that you can
+          only import 5 stars artifacts.
+        </p>
+        <Button color="primary" onClick={handleOpen}>
+          Read Guide
+        </Button>
+        <Button className={classes.demoVideoButton} color="primary">
+          <a
+            className={classes.downloadVideoLink}
+            href="https://github.com/FabienCH/genshin-bo-demo-video/blob/master/genshin-bo-demo-video.mp4?raw=true"
+          >
+            <GetAppIcon className={classes.getAppIcon}></GetAppIcon>Demo Video
+          </a>
+        </Button>
+        <Dialog
+          open={open}
+          maxWidth="lg"
+          classes={{
+            paperScrollPaper: classes.paperScrollPaper,
+          }}
+          onClose={handleClose}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          <ForwardImportGuide />
+        </Dialog>
+      </Container>
+      <Container className={classes.container}>
+        <div className={classes.importFlex}>
+          <label className={classes.uploadVideo} htmlFor="upload-video">
+            <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
 
-          <Button color="primary" variant="contained" component="span">
-            Upload video
-          </Button>
-          <input className={classes.videoNameInput} id="video-name" name="video-name" type="text" value={videoName} disabled={true} />
-        </label>
+            <Button color="primary" variant="contained" component="span">
+              Upload video
+            </Button>
+            <input className={classes.videoNameInput} id="video-name" name="video-name" type="text" value={videoName} disabled={true} />
+          </label>
 
-        <FormSelect
-          label="Number of threads"
-          options={nbThreadsOptions}
-          selectedValue={nbOfThreads}
-          tooltipText={tooltip}
-          onChange={(e) => handleNbThreadsChange(e)}
-        ></FormSelect>
-      </div>
+          <div className={classes.threadsSelect}>
+            <FormSelect
+              label="Threads"
+              options={nbThreadsOptions}
+              selectedValue={nbOfThreads}
+              tooltipText={tooltip}
+              onChange={(e) => handleNbThreadsChange(e)}
+            ></FormSelect>
+          </div>
+        </div>
 
-      <div className={classes.importFlex}>
-        <FormControlLabel
-          control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
-          label="Override current artifacts"
-        />
-        {video ? (
-          <ArtifactsImportInfos
-            foundFrames={importInfos.foundFrames}
-            importedArtifacts={importInfos.importedArtifacts}
-            artifactsInError={importInfos.artifactsInError}
-          ></ArtifactsImportInfos>
-        ) : null}
-        <ImportButtons
-          video={video}
-          isImportRunning={isImportRunning}
-          importArtifactsClicked={importArtifacts}
-          cancelImportClicked={cancelImport}
-        ></ImportButtons>
-      </div>
-    </Container>
+        <div className={classes.importFlex}>
+          <FormControlLabel
+            control={<Checkbox onChange={handleOverrideArtifactsChange} name="override-artifacts" />}
+            label="Override current artifacts"
+          />
+          {video ? (
+            <ArtifactsImportInfos
+              foundFrames={importInfos.foundFrames}
+              importedArtifacts={importInfos.importedArtifacts}
+              artifactsInError={importInfos.artifactsInError}
+            ></ArtifactsImportInfos>
+          ) : null}
+          <ImportButtons
+            video={video}
+            isImportRunning={isImportRunning}
+            importArtifactsClicked={importArtifacts}
+            cancelImportClicked={cancelImport}
+          ></ImportButtons>
+        </div>
+      </Container>
+    </Fragment>
   );
 }
 

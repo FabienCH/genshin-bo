@@ -9,11 +9,9 @@ const styles = createStyles({
   },
   importButton: {
     display: 'block',
-    marginTop: 20,
   },
   cancelButton: {
     display: 'block',
-    marginTop: 20,
     marginRight: 20,
   },
 });
