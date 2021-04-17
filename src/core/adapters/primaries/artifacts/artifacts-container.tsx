@@ -4,6 +4,7 @@ import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { ArtifactView } from '../../../domain/models/artifact-view';
 import { Container } from '@material-ui/core';
 import ArtifactsImport from './components/artifacts-import';
+import ArtifactsImportGuide from './components/artifacts-import-guide';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
 import { ArtifactsImporter } from '../../../usescases/artifacts-importer';
 import { connect } from 'react-redux';
@@ -122,6 +123,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     return (
       <section>
         <h2>Import Artifacts</h2>
+        <ArtifactsImportGuide></ArtifactsImportGuide>
         <ArtifactsImport
           video={this.state.video}
           isImportRunning={isImportRunning}
