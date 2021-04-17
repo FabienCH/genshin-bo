@@ -6,6 +6,7 @@ import { Container, createStyles, Theme, withStyles, WithStyles } from '@materia
 import { ImportInfos } from '../../../redux/artifacts/artifacts-reducer';
 import ArtifactsImportInfos from './artifacts-import-infos';
 import ImportButtons from './import-buttons';
+import FormSelect from '../../shared/form-select';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -13,7 +14,7 @@ const styles = ({ palette }: Theme) =>
       marginBottom: 20,
     },
     uploadVideo: {
-      display: 'block',
+      alignSelf: 'center',
     },
     uploadVideoInput: {
       display: 'none',
@@ -26,6 +27,10 @@ const styles = ({ palette }: Theme) =>
       textOverflow: 'ellipsis',
       width: 200,
     },
+    threadsSelect: {
+      flex: 1,
+      maxWidth: 172,
+    },
     importFlex: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -37,19 +42,26 @@ interface ArtifactsImportProps extends WithStyles<typeof styles> {
   video?: File;
   isImportRunning: boolean;
   importInfos: ImportInfos;
-  handleFileChange: (video: File) => void;
+  nbOfThreads: number;
+  nbThreadsOptions: number[];
+  fileChanged: (video: File) => void;
+  nbThreadsChanged: (selectedNbThreads: number) => void;
   importArtifacts: () => void;
   cancelImport: () => void;
-  handleOverrideArtifactsChange: (checked: boolean) => void;
+  overrideArtifactsChanged: (checked: boolean) => void;
 }
 
 function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
-  const { video, isImportRunning, importInfos, classes } = props;
+  const { video, isImportRunning, importInfos, nbOfThreads, nbThreadsOptions, classes } = props;
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
-      props.handleFileChange(event.target.files[0]);
+      props.fileChanged(event.target.files[0]);
     }
+  };
+
+  const handleNbThreadsChange = (selectedNbThreads: number): void => {
+    props.nbThreadsChanged(selectedNbThreads);
   };
 
   const importArtifacts = (): void => {
@@ -63,20 +75,40 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   };
 
   const handleOverrideArtifactsChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    props.handleOverrideArtifactsChange(event.target.checked);
+    props.overrideArtifactsChanged(event.target.checked);
   };
 
   const videoName = video ? video.name : '';
+  const tooltip = (
+    <div>
+      The more threads you use, the faster the import will be.
+      <br />
+      The max number of threads is given by the number of threads of your CPU minus 1.
+    </div>
+  );
+
   return (
     <Container className={classes.container}>
-      <label className={classes.uploadVideo} htmlFor="upload-video">
-        <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
+      <div className={classes.importFlex}>
+        <label className={classes.uploadVideo} htmlFor="upload-video">
+          <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
 
-        <Button color="primary" variant="contained" component="span">
-          Upload video
-        </Button>
-        <input className={classes.videoNameInput} id="video-name" name="video-name" type="text" value={videoName} disabled={true} />
-      </label>
+          <Button color="primary" variant="contained" component="span">
+            Upload video
+          </Button>
+          <input className={classes.videoNameInput} id="video-name" name="video-name" type="text" value={videoName} disabled={true} />
+        </label>
+
+        <div className={classes.threadsSelect}>
+          <FormSelect
+            label="Threads"
+            options={nbThreadsOptions}
+            selectedValue={nbOfThreads}
+            tooltipText={tooltip}
+            onChange={(e) => handleNbThreadsChange(e)}
+          ></FormSelect>
+        </div>
+      </div>
 
       <div className={classes.importFlex}>
         <FormControlLabel

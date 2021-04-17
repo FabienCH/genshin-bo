@@ -61,5 +61,19 @@ export const theme = createMuiTheme({
         fontSize: '0.7rem',
       },
     },
+    MuiTableBody: {
+      root: {
+        border: '1px solid rgba(216, 224, 230, 1)',
+      },
+    },
+    MuiTableCell: {
+      head: {
+        fontWeight: 600,
+      },
+      root: {
+        borderBottom: 'inherit',
+        border: '1px solid rgba(216, 224, 230, 1)',
+      },
+    },
   },
 });

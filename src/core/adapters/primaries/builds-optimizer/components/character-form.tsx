@@ -52,21 +52,31 @@ function CharacterForm(props: CharacterFormProps): ReactElement {
         <Box className={classes.leftSelect}>
           <FormSelect
             label="Character"
-            data={charactersNames}
+            options={charactersNames}
             selectedValue={currentCharacter.name}
             onChange={handleCharacterNameChange}
           ></FormSelect>
         </Box>
         <Box className={classes.rightSelect}>
-          <FormSelect label="Level" data={levels} selectedValue={currentCharacter.level} onChange={handleCharacterLevelChange}></FormSelect>
+          <FormSelect
+            label="Level"
+            options={levels}
+            selectedValue={currentCharacter.level}
+            onChange={handleCharacterLevelChange}
+          ></FormSelect>
         </Box>
       </div>
       <div className={classes.div}>
         <Box className={classes.leftSelect}>
-          <FormSelect label="Weapon" data={weaponsNames} selectedValue={currentWeapon.name} onChange={handleWeaponNameChange}></FormSelect>
+          <FormSelect
+            label="Weapon"
+            options={weaponsNames}
+            selectedValue={currentWeapon.name}
+            onChange={handleWeaponNameChange}
+          ></FormSelect>
         </Box>
         <Box className={classes.rightSelect}>
-          <FormSelect label="Level" data={levels} selectedValue={currentWeapon.level} onChange={handleWeaponLevelChange}></FormSelect>
+          <FormSelect label="Level" options={levels} selectedValue={currentWeapon.level} onChange={handleWeaponLevelChange}></FormSelect>
         </Box>
       </div>
     </Container>

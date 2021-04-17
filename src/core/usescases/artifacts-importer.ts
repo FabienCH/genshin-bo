@@ -14,9 +14,9 @@ import { ImportInfos } from '../adapters/redux/artifacts/artifacts-reducer';
 export class ArtifactsImporter {
   private readonly allFramesRetrieve: Subject<void> = new Subject();
 
-  public async importFromVideo(video: File, overrideCurrentArtifacts = false): Promise<void> {
+  public async importFromVideo(video: File, nbOfWorkers: number, overrideCurrentArtifacts = false): Promise<void> {
     appStore.dispatch(importArtifactsFromVideoAction());
-    await ArtifactsDI.getArtifactImageOcr().initializeOcr();
+    await ArtifactsDI.getArtifactImageOcr().initializeOcr(nbOfWorkers);
 
     if (overrideCurrentArtifacts) {
       appStore.dispatch(deleteAllArtifactsAction());
@@ -30,6 +30,10 @@ export class ArtifactsImporter {
           this.allFramesRetrieve.next();
         }
       });
+  }
+
+  public getMaxWorkers(): number {
+    return ArtifactsDI.getOcrWorkerHandler().getMaxWorkers();
   }
 
   public isImportRunning(): boolean {

@@ -35,21 +35,21 @@ function ArtifactsMainSelects(props: ArtifactsMainSelectsProps): ReactElement {
     <div className={classes.mainStatDiv}>
       <FormSelect
         label="Sands Main"
-        data={sandsMainStats}
+        options={sandsMainStats}
         selectedValue={mainsStats.sandsMain}
         isOptional={true}
         onChange={handleSandsMainChange}
       ></FormSelect>
       <FormSelect
         label="Goblet Main"
-        data={gobletMainStats}
+        options={gobletMainStats}
         selectedValue={mainsStats.gobletMain}
         isOptional={true}
         onChange={handleGobletMainChange}
       ></FormSelect>
       <FormSelect
         label="Circlet Main"
-        data={circletMainStats}
+        options={circletMainStats}
         selectedValue={mainsStats.circletMain}
         isOptional={true}
         onChange={handleCircletMainChange}

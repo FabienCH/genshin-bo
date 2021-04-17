@@ -11,7 +11,6 @@ const styles = createStyles({
   },
   div: {
     display: 'flex',
-    alignItems: 'baseline',
   },
   textField: {
     marginRight: 30,
@@ -119,7 +118,7 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
                 <FormSelect
                   label={listedStat.label}
                   selectedValue={selectedListedStats[index].stat}
-                  data={listedStat.stats}
+                  options={listedStat.stats}
                   onChange={(e) => handleListedStatsChange(e, index)}
                 ></FormSelect>
               </Box>

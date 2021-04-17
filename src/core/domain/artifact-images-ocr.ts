@@ -26,12 +26,12 @@ export class ArtifactImageOcr {
     this.ocrResultsParser = new OcrResultsParser();
   }
 
-  public async initializeOcr(): Promise<void> {
+  public async initializeOcr(nbOfWorkers: number): Promise<void> {
     this.recognizingImagesCount = 0;
     this.lastImageProcessed = false;
     this.cancelImport = false;
 
-    await this.ocrWorker.initialize('genshin', {
+    await this.ocrWorker.initialize('genshin', nbOfWorkers, {
       cacheMethod: 'none',
       langPath: '.',
     });
@@ -98,46 +98,45 @@ export class ArtifactImageOcr {
   private async transformForOcr(image: Jimp): Promise<Jimp> {
     const height = image.getHeight();
     const width = image.getWidth();
-    if (height < 850 || height > 854 || width < 498 || width > 502) {
-      image.resize(500, 852);
+    if (height < 836 || height > 840 || width < 486 || width > 490) {
+      image.resize(488, 838);
     }
 
     const mainStatType = await Jimp.create(image);
-    mainStatType.crop(30, 158, 240, 27).scale(1.2).threshold({ max: 140 }).invert().threshold({ max: 115 });
+    mainStatType.crop(23, 151, 240, 27).scale(1.2).threshold({ max: 140 }).invert().threshold({ max: 115 });
 
     const mainStatValue = await Jimp.create(image);
-    mainStatValue.crop(30, 186, 220, 50).scale(0.7).threshold({ max: 180 }).invert().threshold({ max: 75 });
+    mainStatValue.crop(23, 179, 220, 50).scale(0.7).threshold({ max: 180 }).invert().threshold({ max: 75 });
 
     const top = await Jimp.create(image);
     top
-      .crop(7, 7, 500, 280)
-      .threshold({ max: 140 })
+      .crop(0, 0, 500, 280)
+      .threshold({ max: 160 })
       .invert()
-      .threshold({ max: 115 })
-      .composite(this.topOverlay1, 195, 173)
-      .composite(this.topOverlay2, 7, 225);
+      .threshold({ max: 95 })
+      .composite(this.topOverlay1, 188, 166)
+      .composite(this.topOverlay2, 0, 218);
 
     const level = await Jimp.create(image);
-    level.crop(36, 316, 53, 25).invert().threshold({ max: 130 });
+    level.crop(29, 309, 53, 25).invert().threshold({ max: 130 });
 
     const imageWithSetBlack = this.setNameGreenToBlack(image);
 
     return imageWithSetBlack
       .normalize()
-      .threshold({ max: 135 })
+      .threshold({ max: 150 })
       .invert()
-      .threshold({ max: 120 })
+      .threshold({ max: 115 })
       .invert()
-      .composite(top, 7, 7)
-      .composite(this.artifactOverlay, 270, 65)
-      .composite(this.mainStatOverlay, 29, 157)
-      .composite(mainStatType, 30, 140)
-      .composite(this.mainValueOverlay, 29, 185)
-      .composite(mainStatValue, 30, 186)
-      .composite(this.levelOverlay, 34, 314)
-      .composite(level, 51, 320)
-      .composite(this.bottomOverlay, 20, 562)
-      .crop(7, 7, image.getWidth() - 14, image.getHeight() - 14);
+      .composite(top, 0, 0)
+      .composite(this.artifactOverlay, 263, 58)
+      .composite(this.mainStatOverlay, 22, 150)
+      .composite(mainStatType, 23, 133)
+      .composite(this.mainValueOverlay, 22, 178)
+      .composite(mainStatValue, 23, 179)
+      .composite(this.levelOverlay, 27, 307)
+      .composite(level, 44, 313)
+      .composite(this.bottomOverlay, 13, 555);
   }
 
   private setNameGreenToBlack(image: Jimp): Jimp {

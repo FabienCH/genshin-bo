@@ -1,19 +1,22 @@
 import { ChangeEvent, ReactElement } from 'react';
 import { InputLabel, Select, MenuItem, FormControl, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { StringFormatter } from '../../../domain/mappers/string-formatter';
+import HelpIconTooltip from './help-icon-tooltip';
 
 const styles = createStyles({
-  formControl: {
+  container: {
     display: 'flex',
     flex: 1,
+    flexDirection: 'column',
   },
 });
 
 export interface FormSelectProps<T extends string | number> extends WithStyles<typeof styles> {
   label: string;
-  data: Array<T>;
+  options: Array<T>;
   selectedValue?: T;
   isOptional?: boolean;
+  tooltipText?: NonNullable<React.ReactNode>;
   onChange: (value: T) => void;
 }
 
@@ -23,15 +26,15 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
     props.onChange(value as T);
   };
 
-  const { label, data, selectedValue, isOptional, classes } = props;
-  const options = data.map((dataItem) => (
-    <MenuItem value={dataItem} key={dataItem}>
-      {StringFormatter.formatStringWithUpperCase(`${dataItem}`)}
+  const { label, options, selectedValue, isOptional, tooltipText, classes } = props;
+  const menuItems = options.map((option) => (
+    <MenuItem value={option} key={option}>
+      {StringFormatter.formatStringWithUpperCase(`${option}`)}
     </MenuItem>
   ));
 
   if (isOptional) {
-    options.unshift(
+    menuItems.unshift(
       <MenuItem value="-" key="default">
         -
       </MenuItem>,
@@ -41,12 +44,17 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
   const selectId = label.toLowerCase().replace(' ', '');
 
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel htmlFor={selectId}>{label}</InputLabel>
-      <Select id={selectId} value={value} defaultValue="-" onChange={handleChange}>
-        {options}
-      </Select>
-    </FormControl>
+    <div className={classes.container}>
+      <InputLabel htmlFor={selectId} shrink={!tooltipText}>
+        {label}
+        {tooltipText ? <HelpIconTooltip tooltipText={tooltipText}></HelpIconTooltip> : null}
+      </InputLabel>
+      <FormControl>
+        <Select id={selectId} value={value} defaultValue="-" onChange={handleChange}>
+          {menuItems}
+        </Select>
+      </FormControl>
+    </div>
   );
 }
 

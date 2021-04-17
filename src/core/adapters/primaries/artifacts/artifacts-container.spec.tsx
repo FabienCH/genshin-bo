@@ -51,7 +51,7 @@ describe('Artifacts container', () => {
     wrapper.find(Button).last().simulate('click');
 
     await waitFor(() => {
-      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, false);
+      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, false);
     });
   });
 
@@ -65,7 +65,7 @@ describe('Artifacts container', () => {
     wrapper.find(Button).last().simulate('click');
 
     await waitFor(() => {
-      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, true);
+      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, true);
     });
   });
 });

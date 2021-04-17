@@ -1,23 +1,10 @@
 import { ChangeEvent, ReactElement } from 'react';
-import {
-  createStyles,
-  withStyles,
-  WithStyles,
-  InputLabel,
-  Select,
-  Input,
-  Chip,
-  useTheme,
-  MenuItem,
-  Theme,
-  Tooltip,
-  Box,
-} from '@material-ui/core';
+import { createStyles, withStyles, WithStyles, InputLabel, Select, Input, Chip, useTheme, MenuItem, Theme, Box } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import { artifactStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
 import { StringFormatter } from '../../../../domain/mappers/string-formatter';
 import FormSelect from '../../shared/form-select';
-import HelpIcon from '@material-ui/icons/Help';
+import HelpIconTooltip from '../../shared/help-icon-tooltip';
 
 const styles = createStyles({
   levelSelect: {
@@ -26,15 +13,7 @@ const styles = createStyles({
   focusStatsLabel: {
     marginBottom: 5,
   },
-  helpIconSup: {
-    display: 'inline-block',
-    height: 22,
-    padding: 3,
-    cursor: 'pointer',
-  },
-  helpIcon: {
-    fontSize: '1rem',
-  },
+
   formControl: {
     width: 350,
   },
@@ -97,15 +76,11 @@ function ArtifactsOptionsForm(props: ArtifactsOptionsFormProps): ReactElement {
   return (
     <div>
       <Box className={classes.levelSelect}>
-        <FormSelect label="Artifacts level" data={levels} selectedValue={minLevel} onChange={handleMinLevelChange}></FormSelect>
+        <FormSelect label="Artifacts level" options={levels} selectedValue={minLevel} onChange={handleMinLevelChange}></FormSelect>
       </Box>
       <InputLabel id="focus-stats-label" className={classes.focusStatsLabel} shrink={false}>
         Focus stats
-        <Tooltip title={tooltip} placement="top-start" interactive>
-          <sup className={classes.helpIconSup}>
-            <HelpIcon className={classes.helpIcon} />
-          </sup>
-        </Tooltip>
+        <HelpIconTooltip tooltipText={tooltip}></HelpIconTooltip>
       </InputLabel>
       <FormControl className={classes.formControl}>
         <Select
