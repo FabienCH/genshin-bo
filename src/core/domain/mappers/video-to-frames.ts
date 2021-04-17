@@ -11,7 +11,6 @@ export abstract class VideoToFrames {
   private static importCancelled: boolean;
 
   public static getFrames(videoFile: File, fps: number): Observable<FrameData> {
-    VideoToFrames.importCancelled = false;
     const video = document.createElement('video');
     video.preload = 'auto';
 
@@ -27,6 +26,7 @@ export abstract class VideoToFrames {
           time = duration;
         }
       }
+      VideoToFrames.importCancelled = false;
     });
 
     video.src = URL.createObjectURL(videoFile);
