@@ -19,6 +19,7 @@ import { ningguang } from '../adapters/secondaries/characters-stats/ningguang';
 import { noelle } from '../adapters/secondaries/characters-stats/noelle';
 import { qiqi } from '../adapters/secondaries/characters-stats/qiqi';
 import { razor } from '../adapters/secondaries/characters-stats/razor';
+import { rosaria } from '../adapters/secondaries/characters-stats/rosaria';
 import { sucrose } from '../adapters/secondaries/characters-stats/sucrose';
 import { tartaglia } from '../adapters/secondaries/characters-stats/tartaglia';
 import { traveler } from '../adapters/secondaries/characters-stats/traveler';
@@ -55,6 +56,7 @@ describe('CharactersHandler.getCharactersNames', () => {
     noelle,
     qiqi,
     razor,
+    rosaria,
     sucrose,
     tartaglia,
     traveler,

@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const ningguang: CharacterWithStats = {
   name: 'ningguang',
+  weaponType: 'catalyst',
   levels: {
     '1': { stats: { hp: 821, atk: 18, def: 48 } },
     '20': { stats: { hp: 2108, atk: 46, def: 123 } },

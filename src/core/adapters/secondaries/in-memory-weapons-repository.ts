@@ -8,29 +8,27 @@ import { allClaymores } from './weapons-stats/claymores';
 import { allPolearms } from './weapons-stats/polearms';
 import { allSwords } from './weapons-stats/swords';
 import { WeaponStats } from './weapons-stats/weapon-stats-type';
-import { allBuildStats } from '../../domain/models/character-statistics';
 
 export class InMemoryWeaponsRepository implements WeaponsRepository {
   private readonly weaponsStats: WeaponStats[];
-  private readonly defaultWeaponStats = { atk: 0, bonusStat: { [allBuildStats.atk]: 0 } };
 
   constructor() {
     this.weaponsStats = [...allBows, ...allCatalysts, ...allClaymores, ...allPolearms, ...allSwords];
   }
 
   public getAll(level: Levels): Weapon[] {
-    return this.weaponsStats.map((weaponsStat) => ({
-      ...weaponsStat.levels[level],
-      type: weaponsStat.type,
-      name: weaponsStat.name,
-      level,
-    }));
+    return this.weaponsStats.map((weaponsStats) => this.getWeapon(weaponsStats.name, level));
   }
 
   public getWeapon(name: string, level: Levels): Weapon {
     const weaponStats = this.weaponsStats.find((weapon) => weapon.name === name);
-    const weapon = weaponStats ? weaponStats.levels[level] : this.defaultWeaponStats;
-
-    return { ...weapon, type: weaponStats ? weaponStats.type : 'bow', name, level };
+    if (!weaponStats) {
+      throw new Error(`could not find weapon with name ${name}`);
+    }
+    const weaponStat = weaponStats.levels[level];
+    if (!weaponStat.bonusStat) {
+      throw new Error(`missing data: weapon does not have bonus stat for level ${level}`);
+    }
+    return { atk: weaponStat.atk, bonusStat: weaponStat.bonusStat, type: weaponStats.type, name, level };
   }
 }

@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const tartaglia: CharacterWithStats = {
   name: 'tartaglia',
+  weaponType: 'bow',
   levels: {
     '1': { stats: { hp: 1020, atk: 23, def: 63 } },
     '20': { stats: { hp: 2646, atk: 61, def: 165 } },

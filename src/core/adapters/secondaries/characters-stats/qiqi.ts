@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const qiqi: CharacterWithStats = {
   name: 'qiqi',
+  weaponType: 'sword',
   levels: {
     '1': { stats: { hp: 963, atk: 22, def: 72 } },
     '20': { stats: { hp: 2498, atk: 58, def: 186 } },

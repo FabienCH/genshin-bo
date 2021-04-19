@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const diluc: CharacterWithStats = {
   name: 'diluc',
+  weaponType: 'claymore',
   levels: {
     '1': { stats: { hp: 1011, atk: 26, def: 61 } },
     '20': { stats: { hp: 2621, atk: 68, def: 158 } },

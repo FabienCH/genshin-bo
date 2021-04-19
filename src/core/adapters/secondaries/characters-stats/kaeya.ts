@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const kaeya: CharacterWithStats = {
   name: 'kaeya',
+  weaponType: 'sword',
   levels: {
     '1': { stats: { hp: 976, atk: 19, def: 66 } },
     '20': { stats: { hp: 2506, atk: 48, def: 171 } },

@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const fischl: CharacterWithStats = {
   name: 'fischl',
+  weaponType: 'bow',
   levels: {
     '1': { stats: { hp: 770, atk: 20, def: 50 } },
     '20': { stats: { hp: 1979, atk: 53, def: 128 } },

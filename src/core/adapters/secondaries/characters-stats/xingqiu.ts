@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const xingqiu: CharacterWithStats = {
   name: 'xingqiu',
+  weaponType: 'sword',
   levels: {
     '1': { stats: { hp: 857, atk: 17, def: 64 } },
     '20': { stats: { hp: 2202, atk: 43, def: 163 } },

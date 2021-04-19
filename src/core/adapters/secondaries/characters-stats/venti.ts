@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const venti: CharacterWithStats = {
   name: 'venti',
+  weaponType: 'bow',
   levels: {
     '1': { stats: { hp: 820, atk: 20, def: 52 } },
     '20': { stats: { hp: 2127, atk: 53, def: 135 } },

@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const mona: CharacterWithStats = {
   name: 'mona',
+  weaponType: 'catalyst',
   levels: {
     '1': { stats: { hp: 810, atk: 22, def: 51 } },
     '20': { stats: { hp: 2102, atk: 58, def: 132 } },

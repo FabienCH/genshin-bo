@@ -35,6 +35,7 @@ import { InMemoryWeaponsRepository } from './in-memory-weapons-repository';
 import { CharacterStats, CharacterStatsPerLevel } from '../../domain/models/character-statistics';
 import { xiao } from './characters-stats/xiao';
 import { huTao } from './characters-stats/hu-tao';
+import { rosaria } from './characters-stats/rosaria';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly weaponsRepository: InMemoryWeaponsRepository;
@@ -65,6 +66,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       noelle,
       qiqi,
       razor,
+      rosaria,
       sucrose,
       tartaglia,
       traveler,

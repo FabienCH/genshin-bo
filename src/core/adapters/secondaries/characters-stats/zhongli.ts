@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const zhongli: CharacterWithStats = {
   name: 'zhongli',
+  weaponType: 'polearm',
   levels: {
     '1': { stats: { hp: 1144, atk: 20, def: 57 } },
     '20': { stats: { hp: 2967, atk: 51, def: 149 } },

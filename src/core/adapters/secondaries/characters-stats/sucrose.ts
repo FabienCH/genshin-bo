@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const sucrose: CharacterWithStats = {
   name: 'sucrose',
+  weaponType: 'catalyst',
   levels: {
     '1': { stats: { hp: 775, atk: 14, def: 59 } },
     '20': { stats: { hp: 1991, atk: 37, def: 151 } },
