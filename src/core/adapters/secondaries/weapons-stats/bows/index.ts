@@ -17,25 +17,27 @@ import { skywardHarp } from './skyward-harp';
 import { slingshot } from './slingshot';
 import { theStringless } from './the-stringless';
 import { theViridescentHunt } from './the-viridescent-hunt';
+import { windblumeOde } from './windblume-ode';
 
 export const allBows = [
-  skywardHarp,
-  compoundBow,
-  blackcliffWarbow,
+  sharpshootersOath,
+  elegyfortheEnd,
+  theStringless,
+  ravenBow,
+  amosBow,
   theViridescentHunt,
   prototypeCrescent,
-  sacrificialBow,
-  alleyHunter,
   rust,
-  theStringless,
-  royalBow,
   favoniusWarbow,
-  sharpshootersOath,
+  alleyHunter,
+  blackcliffWarbow,
+  compoundBow,
+  royalBow,
+  sacrificialBow,
   slingshot,
-  ravenBow,
   ebonyBow,
+  skywardHarp,
+  windblumeOde,
   messenger,
   recurveBow,
-  amosBow,
-  elegyfortheEnd,
 ];

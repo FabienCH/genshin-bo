@@ -14,7 +14,7 @@ export const swordofDescension: WeaponStats = {
     '60a': { atk: NaN, bonusStat: { percentAtk: 25.9 } },
     '70': { atk: 335, bonusStat: { percentAtk: 29 } },
     '70a': { atk: NaN, bonusStat: { percentAtk: 29 } },
-    '80': { atk: NaN, bonusStat: { percentAtk: 32.1 } },
+    '80': { atk: 388, bonusStat: { percentAtk: 32.1 } },
     '80a': { atk: NaN, bonusStat: { percentAtk: 32.1 } },
     '90': { atk: 440, bonusStat: { percentAtk: 35.2 } },
   },
