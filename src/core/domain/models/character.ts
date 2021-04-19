@@ -24,6 +24,7 @@ export type ExistingCharacters =
   | 'noelle'
   | 'qiqi'
   | 'razor'
+  | 'rosaria'
   | 'sucrose'
   | 'tartaglia'
   | 'traveler'
