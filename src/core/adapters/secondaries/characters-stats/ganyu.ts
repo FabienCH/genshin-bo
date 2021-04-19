@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const ganyu: CharacterWithStats = {
   name: 'ganyu',
+  weaponType: 'bow',
   levels: {
     '1': { stats: { hp: 763, atk: 26, def: 49 } },
     '20': { stats: { hp: 1978, atk: 68, def: 127 } },

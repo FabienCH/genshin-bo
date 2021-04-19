@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const barbara: CharacterWithStats = {
   name: 'barbara',
+  weaponType: 'catalyst',
   levels: {
     '1': { stats: { hp: 821, atk: 13, def: 56 } },
     '20': { stats: { hp: 2108, atk: 34, def: 144 } },

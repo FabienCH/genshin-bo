@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const albedo: CharacterWithStats = {
   name: 'albedo',
+  weaponType: 'sword',
   levels: {
     '1': { stats: { hp: 1030, atk: 20, def: 68 } },
     '20': { stats: { hp: 2671, atk: 51, def: 177 } },

@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const xinyan: CharacterWithStats = {
   name: 'xinyan',
+  weaponType: 'claymore',
   levels: {
     '1': { stats: { hp: 939, atk: 21, def: 67 } },
     '20': { stats: { hp: 2413, atk: 54, def: 172 } },

@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const beidou: CharacterWithStats = {
   name: 'beidou',
+  weaponType: 'claymore',
   levels: {
     '1': { stats: { hp: 1094, atk: 19, def: 54 } },
     '20': { stats: { hp: 2811, atk: 48, def: 140 } },

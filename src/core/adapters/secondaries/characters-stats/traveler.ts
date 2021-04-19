@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const traveler: CharacterWithStats = {
   name: 'traveler',
+  weaponType: 'sword',
   levels: {
     '1': { stats: { hp: 912, atk: 18, def: 57 } },
     '20': { stats: { hp: 2342, atk: 46, def: 147 } },

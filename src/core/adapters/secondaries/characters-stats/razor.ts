@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const razor: CharacterWithStats = {
   name: 'razor',
+  weaponType: 'claymore',
   levels: {
     '1': { stats: { hp: 1003, atk: 20, def: 63 } },
     '20': { stats: { hp: 2577, atk: 50, def: 162 } },

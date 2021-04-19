@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const amber: CharacterWithStats = {
   name: 'amber',
+  weaponType: 'bow',
   levels: {
     '1': { stats: { hp: 793, atk: 19, def: 50 } },
     '20': { stats: { hp: 2038, atk: 48, def: 129 } },

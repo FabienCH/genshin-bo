@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const diona: CharacterWithStats = {
   name: 'diona',
+  weaponType: 'bow',
   levels: {
     '1': { stats: { hp: 802, atk: 18, def: 50 } },
     '20': { stats: { hp: 2061, atk: 46, def: 129 } },

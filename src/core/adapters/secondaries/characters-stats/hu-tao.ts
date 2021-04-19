@@ -2,6 +2,7 @@ import { CharacterWithStats } from './character-stats-type';
 
 export const huTao: CharacterWithStats = {
   name: 'huTao',
+  weaponType: 'polearm',
   levels: {
     '1': { stats: { hp: 1211, atk: 8, def: 68 } },
     '20': { stats: { hp: 3141, atk: 21, def: 177 } },
