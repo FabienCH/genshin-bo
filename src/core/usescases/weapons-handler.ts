@@ -1,5 +1,5 @@
 import { Levels } from '../domain/models/levels';
-import { WeaponType } from '../domain/models/weapon';
+import { WeaponType, WeaponView } from '../domain/models/weapon';
 import { WeaponsRepository } from '../domain/weapons-repository';
 
 export class WeaponsHandler {
@@ -10,5 +10,10 @@ export class WeaponsHandler {
       .getAll(level)
       .filter((weapon) => weapon.type === type)
       .map((weapon) => weapon.name);
+  }
+
+  public getWeaponView(name: string, level: Levels = '1'): WeaponView {
+    const weapon = this.weaponsRepository.getWeapon(name, level);
+    return { name: weapon.name, level };
   }
 }
