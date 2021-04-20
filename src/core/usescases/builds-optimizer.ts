@@ -2,7 +2,7 @@ import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/red
 import { appStore } from '../adapters/redux/store';
 import { Artifact } from '../domain/entities/artifact';
 import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
-import { Character } from '../domain/models/character';
+import { Character, CharacterView } from '../domain/models/character';
 import { CharacterStatsValues } from '../domain/models/character-statistics';
 import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
@@ -11,18 +11,22 @@ import { StatsComputation } from '../domain/stats-computation';
 import { runBuildsOptimizer } from '../adapters/redux/builds/builds-middleware';
 import { SetFilter } from '../domain/build-filter';
 import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
+import { CharactersRepository } from '../domain/characters-repository';
+import { Weapon, WeaponView } from '../domain/models/weapon';
+import { WeaponsRepository } from '../domain/weapons-repository';
 
 export class BuildsOptimizer {
   private allArtifacts!: Artifact[][];
 
-  constructor() {
+  constructor(private readonly charactersRepository: CharactersRepository, private readonly weaponsRepository: WeaponsRepository) {
     if (!isArtifactsStateInitialized()) {
       appStore.dispatch(loadArtifactsActions());
     }
   }
 
   public computeBuildsStats(
-    character: Character,
+    characterView: CharacterView,
+    weaponView: WeaponView,
     artifactsFilters: {
       currentSets: SetNames[];
       setPieces: 2 | 4;
@@ -41,8 +45,10 @@ export class BuildsOptimizer {
       throw new Error('total pieces can not be higher than 5');
     }
 
-    const baseStats = { ...character.stats, atk: character.stats.atk + character.weapon.atk };
-    const characterBonusStat = this.computeCharacterBonusStats(character);
+    const character = this.charactersRepository.getCharacter(characterView.name, characterView.level);
+    const weapon = this.weaponsRepository.getWeapon(weaponView.name, weaponView.level);
+    const baseStats = { ...character.stats, atk: character.stats.atk + weapon.atk };
+    const characterBonusStat = this.computeBonusStats(character, weapon);
 
     const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
     const mainStats = {
@@ -75,9 +81,9 @@ export class BuildsOptimizer {
     return totalSetFilterPieces;
   }
 
-  private computeCharacterBonusStats(character: Character): MainStatsValues {
+  private computeBonusStats(character: Character, weapon: Weapon): MainStatsValues {
     const statsComputation = new StatsComputation();
-    const weaponBonusStat = character.weapon.bonusStat;
+    const weaponBonusStat = weapon.bonusStat;
     const characterBonusStat = character.bonusStat;
     if (!characterBonusStat) {
       return weaponBonusStat;
