@@ -3,5 +3,5 @@ import { Levels } from './models/levels';
 
 export interface CharactersRepository {
   getAll(level: Levels): Character[];
-  getCharacter(name: ExistingCharacters, level: Levels, weapon: { name: string; level: Levels }): Character;
+  getCharacter(name: ExistingCharacters, level: Levels): Character;
 }
