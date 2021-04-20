@@ -33,7 +33,8 @@ describe('Builds Optimizer container', () => {
     const charactersHandler = new CharactersHandler(new InMemoryCharactersRepository());
     const weaponsHandler = new WeaponsHandler(new InMemoryWeaponsRepository());
     charactersNames = charactersHandler.getCharactersNames();
-    weaponsNames = weaponsHandler.getWeaponsNames();
+    const currentCharacter = charactersHandler.getCharacterView(charactersNames[0]);
+    weaponsNames = weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
   });
 
   it('should renders characters and weapons initialized', () => {

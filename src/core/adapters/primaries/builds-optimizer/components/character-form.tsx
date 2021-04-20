@@ -1,8 +1,9 @@
 import { createStyles, withStyles, WithStyles, Box, Container } from '@material-ui/core';
 import { Levels } from '../../../../domain/models/levels';
-import { ExistingCharacters } from '../../../../domain/models/character';
+import { CharacterView, ExistingCharacters } from '../../../../domain/models/character';
 import FormSelect from '../../shared/form-select';
 import { ReactElement } from 'react';
+import { WeaponView } from '../../../../domain/models/weapon';
 
 const styles = createStyles({
   div: {
@@ -21,8 +22,8 @@ const styles = createStyles({
 interface CharacterFormProps extends WithStyles<typeof styles> {
   charactersNames: ExistingCharacters[];
   weaponsNames: string[];
-  currentCharacter: { name: ExistingCharacters; level: Levels };
-  currentWeapon: { name: string; level: Levels };
+  currentCharacter: CharacterView;
+  currentWeapon: WeaponView;
   onCharacterNameChange: (value: ExistingCharacters) => void;
   onCharacterLevelChange: (value: Levels) => void;
   onWeaponNameChange: (value: string) => void;
