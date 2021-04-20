@@ -21,6 +21,7 @@ describe('Builds Optimizer container', () => {
   let wrapper: ReactWrapper;
   let charactersNames: ExistingCharacters[];
   let weaponsNames: string[];
+  let weaponsHandler: WeaponsHandler;
 
   beforeEach(() => {
     ArtifactsDI.registerRepository();
@@ -31,7 +32,7 @@ describe('Builds Optimizer container', () => {
     );
 
     const charactersHandler = new CharactersHandler(new InMemoryCharactersRepository());
-    const weaponsHandler = new WeaponsHandler(new InMemoryWeaponsRepository());
+    weaponsHandler = new WeaponsHandler(new InMemoryWeaponsRepository());
     charactersNames = charactersHandler.getCharactersNames();
     const currentCharacter = charactersHandler.getCharacterView(charactersNames[0]);
     weaponsNames = weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
@@ -43,6 +44,22 @@ describe('Builds Optimizer container', () => {
 
     expect(charactersFormSelect.prop('options')).toEqual(charactersNames);
     expect(weaponsFormSelect.prop('options')).toEqual(weaponsNames);
+  });
+
+  it('should update weapons list if selected character can equip a different weapon than the previous one', async () => {
+    wrapper
+      .find(FormSelect)
+      .find('#character')
+      .first()
+      .find('input')
+      .simulate('change', { target: { name: '', value: 'diluc' } });
+
+    await waitFor(() => {
+      const weaponsFormSelect = wrapper.find(FormSelect).at(2);
+      const claymores = weaponsHandler.getWeaponsNamesByTypes('claymore');
+
+      expect(weaponsFormSelect.prop('options')).toEqual(claymores);
+    });
   });
 
   it('should remove the second set select if set pieces equals 4', () => {

@@ -87,10 +87,14 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   getCurrentWeapon = (name: string, level: Levels = this.state.currentWeapon.level) => WeaponsDI.weaponsHandler.getWeaponView(name, level);
 
   handleCharacterNameChange(name: ExistingCharacters): void {
+    const currentCharacter = this.getCurrentCharacter(name);
     this.setState((state) => ({
       ...state,
-      currentCharacter: this.getCurrentCharacter(name),
+      currentCharacter,
     }));
+    if (currentCharacter.weaponType !== this.state.currentCharacter.weaponType) {
+      this.updateWeaponsState(currentCharacter);
+    }
   }
 
   handleCharacterLevelChange(level: Levels): void {
@@ -248,6 +252,16 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
         {buildsResultsContainer}
       </section>
     );
+  }
+
+  private updateWeaponsState(currentCharacter: CharacterView) {
+    const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
+    const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
+    this.setState((state) => ({
+      ...state,
+      weaponsNames,
+      currentWeapon,
+    }));
   }
 }
 
