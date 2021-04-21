@@ -54,7 +54,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
       ArtifactsDI.registerRepository(defPhyDmgAtkBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -77,7 +76,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
       ArtifactsDI.registerRepository(atkGeoDmgEmBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -103,7 +101,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   describe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
       ArtifactsDI.registerRepository(lvl134820BuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -127,7 +124,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with levels 2, 7, 12, 15, 17', () => {
       ArtifactsDI.registerRepository(lvl27121517BuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -151,7 +147,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with gladiator and thundering sets effects', () => {
       ArtifactsDI.registerRepository(gladiatorThunderingBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -175,7 +170,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with bolide and Lavawalker sets effects', () => {
       ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -202,7 +196,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
       ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
       const amber: CharacterView = { name: 'amber', level: '1', weaponType: 'bow' };
       const rust: WeaponView = { name: 'rust', level: '1' };
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
       buildsOptimizer.computeBuildsStats(amber, rust, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -381,7 +374,6 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
   it('should compute build stats of multiple artifacts for each type', () => {
     ArtifactsDI.registerRepository(multipleArtifactsBuildArtifactsData);
-    buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
     buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
     expect(getBuildsWithoutId()).toEqual([
@@ -515,11 +507,8 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   });
 
   describe('filter builds before stats computation', () => {
-    let buildsOptimizer: BuildsOptimizer;
-
     beforeEach(() => {
       ArtifactsDI.registerRepository();
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
     });
 
     it('that must have 2 thunderingFury set pieces', () => {
@@ -569,11 +558,8 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   });
 
   describe('filter builds after stats computation', () => {
-    let buildsOptimizer: BuildsOptimizer;
-
     beforeEach(() => {
       ArtifactsDI.registerRepository();
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
     });
 
     it('that must have at least 17000 hp', () => {
@@ -595,11 +581,8 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   });
 
   describe('return number of possible builds', () => {
-    let buildsOptimizer: BuildsOptimizer;
-
     beforeEach(() => {
       ArtifactsDI.registerRepository();
-      buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
     });
 
     it('should return 144 with default in memory artifacts', () => {
