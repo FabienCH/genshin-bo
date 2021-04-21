@@ -9,3 +9,8 @@ export type Weapon = {
   atk: number;
   bonusStat: { [bonusStat: string]: number };
 };
+
+export type WeaponView = {
+  name: string;
+  level: Levels;
+};

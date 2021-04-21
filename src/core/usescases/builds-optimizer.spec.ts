@@ -1,7 +1,7 @@
 import { BuildsOptimizer } from './builds-optimizer';
 import { CharacterStats } from '../domain/models/character-statistics';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
-import { Character } from '../domain/models/character';
+import { CharacterView } from '../domain/models/character';
 import {
   atkGeoDmgEmBuildArtifactsData,
   bolideLavawalkerBuildArtifactsData,
@@ -16,11 +16,13 @@ import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsMainStats, ArtifactStatsTypes } from '../domain/models/main-statistics';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { selectAllBuilds } from '../adapters/redux/builds/builds-selectors';
+import { WeaponView } from '../domain/models/weapon';
+import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
 
 describe('BuildsOptimizer.computeBuildsStats', () => {
   let buildsOptimizer: BuildsOptimizer;
-  let charactersRepository: InMemoryCharactersRepository;
-  let razor: Character;
+  let razor: CharacterView;
+  let snowTombedStarsilver: WeaponView;
 
   const defaultArtifactsFilters = {
     currentSets: [],
@@ -43,17 +45,16 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
   beforeEach(() => {
     ArtifactsDI.registerRepository(defaultBuildArtifactsData);
-    buildsOptimizer = new BuildsOptimizer();
-    charactersRepository = new InMemoryCharactersRepository();
+    buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
 
-    razor = charactersRepository.getCharacter('razor', '80a', { name: 'snowTombedStarsilver', level: '90' });
+    razor = { name: 'razor', level: '80a', weaponType: 'claymore' };
+    snowTombedStarsilver = { name: 'snowTombedStarsilver', level: '90' };
   });
 
   describe('should compute build stats of 5 lvl 0 artifacts', () => {
     it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
       ArtifactsDI.registerRepository(defPhyDmgAtkBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer();
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -75,8 +76,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
       ArtifactsDI.registerRepository(atkGeoDmgEmBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer();
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -101,8 +101,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   describe('should compute build stats of 5 artifacts', () => {
     it('with levels 1, 3, 4, 8, 20', () => {
       ArtifactsDI.registerRepository(lvl134820BuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer();
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -125,8 +124,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with levels 2, 7, 12, 15, 17', () => {
       ArtifactsDI.registerRepository(lvl27121517BuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer();
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -149,8 +147,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with gladiator and thundering sets effects', () => {
       ArtifactsDI.registerRepository(gladiatorThunderingBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer();
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -173,8 +170,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with bolide and Lavawalker sets effects', () => {
       ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
-      buildsOptimizer = new BuildsOptimizer();
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -198,9 +194,9 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
     it('with level 1 Amber', () => {
       ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
-      const amber = charactersRepository.getCharacter('amber', '1', { name: 'rust', level: '1' });
-      buildsOptimizer = new BuildsOptimizer();
-      buildsOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
+      const amber: CharacterView = { name: 'amber', level: '1', weaponType: 'bow' };
+      const rust: WeaponView = { name: 'rust', level: '1' };
+      buildsOptimizer.computeBuildsStats(amber, rust, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -222,8 +218,9 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     });
 
     it('with level 20 ascended Amber', () => {
-      const amber = charactersRepository.getCharacter('amber', '20a', { name: 'rust', level: '40' });
-      buildsOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
+      const amber: CharacterView = { name: 'amber', level: '20a', weaponType: 'bow' };
+      const rust: WeaponView = { name: 'rust', level: '40' };
+      buildsOptimizer.computeBuildsStats(amber, rust, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -243,8 +240,9 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     });
 
     it('with level 50 Amber', () => {
-      const amber = charactersRepository.getCharacter('amber', '50', { name: 'rust', level: '60a' });
-      buildsOptimizer.computeBuildsStats(amber, defaultArtifactsFilters, defaultStatsFilter);
+      const amber: CharacterView = { name: 'amber', level: '50', weaponType: 'bow' };
+      const rust: WeaponView = { name: 'rust', level: '60a' };
+      buildsOptimizer.computeBuildsStats(amber, rust, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -264,7 +262,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     });
 
     it('with level 80 ascended Razor', () => {
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -285,8 +283,9 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     });
 
     it('with level 60 ascended Albedo', () => {
-      const albedo = charactersRepository.getCharacter('albedo', '60a', { name: 'darkIronSword', level: '70' });
-      buildsOptimizer.computeBuildsStats(albedo, defaultArtifactsFilters, defaultStatsFilter);
+      const albedo: CharacterView = { name: 'albedo', level: '60a', weaponType: 'sword' };
+      const darkIronSword: WeaponView = { name: 'darkIronSword', level: '70' };
+      buildsOptimizer.computeBuildsStats(albedo, darkIronSword, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -307,8 +306,9 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     });
 
     it('with level 70 Fischl', () => {
-      const fischl = charactersRepository.getCharacter('fischl', '70', { name: 'favoniusWarbow', level: '70a' });
-      buildsOptimizer.computeBuildsStats(fischl, defaultArtifactsFilters, defaultStatsFilter);
+      const fischl: CharacterView = { name: 'fischl', level: '70', weaponType: 'bow' };
+      const favoniusWarbow: WeaponView = { name: 'favoniusWarbow', level: '70a' };
+      buildsOptimizer.computeBuildsStats(fischl, favoniusWarbow, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -328,8 +328,8 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     });
 
     it('with level 1 Prototype Archaic', () => {
-      const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '1' });
-      buildsOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter);
+      const prototypeArchaic: WeaponView = { name: 'prototypeArchaic', level: '1' };
+      buildsOptimizer.computeBuildsStats(razor, prototypeArchaic, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -350,8 +350,8 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     });
 
     it('with level 40 ascended Prototype Archaic', () => {
-      const razorWithProto = charactersRepository.getCharacter('razor', '80a', { name: 'prototypeArchaic', level: '40a' });
-      buildsOptimizer.computeBuildsStats(razorWithProto, defaultArtifactsFilters, defaultStatsFilter);
+      const prototypeArchaic: WeaponView = { name: 'prototypeArchaic', level: '40a' };
+      buildsOptimizer.computeBuildsStats(razor, prototypeArchaic, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
         {
@@ -374,8 +374,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
 
   it('should compute build stats of multiple artifacts for each type', () => {
     ArtifactsDI.registerRepository(multipleArtifactsBuildArtifactsData);
-    buildsOptimizer = new BuildsOptimizer();
-    buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, defaultStatsFilter);
+    buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
     expect(getBuildsWithoutId()).toEqual([
       {
@@ -508,16 +507,14 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   });
 
   describe('filter builds before stats computation', () => {
-    let buildsOptimizer: BuildsOptimizer;
-
     beforeEach(() => {
       ArtifactsDI.registerRepository();
-      buildsOptimizer = new BuildsOptimizer();
     });
 
     it('that must have 2 thunderingFury set pieces', () => {
       buildsOptimizer.computeBuildsStats(
         razor,
+        snowTombedStarsilver,
         { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury], setPieces: 2 },
         defaultStatsFilter,
       );
@@ -527,6 +524,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     it('that must have 4 retracingBolide set pieces', () => {
       buildsOptimizer.computeBuildsStats(
         razor,
+        snowTombedStarsilver,
         { ...defaultArtifactsFilters, currentSets: [SetNames.retracingBolide], setPieces: 4 },
         defaultStatsFilter,
       );
@@ -536,6 +534,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
     it('that must have 2 thunderingFury and 2 blizzardStrayer set pieces', () => {
       buildsOptimizer.computeBuildsStats(
         razor,
+        snowTombedStarsilver,
         { ...defaultArtifactsFilters, currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer], setPieces: 2 },
         defaultStatsFilter,
       );
@@ -546,6 +545,7 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
       expect(() =>
         buildsOptimizer.computeBuildsStats(
           razor,
+          snowTombedStarsilver,
           {
             ...defaultArtifactsFilters,
             currentSets: [SetNames.thunderingFury, SetNames.blizzardStrayer],
@@ -558,20 +558,20 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   });
 
   describe('filter builds after stats computation', () => {
-    let buildsOptimizer: BuildsOptimizer;
-
     beforeEach(() => {
       ArtifactsDI.registerRepository();
-      buildsOptimizer = new BuildsOptimizer();
     });
 
     it('that must have at least 17000 hp', () => {
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, { ...defaultStatsFilter, [CharacterStats.hp]: 17000 });
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {
+        ...defaultStatsFilter,
+        [CharacterStats.hp]: 17000,
+      });
       expect(selectAllBuilds().length).toEqual(24);
     });
 
     it('that must have at least 16000 hp and 30 crit rate', () => {
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, {
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {
         ...defaultStatsFilter,
         [CharacterStats.hp]: 16000,
         [CharacterStats.critRate]: 30,
@@ -581,15 +581,12 @@ describe('BuildsOptimizer.computeBuildsStats', () => {
   });
 
   describe('return number of possible builds', () => {
-    let buildsOptimizer: BuildsOptimizer;
-
     beforeEach(() => {
       ArtifactsDI.registerRepository();
-      buildsOptimizer = new BuildsOptimizer();
     });
 
     it('should return 144 with default in memory artifacts', () => {
-      buildsOptimizer.computeBuildsStats(razor, defaultArtifactsFilters, {});
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
       expect(buildsOptimizer.getBuilds()).toEqual(144);
     });
   });

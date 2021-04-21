@@ -4,7 +4,7 @@ import { WeaponsDI } from '../../../../di/weapons-di';
 import CharacterForm from '../components/character-form';
 import SetsForm from '../components/sets-form';
 import ArtifactsForm from '../components/artifacts-form';
-import { ExistingCharacters } from '../../../../domain/models/character';
+import { CharacterView, ExistingCharacters } from '../../../../domain/models/character';
 import { Levels } from '../../../../domain/models/levels';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { Build } from '../../../../domain/models/build';
 import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
+import { WeaponView } from '../../../../domain/models/weapon';
 
 const styles = createStyles({
   form: {
@@ -33,8 +34,8 @@ interface BuildsOptimizerProps extends WithStyles<typeof styles> {
 type State = {
   charactersNames: ExistingCharacters[];
   weaponsNames: string[];
-  currentCharacter: { name: ExistingCharacters; level: Levels };
-  currentWeapon: { name: string; level: Levels };
+  currentCharacter: CharacterView;
+  currentWeapon: WeaponView;
   artifactsFilters: {
     currentSets: { [index: number]: SetNames };
     setPieces: 2 | 4;
@@ -48,11 +49,16 @@ type State = {
 class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   constructor(props: BuildsOptimizerProps) {
     super(props);
+    const charactersNames = CharactersDI.charactersHandler.getCharactersNames();
+    const currentCharacter = this.getCurrentCharacter(charactersNames[0], '1');
+    const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
+    const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
+
     this.state = {
-      charactersNames: [],
-      weaponsNames: [],
-      currentCharacter: { name: 'albedo', level: '1' },
-      currentWeapon: { name: 'skywardHarp', level: '1' },
+      charactersNames,
+      weaponsNames,
+      currentCharacter,
+      currentWeapon,
       artifactsFilters: {
         currentSets: {},
         setPieces: 2,
@@ -75,37 +81,40 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     this.runOptimization = this.runOptimization.bind(this);
   }
 
-  componentDidMount(): void {
-    const charactersNames = CharactersDI.charactersHandler.getCharactersNames();
-    const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNames();
-    this.setState({ ...this.state, charactersNames, weaponsNames });
-  }
+  getCurrentCharacter = (name: ExistingCharacters, level: Levels = this.state.currentCharacter.level) =>
+    CharactersDI.charactersHandler.getCharacterView(name, level);
+
+  getCurrentWeapon = (name: string, level: Levels = this.state.currentWeapon.level) => WeaponsDI.weaponsHandler.getWeaponView(name, level);
 
   handleCharacterNameChange(name: ExistingCharacters): void {
+    const currentCharacter = this.getCurrentCharacter(name);
     this.setState((state) => ({
       ...state,
-      currentCharacter: { ...state.currentCharacter, name },
+      currentCharacter,
     }));
+    if (currentCharacter.weaponType !== this.state.currentCharacter.weaponType) {
+      this.updateWeaponsState(currentCharacter);
+    }
   }
 
   handleCharacterLevelChange(level: Levels): void {
     this.setState((state) => ({
       ...state,
-      currentCharacter: { ...state.currentCharacter, level },
+      currentCharacter: this.getCurrentCharacter(this.state.currentCharacter.name, level),
     }));
   }
 
   handleWeaponNameChange(name: string): void {
     this.setState((state) => ({
       ...state,
-      currentWeapon: { ...state.currentWeapon, name },
+      currentWeapon: this.getCurrentWeapon(name),
     }));
   }
 
   handleWeaponLevelChange(level: Levels): void {
     this.setState((state) => ({
       ...state,
-      currentWeapon: { ...state.currentWeapon, level },
+      currentWeapon: this.getCurrentWeapon(this.state.currentWeapon.name, level),
     }));
   }
 
@@ -185,10 +194,13 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   }
 
   runOptimization(): void {
-    const { name, level } = this.state.currentCharacter;
-    const character = CharactersDI.charactersHandler.getCharacter(name, level, this.state.currentWeapon);
     const artifactsFilters = { ...this.state.artifactsFilters, currentSets: Object.values(this.state.artifactsFilters.currentSets) };
-    BuildsOptimizerDI.getBuildsOptimizer().computeBuildsStats(character, artifactsFilters, this.state.buildFilters);
+    BuildsOptimizerDI.getBuildsOptimizer().computeBuildsStats(
+      this.state.currentCharacter,
+      this.state.currentWeapon,
+      artifactsFilters,
+      this.state.buildFilters,
+    );
   }
 
   render(): ReactElement {
@@ -240,6 +252,16 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
         {buildsResultsContainer}
       </section>
     );
+  }
+
+  private updateWeaponsState(currentCharacter: CharacterView) {
+    const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
+    const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
+    this.setState((state) => ({
+      ...state,
+      weaponsNames,
+      currentWeapon,
+    }));
   }
 }
 

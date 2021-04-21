@@ -31,19 +31,14 @@ import { xingqiu } from './characters-stats/xingqiu';
 import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
 import { Levels } from '../../domain/models/levels';
-import { InMemoryWeaponsRepository } from './in-memory-weapons-repository';
-import { CharacterStats, CharacterStatsPerLevel } from '../../domain/models/character-statistics';
 import { xiao } from './characters-stats/xiao';
 import { huTao } from './characters-stats/hu-tao';
 import { rosaria } from './characters-stats/rosaria';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
-  private readonly weaponsRepository: InMemoryWeaponsRepository;
   private readonly charactersStats: CharacterWithStats[];
-  private readonly defaultStats: CharacterStatsPerLevel = { [CharacterStats.hp]: 0, [CharacterStats.atk]: 0, [CharacterStats.def]: 0 };
 
   constructor() {
-    this.weaponsRepository = new InMemoryWeaponsRepository();
     this.charactersStats = [
       albedo,
       amber,
@@ -80,27 +75,26 @@ export class InMemoryCharactersRepository implements CharactersRepository {
   }
 
   public getAll(level: Levels): Character[] {
-    return this.charactersStats.map((characterStat) =>
-      this.characterStatToCharacter(characterStat.name, level, characterStat.levels[level]),
-    );
+    return this.charactersStats.map((characterStat) => this.characterStatToCharacter(characterStat.name, level, characterStat));
   }
 
-  public getCharacter(name: ExistingCharacters, level: Levels, weaponProps: { name: string; level: Levels }): Character {
-    const allCharacterStats = this.charactersStats.find((character) => character.name === name);
-    const characterStats = allCharacterStats ? allCharacterStats.levels[level] : { stats: this.defaultStats };
-    return this.characterStatToCharacter(name, level, characterStats, weaponProps);
+  public getCharacter(name: ExistingCharacters, level: Levels): Character {
+    const characterStats = this.charactersStats.find((character) => character.name === name);
+    if (!characterStats) {
+      throw new Error(`could not find character with name ${name}`);
+    }
+    return this.characterStatToCharacter(name, level, characterStats);
   }
 
-  private characterStatToCharacter(
-    name: ExistingCharacters,
-    level: Levels,
-    characterStats: { stats: CharacterStatsPerLevel; bonusStat?: { [bonusStat: string]: number } },
-    weaponProps?: { name: string; level: Levels },
-  ) {
-    const characterBuilder = weaponProps
-      ? new CharacterBuilder().withWeapon(this.weaponsRepository.getWeapon(weaponProps.name, weaponProps.level))
-      : new CharacterBuilder();
+  private characterStatToCharacter(name: ExistingCharacters, level: Levels, characterStats: CharacterWithStats) {
+    const { stats, bonusStat } = characterStats.levels[level];
 
-    return characterBuilder.withName(name).withLevel(level).withStats(characterStats.stats).withBonusStat(characterStats.bonusStat).build();
+    return new CharacterBuilder()
+      .withName(name)
+      .withLevel(level)
+      .withWeaponType(characterStats.weaponType)
+      .withStats(stats)
+      .withBonusStat(bonusStat)
+      .build();
   }
 }

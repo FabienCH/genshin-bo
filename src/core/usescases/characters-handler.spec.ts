@@ -30,9 +30,10 @@ import { xingqiu } from '../adapters/secondaries/characters-stats/xingqiu';
 import { xinyan } from '../adapters/secondaries/characters-stats/xinyan';
 import { zhongli } from '../adapters/secondaries/characters-stats/zhongli';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
+import { ExistingCharacters } from '../domain/models/character';
 import { CharactersHandler } from './characters-handler';
 
-describe('CharactersHandler.getCharactersNames', () => {
+describe('CharactersHandler', () => {
   let charactersHandler: CharactersHandler;
   const allCharactersWithStats = [
     albedo,
@@ -71,12 +72,30 @@ describe('CharactersHandler.getCharactersNames', () => {
     charactersHandler = new CharactersHandler(new InMemoryCharactersRepository());
   });
 
-  it('should give list of expected characters names', () => {
-    const expectedCharactersNames = charactersHandler.getCharactersNames();
+  describe('getCharactersNames', () => {
+    it('should give list of expected characters names', () => {
+      const expectedCharactersNames = charactersHandler.getCharactersNames();
 
-    expect(allCharactersWithStats.length).toEqual(expectedCharactersNames.length);
-    allCharactersWithStats.forEach((charactersWithStats, index) => {
-      expect(charactersWithStats.name).toEqual(expectedCharactersNames[index]);
+      expect(allCharactersWithStats.length).toEqual(expectedCharactersNames.length);
+      allCharactersWithStats.forEach((charactersWithStats, index) => {
+        expect(charactersWithStats.name).toEqual(expectedCharactersNames[index]);
+      });
+    });
+  });
+
+  describe('getCharacterView', () => {
+    it('should retrieve a character name, weapon type and level', () => {
+      const expectedCharacter = charactersHandler.getCharacterView(albedo.name);
+
+      expect(expectedCharacter.name).toEqual(albedo.name);
+      expect(expectedCharacter.level).toEqual('1');
+      expect(expectedCharacter.weaponType).toEqual(albedo.weaponType);
+    });
+
+    it('should return an error if the character does not exist', () => {
+      expect(() => charactersHandler.getCharacterView('charName' as ExistingCharacters)).toThrowError(
+        'could not find character with name charName',
+      );
     });
   });
 });

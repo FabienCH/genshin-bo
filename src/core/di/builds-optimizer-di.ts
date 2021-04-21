@@ -1,4 +1,6 @@
 import { BcWorkerMock } from '../../test/builds-computation-worker-mock';
+import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
+import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
 import BuildsComputationWorker, { BcWorker } from '../domain/worker/builds-computation.worker';
 import { BuildsOptimizer } from '../usescases/builds-optimizer';
 
@@ -8,7 +10,7 @@ export abstract class BuildsOptimizerDI {
 
   public static getBuildsOptimizer(): BuildsOptimizer {
     if (!BuildsOptimizerDI.buildsOptimizer) {
-      BuildsOptimizerDI.buildsOptimizer = new BuildsOptimizer();
+      BuildsOptimizerDI.buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
     }
     return BuildsOptimizerDI.buildsOptimizer;
   }
