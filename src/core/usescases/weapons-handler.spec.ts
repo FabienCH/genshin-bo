@@ -19,8 +19,6 @@ describe('getWeaponsNames', () => {
     it('should give list of all bows names alphabetically sorted', () => {
       const expectedWeaponsNames = weaponsHandler.getWeaponsNamesByTypes('bow');
 
-      console.log('expectedWeaponsNames bow', expectedWeaponsNames);
-      console.log('allBows.sort(sortWeapons)', allBows.sort(sortWeapons));
       expect(allBows.length).toEqual(expectedWeaponsNames.length);
       allBows.sort(sortWeapons).forEach((bowWithStats, index) => {
         expect(bowWithStats.name).toEqual(expectedWeaponsNames[index]);
