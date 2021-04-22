@@ -1,8 +1,17 @@
 import { AllArtifacts } from '../domain/models/all-artifacts';
 import { CircletMainStatType } from '../domain/models/circlet-artifact-data';
 import { GobletMainStatType } from '../domain/models/goblet-artifact-data';
-import { ArtifactStatsTypes } from '../domain/models/main-statistics';
+import { ArtifactsMainStats, ArtifactStatsTypes } from '../domain/models/main-statistics';
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
+import { SetNames } from '../domain/models/sets-with-effects';
+
+export interface ArtifactsFilters {
+  currentSets: { [index: number]: SetNames };
+  setPieces: 2 | 4;
+  mainsStats: ArtifactsMainStats;
+  focusStats: ArtifactStatsTypes[];
+  minArtifactLevel: number;
+}
 
 export abstract class ArtifactsFilter {
   public static filterArtifacts(

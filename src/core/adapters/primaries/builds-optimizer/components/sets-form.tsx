@@ -33,6 +33,7 @@ function SetsForm(props: SetsFormProps): ReactElement {
     const newSetPieces = intValue === 2 || intValue === 4 ? intValue : 2;
     props.onSetPiecesChange(newSetPieces);
   };
+
   return (
     <Container>
       <FormControl>

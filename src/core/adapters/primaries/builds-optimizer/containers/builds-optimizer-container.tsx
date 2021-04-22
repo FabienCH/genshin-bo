@@ -1,9 +1,6 @@
 import { Component, ReactElement } from 'react';
 import { CharactersDI } from '../../../../di/characters-di';
 import { WeaponsDI } from '../../../../di/weapons-di';
-import CharacterForm from '../components/character-form';
-import SetsForm from '../components/sets-form';
-import ArtifactsForm from '../components/artifacts-form';
 import { CharacterView, ExistingCharacters } from '../../../../domain/models/character';
 import { Levels } from '../../../../domain/models/levels';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
@@ -12,19 +9,17 @@ import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/mod
 import BuildFiltersForm from '../components/build-filters-form';
 import { SetNames } from '../../../../domain/models/sets-with-effects';
 import BuildsResultsContainer from './builds-results-container';
+import BuildsSetupContainer from './builds-setup-container';
 import { connect } from 'react-redux';
 import { Build } from '../../../../domain/models/build';
 import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
 import { WeaponView } from '../../../../domain/models/weapon';
-import { SelectOption } from '../../../../usescases/builds-forms-handler';
+import { ArtifactsFilters } from '../../../../usescases/artifacts-filter';
 
 const styles = createStyles({
   form: {
     minHeight: 260,
-  },
-  buildSetup: {
-    display: 'flex',
   },
 });
 
@@ -35,7 +30,6 @@ interface BuildsOptimizerProps extends WithStyles<typeof styles> {
 type State = {
   charactersNames: ExistingCharacters[];
   weaponsNames: string[];
-  weaponsLevels: SelectOption[];
   currentCharacter: CharacterView;
   currentWeapon: WeaponView;
   artifactsFilters: {
@@ -55,12 +49,10 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     const currentCharacter = this.getCurrentCharacter(charactersNames[0], '1');
     const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
     const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
-    const weaponsLevels = BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(currentWeapon.name);
 
     this.state = {
       charactersNames,
       weaponsNames,
-      weaponsLevels,
       currentCharacter,
       currentWeapon,
       artifactsFilters: {
@@ -72,15 +64,9 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       },
       buildFilters: {},
     };
-    this.handleCharacterNameChange = this.handleCharacterNameChange.bind(this);
-    this.handleCharacterLevelChange = this.handleCharacterLevelChange.bind(this);
-    this.handleWeaponNameChange = this.handleWeaponNameChange.bind(this);
-    this.handleWeaponLevelChange = this.handleWeaponLevelChange.bind(this);
-    this.handleSetNameChange = this.handleSetNameChange.bind(this);
-    this.handleSetPiecesChange = this.handleSetPiecesChange.bind(this);
-    this.handleMainsStatsChange = this.handleMainsStatsChange.bind(this);
-    this.handleFocusStatsChange = this.handleFocusStatsChange.bind(this);
-    this.handleMinLevelChange = this.handleMinLevelChange.bind(this);
+    this.handleCharacterChange = this.handleCharacterChange.bind(this);
+    this.handleWeaponChange = this.handleWeaponChange.bind(this);
+    this.handleArtifactsFiltersChange = this.handleArtifactsFiltersChange.bind(this);
     this.handleBuildFiltersChange = this.handleBuildFiltersChange.bind(this);
     this.runOptimization = this.runOptimization.bind(this);
   }
@@ -90,26 +76,19 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
 
   getCurrentWeapon = (name: string, level: Levels = this.state.currentWeapon.level) => WeaponsDI.weaponsHandler.getWeaponView(name, level);
 
-  handleCharacterNameChange(name: ExistingCharacters): void {
-    const currentCharacter = this.getCurrentCharacter(name);
+  handleCharacterChange(character: CharacterView): void {
+    const currentCharacter = this.getCurrentCharacter(character.name, character.level);
+    if (currentCharacter.weaponType !== this.state.currentCharacter.weaponType) {
+      this.updateWeaponsState(currentCharacter);
+    }
     this.setState((state) => ({
       ...state,
       currentCharacter,
     }));
-    if (currentCharacter.weaponType !== this.state.currentCharacter.weaponType) {
-      this.updateWeaponsState(currentCharacter);
-    }
   }
 
-  handleCharacterLevelChange(level: Levels): void {
-    this.setState((state) => ({
-      ...state,
-      currentCharacter: this.getCurrentCharacter(this.state.currentCharacter.name, level),
-    }));
-  }
-
-  handleWeaponNameChange(name: string): void {
-    const currentWeapon = this.getCurrentWeapon(name);
+  handleWeaponChange(weapon: WeaponView): void {
+    const currentWeapon = this.getCurrentWeapon(weapon.name, weapon.level);
     const weaponsLevels = BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(currentWeapon.name);
 
     this.setState((state) => ({
@@ -119,70 +98,10 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     }));
   }
 
-  handleWeaponLevelChange(level: Levels): void {
+  handleArtifactsFiltersChange(artifactsFilters: ArtifactsFilters): void {
     this.setState((state) => ({
       ...state,
-      currentWeapon: this.getCurrentWeapon(this.state.currentWeapon.name, level),
-    }));
-  }
-
-  handleSetNameChange(event: { value: SetNames; setIndex: number }): void {
-    this.setState((state) => {
-      const currentSets = state.artifactsFilters.currentSets;
-      if (event.value == null) {
-        delete currentSets[event.setIndex];
-      }
-      const newCurrentSets = event.value == null ? currentSets : { ...currentSets, [event.setIndex]: event.value };
-
-      return {
-        ...state,
-        artifactsFilters: {
-          ...state.artifactsFilters,
-          currentSets: newCurrentSets,
-        },
-      };
-    });
-  }
-
-  handleSetPiecesChange(setPieces: 2 | 4): void {
-    this.setState((state) => ({
-      ...state,
-      artifactsFilters: {
-        ...state.artifactsFilters,
-        setPieces,
-      },
-    }));
-  }
-
-  handleMainsStatsChange(mainsStats: ArtifactsMainStats): void {
-    this.setState((state) => ({
-      ...state,
-      artifactsFilters: {
-        ...state.artifactsFilters,
-        mainsStats,
-      },
-    }));
-  }
-
-  handleFocusStatsChange(focusStats: ArtifactStatsTypes[]): void {
-    if (focusStats.length <= 5) {
-      this.setState((state) => ({
-        ...state,
-        artifactsFilters: {
-          ...state.artifactsFilters,
-          focusStats,
-        },
-      }));
-    }
-  }
-
-  handleMinLevelChange(minArtifactLevel: number): void {
-    this.setState((state) => ({
-      ...state,
-      artifactsFilters: {
-        ...state.artifactsFilters,
-        minArtifactLevel,
-      },
+      artifactsFilters,
     }));
   }
 
@@ -223,33 +142,16 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
         <h2>Builds Optimizer</h2>
         <h3>Build Setup</h3>
         <form className={classes.form}>
-          <div className={classes.buildSetup}>
-            <CharacterForm
-              charactersNames={this.state.charactersNames}
-              currentCharacter={this.state.currentCharacter}
-              weaponsNames={this.state.weaponsNames}
-              weaponsLevels={this.state.weaponsLevels}
-              currentWeapon={this.state.currentWeapon}
-              onCharacterNameChange={this.handleCharacterNameChange}
-              onCharacterLevelChange={this.handleCharacterLevelChange}
-              onWeaponNameChange={this.handleWeaponNameChange}
-              onWeaponLevelChange={this.handleWeaponLevelChange}
-            ></CharacterForm>
-            <SetsForm
-              currentSets={this.state.artifactsFilters.currentSets}
-              setPieces={this.state.artifactsFilters.setPieces}
-              onSetNameChange={this.handleSetNameChange}
-              onSetPiecesChange={this.handleSetPiecesChange}
-            ></SetsForm>
-            <ArtifactsForm
-              mainsStats={this.state.artifactsFilters.mainsStats}
-              focusStats={this.state.artifactsFilters.focusStats}
-              minLevel={this.state.artifactsFilters.minArtifactLevel}
-              onMainsStatsChange={this.handleMainsStatsChange}
-              onFocusStatsChange={this.handleFocusStatsChange}
-              onMinLevelChange={this.handleMinLevelChange}
-            ></ArtifactsForm>
-          </div>
+          <BuildsSetupContainer
+            charactersNames={this.state.charactersNames}
+            weaponsNames={this.state.weaponsNames}
+            currentCharacter={this.state.currentCharacter}
+            currentWeapon={this.state.currentWeapon}
+            artifactsFilters={this.state.artifactsFilters}
+            onCharacterChange={this.handleCharacterChange}
+            onWeaponChange={this.handleWeaponChange}
+            onArtifactsFiltersChange={this.handleArtifactsFiltersChange}
+          ></BuildsSetupContainer>
           <h3>Build Filters</h3>
           <BuildFiltersForm
             buildFilters={this.state.buildFilters}
