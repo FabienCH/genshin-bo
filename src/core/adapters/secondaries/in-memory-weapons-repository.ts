@@ -21,14 +21,20 @@ export class InMemoryWeaponsRepository implements WeaponsRepository {
   }
 
   public getWeapon(name: string, level: Levels): Weapon {
-    const weaponStats = this.weaponsStats.find((weapon) => weapon.name === name);
-    if (!weaponStats) {
-      throw new Error(`could not find weapon with name ${name}`);
-    }
+    const weaponStats = this.getWeaponWithStats(name);
     const weaponStat = weaponStats.levels[level];
     if (!weaponStat.bonusStat) {
       throw new Error(`missing data: weapon does not have bonus stat for level ${level}`);
     }
     return { atk: weaponStat.atk, bonusStat: weaponStat.bonusStat, type: weaponStats.type, name, level };
+  }
+
+  public getWeaponWithStats(name: string): WeaponStats {
+    const weaponStats = this.weaponsStats.find((weapon) => weapon.name === name);
+    if (!weaponStats) {
+      throw new Error(`could not find weapon with name ${name}`);
+    }
+
+    return weaponStats;
   }
 }
