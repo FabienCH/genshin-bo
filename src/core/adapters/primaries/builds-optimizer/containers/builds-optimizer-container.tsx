@@ -17,6 +17,7 @@ import { Build } from '../../../../domain/models/build';
 import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
 import { WeaponView } from '../../../../domain/models/weapon';
+import { SelectOption } from '../../../../usescases/builds-forms-handler';
 
 const styles = createStyles({
   form: {
@@ -34,6 +35,7 @@ interface BuildsOptimizerProps extends WithStyles<typeof styles> {
 type State = {
   charactersNames: ExistingCharacters[];
   weaponsNames: string[];
+  weaponsLevels: SelectOption[];
   currentCharacter: CharacterView;
   currentWeapon: WeaponView;
   artifactsFilters: {
@@ -53,10 +55,12 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     const currentCharacter = this.getCurrentCharacter(charactersNames[0], '1');
     const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
     const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
+    const weaponsLevels = BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(currentWeapon.name);
 
     this.state = {
       charactersNames,
       weaponsNames,
+      weaponsLevels,
       currentCharacter,
       currentWeapon,
       artifactsFilters: {
@@ -105,9 +109,13 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   }
 
   handleWeaponNameChange(name: string): void {
+    const currentWeapon = this.getCurrentWeapon(name);
+    const weaponsLevels = BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(currentWeapon.name);
+
     this.setState((state) => ({
       ...state,
-      currentWeapon: this.getCurrentWeapon(name),
+      currentWeapon,
+      weaponsLevels,
     }));
   }
 
@@ -220,6 +228,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
               charactersNames={this.state.charactersNames}
               currentCharacter={this.state.currentCharacter}
               weaponsNames={this.state.weaponsNames}
+              weaponsLevels={this.state.weaponsLevels}
               currentWeapon={this.state.currentWeapon}
               onCharacterNameChange={this.handleCharacterNameChange}
               onCharacterLevelChange={this.handleCharacterLevelChange}

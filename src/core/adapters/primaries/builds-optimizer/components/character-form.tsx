@@ -4,6 +4,7 @@ import { CharacterView, ExistingCharacters } from '../../../../domain/models/cha
 import FormSelect from '../../shared/form-select';
 import { ReactElement } from 'react';
 import { WeaponView } from '../../../../domain/models/weapon';
+import { SelectOption } from '../../../../usescases/builds-forms-handler';
 
 const styles = createStyles({
   div: {
@@ -22,6 +23,7 @@ const styles = createStyles({
 interface CharacterFormProps extends WithStyles<typeof styles> {
   charactersNames: ExistingCharacters[];
   weaponsNames: string[];
+  weaponsLevels: SelectOption[];
   currentCharacter: CharacterView;
   currentWeapon: WeaponView;
   onCharacterNameChange: (value: ExistingCharacters) => void;
@@ -31,7 +33,7 @@ interface CharacterFormProps extends WithStyles<typeof styles> {
 }
 
 function CharacterForm(props: CharacterFormProps): ReactElement {
-  const { charactersNames, weaponsNames, currentCharacter, currentWeapon, classes } = props;
+  const { charactersNames, weaponsNames, weaponsLevels, currentCharacter, currentWeapon, classes } = props;
   const levels: Levels[] = ['1', '20', '20a', '40', '40a', '50', '50a', '60', '60a', '70', '70a', '80', '80a', '90'];
 
   const handleCharacterNameChange = (value: ExistingCharacters): void => {
@@ -77,7 +79,12 @@ function CharacterForm(props: CharacterFormProps): ReactElement {
           ></FormSelect>
         </Box>
         <Box className={classes.rightSelect}>
-          <FormSelect label="Level" options={levels} selectedValue={currentWeapon.level} onChange={handleWeaponLevelChange}></FormSelect>
+          <FormSelect
+            label="Level"
+            options={weaponsLevels}
+            selectedValue={currentWeapon.level}
+            onChange={handleWeaponLevelChange}
+          ></FormSelect>
         </Box>
       </div>
     </Container>
