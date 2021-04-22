@@ -69,14 +69,15 @@ describe('Builds Optimizer container', () => {
     expect(wrapper.find({ id: 'set2' }).length).toEqual(0);
   });
 
-  it('should allow a maximum of 6 focus stats', () => {
+  it('should allow a maximum of 5 focus stats', () => {
     let chips: ReactWrapper;
     const expectedFocusStats = ['Flat Hp', 'Percent Atk', 'Crit Rate', 'Crit Dmg', 'Energy Recharge'];
+    const maxFocusStats = 5;
     wrapper.find(ArtifactsForm).props().onFocusStatsChange(['flatHp', 'percentAtk', 'critRate', 'critDmg', 'energyRecharge']);
     wrapper.update();
 
     chips = wrapper.find(Chip);
-    expect(chips.length).toEqual(expectedFocusStats.length);
+    expect(chips.length).toEqual(maxFocusStats);
     chips.forEach((chip, index) => {
       expect(chip.childAt(0).childAt(0).text()).toEqual(expectedFocusStats[index]);
     });
@@ -88,7 +89,7 @@ describe('Builds Optimizer container', () => {
     wrapper.update();
 
     chips = wrapper.find(Chip);
-    expect(chips.length).toEqual(expectedFocusStats.length);
+    expect(chips.length).toEqual(maxFocusStats);
     chips.forEach((chip, index) => {
       expect(chip.childAt(0).childAt(0).text()).toEqual(expectedFocusStats[index]);
     });

@@ -79,10 +79,12 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
   };
 
   const handleFocusStatsChange = (focusStats: ArtifactStatsTypes[]): void => {
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      focusStats,
-    });
+    if (focusStats.length <= 5) {
+      props.onArtifactsFiltersChange({
+        ...artifactsFilters,
+        focusStats,
+      });
+    }
   };
 
   const handleMinLevelChange = (level: number): void => {
