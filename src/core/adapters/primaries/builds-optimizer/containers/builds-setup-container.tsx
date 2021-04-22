@@ -33,6 +33,14 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
   const { charactersNames, weaponsNames, currentCharacter, currentWeapon, artifactsFilters, classes } = props;
   const [weaponsLevels, setWeaponsLevels] = React.useState(BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(currentWeapon.name));
 
+  const getUpdatedCurrentSets = (deleteCondition: boolean, index: number): { [index: number]: SetNames } => {
+    const currentSets = artifactsFilters.currentSets;
+    if (deleteCondition) {
+      delete currentSets[index];
+    }
+    return currentSets;
+  };
+
   const handleCharacterNameChange = (name: ExistingCharacters): void => {
     props.onCharacterChange({ ...currentCharacter, name });
   };
@@ -51,11 +59,9 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
   };
 
   const handleSetNameChange = (event: { value: SetNames; setIndex: number }): void => {
-    const currentSets = artifactsFilters.currentSets;
-    if (event.value == null) {
-      delete currentSets[event.setIndex];
-    }
+    const currentSets = getUpdatedCurrentSets(event.value == null, event.setIndex);
     const newCurrentSets = event.value == null ? currentSets : { ...currentSets, [event.setIndex]: event.value };
+
     props.onArtifactsFiltersChange({
       ...artifactsFilters,
       currentSets: newCurrentSets,
@@ -63,9 +69,12 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
   };
 
   const handleSetPiecesChange = (setPieces: 2 | 4): void => {
+    const currentSets = getUpdatedCurrentSets(setPieces === 4, 1);
+
     props.onArtifactsFiltersChange({
       ...artifactsFilters,
       setPieces,
+      currentSets,
     });
   };
 
