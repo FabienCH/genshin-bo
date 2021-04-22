@@ -2,9 +2,11 @@ import { BcWorkerMock } from '../../test/builds-computation-worker-mock';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
 import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
 import BuildsComputationWorker, { BcWorker } from '../domain/worker/builds-computation.worker';
+import { BuildsFormsHandler } from '../usescases/builds-forms-handler';
 import { BuildsOptimizer } from '../usescases/builds-optimizer';
 
 export abstract class BuildsOptimizerDI {
+  public static buildsFormsHandler = new BuildsFormsHandler(new InMemoryWeaponsRepository());
   private static buildsOptimizer: BuildsOptimizer;
   private static bcWorker: BcWorker;
 
