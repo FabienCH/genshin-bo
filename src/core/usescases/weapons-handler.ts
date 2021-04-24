@@ -9,7 +9,8 @@ export class WeaponsHandler {
     return this.weaponsRepository
       .getAll(level)
       .filter((weapon) => weapon.type === type)
-      .map((weapon) => weapon.name);
+      .map((weapon) => weapon.name)
+      .sort();
   }
 
   public getWeaponView(name: string, level: Levels = '1'): WeaponView {

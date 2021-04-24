@@ -1,7 +1,9 @@
 import { ChangeEvent, ReactElement } from 'react';
 import { InputLabel, Select, MenuItem, FormControl, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 import { StringFormatter } from '../../../domain/mappers/string-formatter';
 import HelpIconTooltip from './help-icon-tooltip';
+import { SelectOption } from '../../../usescases/builds-forms-handler';
 
 const styles = createStyles({
   container: {
@@ -13,7 +15,7 @@ const styles = createStyles({
 
 export interface FormSelectProps<T extends string | number> extends WithStyles<typeof styles> {
   label: string;
-  options: Array<T>;
+  options: SelectOption[] | T[];
   selectedValue?: T;
   isOptional?: boolean;
   tooltipText?: NonNullable<React.ReactNode>;
@@ -25,13 +27,29 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
     const value = event.target.value !== '-' ? event.target.value : null;
     props.onChange(value as T);
   };
+  const isTypeT = (x: SelectOption | T): x is T => {
+    return typeof x === 'string' || typeof x === 'number';
+  };
 
   const { label, options, selectedValue, isOptional, tooltipText, classes } = props;
-  const menuItems = options.map((option) => (
-    <MenuItem value={option} key={option}>
-      {StringFormatter.formatStringWithUpperCase(`${option}`)}
-    </MenuItem>
-  ));
+
+  const menuItems = options.map((option: SelectOption | T) => {
+    const value = isTypeT(option) ? option : option.value;
+    const disableMessage = isTypeT(option) || !option.disableMessage ? false : <span>{option.disableMessage}</span>;
+    const menuItem = (key?: string | number): ReactElement => (
+      <MenuItem key={key} value={value} disabled={!key}>
+        {StringFormatter.formatStringWithUpperCase(`${value}`)}
+      </MenuItem>
+    );
+
+    return disableMessage ? (
+      <Tooltip key={value} title={disableMessage} placement="right-start" aria-label="disable message">
+        <div>{menuItem()}</div>
+      </Tooltip>
+    ) : (
+      menuItem(value)
+    );
+  });
 
   if (isOptional) {
     menuItems.unshift(
@@ -40,6 +58,7 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
       </MenuItem>,
     );
   }
+
   const value = selectedValue != null ? selectedValue : '-';
   const selectId = label.toLowerCase().replace(' ', '');
 

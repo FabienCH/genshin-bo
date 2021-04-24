@@ -4,6 +4,7 @@ import { allCatalysts } from '../adapters/secondaries/weapons-stats/catalysts';
 import { allClaymores } from '../adapters/secondaries/weapons-stats/claymores';
 import { allPolearms } from '../adapters/secondaries/weapons-stats/polearms';
 import { allSwords } from '../adapters/secondaries/weapons-stats/swords';
+import { WeaponStats } from '../adapters/secondaries/weapons-stats/weapon-stats-type';
 
 import { WeaponsHandler } from './weapons-handler';
 
@@ -15,48 +16,48 @@ describe('getWeaponsNames', () => {
   });
 
   describe('getWeaponsNames', () => {
-    it('should give list of all bows names', () => {
+    it('should give list of all bows names alphabetically sorted', () => {
       const expectedWeaponsNames = weaponsHandler.getWeaponsNamesByTypes('bow');
 
       expect(allBows.length).toEqual(expectedWeaponsNames.length);
-      allBows.forEach((bowWithStats, index) => {
+      allBows.sort(sortWeapons).forEach((bowWithStats, index) => {
         expect(bowWithStats.name).toEqual(expectedWeaponsNames[index]);
       });
     });
 
-    it('should give list of all catalysts names', () => {
+    it('should give list of all catalysts names alphabetically sorted', () => {
       const expectedWeaponsNames = weaponsHandler.getWeaponsNamesByTypes('catalyst');
 
       expect(allCatalysts.length).toEqual(expectedWeaponsNames.length);
-      allCatalysts.forEach((bowWithStats, index) => {
-        expect(bowWithStats.name).toEqual(expectedWeaponsNames[index]);
+      allCatalysts.sort(sortWeapons).forEach((catalystWithStats, index) => {
+        expect(catalystWithStats.name).toEqual(expectedWeaponsNames[index]);
       });
     });
 
-    it('should give list of all claymores names', () => {
+    it('should give list of all claymores names alphabetically sorted', () => {
       const expectedWeaponsNames = weaponsHandler.getWeaponsNamesByTypes('claymore');
 
       expect(allClaymores.length).toEqual(expectedWeaponsNames.length);
-      allClaymores.forEach((bowWithStats, index) => {
-        expect(bowWithStats.name).toEqual(expectedWeaponsNames[index]);
+      allClaymores.sort(sortWeapons).forEach((claymoreWithStats, index) => {
+        expect(claymoreWithStats.name).toEqual(expectedWeaponsNames[index]);
       });
     });
 
-    it('should give list of all polearms names', () => {
+    it('should give list of all polearms names alphabetically sorted', () => {
       const expectedWeaponsNames = weaponsHandler.getWeaponsNamesByTypes('polearm');
 
       expect(allPolearms.length).toEqual(expectedWeaponsNames.length);
-      allPolearms.forEach((bowWithStats, index) => {
-        expect(bowWithStats.name).toEqual(expectedWeaponsNames[index]);
+      allPolearms.sort(sortWeapons).forEach((polearmWithStats, index) => {
+        expect(polearmWithStats.name).toEqual(expectedWeaponsNames[index]);
       });
     });
 
-    it('should give list of all swords names', () => {
+    it('should give list of all swords names alphabetically sorted', () => {
       const expectedWeaponsNames = weaponsHandler.getWeaponsNamesByTypes('sword');
 
       expect(allSwords.length).toEqual(expectedWeaponsNames.length);
-      allSwords.forEach((bowWithStats, index) => {
-        expect(bowWithStats.name).toEqual(expectedWeaponsNames[index]);
+      allSwords.sort(sortWeapons).forEach((swordWithStats, index) => {
+        expect(swordWithStats.name).toEqual(expectedWeaponsNames[index]);
       });
     });
   });
@@ -74,3 +75,7 @@ describe('getWeaponsNames', () => {
     });
   });
 });
+
+function sortWeapons(a: WeaponStats, b: WeaponStats): number {
+  return a.name > b.name ? 1 : -1;
+}
