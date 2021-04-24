@@ -11,6 +11,7 @@ import { WeaponView } from '../../../../domain/models/weapon';
 import { Levels } from '../../../../domain/models/levels';
 import React from 'react';
 import { ArtifactsFilters } from '../../../../usescases/artifacts-filter';
+import { SelectOption } from '../../../../usescases/builds-forms-handler';
 
 const styles = createStyles({
   buildSetup: {
@@ -31,7 +32,8 @@ interface BuildsSetupContainerProps extends WithStyles<typeof styles> {
 
 function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
   const { charactersNames, weaponsNames, currentCharacter, currentWeapon, artifactsFilters, classes } = props;
-  const [weaponsLevels, setWeaponsLevels] = React.useState(BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(currentWeapon.name));
+
+  const getWeaponLevelsOptions = (name: string): SelectOption[] => BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(name);
 
   const getUpdatedCurrentSets = (deleteCondition: boolean, index: number): { [index: number]: SetNames } => {
     const currentSets = artifactsFilters.currentSets;
@@ -40,6 +42,8 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
     }
     return currentSets;
   };
+
+  const [weaponsLevels, setWeaponsLevels] = React.useState(getWeaponLevelsOptions(currentWeapon.name));
 
   const handleCharacterNameChange = (name: ExistingCharacters): void => {
     props.onCharacterChange({ ...currentCharacter, name });
@@ -51,7 +55,7 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
 
   const handleWeaponNameChange = (name: string): void => {
     props.onWeaponChange({ ...currentWeapon, name });
-    setWeaponsLevels(BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(name));
+    setWeaponsLevels(getWeaponLevelsOptions(name));
   };
 
   const handleWeaponLevelChange = (level: Levels): void => {
