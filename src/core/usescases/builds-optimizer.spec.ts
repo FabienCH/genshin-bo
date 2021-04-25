@@ -23,6 +23,8 @@ import { appStore } from '../adapters/redux/store';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Unsubscribe } from '@reduxjs/toolkit';
+import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
+import { AllArtifactsData } from '../domain/models/artifact-data';
 
 describe('BuildsOptimizer', () => {
   let buildsOptimizer: BuildsOptimizer;
@@ -49,7 +51,7 @@ describe('BuildsOptimizer', () => {
   };
 
   beforeEach(() => {
-    ArtifactsDI.registerRepository(defaultBuildArtifactsData);
+    loadArtifacts(defaultBuildArtifactsData);
     buildsOptimizer = new BuildsOptimizer(new InMemoryCharactersRepository(), new InMemoryWeaponsRepository());
 
     razor = { name: 'razor', level: '80a', weaponType: 'claymore' };
@@ -58,8 +60,9 @@ describe('BuildsOptimizer', () => {
 
   describe('computeBuildsStats', () => {
     describe('should compute build stats of 5 lvl 0 artifacts', () => {
-      it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stat', () => {
-        ArtifactsDI.registerRepository(defPhyDmgAtkBuildArtifactsData);
+      it('with percentDef, physicalDmg and percentAtk as main stats and multiple sub stats', () => {
+        loadArtifacts(defPhyDmgAtkBuildArtifactsData);
+
         buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
         expect(getBuildsWithoutId()).toEqual([
@@ -81,7 +84,8 @@ describe('BuildsOptimizer', () => {
       });
 
       it('with percentAtk, geoDmg and elementalMastery as main stats and multiple sub stats', () => {
-        ArtifactsDI.registerRepository(atkGeoDmgEmBuildArtifactsData);
+        loadArtifacts(atkGeoDmgEmBuildArtifactsData);
+
         buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
         expect(getBuildsWithoutId()).toEqual([
@@ -106,7 +110,8 @@ describe('BuildsOptimizer', () => {
 
     describe('should compute build stats of 5 artifacts', () => {
       it('with levels 1, 3, 4, 8, 20', () => {
-        ArtifactsDI.registerRepository(lvl134820BuildArtifactsData);
+        loadArtifacts(lvl134820BuildArtifactsData);
+
         buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
         expect(getBuildsWithoutId()).toEqual([
@@ -129,7 +134,8 @@ describe('BuildsOptimizer', () => {
       });
 
       it('with levels 2, 7, 12, 15, 17', () => {
-        ArtifactsDI.registerRepository(lvl27121517BuildArtifactsData);
+        loadArtifacts(lvl27121517BuildArtifactsData);
+
         buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
         expect(getBuildsWithoutId()).toEqual([
@@ -152,7 +158,8 @@ describe('BuildsOptimizer', () => {
       });
 
       it('with gladiator and thundering sets effects', () => {
-        ArtifactsDI.registerRepository(gladiatorThunderingBuildArtifactsData);
+        loadArtifacts(gladiatorThunderingBuildArtifactsData);
+
         buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
         expect(getBuildsWithoutId()).toEqual([
@@ -175,7 +182,8 @@ describe('BuildsOptimizer', () => {
       });
 
       it('with bolide and Lavawalker sets effects', () => {
-        ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
+        loadArtifacts(bolideLavawalkerBuildArtifactsData);
+
         buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
         expect(getBuildsWithoutId()).toEqual([
@@ -199,9 +207,10 @@ describe('BuildsOptimizer', () => {
       });
 
       it('with level 1 Amber', () => {
-        ArtifactsDI.registerRepository(bolideLavawalkerBuildArtifactsData);
+        loadArtifacts(bolideLavawalkerBuildArtifactsData);
         const amber: CharacterView = { name: 'amber', level: '1', weaponType: 'bow' };
         const rust: WeaponView = { name: 'rust', level: '1' };
+
         buildsOptimizer.computeBuildsStats(amber, rust, defaultArtifactsFilters, defaultStatsFilter);
 
         expect(getBuildsWithoutId()).toEqual([
@@ -379,7 +388,8 @@ describe('BuildsOptimizer', () => {
     });
 
     it('should compute build stats of multiple artifacts for each type', () => {
-      ArtifactsDI.registerRepository(multipleArtifactsBuildArtifactsData);
+      loadArtifacts(multipleArtifactsBuildArtifactsData);
+
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
       expect(getBuildsWithoutId()).toEqual([
@@ -514,7 +524,7 @@ describe('BuildsOptimizer', () => {
 
     describe('filter builds before stats computation', () => {
       beforeEach(() => {
-        ArtifactsDI.registerRepository();
+        loadArtifacts();
       });
 
       it('that must have 2 thunderingFury set pieces', () => {
@@ -565,7 +575,7 @@ describe('BuildsOptimizer', () => {
 
     describe('filter builds after stats computation', () => {
       beforeEach(() => {
-        ArtifactsDI.registerRepository();
+        loadArtifacts();
       });
 
       it('that must have at least 17000 hp', () => {
@@ -601,14 +611,14 @@ describe('BuildsOptimizer', () => {
     });
 
     it('should return 144 total and computed builds with default artifacts', () => {
-      ArtifactsDI.registerRepository();
+      loadArtifacts();
 
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
       expect(buildsOptimizer.getBuildsComputationProgress()).toEqual({ computed: 144, total: 144 });
     });
 
     it('should limit to 1000 builds', (done) => {
-      ArtifactsDI.registerRepository(moreThan1000BuildsArtifactsData);
+      loadArtifacts(moreThan1000BuildsArtifactsData);
 
       optimizationDoneSub.pipe(take(1)).subscribe(() => {
         expect(buildsOptimizer.getBuildsComputationProgress()).toEqual({ computed: 1000, total: 1536 });
@@ -624,6 +634,11 @@ describe('BuildsOptimizer', () => {
     });
   });
 });
+
+function loadArtifacts(artifactsData?: AllArtifactsData) {
+  ArtifactsDI.registerRepository(artifactsData);
+  appStore.dispatch(loadArtifactsActions());
+}
 
 function getBuildsWithoutId() {
   return selectAllBuilds().map((buildItem) => {
