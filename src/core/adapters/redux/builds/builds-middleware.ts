@@ -1,10 +1,10 @@
 import {
   addBuildsAction,
-  buildsLimitReached,
-  buildsOptimizationDone,
+  buildsLimitReachedAction,
+  buildsOptimizationDoneAction,
   removeAllBuildsAction,
   runBuildsOptimizerAction,
-  updateBuildsComputationProgress,
+  updateBuildsComputationProgressAction,
 } from './builds-action';
 import { BuildsOptimizerDI } from '../../../di/builds-optimizer-di';
 import { Middleware } from '@reduxjs/toolkit';
@@ -21,16 +21,14 @@ export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (n
 
       bcWorker.onmessage = ({ data }) => {
         const { builds, progress } = data.buildsResults;
-        dispatch(updateBuildsComputationProgress({ buildsComputationProgress: progress }));
+        dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: progress }));
+        dispatch(addBuildsAction(builds));
 
-        if (builds) {
-          dispatch(addBuildsAction(builds));
-        }
         if (selectAllBuilds().length >= BuildsComputation.buildsLimit) {
-          dispatch(buildsLimitReached());
+          dispatch(buildsLimitReachedAction());
         }
         if (progress.computed === progress.total) {
-          dispatch(buildsOptimizationDone());
+          dispatch(buildsOptimizationDoneAction());
         }
       };
       bcWorker.postMessage(action.payload);
@@ -38,8 +36,8 @@ export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (n
       next(action);
       break;
     }
-    case buildsLimitReached.type:
-    case buildsOptimizationDone.type: {
+    case buildsLimitReachedAction.type:
+    case buildsOptimizationDoneAction.type: {
       bcWorker.terminate();
 
       next(action);

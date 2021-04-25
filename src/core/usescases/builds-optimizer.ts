@@ -11,7 +11,7 @@ import { Weapon, WeaponView } from '../domain/models/weapon';
 import { WeaponsRepository } from '../domain/weapons-repository';
 import { runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
 import { SetFilter } from '../domain/build-filter';
-import { buildsComputationProgress } from '../adapters/redux/builds/builds-selectors';
+import { buildsComputationProgress, buildsLimitReached } from '../adapters/redux/builds/builds-selectors';
 import { BuildsComputationProgress } from '../domain/builds-computation';
 
 export class BuildsOptimizer {
@@ -54,6 +54,10 @@ export class BuildsOptimizer {
 
   public getBuildsComputationProgress(): BuildsComputationProgress | undefined {
     return buildsComputationProgress();
+  }
+
+  public isBuildsLimitReached(): boolean {
+    return buildsLimitReached();
   }
 
   private getTotalSetFilterPieces(setFilter: SetFilter) {

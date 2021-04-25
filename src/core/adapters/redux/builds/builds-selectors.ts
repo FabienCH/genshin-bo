@@ -10,12 +10,15 @@ const buildsState = (state: AppState) => state.builds;
 const buildsSelectors = buildsAdapter.getSelectors(buildsState);
 
 const isOptimizationRunningSelector = createSelector(buildsState, (state) => state.isOptimizationRunning);
+const buildsLimitReachedSelector = createSelector(buildsState, (state) => state.buildsLimitReached);
 
 const buildsComputationProgressSelector = createSelector(buildsState, (state) => state.buildsComputationProgress);
 
 export const selectAllBuilds = (): Build[] => buildsSelectors.selectAll(appStore.getState());
 
 export const isOptimizationRunning = (): boolean => isOptimizationRunningSelector(appStore.getState());
+
+export const buildsLimitReached = (): boolean => buildsLimitReachedSelector(appStore.getState());
 
 export const buildsComputationProgress = (): BuildsComputationProgress | undefined =>
   buildsComputationProgressSelector(appStore.getState());

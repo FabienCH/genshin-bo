@@ -16,9 +16,13 @@ import {
 import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsMainStats, ArtifactStatsTypes } from '../domain/models/main-statistics';
 import { ArtifactsDI } from '../di/artifacts-di';
-import { selectAllBuilds } from '../adapters/redux/builds/builds-selectors';
+import { buildsComputationProgress, buildsLimitReached, selectAllBuilds } from '../adapters/redux/builds/builds-selectors';
 import { WeaponView } from '../domain/models/weapon';
 import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
+import { appStore } from '../adapters/redux/store';
+import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { Unsubscribe } from '@reduxjs/toolkit';
 
 describe('BuildsOptimizer', () => {
   let buildsOptimizer: BuildsOptimizer;
@@ -584,20 +588,39 @@ describe('BuildsOptimizer', () => {
   });
 
   describe('getBuildsComputationProgress', () => {
-    describe('return number of possible builds', () => {
-      it('should return 144 with default in memory artifacts', () => {
-        ArtifactsDI.registerRepository();
+    const optimizationDoneSub: Subject<void> = new Subject();
+    let appStoreUnsubscribe: Unsubscribe;
 
-        buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
-        expect(buildsOptimizer.getBuildsComputationProgress()).toEqual({ computed: 144, total: 144 });
+    beforeEach(() => {
+      appStoreUnsubscribe = appStore.subscribe(() => {
+        const progress = buildsComputationProgress();
+        if (buildsLimitReached() || (!!progress && progress.computed === progress.total)) {
+          optimizationDoneSub.next();
+        }
       });
+    });
 
-      it('should limit to 1000 builds', () => {
-        ArtifactsDI.registerRepository(moreThan1000BuildsArtifactsData);
+    it('should return 144 total and computed builds with default artifacts', () => {
+      ArtifactsDI.registerRepository();
 
-        buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
+      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual({ computed: 144, total: 144 });
+    });
+
+    it('should limit to 1000 builds', (done) => {
+      ArtifactsDI.registerRepository(moreThan1000BuildsArtifactsData);
+
+      optimizationDoneSub.pipe(take(1)).subscribe(() => {
         expect(buildsOptimizer.getBuildsComputationProgress()).toEqual({ computed: 1000, total: 1536 });
+        expect(buildsOptimizer.isBuildsLimitReached()).toBeTruthy();
+        done();
       });
+
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
+    });
+
+    afterEach(() => {
+      appStoreUnsubscribe();
     });
   });
 });

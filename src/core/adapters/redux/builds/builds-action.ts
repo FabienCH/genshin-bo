@@ -24,18 +24,18 @@ export const runBuildsOptimizerAction = createAction<{
   statsFilter: Partial<CharacterStatsValues>;
 }>('[Entities/Builds] Run Builds Optimizer');
 
-export const updateBuildsComputationProgress = createAction<{ buildsComputationProgress: BuildsComputationProgress }>(
+export const updateBuildsComputationProgressAction = createAction<{ buildsComputationProgress: BuildsComputationProgress }>(
   '[Entities/Builds] Update Builds Progress',
 );
 
-export const buildsLimitReached = createAction('[Entities/Builds] Builds Limit Reached');
+export const buildsLimitReachedAction = createAction('[Entities/Builds] Builds Limit Reached');
 
-export const buildsOptimizationDone = createAction('[Entities/Builds] Builds Optimization Done');
+export const buildsOptimizationDoneAction = createAction('[Entities/Builds] Builds Optimization Done');
 
 export type BuildsActionTypes =
   | typeof addBuildsAction
   | typeof removeAllBuildsAction
   | typeof runBuildsOptimizerAction
-  | typeof updateBuildsComputationProgress
-  | typeof buildsLimitReached
-  | typeof buildsOptimizationDone;
+  | typeof updateBuildsComputationProgressAction
+  | typeof buildsLimitReachedAction
+  | typeof buildsOptimizationDoneAction;
