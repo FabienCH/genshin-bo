@@ -25,6 +25,7 @@ const styles = createStyles({
 
 interface BuildsOptimizerProps extends WithStyles<typeof styles> {
   builds: Build[];
+  isBuildsLimitReached: boolean;
 }
 
 type State = {
@@ -131,10 +132,16 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   }
 
   render(): ReactElement {
-    const { classes, builds } = this.props;
+    const { classes, builds, isBuildsLimitReached } = this.props;
     let buildsResultsContainer;
     if (builds.length > 0) {
-      buildsResultsContainer = <BuildsResultsContainer builds={builds} buildFilters={this.state.buildFilters}></BuildsResultsContainer>;
+      buildsResultsContainer = (
+        <BuildsResultsContainer
+          builds={builds}
+          isBuildsLimitReached={isBuildsLimitReached}
+          buildFilters={this.state.buildFilters}
+        ></BuildsResultsContainer>
+      );
     }
 
     return (
@@ -177,7 +184,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
 }
 
 const mapStateToProps = () => {
-  return { builds: selectAllBuilds() };
+  return { builds: selectAllBuilds(), isBuildsLimitReached: BuildsOptimizerDI.getBuildsOptimizer().isBuildsLimitReached() };
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(BuildsOptimizerContainer));

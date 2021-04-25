@@ -1,7 +1,8 @@
 import { Fragment, ReactElement } from 'react';
-import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { Container, createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import InfoIcon from '@material-ui/icons/Info';
+import WarningIcon from '@material-ui/icons/Warning';
 import BuildsResultsGrid from '../components/builds-results-grid';
 import { Build } from '../../../../domain/models/build';
 import { ColDef } from 'ag-grid-community';
@@ -11,25 +12,32 @@ import { ArtifactMapper } from '../../../../domain/mappers/artifact-mapper';
 import { ArtifactData } from '../../../../domain/models/artifact-data';
 import { ArtifactView } from '../../../../domain/models/artifact-view';
 
-const styles = createStyles({
-  infoIcon: {
-    float: 'left',
-    marginRight: 10,
-  },
-  infoContainer: {
-    display: 'flex',
-    margin: 0,
-    alignItems: 'center',
-  },
-});
+const styles = ({ palette }: Theme) =>
+  createStyles({
+    infoContainer: {
+      display: 'flex',
+      margin: 0,
+      alignItems: 'center',
+    },
+    warningContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      color: palette.warning.light,
+    },
+    infoIcon: {
+      float: 'left',
+      marginRight: 10,
+    },
+  });
 
 interface BuildsResultsContainerProps extends WithStyles<typeof styles> {
   builds: Build[];
+  isBuildsLimitReached: boolean;
   buildFilters: Partial<CharacterStatsValues>;
 }
 
 function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElement {
-  const { builds, buildFilters, classes } = props;
+  const { builds, isBuildsLimitReached, buildFilters, classes } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
   const [currentArtifact, setCurrentArtifact] = React.useState<ArtifactView | null>(null);
@@ -98,6 +106,12 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
           <br />
           Only statistics are calculated for now, so 4 pieces set effects are ignored.
         </p>
+        {isBuildsLimitReached ? (
+          <p className={classes.warningContainer}>
+            <WarningIcon className={classes.infoIcon}></WarningIcon>
+            You have reached the limit of 1000 builds, please use more restrictive filters.
+          </p>
+        ) : null}
         <BuildsResultsGrid
           builds={builds}
           buildFilters={buildFilters}
