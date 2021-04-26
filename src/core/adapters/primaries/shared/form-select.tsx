@@ -37,7 +37,7 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
     const value = isTypeT(option) ? option : option.value;
     const disableMessage = isTypeT(option) || !option.disableMessage ? false : <span>{option.disableMessage}</span>;
     const menuItem = (key?: string | number): ReactElement => (
-      <MenuItem key={key} value={value} disabled={!key}>
+      <MenuItem key={key} value={value} disabled={key == null}>
         {StringFormatter.formatStringWithUpperCase(`${value}`)}
       </MenuItem>
     );

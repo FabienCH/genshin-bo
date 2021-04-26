@@ -8,6 +8,7 @@ import { BuildsOptimizer } from '../usescases/builds-optimizer';
 export abstract class BuildsOptimizerDI {
   public static buildsFormsHandler = new BuildsFormsHandler(new InMemoryWeaponsRepository());
   private static buildsOptimizer: BuildsOptimizer;
+  private static bcWorker?: BcWorker;
 
   public static getBuildsOptimizer(): BuildsOptimizer {
     if (!BuildsOptimizerDI.buildsOptimizer) {
@@ -17,11 +18,22 @@ export abstract class BuildsOptimizerDI {
   }
 
   public static getBcWorker(): BcWorker {
-    switch (process.env.NODE_ENV) {
-      case 'test':
-        return new BcWorkerMock();
-      default:
-        return new BuildsComputationWorker();
+    if (!BuildsOptimizerDI.bcWorker) {
+      switch (process.env.NODE_ENV) {
+        case 'test':
+          BuildsOptimizerDI.bcWorker = new BcWorkerMock();
+          break;
+        default:
+          BuildsOptimizerDI.bcWorker = new BuildsComputationWorker();
+      }
+    }
+    return BuildsOptimizerDI.bcWorker;
+  }
+
+  public static terminateBcWorker(): void {
+    if (BuildsOptimizerDI.bcWorker) {
+      BuildsOptimizerDI.bcWorker.terminate();
+      BuildsOptimizerDI.bcWorker = undefined;
     }
   }
 }

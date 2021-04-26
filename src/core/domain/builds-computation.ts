@@ -36,6 +36,8 @@ export class BuildsComputation {
   private buildsComputed!: number;
   private buildsMatchingFilters!: number;
   private totalBuilds!: number;
+  private lastBuildsEmitPercent!: number;
+  private lastBuildsEmitTimestamp!: number;
 
   constructor() {
     this.statsComputation = new StatsComputation();
@@ -78,10 +80,12 @@ export class BuildsComputation {
     this.statsFilter = statsFilter;
     this.builds = [];
     this.artifactsPerBuild = this.allArtifacts.length - 1;
+    this.lastBuildsEmitPercent = 0;
+    this.lastBuildsEmitTimestamp = Date.now();
     this.initBuildsProgressCounters();
 
     this.iterateOverAllBuilds([], 0);
-    this.emitBuildsSub();
+    this.emitNewBuildsSub();
   }
 
   public getNewBuilds(): Observable<BuildsResults> {
@@ -89,7 +93,7 @@ export class BuildsComputation {
   }
 
   private iterateOverAllBuilds(artifacts: Artifact[], i: number): void {
-    this.allArtifacts[i].forEach((artifact: Artifact) => {
+    this.allArtifacts[i].every((artifact: Artifact) => {
       const artifactsToCompute = [...artifacts];
       artifactsToCompute.push(artifact);
       if (i === this.artifactsPerBuild) {
@@ -97,13 +101,12 @@ export class BuildsComputation {
         if (BuildFilter.setFilterMatch(this.setFilter, artifactsToCompute)) {
           this.computeBuildStats(artifactsToCompute);
         }
+        this.emitNewBuildsIfNeeded();
+        return true;
+      }
 
-        return;
-      }
-      if (this.buildsMatchingFilters >= BuildsComputation.buildsLimit) {
-        return;
-      }
       this.iterateOverAllBuilds(artifactsToCompute, i + 1);
+      return this.buildsMatchingFilters < BuildsComputation.buildsLimit;
     });
   }
 
@@ -113,10 +116,6 @@ export class BuildsComputation {
       const artifactIds = artifactsToCompute.map((artifact) => artifact.id);
       this.builds.push({ id: uuidv4(), stats: buildStats, artifactIds });
       this.buildsMatchingFilters++;
-
-      if (this.builds.length > 50) {
-        this.emitBuildsSub();
-      }
     }
   }
 
@@ -142,7 +141,18 @@ export class BuildsComputation {
     }, 1);
   }
 
-  private emitBuildsSub(): void {
+  private emitNewBuildsIfNeeded(): void {
+    const currentPercent = Math.trunc((this.buildsComputed * 100) / this.totalBuilds);
+    const now = Date.now();
+    const lastEmitMoreThan500ms = now - this.lastBuildsEmitTimestamp > 500;
+    if (currentPercent !== this.lastBuildsEmitPercent || (lastEmitMoreThan500ms && this.builds.length)) {
+      this.lastBuildsEmitTimestamp = now;
+      this.lastBuildsEmitPercent = currentPercent;
+      this.emitNewBuildsSub();
+    }
+  }
+
+  private emitNewBuildsSub(): void {
     this.newBuildsSub.next({
       builds: this.builds,
       progress: { computed: this.buildsComputed, total: this.totalBuilds },

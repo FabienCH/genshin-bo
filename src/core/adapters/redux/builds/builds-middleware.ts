@@ -13,12 +13,11 @@ import { BuildsComputation } from '../../../domain/builds-computation';
 import { selectAllBuilds } from './builds-selectors';
 
 export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (next) => (action) => {
-  const bcWorker = BuildsOptimizerDI.getBcWorker();
-
   switch (action.type) {
     case runBuildsOptimizerAction.type: {
       dispatch(removeAllBuildsAction());
 
+      const bcWorker = BuildsOptimizerDI.getBcWorker();
       bcWorker.onmessage = ({ data }) => {
         const { builds, progress } = data.buildsResults;
         dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: progress }));
@@ -38,7 +37,7 @@ export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (n
     }
     case buildsLimitReachedAction.type:
     case buildsOptimizationDoneAction.type: {
-      bcWorker.terminate();
+      BuildsOptimizerDI.terminateBcWorker();
 
       next(action);
       break;
