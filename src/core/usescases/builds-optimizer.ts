@@ -10,9 +10,10 @@ import { CharactersRepository } from '../domain/characters-repository';
 import { Weapon, WeaponView } from '../domain/models/weapon';
 import { WeaponsRepository } from '../domain/weapons-repository';
 import { runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
-import { SetFilter } from '../domain/build-filter';
 import { buildsComputationProgress, buildsLimitReached } from '../adapters/redux/builds/builds-selectors';
 import { BuildsComputationProgress } from '../domain/builds-computation';
+import { BuildsOptimizerDI } from '../di/builds-optimizer-di';
+import { SetFilter } from '../domain/build-filter';
 
 export class BuildsOptimizer {
   constructor(private readonly charactersRepository: CharactersRepository, private readonly weaponsRepository: WeaponsRepository) {
@@ -58,6 +59,16 @@ export class BuildsOptimizer {
 
   public isBuildsLimitReached(): boolean {
     return buildsLimitReached();
+  }
+
+  public isBuildsCombinationsLimitReached(artifactsFilters: {
+    currentSets: SetNames[];
+    setPieces: 2 | 4;
+    mainsStats: ArtifactsMainStats;
+    focusStats: ArtifactStatsTypes[];
+    minArtifactLevel: number;
+  }): boolean {
+    return BuildsOptimizerDI.getBuildsComputation().getBuildsCombinations(artifactsFilters, selectAllArtifacts()) > Math.pow(10, 10);
   }
 
   private getTotalSetFilterPieces(setFilter: SetFilter) {

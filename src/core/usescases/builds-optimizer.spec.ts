@@ -11,6 +11,7 @@ import {
   lvl134820BuildArtifactsData,
   lvl27121517BuildArtifactsData,
   moreThan1000BuildsArtifactsData,
+  moreThan10BillionsBuildsArtifactsData,
   multipleArtifactsBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
 import { SetNames } from '../domain/models/sets-with-effects';
@@ -632,6 +633,24 @@ describe('BuildsOptimizer', () => {
     afterEach(() => {
       appStoreUnsubscribe();
     });
+  });
+
+  describe('isBuildsCombinationsLimitReached', () => {
+    it('should reach the limit with 10 billions builds combinations', () => {
+      loadArtifacts(moreThan10BillionsBuildsArtifactsData);
+
+      expect(buildsOptimizer.isBuildsCombinationsLimitReached(defaultArtifactsFilters)).toBeTruthy();
+    });
+  });
+
+  it('should reach the limit with 10 billions builds combinations', () => {
+    const lessThan10BillionsBuildsArtifactsData: AllArtifactsData = {
+      ...moreThan10BillionsBuildsArtifactsData,
+      flowers: moreThan10BillionsBuildsArtifactsData.flowers.slice(0, 99),
+    };
+    loadArtifacts(lessThan10BillionsBuildsArtifactsData);
+
+    expect(buildsOptimizer.isBuildsCombinationsLimitReached(defaultArtifactsFilters)).toBeFalsy();
   });
 });
 

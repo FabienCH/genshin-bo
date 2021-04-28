@@ -43,7 +43,7 @@ export class BuildsComputation {
     this.statsComputation = new StatsComputation();
   }
 
-  public computeBuilds(
+  public async computeBuilds(
     artifacts: ArtifactData[],
     baseStats: CharacterStatsValues,
     characterBonusStat: MainStatsValues,
@@ -55,25 +55,13 @@ export class BuildsComputation {
       minArtifactLevel: number;
     },
     statsFilter: Partial<CharacterStatsValues>,
-  ): void {
+  ): Promise<void> {
     const setFilter = {
       setNames: artifactsFilters.currentSets,
       pieces: artifactsFilters.setPieces,
     };
-    const totalSetFilterPieces = this.getTotalSetFilterPieces(setFilter);
-    if (totalSetFilterPieces > 5) {
-      throw new Error('total pieces can not be higher than 5');
-    }
 
-    const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
-    const mainStats = {
-      sandsMain: mainsStats.sandsMain,
-      gobletMain: mainsStats.gobletMain,
-      circletMain: mainsStats.circletMain,
-    };
-
-    const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(artifacts);
-    this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
+    this.setAllArtifacts(artifactsFilters, artifacts);
     this.baseStats = baseStats;
     this.characterBonusStat = characterBonusStat;
     this.setFilter = setFilter;
@@ -86,6 +74,20 @@ export class BuildsComputation {
 
     this.iterateOverAllBuilds([], 0);
     this.emitNewBuildsSub();
+  }
+
+  public getBuildsCombinations(
+    artifactsFilters: {
+      currentSets: SetNames[];
+      setPieces: 2 | 4;
+      mainsStats: ArtifactsMainStats;
+      focusStats: ArtifactStatsTypes[];
+      minArtifactLevel: number;
+    },
+    artifacts: ArtifactData[],
+  ): number {
+    this.setAllArtifacts(artifactsFilters, artifacts);
+    return this.getTotalBuilds();
   }
 
   public getNewBuilds(): Observable<BuildsResults> {
@@ -119,23 +121,37 @@ export class BuildsComputation {
     }
   }
 
-  private getTotalSetFilterPieces(setFilter: SetFilter) {
-    const setNames = setFilter ? setFilter.setNames : [];
-    const totalSetFilterPieces = setNames.reduce((totalPieces) => {
-      totalPieces += setFilter.pieces;
-      return totalPieces;
-    }, 0);
-    return totalSetFilterPieces;
+  private setAllArtifacts(
+    artifactsFilters: {
+      currentSets: SetNames[];
+      setPieces: 2 | 4;
+      mainsStats: ArtifactsMainStats;
+      focusStats: ArtifactStatsTypes[];
+      minArtifactLevel: number;
+    },
+    artifacts: ArtifactData[],
+  ): void {
+    const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
+
+    const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(artifacts);
+    this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainsStats, minArtifactLevel, focusStats));
   }
 
   private initBuildsProgressCounters(): void {
     this.buildsComputed = 0;
     this.buildsMatchingFilters = 0;
+    this.totalBuilds = this.getTotalBuilds();
 
-    if (!this.allArtifacts) {
-      this.totalBuilds = 0;
+    if (this.totalBuilds > Math.pow(10, 10)) {
+      throw new Error('total builds combinations can not be higher than 10 billions');
     }
-    this.totalBuilds = this.allArtifacts.reduce((numberOfBuilds, artifacts) => {
+  }
+
+  private getTotalBuilds(): number {
+    if (!this.allArtifacts) {
+      return 0;
+    }
+    return this.allArtifacts.reduce((numberOfBuilds, artifacts) => {
       numberOfBuilds *= artifacts.length;
       return numberOfBuilds;
     }, 1);
