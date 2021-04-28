@@ -41,6 +41,7 @@ type State = {
     minArtifactLevel: number;
   };
   buildFilters: Partial<CharacterStatsValues>;
+  buildsCombinationsLimitReached: boolean;
 };
 
 class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
@@ -50,20 +51,25 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     const currentCharacter = this.getCurrentCharacter(charactersNames[0], '1');
     const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
     const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
+    const artifactsFilters: ArtifactsFilters = {
+      currentSets: {},
+      setPieces: 2,
+      mainsStats: {},
+      focusStats: [],
+      minArtifactLevel: 0,
+    };
 
     this.state = {
       charactersNames,
       weaponsNames,
       currentCharacter,
       currentWeapon,
-      artifactsFilters: {
-        currentSets: {},
-        setPieces: 2,
-        mainsStats: {},
-        focusStats: [],
-        minArtifactLevel: 0,
-      },
+      artifactsFilters,
       buildFilters: {},
+      buildsCombinationsLimitReached: BuildsOptimizerDI.getBuildsOptimizer().isBuildsCombinationsLimitReached({
+        ...artifactsFilters,
+        currentSets: Object.values(artifactsFilters.currentSets),
+      }),
     };
     this.handleCharacterChange = this.handleCharacterChange.bind(this);
     this.handleWeaponChange = this.handleWeaponChange.bind(this);
@@ -100,9 +106,14 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   }
 
   handleArtifactsFiltersChange(artifactsFilters: ArtifactsFilters): void {
+    const buildsCombinationsLimitReached = BuildsOptimizerDI.getBuildsOptimizer().isBuildsCombinationsLimitReached({
+      ...artifactsFilters,
+      currentSets: Object.values(artifactsFilters.currentSets),
+    });
     this.setState((state) => ({
       ...state,
       artifactsFilters,
+      buildsCombinationsLimitReached,
     }));
   }
 
@@ -144,6 +155,8 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       );
     }
 
+    const disableButton = this.state.artifactsFilters.focusStats.length === 1 || this.state.buildsCombinationsLimitReached;
+
     return (
       <section>
         <h2>Builds Optimizer</h2>
@@ -162,7 +175,8 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
           <h3>Build Filters</h3>
           <BuildFiltersForm
             buildFilters={this.state.buildFilters}
-            disableButton={this.state.artifactsFilters.focusStats.length === 1}
+            disableButton={disableButton}
+            buildsCombinationsLimitReached={this.state.buildsCombinationsLimitReached}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
           ></BuildFiltersForm>

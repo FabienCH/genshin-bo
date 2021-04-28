@@ -1,8 +1,7 @@
 import { Fragment, ReactElement } from 'react';
-import { Container, createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
+import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import InfoIcon from '@material-ui/icons/Info';
-import WarningIcon from '@material-ui/icons/Warning';
 import BuildsResultsGrid from '../components/builds-results-grid';
 import { Build } from '../../../../domain/models/build';
 import { ColDef } from 'ag-grid-community';
@@ -11,24 +10,19 @@ import React from 'react';
 import { ArtifactMapper } from '../../../../domain/mappers/artifact-mapper';
 import { ArtifactData } from '../../../../domain/models/artifact-data';
 import { ArtifactView } from '../../../../domain/models/artifact-view';
+import WarningMessage from '../../shared/warning-message';
 
-const styles = ({ palette }: Theme) =>
-  createStyles({
-    infoContainer: {
-      display: 'flex',
-      margin: 0,
-      alignItems: 'center',
-    },
-    warningContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      color: palette.warning.light,
-    },
-    infoIcon: {
-      float: 'left',
-      marginRight: 10,
-    },
-  });
+const styles = createStyles({
+  infoContainer: {
+    display: 'flex',
+    marginTop: 0,
+    alignItems: 'center',
+  },
+  infoIcon: {
+    float: 'left',
+    marginRight: 10,
+  },
+});
 
 interface BuildsResultsContainerProps extends WithStyles<typeof styles> {
   builds: Build[];
@@ -107,10 +101,7 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
           Only statistics are calculated for now, so 4 pieces set effects are ignored.
         </p>
         {isBuildsLimitReached ? (
-          <p className={classes.warningContainer}>
-            <WarningIcon className={classes.infoIcon}></WarningIcon>
-            You have reached the limit of 1000 builds, please use more restrictive filters.
-          </p>
+          <WarningMessage message="You have reached the limit of 1000 builds, please use more restrictive filters."></WarningMessage>
         ) : null}
         <BuildsResultsGrid
           builds={builds}

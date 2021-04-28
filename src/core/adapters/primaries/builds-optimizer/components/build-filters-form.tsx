@@ -2,6 +2,7 @@ import { ChangeEvent, Fragment, ReactElement } from 'react';
 import { Box, Button, Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import FormSelect from '../../shared/form-select';
+import WarningMessage from '../../shared/warning-message';
 import BuildFiltersTextFieldProps from './build-filters-text-field';
 
 const styles = createStyles({
@@ -64,12 +65,13 @@ const selectedListedStats: { stat: CharacterStatTypes; value: number | undefined
 interface BuildFiltersFormProps extends WithStyles<typeof styles> {
   buildFilters: Partial<CharacterStatsValues>;
   disableButton: boolean;
+  buildsCombinationsLimitReached: boolean;
   onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number | undefined }) => void;
   onRunClick: () => void;
 }
 
 function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
-  const { buildFilters, disableButton, classes } = props;
+  const { buildFilters, disableButton, buildsCombinationsLimitReached, classes } = props;
 
   const parseValue = (value: unknown): number | undefined => {
     const intValue = parseInt(`${value}`);
@@ -130,9 +132,14 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
           );
         })}
       </div>
-      <Button className={classes.runButton} variant="contained" color="primary" disabled={disableButton} onClick={handleRunClick}>
-        Run
-      </Button>
+      <div className={classes.div} style={{ justifyContent: buildsCombinationsLimitReached ? 'space-between' : ' flex-end' }}>
+        {buildsCombinationsLimitReached ? (
+          <WarningMessage message="Total builds combinations can not be higher than 10 billions, please use more restrictive artifacts filters."></WarningMessage>
+        ) : null}
+        <Button className={classes.runButton} variant="contained" color="primary" disabled={disableButton} onClick={handleRunClick}>
+          Run
+        </Button>
+      </div>
     </Container>
   );
 }
