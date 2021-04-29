@@ -2,8 +2,7 @@ import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/red
 import { appStore } from '../adapters/redux/store';
 import { Character, CharacterView } from '../domain/models/character';
 import { CharacterStatsValues } from '../domain/models/character-statistics';
-import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
-import { SetNames } from '../domain/models/sets-with-effects';
+import { MainStatsValues } from '../domain/models/main-statistics';
 import { StatsComputation } from '../domain/stats-computation';
 import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
 import { CharactersRepository } from '../domain/characters-repository';
@@ -14,6 +13,7 @@ import { buildsComputationProgress, buildsLimitReached } from '../adapters/redux
 import { BuildsComputationProgress } from '../domain/builds-computation';
 import { BuildsOptimizerDI } from '../di/builds-optimizer-di';
 import { SetFilter } from '../domain/build-filter';
+import { ArtifactsFilters } from './artifacts-filter';
 
 export class BuildsOptimizer {
   constructor(private readonly charactersRepository: CharactersRepository, private readonly weaponsRepository: WeaponsRepository) {
@@ -25,13 +25,7 @@ export class BuildsOptimizer {
   public computeBuildsStats(
     characterView: CharacterView,
     weaponView: WeaponView,
-    artifactsFilters: {
-      currentSets: SetNames[];
-      setPieces: 2 | 4;
-      mainsStats: ArtifactsMainStats;
-      focusStats: ArtifactStatsTypes[];
-      minArtifactLevel: number;
-    },
+    artifactsFilters: ArtifactsFilters,
     statsFilter: Partial<CharacterStatsValues>,
   ): void {
     const setFilter = {
@@ -61,13 +55,7 @@ export class BuildsOptimizer {
     return buildsLimitReached();
   }
 
-  public isBuildsCombinationsLimitReached(artifactsFilters: {
-    currentSets: SetNames[];
-    setPieces: 2 | 4;
-    mainsStats: ArtifactsMainStats;
-    focusStats: ArtifactStatsTypes[];
-    minArtifactLevel: number;
-  }): boolean {
+  public isBuildsCombinationsLimitReached(artifactsFilters: ArtifactsFilters): boolean {
     return BuildsOptimizerDI.getBuildsComputation().getBuildsCombinations(artifactsFilters, selectAllArtifacts()) > Math.pow(10, 10);
   }
 

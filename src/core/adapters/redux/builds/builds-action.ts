@@ -3,8 +3,8 @@ import { BuildsComputationProgress } from '../../../domain/builds-computation';
 import { ArtifactData } from '../../../domain/models/artifact-data';
 import { Build } from '../../../domain/models/build';
 import { CharacterStatsValues } from '../../../domain/models/character-statistics';
-import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from '../../../domain/models/main-statistics';
-import { SetNames } from '../../../domain/models/sets-with-effects';
+import { MainStatsValues } from '../../../domain/models/main-statistics';
+import { ArtifactsFilters } from '../../../usescases/artifacts-filter';
 
 export const addBuildsAction = createAction<Build[]>('[Entities/Builds] Add Builds');
 
@@ -14,13 +14,7 @@ export const runBuildsOptimizerAction = createAction<{
   allArtifacts: ArtifactData[];
   baseStats: CharacterStatsValues;
   characterBonusStat: MainStatsValues;
-  artifactsFilters: {
-    currentSets: SetNames[];
-    setPieces: 2 | 4;
-    mainsStats: ArtifactsMainStats;
-    focusStats: ArtifactStatsTypes[];
-    minArtifactLevel: number;
-  };
+  artifactsFilters: ArtifactsFilters;
   statsFilter: Partial<CharacterStatsValues>;
 }>('[Entities/Builds] Run Builds Optimizer');
 

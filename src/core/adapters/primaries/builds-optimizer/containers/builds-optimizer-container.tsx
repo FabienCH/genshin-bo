@@ -4,10 +4,8 @@ import { WeaponsDI } from '../../../../di/weapons-di';
 import { CharacterView, ExistingCharacters } from '../../../../domain/models/character';
 import { Levels } from '../../../../domain/models/levels';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
 import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import BuildFiltersForm from '../components/build-filters-form';
-import { SetNames } from '../../../../domain/models/sets-with-effects';
 import BuildsResultsContainer from './builds-results-container';
 import BuildsSetupContainer from './builds-setup-container';
 import { connect } from 'react-redux';
@@ -15,7 +13,7 @@ import { Build } from '../../../../domain/models/build';
 import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
 import { WeaponView } from '../../../../domain/models/weapon';
-import { ArtifactsFilters } from '../../../../usescases/artifacts-filter';
+import { ArtifactsFiltersView } from '../../../../usescases/artifacts-filter';
 
 const styles = createStyles({
   form: {
@@ -33,13 +31,7 @@ type State = {
   weaponsNames: string[];
   currentCharacter: CharacterView;
   currentWeapon: WeaponView;
-  artifactsFilters: {
-    currentSets: { [index: number]: SetNames };
-    setPieces: 2 | 4;
-    mainsStats: ArtifactsMainStats;
-    focusStats: ArtifactStatsTypes[];
-    minArtifactLevel: number;
-  };
+  artifactsFilters: ArtifactsFiltersView;
   buildFilters: Partial<CharacterStatsValues>;
   buildsCombinationsLimitReached: boolean;
 };
@@ -51,7 +43,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     const currentCharacter = this.getCurrentCharacter(charactersNames[0], '1');
     const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
     const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
-    const artifactsFilters: ArtifactsFilters = {
+    const artifactsFilters: ArtifactsFiltersView = {
       currentSets: {},
       setPieces: 2,
       mainsStats: {},
@@ -66,11 +58,9 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       currentWeapon,
       artifactsFilters,
       buildFilters: {},
-      buildsCombinationsLimitReached: BuildsOptimizerDI.getBuildsOptimizer().isBuildsCombinationsLimitReached({
-        ...artifactsFilters,
-        currentSets: Object.values(artifactsFilters.currentSets),
-      }),
+      buildsCombinationsLimitReached: this.isBuildsCombinationsLimitReached(artifactsFilters),
     };
+
     this.handleCharacterChange = this.handleCharacterChange.bind(this);
     this.handleWeaponChange = this.handleWeaponChange.bind(this);
     this.handleArtifactsFiltersChange = this.handleArtifactsFiltersChange.bind(this);
@@ -82,6 +72,12 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     CharactersDI.charactersHandler.getCharacterView(name, level);
 
   getCurrentWeapon = (name: string, level: Levels = this.state.currentWeapon.level) => WeaponsDI.weaponsHandler.getWeaponView(name, level);
+
+  isBuildsCombinationsLimitReached = (artifactsFilters: ArtifactsFiltersView): boolean =>
+    BuildsOptimizerDI.getBuildsOptimizer().isBuildsCombinationsLimitReached({
+      ...artifactsFilters,
+      currentSets: Object.values(artifactsFilters.currentSets),
+    });
 
   handleCharacterChange(character: CharacterView): void {
     const currentCharacter = this.getCurrentCharacter(character.name, character.level);
@@ -105,11 +101,9 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     }));
   }
 
-  handleArtifactsFiltersChange(artifactsFilters: ArtifactsFilters): void {
-    const buildsCombinationsLimitReached = BuildsOptimizerDI.getBuildsOptimizer().isBuildsCombinationsLimitReached({
-      ...artifactsFilters,
-      currentSets: Object.values(artifactsFilters.currentSets),
-    });
+  handleArtifactsFiltersChange(artifactsFilters: ArtifactsFiltersView): void {
+    const buildsCombinationsLimitReached = this.isBuildsCombinationsLimitReached(artifactsFilters);
+
     this.setState((state) => ({
       ...state,
       artifactsFilters,

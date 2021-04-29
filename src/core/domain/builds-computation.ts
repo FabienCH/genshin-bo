@@ -3,13 +3,12 @@ import { StatsComputation } from './stats-computation';
 import { BuildFilter, SetFilter } from './build-filter';
 import { Artifact } from './entities/artifact';
 import { CharacterStatsValues } from './models/character-statistics';
-import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from './models/main-statistics';
+import { MainStatsValues } from './models/main-statistics';
 import { Build } from './models/build';
 import { v4 as uuidv4 } from 'uuid';
-import { ArtifactsFilter } from '../usescases/artifacts-filter';
+import { ArtifactsFilter, ArtifactsFilters } from '../usescases/artifacts-filter';
 import { ArtifactMapper } from './mappers/artifact-mapper';
 import { ArtifactData } from './models/artifact-data';
-import { SetNames } from './models/sets-with-effects';
 
 export interface BuildsComputationProgress {
   computed: number;
@@ -43,19 +42,13 @@ export class BuildsComputation {
     this.statsComputation = new StatsComputation();
   }
 
-  public async computeBuilds(
+  public computeBuilds(
     artifacts: ArtifactData[],
     baseStats: CharacterStatsValues,
     characterBonusStat: MainStatsValues,
-    artifactsFilters: {
-      currentSets: SetNames[];
-      setPieces: 2 | 4;
-      mainsStats: ArtifactsMainStats;
-      focusStats: ArtifactStatsTypes[];
-      minArtifactLevel: number;
-    },
+    artifactsFilters: ArtifactsFilters,
     statsFilter: Partial<CharacterStatsValues>,
-  ): Promise<void> {
+  ): void {
     const setFilter = {
       setNames: artifactsFilters.currentSets,
       pieces: artifactsFilters.setPieces,
@@ -76,16 +69,7 @@ export class BuildsComputation {
     this.emitNewBuildsSub();
   }
 
-  public getBuildsCombinations(
-    artifactsFilters: {
-      currentSets: SetNames[];
-      setPieces: 2 | 4;
-      mainsStats: ArtifactsMainStats;
-      focusStats: ArtifactStatsTypes[];
-      minArtifactLevel: number;
-    },
-    artifacts: ArtifactData[],
-  ): number {
+  public getBuildsCombinations(artifactsFilters: ArtifactsFilters, artifacts: ArtifactData[]): number {
     this.setAllArtifacts(artifactsFilters, artifacts);
     return this.getTotalBuilds();
   }
@@ -121,16 +105,7 @@ export class BuildsComputation {
     }
   }
 
-  private setAllArtifacts(
-    artifactsFilters: {
-      currentSets: SetNames[];
-      setPieces: 2 | 4;
-      mainsStats: ArtifactsMainStats;
-      focusStats: ArtifactStatsTypes[];
-      minArtifactLevel: number;
-    },
-    artifacts: ArtifactData[],
-  ): void {
+  private setAllArtifacts(artifactsFilters: ArtifactsFilters, artifacts: ArtifactData[]): void {
     const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
 
     const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(artifacts);

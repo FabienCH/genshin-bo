@@ -15,7 +15,6 @@ import {
   multipleArtifactsBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
 import { SetNames } from '../domain/models/sets-with-effects';
-import { ArtifactsMainStats, ArtifactStatsTypes } from '../domain/models/main-statistics';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { buildsComputationProgress, buildsLimitReached, selectAllBuilds } from '../adapters/redux/builds/builds-selectors';
 import { WeaponView } from '../domain/models/weapon';
@@ -26,25 +25,21 @@ import { take } from 'rxjs/operators';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
 import { AllArtifactsData } from '../domain/models/artifact-data';
+import { ArtifactsFilters } from './artifacts-filter';
 
 describe('BuildsOptimizer', () => {
   let buildsOptimizer: BuildsOptimizer;
   let razor: CharacterView;
   let snowTombedStarsilver: WeaponView;
 
-  const defaultArtifactsFilters = {
+  const defaultArtifactsFilters: ArtifactsFilters = {
     currentSets: [],
     setPieces: 2,
     mainsStats: {},
     focusStats: [],
     minArtifactLevel: 0,
-  } as {
-    currentSets: SetNames[];
-    setPieces: 2 | 4;
-    mainsStats: ArtifactsMainStats;
-    focusStats: ArtifactStatsTypes[];
-    minArtifactLevel: number;
   };
+
   const defaultStatsFilter = {
     [CharacterStats.hp]: 0,
     [CharacterStats.atk]: 0,

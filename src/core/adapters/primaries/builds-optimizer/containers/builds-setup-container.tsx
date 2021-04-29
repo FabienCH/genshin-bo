@@ -10,7 +10,7 @@ import { SetNames } from '../../../../domain/models/sets-with-effects';
 import { WeaponView } from '../../../../domain/models/weapon';
 import { Levels } from '../../../../domain/models/levels';
 import React from 'react';
-import { ArtifactsFilters } from '../../../../usescases/artifacts-filter';
+import { ArtifactsFiltersView } from '../../../../usescases/artifacts-filter';
 import { SelectOption } from '../../../../usescases/builds-forms-handler';
 
 const styles = createStyles({
@@ -24,10 +24,10 @@ interface BuildsSetupContainerProps extends WithStyles<typeof styles> {
   weaponsNames: string[];
   currentCharacter: CharacterView;
   currentWeapon: WeaponView;
-  artifactsFilters: ArtifactsFilters;
+  artifactsFilters: ArtifactsFiltersView;
   onCharacterChange: (character: CharacterView) => void;
   onWeaponChange: (weapon: WeaponView) => void;
-  onArtifactsFiltersChange: (artifactsFilters: ArtifactsFilters) => void;
+  onArtifactsFiltersChange: (artifactsFilters: ArtifactsFiltersView) => void;
 }
 
 function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {

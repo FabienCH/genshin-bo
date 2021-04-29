@@ -1,20 +1,14 @@
+import { ArtifactsFilters } from '../../usescases/artifacts-filter';
 import { BuildsComputation, BuildsResults } from '../builds-computation';
 import { ArtifactData } from '../models/artifact-data';
 import { CharacterStatsValues } from '../models/character-statistics';
-import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from '../models/main-statistics';
-import { SetNames } from '../models/sets-with-effects';
+import { MainStatsValues } from '../models/main-statistics';
 
 export type BcMessage = {
   allArtifacts: ArtifactData[];
   baseStats: CharacterStatsValues;
   characterBonusStat: MainStatsValues;
-  artifactsFilters: {
-    currentSets: SetNames[];
-    setPieces: 2 | 4;
-    mainsStats: ArtifactsMainStats;
-    focusStats: ArtifactStatsTypes[];
-    minArtifactLevel: number;
-  };
+  artifactsFilters: ArtifactsFilters;
   statsFilter: Partial<CharacterStatsValues>;
 };
 
