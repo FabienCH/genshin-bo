@@ -4,10 +4,8 @@ import { WeaponsDI } from '../../../../di/weapons-di';
 import { CharacterView, ExistingCharacters } from '../../../../domain/models/character';
 import { Levels } from '../../../../domain/models/levels';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/models/main-statistics';
 import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import BuildFiltersForm from '../components/build-filters-form';
-import { SetNames } from '../../../../domain/models/sets-with-effects';
 import BuildsResultsContainer from './builds-results-container';
 import BuildsSetupContainer from './builds-setup-container';
 import { connect } from 'react-redux';
@@ -15,7 +13,7 @@ import { Build } from '../../../../domain/models/build';
 import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
 import { WeaponView } from '../../../../domain/models/weapon';
-import { ArtifactsFilters } from '../../../../usescases/artifacts-filter';
+import { ArtifactsFiltersView } from '../../../../usescases/artifacts-filter';
 
 const styles = createStyles({
   form: {
@@ -25,6 +23,7 @@ const styles = createStyles({
 
 interface BuildsOptimizerProps extends WithStyles<typeof styles> {
   builds: Build[];
+  isBuildsLimitReached: boolean;
 }
 
 type State = {
@@ -32,14 +31,9 @@ type State = {
   weaponsNames: string[];
   currentCharacter: CharacterView;
   currentWeapon: WeaponView;
-  artifactsFilters: {
-    currentSets: { [index: number]: SetNames };
-    setPieces: 2 | 4;
-    mainsStats: ArtifactsMainStats;
-    focusStats: ArtifactStatsTypes[];
-    minArtifactLevel: number;
-  };
+  artifactsFilters: ArtifactsFiltersView;
   buildFilters: Partial<CharacterStatsValues>;
+  buildsCombinationsLimitReached: boolean;
 };
 
 class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
@@ -49,21 +43,24 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     const currentCharacter = this.getCurrentCharacter(charactersNames[0], '1');
     const weaponsNames = WeaponsDI.weaponsHandler.getWeaponsNamesByTypes(currentCharacter.weaponType);
     const currentWeapon = this.getCurrentWeapon(weaponsNames[0], '1');
+    const artifactsFilters: ArtifactsFiltersView = {
+      currentSets: {},
+      setPieces: 2,
+      mainsStats: {},
+      focusStats: [],
+      minArtifactLevel: 0,
+    };
 
     this.state = {
       charactersNames,
       weaponsNames,
       currentCharacter,
       currentWeapon,
-      artifactsFilters: {
-        currentSets: {},
-        setPieces: 2,
-        mainsStats: {},
-        focusStats: [],
-        minArtifactLevel: 0,
-      },
+      artifactsFilters,
       buildFilters: {},
+      buildsCombinationsLimitReached: this.isBuildsCombinationsLimitReached(artifactsFilters),
     };
+
     this.handleCharacterChange = this.handleCharacterChange.bind(this);
     this.handleWeaponChange = this.handleWeaponChange.bind(this);
     this.handleArtifactsFiltersChange = this.handleArtifactsFiltersChange.bind(this);
@@ -75,6 +72,12 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     CharactersDI.charactersHandler.getCharacterView(name, level);
 
   getCurrentWeapon = (name: string, level: Levels = this.state.currentWeapon.level) => WeaponsDI.weaponsHandler.getWeaponView(name, level);
+
+  isBuildsCombinationsLimitReached = (artifactsFilters: ArtifactsFiltersView): boolean =>
+    BuildsOptimizerDI.getBuildsOptimizer().isBuildsCombinationsLimitReached({
+      ...artifactsFilters,
+      currentSets: Object.values(artifactsFilters.currentSets),
+    });
 
   handleCharacterChange(character: CharacterView): void {
     const currentCharacter = this.getCurrentCharacter(character.name, character.level);
@@ -98,10 +101,13 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     }));
   }
 
-  handleArtifactsFiltersChange(artifactsFilters: ArtifactsFilters): void {
+  handleArtifactsFiltersChange(artifactsFilters: ArtifactsFiltersView): void {
+    const buildsCombinationsLimitReached = this.isBuildsCombinationsLimitReached(artifactsFilters);
+
     this.setState((state) => ({
       ...state,
       artifactsFilters,
+      buildsCombinationsLimitReached,
     }));
   }
 
@@ -131,11 +137,19 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   }
 
   render(): ReactElement {
-    const { classes, builds } = this.props;
+    const { classes, builds, isBuildsLimitReached } = this.props;
     let buildsResultsContainer;
     if (builds.length > 0) {
-      buildsResultsContainer = <BuildsResultsContainer builds={builds} buildFilters={this.state.buildFilters}></BuildsResultsContainer>;
+      buildsResultsContainer = (
+        <BuildsResultsContainer
+          builds={builds}
+          isBuildsLimitReached={isBuildsLimitReached}
+          buildFilters={this.state.buildFilters}
+        ></BuildsResultsContainer>
+      );
     }
+
+    const disableButton = this.state.artifactsFilters.focusStats.length === 1 || this.state.buildsCombinationsLimitReached;
 
     return (
       <section>
@@ -155,7 +169,8 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
           <h3>Build Filters</h3>
           <BuildFiltersForm
             buildFilters={this.state.buildFilters}
-            disableButton={this.state.artifactsFilters.focusStats.length === 1}
+            disableButton={disableButton}
+            buildsCombinationsLimitReached={this.state.buildsCombinationsLimitReached}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
           ></BuildFiltersForm>
@@ -177,7 +192,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
 }
 
 const mapStateToProps = () => {
-  return { builds: selectAllBuilds() };
+  return { builds: selectAllBuilds(), isBuildsLimitReached: BuildsOptimizerDI.getBuildsOptimizer().isBuildsLimitReached() };
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(BuildsOptimizerContainer));

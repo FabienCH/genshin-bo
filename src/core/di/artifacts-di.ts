@@ -17,7 +17,6 @@ export abstract class ArtifactsDI {
   private static artifactImageOcr: ArtifactImageOcr;
 
   public static registerRepository(artifactsData?: AllArtifactsData): void {
-    ArtifactsDI.artifactsRepository = new InMemoryArtifactsRepository(artifactsData);
     switch (process.env.NODE_ENV) {
       case 'test':
         ArtifactsDI.artifactsRepository = new InMemoryArtifactsRepository(artifactsData);

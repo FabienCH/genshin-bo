@@ -1,23 +1,21 @@
 import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
-import { Artifact } from '../domain/entities/artifact';
-import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { Character, CharacterView } from '../domain/models/character';
 import { CharacterStatsValues } from '../domain/models/character-statistics';
-import { ArtifactsMainStats, ArtifactStatsTypes, MainStatsValues } from '../domain/models/main-statistics';
-import { SetNames } from '../domain/models/sets-with-effects';
-import { ArtifactsFilter } from './artifacts-filter';
+import { MainStatsValues } from '../domain/models/main-statistics';
 import { StatsComputation } from '../domain/stats-computation';
-import { runBuildsOptimizer } from '../adapters/redux/builds/builds-middleware';
-import { SetFilter } from '../domain/build-filter';
 import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
 import { CharactersRepository } from '../domain/characters-repository';
 import { Weapon, WeaponView } from '../domain/models/weapon';
 import { WeaponsRepository } from '../domain/weapons-repository';
+import { runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
+import { buildsComputationProgress, buildsLimitReached } from '../adapters/redux/builds/builds-selectors';
+import { BuildsComputationProgress } from '../domain/builds-computation';
+import { BuildsOptimizerDI } from '../di/builds-optimizer-di';
+import { SetFilter } from '../domain/build-filter';
+import { ArtifactsFilters } from './artifacts-filter';
 
 export class BuildsOptimizer {
-  private allArtifacts!: Artifact[][];
-
   constructor(private readonly charactersRepository: CharactersRepository, private readonly weaponsRepository: WeaponsRepository) {
     if (!isArtifactsStateInitialized()) {
       appStore.dispatch(loadArtifactsActions());
@@ -27,13 +25,7 @@ export class BuildsOptimizer {
   public computeBuildsStats(
     characterView: CharacterView,
     weaponView: WeaponView,
-    artifactsFilters: {
-      currentSets: SetNames[];
-      setPieces: 2 | 4;
-      mainsStats: ArtifactsMainStats;
-      focusStats: ArtifactStatsTypes[];
-      minArtifactLevel: number;
-    },
+    artifactsFilters: ArtifactsFilters,
     statsFilter: Partial<CharacterStatsValues>,
   ): void {
     const setFilter = {
@@ -50,26 +42,21 @@ export class BuildsOptimizer {
     const baseStats = { ...character.stats, atk: character.stats.atk + weapon.atk };
     const characterBonusStat = this.computeBonusStats(character, weapon);
 
-    const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
-    const mainStats = {
-      sandsMain: mainsStats.sandsMain,
-      gobletMain: mainsStats.gobletMain,
-      circletMain: mainsStats.circletMain,
-    };
-
-    const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(selectAllArtifacts());
-    this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainStats, minArtifactLevel, focusStats));
-    runBuildsOptimizer(this.allArtifacts, baseStats, characterBonusStat, setFilter, statsFilter);
+    appStore.dispatch(
+      runBuildsOptimizerAction({ allArtifacts: selectAllArtifacts(), baseStats, characterBonusStat, artifactsFilters, statsFilter }),
+    );
   }
 
-  public getBuilds(): number {
-    if (!this.allArtifacts) {
-      return 0;
-    }
-    return this.allArtifacts.reduce((numberOfBuilds, artifacts) => {
-      numberOfBuilds *= artifacts.length;
-      return numberOfBuilds;
-    }, 1);
+  public getBuildsComputationProgress(): BuildsComputationProgress | undefined {
+    return buildsComputationProgress();
+  }
+
+  public isBuildsLimitReached(): boolean {
+    return buildsLimitReached();
+  }
+
+  public isBuildsCombinationsLimitReached(artifactsFilters: ArtifactsFilters): boolean {
+    return BuildsOptimizerDI.getBuildsComputation().getBuildsCombinations(artifactsFilters, selectAllArtifacts()) > Math.pow(10, 10);
   }
 
   private getTotalSetFilterPieces(setFilter: SetFilter) {

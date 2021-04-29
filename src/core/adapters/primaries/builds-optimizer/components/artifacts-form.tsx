@@ -5,7 +5,8 @@ import ArtifactsMainSelects from './artifacts-main-selects';
 import ArtifactsOptionsForm from './artifacts-options-form';
 
 const styles = createStyles({
-  container: {
+  title: { marginTop: 0 },
+  content: {
     display: 'flex',
   },
 });
@@ -35,14 +36,17 @@ function ArtifactsForm(props: ArtifactsFormProps): ReactElement {
   };
 
   return (
-    <Container className={classes.container}>
-      <ArtifactsMainSelects mainsStats={mainsStats} onMainsStatsChange={handleMainsStatsChange}></ArtifactsMainSelects>
-      <ArtifactsOptionsForm
-        focusStats={focusStats}
-        minLevel={minLevel}
-        onFocusStatsChange={handleFocusStatsChange}
-        onMinLevelChange={handleMinLevelChange}
-      ></ArtifactsOptionsForm>
+    <Container>
+      <h4 className={classes.title}>Artifacts Filters</h4>
+      <div className={classes.content}>
+        <ArtifactsMainSelects mainsStats={mainsStats} onMainsStatsChange={handleMainsStatsChange}></ArtifactsMainSelects>
+        <ArtifactsOptionsForm
+          focusStats={focusStats}
+          minLevel={minLevel}
+          onFocusStatsChange={handleFocusStatsChange}
+          onMinLevelChange={handleMinLevelChange}
+        ></ArtifactsOptionsForm>
+      </div>
     </Container>
   );
 }

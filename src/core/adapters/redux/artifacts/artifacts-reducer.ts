@@ -32,7 +32,15 @@ const initialState: ArtifactsState = artifactsAdapter.getInitialState({
 
 export const artifactsReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(addAllArtifactsAction, (state, action) => artifactsAdapter.setAll(state, action.payload))
+    .addCase(addAllArtifactsAction, (state, action) =>
+      artifactsAdapter.setAll(
+        {
+          ...state,
+          isInitialized: true,
+        },
+        action.payload,
+      ),
+    )
     .addCase(addOneArtifactAction, (state, action) => ({
       ...artifactsAdapter.addOne(
         {

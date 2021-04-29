@@ -10,26 +10,28 @@ import React from 'react';
 import { ArtifactMapper } from '../../../../domain/mappers/artifact-mapper';
 import { ArtifactData } from '../../../../domain/models/artifact-data';
 import { ArtifactView } from '../../../../domain/models/artifact-view';
+import WarningMessage from '../../shared/warning-message';
 
 const styles = createStyles({
+  infoContainer: {
+    display: 'flex',
+    marginTop: 0,
+    alignItems: 'center',
+  },
   infoIcon: {
     float: 'left',
     marginRight: 10,
-  },
-  infoContainer: {
-    display: 'flex',
-    margin: 0,
-    alignItems: 'center',
   },
 });
 
 interface BuildsResultsContainerProps extends WithStyles<typeof styles> {
   builds: Build[];
+  isBuildsLimitReached: boolean;
   buildFilters: Partial<CharacterStatsValues>;
 }
 
 function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElement {
-  const { builds, buildFilters, classes } = props;
+  const { builds, isBuildsLimitReached, buildFilters, classes } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
   const [currentArtifact, setCurrentArtifact] = React.useState<ArtifactView | null>(null);
@@ -98,6 +100,9 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
           <br />
           Only statistics are calculated for now, so 4 pieces set effects are ignored.
         </p>
+        {isBuildsLimitReached ? (
+          <WarningMessage message="You have reached the limit of 1000 builds, please use more restrictive filters."></WarningMessage>
+        ) : null}
         <BuildsResultsGrid
           builds={builds}
           buildFilters={buildFilters}

@@ -5,8 +5,16 @@ import { ArtifactsMainStats, ArtifactStatsTypes } from '../domain/models/main-st
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 
-export interface ArtifactsFilters {
+export interface ArtifactsFiltersView {
   currentSets: { [index: number]: SetNames };
+  setPieces: 2 | 4;
+  mainsStats: ArtifactsMainStats;
+  focusStats: ArtifactStatsTypes[];
+  minArtifactLevel: number;
+}
+
+export interface ArtifactsFilters {
+  currentSets: SetNames[];
   setPieces: 2 | 4;
   mainsStats: ArtifactsMainStats;
   focusStats: ArtifactStatsTypes[];
