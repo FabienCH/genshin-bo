@@ -26,6 +26,7 @@ import { Unsubscribe } from '@reduxjs/toolkit';
 import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
 import { AllArtifactsData } from '../domain/models/artifact-data';
 import { ArtifactsFilters } from './artifacts-filter';
+import { updateBuildsComputationProgressAction } from '../adapters/redux/builds/builds-action';
 
 describe('BuildsOptimizer', () => {
   let buildsOptimizer: BuildsOptimizer;
@@ -606,23 +607,47 @@ describe('BuildsOptimizer', () => {
       });
     });
 
-    it('should return 144 total and computed builds with default artifacts', () => {
+    it('should return 144 / 144 with default artifacts', () => {
       loadArtifacts();
 
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
-      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual({ computed: 144, total: 144 });
+      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('144 / 144');
     });
 
-    it('should limit to 1000 builds', (done) => {
+    it('should limit to 1000 builds and return 1k / 1.54k', (done) => {
       loadArtifacts(moreThan1000BuildsArtifactsData);
 
       optimizationDoneSub.pipe(take(1)).subscribe(() => {
-        expect(buildsOptimizer.getBuildsComputationProgress()).toEqual({ computed: 1000, total: 1536 });
+        expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('1.00k / 1.54k');
         expect(buildsOptimizer.isBuildsLimitReached()).toBeTruthy();
         done();
       });
 
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
+    });
+
+    it('should format number higher or equal to 10 000 with a k', () => {
+      appStore.dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: { computed: 10000, total: 12504 } }));
+
+      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('10.0k / 12.5k');
+    });
+
+    it('should format number higher or equal to 10 000 000 with a M', () => {
+      appStore.dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: { computed: 10000000, total: 11300000 } }));
+
+      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('10.0M / 11.3M');
+    });
+
+    it('should format number with 3 significant numbers', () => {
+      appStore.dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: { computed: 10180, total: 13250 } }));
+
+      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('10.2k / 13.3k');
+    });
+
+    it('should format number with 4 significant numbers if formatted value is higher or equal 1000', () => {
+      appStore.dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: { computed: 10180, total: 1130000000 } }));
+
+      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('10.2k / 1130M');
     });
 
     afterEach(() => {

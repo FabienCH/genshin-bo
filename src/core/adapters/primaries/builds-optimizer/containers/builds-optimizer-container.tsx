@@ -25,6 +25,8 @@ interface BuildsOptimizerProps extends WithStyles<typeof styles> {
   initialBuilds: Build[];
   newBuilds: Build[];
   isBuildsLimitReached: boolean;
+  isOptimizationRunning: boolean;
+  buildsComputationProgress: string;
 }
 
 type State = {
@@ -138,7 +140,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   }
 
   render(): ReactElement {
-    const { classes, initialBuilds, newBuilds, isBuildsLimitReached } = this.props;
+    const { classes, initialBuilds, newBuilds, isBuildsLimitReached, isOptimizationRunning, buildsComputationProgress } = this.props;
     const disableButton = this.state.artifactsFilters.focusStats.length === 1 || this.state.buildsCombinationsLimitReached;
 
     return (
@@ -161,6 +163,8 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
             buildFilters={this.state.buildFilters}
             disableButton={disableButton}
             buildsCombinationsLimitReached={this.state.buildsCombinationsLimitReached}
+            isOptimizationRunning={isOptimizationRunning}
+            buildsComputationProgress={buildsComputationProgress}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
           ></BuildFiltersForm>
@@ -187,10 +191,13 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
 }
 
 const mapStateToProps = () => {
+  const buildsOptimizer = BuildsOptimizerDI.getBuildsOptimizer();
   return {
     initialBuilds: selectAllBuilds(),
     newBuilds: selectNewBuilds(),
-    isBuildsLimitReached: BuildsOptimizerDI.getBuildsOptimizer().isBuildsLimitReached(),
+    isBuildsLimitReached: buildsOptimizer.isBuildsLimitReached(),
+    isOptimizationRunning: buildsOptimizer.isOptimizationRunning(),
+    buildsComputationProgress: buildsOptimizer.getBuildsComputationProgress(),
   };
 };
 

@@ -17,6 +17,11 @@ const styles = createStyles({
       paddingRight: 10,
     },
   },
+  buildsCount: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginBottom: 5,
+  },
 });
 
 interface BuildsResultsGridProps extends WithStyles<typeof styles> {
@@ -81,6 +86,7 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
 
   return (
     <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
+      <span className={classes.buildsCount}>builds: {gridApi.current?.getDisplayedRowCount()}</span>
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}

@@ -1,7 +1,14 @@
 import { createEntityAdapter, createReducer, EntityState } from '@reduxjs/toolkit';
 import { BuildsComputationProgress } from '../../../domain/builds-computation';
 import { Build } from '../../../domain/models/build';
-import { addBuildsAction, buildsLimitReachedAction, removeAllBuildsAction, updateBuildsComputationProgressAction } from './builds-action';
+import {
+  addBuildsAction,
+  buildsLimitReachedAction,
+  buildsOptimizationDoneAction,
+  removeAllBuildsAction,
+  runBuildsOptimizerAction,
+  updateBuildsComputationProgressAction,
+} from './builds-action';
 
 export interface BuildsState extends EntityState<Build> {
   newBuilds: Build[];
@@ -36,6 +43,10 @@ export const buildsReducer = createReducer(initialState, (builder) => {
         buildsComputationProgress: undefined,
       }),
     )
+    .addCase(runBuildsOptimizerAction, (state) => ({
+      ...state,
+      isOptimizationRunning: true,
+    }))
     .addCase(updateBuildsComputationProgressAction, (state, { payload }) => ({
       ...state,
       newBuilds: [],
@@ -44,7 +55,13 @@ export const buildsReducer = createReducer(initialState, (builder) => {
     .addCase(buildsLimitReachedAction, (state) => ({
       ...state,
       newBuilds: [],
+      isOptimizationRunning: false,
       buildsLimitReached: true,
+    }))
+    .addCase(buildsOptimizationDoneAction, (state) => ({
+      ...state,
+      isOptimizationRunning: false,
+      newBuilds: [],
     }))
     .addDefaultCase((state) => state);
 });
