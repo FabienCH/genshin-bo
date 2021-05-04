@@ -10,7 +10,7 @@ import BuildsResultsContainer from './builds-results-container';
 import BuildsSetupContainer from './builds-setup-container';
 import { connect } from 'react-redux';
 import { Build } from '../../../../domain/models/build';
-import { selectAllBuilds } from '../../../redux/builds/builds-selectors';
+import { selectAllBuilds, selectNewBuilds } from '../../../redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
 import { WeaponView } from '../../../../domain/models/weapon';
 import { ArtifactsFiltersView } from '../../../../usescases/artifacts-filter';
@@ -22,8 +22,11 @@ const styles = createStyles({
 });
 
 interface BuildsOptimizerProps extends WithStyles<typeof styles> {
-  builds: Build[];
+  initialBuilds: Build[];
+  newBuilds: Build[];
   isBuildsLimitReached: boolean;
+  isOptimizationRunning: boolean;
+  buildsComputationProgress: string;
 }
 
 type State = {
@@ -137,18 +140,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
   }
 
   render(): ReactElement {
-    const { classes, builds, isBuildsLimitReached } = this.props;
-    let buildsResultsContainer;
-    if (builds.length > 0) {
-      buildsResultsContainer = (
-        <BuildsResultsContainer
-          builds={builds}
-          isBuildsLimitReached={isBuildsLimitReached}
-          buildFilters={this.state.buildFilters}
-        ></BuildsResultsContainer>
-      );
-    }
-
+    const { classes, initialBuilds, newBuilds, isBuildsLimitReached, isOptimizationRunning, buildsComputationProgress } = this.props;
     const disableButton = this.state.artifactsFilters.focusStats.length === 1 || this.state.buildsCombinationsLimitReached;
 
     return (
@@ -171,11 +163,18 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
             buildFilters={this.state.buildFilters}
             disableButton={disableButton}
             buildsCombinationsLimitReached={this.state.buildsCombinationsLimitReached}
+            isOptimizationRunning={isOptimizationRunning}
+            buildsComputationProgress={buildsComputationProgress}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
           ></BuildFiltersForm>
         </form>
-        {buildsResultsContainer}
+        <BuildsResultsContainer
+          initialBuilds={initialBuilds}
+          newBuilds={newBuilds}
+          isBuildsLimitReached={isBuildsLimitReached}
+          buildFilters={this.state.buildFilters}
+        ></BuildsResultsContainer>
       </section>
     );
   }
@@ -192,7 +191,14 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
 }
 
 const mapStateToProps = () => {
-  return { builds: selectAllBuilds(), isBuildsLimitReached: BuildsOptimizerDI.getBuildsOptimizer().isBuildsLimitReached() };
+  const buildsOptimizer = BuildsOptimizerDI.getBuildsOptimizer();
+  return {
+    initialBuilds: selectAllBuilds(),
+    newBuilds: selectNewBuilds(),
+    isBuildsLimitReached: buildsOptimizer.isBuildsLimitReached(),
+    isOptimizationRunning: buildsOptimizer.isOptimizationRunning(),
+    buildsComputationProgress: buildsOptimizer.getBuildsComputationProgress(),
+  };
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(BuildsOptimizerContainer));

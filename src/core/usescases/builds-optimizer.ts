@@ -9,8 +9,7 @@ import { CharactersRepository } from '../domain/characters-repository';
 import { Weapon, WeaponView } from '../domain/models/weapon';
 import { WeaponsRepository } from '../domain/weapons-repository';
 import { runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
-import { buildsComputationProgress, buildsLimitReached } from '../adapters/redux/builds/builds-selectors';
-import { BuildsComputationProgress } from '../domain/builds-computation';
+import { buildsComputationProgress, buildsLimitReached, isOptimizationRunning } from '../adapters/redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../di/builds-optimizer-di';
 import { SetFilter } from '../domain/build-filter';
 import { ArtifactsFilters } from './artifacts-filter';
@@ -47,8 +46,20 @@ export class BuildsOptimizer {
     );
   }
 
-  public getBuildsComputationProgress(): BuildsComputationProgress | undefined {
-    return buildsComputationProgress();
+  public getBuildsComputationProgress(): string {
+    const buildsComputationProgressValues = buildsComputationProgress();
+    if (!buildsComputationProgressValues) {
+      return '';
+    }
+
+    const computed = this.formatNumberWithSuffix(buildsComputationProgressValues.computed);
+    const total = this.formatNumberWithSuffix(buildsComputationProgressValues.total);
+
+    return `${computed} / ${total}`;
+  }
+
+  public isOptimizationRunning(): boolean {
+    return isOptimizationRunning();
   }
 
   public isBuildsLimitReached(): boolean {
@@ -84,5 +95,22 @@ export class BuildsOptimizer {
     return characterBonusKey === Object.keys(weaponBonusStat)[0]
       ? withSameCharAndWeaponStat()
       : { ...characterBonusStat, ...weaponBonusStat };
+  }
+
+  private formatNumberWithSuffix(valueToFormat: number): string {
+    const formatters = [
+      { value: 1000000, suffix: 'M' },
+      { value: 1000, suffix: 'k' },
+    ];
+    const formatter = formatters.find((f) => valueToFormat >= f.value);
+    const formattedValue = formatter ? this.formatWithPrecision(valueToFormat, formatter.value) : valueToFormat;
+
+    return `${formattedValue}${formatter ? formatter.suffix : ''}`;
+  }
+
+  private formatWithPrecision(valueToFormat: number, divisor: number) {
+    const formattedValue = valueToFormat / divisor;
+    const precision = valueToFormat < 100 ? 2 : formattedValue < 1000 ? 3 : 4;
+    return formattedValue.toPrecision(precision);
   }
 }

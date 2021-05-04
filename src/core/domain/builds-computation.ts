@@ -133,10 +133,11 @@ export class BuildsComputation {
   }
 
   private emitNewBuildsIfNeeded(): void {
-    const currentPercent = Math.trunc((this.buildsComputed * 100) / this.totalBuilds);
+    const currentPercent = (this.buildsComputed * 100) / this.totalBuilds;
     const now = Date.now();
-    const lastEmitMoreThan500ms = now - this.lastBuildsEmitTimestamp > 500;
-    if (currentPercent !== this.lastBuildsEmitPercent || (lastEmitMoreThan500ms && this.builds.length)) {
+    const timeSinceLastEmit = now - this.lastBuildsEmitTimestamp;
+    const percentDiffMoreThan2 = currentPercent - this.lastBuildsEmitPercent > 2;
+    if ((percentDiffMoreThan2 && timeSinceLastEmit > 100) || timeSinceLastEmit > 1000) {
       this.lastBuildsEmitTimestamp = now;
       this.lastBuildsEmitPercent = currentPercent;
       this.emitNewBuildsSub();

@@ -25,13 +25,14 @@ const styles = createStyles({
 });
 
 interface BuildsResultsContainerProps extends WithStyles<typeof styles> {
-  builds: Build[];
+  initialBuilds: Build[];
+  newBuilds: Build[];
   isBuildsLimitReached: boolean;
   buildFilters: Partial<CharacterStatsValues>;
 }
 
 function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElement {
-  const { builds, isBuildsLimitReached, buildFilters, classes } = props;
+  const { initialBuilds, newBuilds, isBuildsLimitReached, buildFilters, classes } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
   const [currentArtifact, setCurrentArtifact] = React.useState<ArtifactView | null>(null);
@@ -96,15 +97,14 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
       <Container>
         <p className={classes.infoContainer}>
           <InfoIcon className={classes.infoIcon}></InfoIcon>
-          Add values to build filters (0 if you don't want to filter builds) to display more columns.
-          <br />
-          Only statistics are calculated for now, so 4 pieces set effects are ignored.
+          Add values to build filters to display more columns (0 if you don't want to filter builds).
         </p>
         {isBuildsLimitReached ? (
           <WarningMessage message="You have reached the limit of 1000 builds, please use more restrictive filters."></WarningMessage>
         ) : null}
         <BuildsResultsGrid
-          builds={builds}
+          initialBuilds={initialBuilds}
+          newBuilds={newBuilds}
           buildFilters={buildFilters}
           columnDefs={columnDefs}
           onMouseEnterArtifact={handlePopoverOpen}

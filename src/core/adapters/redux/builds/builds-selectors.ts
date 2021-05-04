@@ -9,12 +9,17 @@ const buildsState = (state: AppState) => state.builds;
 
 const buildsSelectors = buildsAdapter.getSelectors(buildsState);
 
+const newBuildsSelector = createSelector(buildsState, (state) => state.newBuilds);
+
 const isOptimizationRunningSelector = createSelector(buildsState, (state) => state.isOptimizationRunning);
+
 const buildsLimitReachedSelector = createSelector(buildsState, (state) => state.buildsLimitReached);
 
 const buildsComputationProgressSelector = createSelector(buildsState, (state) => state.buildsComputationProgress);
 
 export const selectAllBuilds = (): Build[] => buildsSelectors.selectAll(appStore.getState());
+
+export const selectNewBuilds = (): Build[] => newBuildsSelector(appStore.getState());
 
 export const isOptimizationRunning = (): boolean => isOptimizationRunningSelector(appStore.getState());
 

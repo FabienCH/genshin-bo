@@ -21,7 +21,9 @@ export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (n
       bcWorker.onmessage = ({ data }) => {
         const { builds, progress } = data.buildsResults;
         dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: progress }));
-        dispatch(addBuildsAction(builds));
+        if (builds.length) {
+          dispatch(addBuildsAction(builds));
+        }
 
         if (selectAllBuilds().length >= BuildsComputation.buildsLimit) {
           dispatch(buildsLimitReachedAction());

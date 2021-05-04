@@ -119,7 +119,7 @@ describe('Builds Optimizer container', () => {
   it('should update the list of builds when running optimization', async () => {
     wrapper.find(Button).last().simulate('click');
     await waitFor(() => {
-      expect(wrapper.find(BuildsResultsGrid).prop('builds').length).toEqual(144);
+      expect(wrapper.find(BuildsResultsGrid).prop('initialBuilds').length).toEqual(144);
     });
   });
 

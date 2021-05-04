@@ -1,4 +1,4 @@
-import { ReactElement, useRef } from 'react';
+import { ReactElement, useRef, useState } from 'react';
 import { Container, createStyles, WithStyles, withStyles } from '@material-ui/core';
 import { CharacterStatsValues } from '../../../../domain/models/character-statistics';
 import { AgGridColumn } from 'ag-grid-react/lib/agGridColumn';
@@ -8,6 +8,7 @@ import { BuildFilter } from '../../../../domain/build-filter';
 import { BuildArtifactsCellRenderer } from './build-artifacts-cell-renderer';
 import { Build } from '../../../../domain/models/build';
 import { ArtifactData } from '../../../../domain/models/artifact-data';
+import React from 'react';
 
 const styles = createStyles({
   gridHeader: {
@@ -16,10 +17,16 @@ const styles = createStyles({
       paddingRight: 10,
     },
   },
+  buildsCount: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginBottom: 5,
+  },
 });
 
 interface BuildsResultsGridProps extends WithStyles<typeof styles> {
-  builds: Build[];
+  initialBuilds: Build[];
+  newBuilds: Build[];
   buildFilters: Partial<CharacterStatsValues>;
   columnDefs: ColDef[];
   onMouseEnterArtifact: (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
@@ -27,11 +34,27 @@ interface BuildsResultsGridProps extends WithStyles<typeof styles> {
 }
 
 function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
-  const { builds, columnDefs, classes, onMouseEnterArtifact, onMouseLeaveArtifact } = props;
+  const { columnDefs, classes, onMouseEnterArtifact, onMouseLeaveArtifact } = props;
   const gridApi = useRef<GridApi | undefined>();
   const refBuildFilters = useRef<Partial<CharacterStatsValues>>(props.buildFilters);
+  const [newBuilds, setNewBuilds] = useState(props.newBuilds);
+  const [initialBuilds, setInitialBuilds] = useState(props.initialBuilds);
 
-  const rowData = builds.map((build) => ({ ...build.stats, artifactIds: build.artifactIds }));
+  const getRowData = (builds: Build[]) => builds.map((build) => ({ ...build.stats, artifactIds: build.artifactIds }));
+
+  React.useEffect(() => {
+    if (props.initialBuilds.length === 0 && props.newBuilds.length === 0) {
+      setInitialBuilds(props.initialBuilds);
+      gridApi.current?.setRowData([]);
+    }
+    if (props.newBuilds !== newBuilds) {
+      setNewBuilds(props.newBuilds);
+      const rowData = getRowData(props.newBuilds);
+      gridApi.current?.applyTransaction({ add: rowData });
+    }
+  }, [initialBuilds, newBuilds, props.initialBuilds, props.newBuilds]);
+
+  const rowData = getRowData(initialBuilds);
   const defaultColDef: ColDef = {
     resizable: true,
     sortable: true,
@@ -41,17 +64,12 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
   };
 
   refBuildFilters.current = props.buildFilters;
-
-  if (gridApi.current) {
-    gridApi.current.onFilterChanged();
-    gridApi.current.sizeColumnsToFit();
-  }
+  gridApi.current?.onFilterChanged();
+  gridApi.current?.sizeColumnsToFit();
 
   const externalFilterChanged = () => {
-    if (gridApi.current) {
-      gridApi.current.onFilterChanged();
-      gridApi.current.sizeColumnsToFit();
-    }
+    gridApi.current?.onFilterChanged();
+    gridApi.current?.sizeColumnsToFit();
   };
 
   const isExternalFilterPresent = () => {
@@ -66,8 +84,11 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
 
   const doesExternalFilterPass = (node: RowNode) => BuildFilter.filterBuilds(refBuildFilters.current, node.data);
 
+  const buildsCount = gridApi.current ? gridApi.current.getDisplayedRowCount() : 0;
+
   return (
     <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
+      <span className={classes.buildsCount}>builds: {buildsCount}</span>
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}

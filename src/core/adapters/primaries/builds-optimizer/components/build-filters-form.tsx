@@ -12,11 +12,16 @@ const styles = createStyles({
   },
   div: {
     display: 'flex',
+    alignItems: 'center',
   },
   textField: {
     marginRight: 30,
     display: 'flex',
     flex: '170px 0 1',
+  },
+  buildsComputationProgress: {
+    marginRight: 20,
+    fontSize: '1rem',
   },
   runButton: {
     width: 120,
@@ -66,12 +71,14 @@ interface BuildFiltersFormProps extends WithStyles<typeof styles> {
   buildFilters: Partial<CharacterStatsValues>;
   disableButton: boolean;
   buildsCombinationsLimitReached: boolean;
+  isOptimizationRunning: boolean;
+  buildsComputationProgress: string;
   onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number | undefined }) => void;
   onRunClick: () => void;
 }
 
 function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
-  const { buildFilters, disableButton, buildsCombinationsLimitReached, classes } = props;
+  const { buildFilters, disableButton, buildsCombinationsLimitReached, isOptimizationRunning, buildsComputationProgress, classes } = props;
 
   const parseValue = (value: unknown): number | undefined => {
     const intValue = parseInt(`${value}`);
@@ -97,6 +104,8 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
   const handleRunClick = (): void => {
     props.onRunClick();
   };
+
+  const displayWarning = buildsCombinationsLimitReached && !isOptimizationRunning;
 
   return (
     <Container className={classes.container} maxWidth={false}>
@@ -132,10 +141,11 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
           );
         })}
       </div>
-      <div className={classes.div} style={{ justifyContent: buildsCombinationsLimitReached ? 'space-between' : ' flex-end' }}>
-        {buildsCombinationsLimitReached ? (
+      <div className={classes.div} style={{ justifyContent: displayWarning ? 'space-between' : ' flex-end' }}>
+        {displayWarning ? (
           <WarningMessage message="Total builds combinations can not be higher than 10 billions, please use more restrictive artifacts filters."></WarningMessage>
         ) : null}
+        <span className={classes.buildsComputationProgress}>{buildsComputationProgress}</span>
         <Button className={classes.runButton} variant="contained" color="primary" disabled={disableButton} onClick={handleRunClick}>
           Run
         </Button>
