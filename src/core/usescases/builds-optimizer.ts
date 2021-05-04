@@ -103,9 +103,14 @@ export class BuildsOptimizer {
       { value: 1000, suffix: 'k' },
     ];
     const formatter = formatters.find((f) => valueToFormat >= f.value);
-    const formattedValue = valueToFormat / (formatter ? formatter.value : 1);
-    const precision = formattedValue < 1000 ? 3 : 4;
+    const formattedValue = formatter ? this.formatWithPrecision(valueToFormat, formatter.value) : valueToFormat;
 
-    return `${formattedValue.toPrecision(precision)}${formatter ? formatter.suffix : ''}`;
+    return `${formattedValue}${formatter ? formatter.suffix : ''}`;
+  }
+
+  private formatWithPrecision(valueToFormat: number, divisor: number) {
+    const formattedValue = valueToFormat / divisor;
+    const precision = valueToFormat < 100 ? 2 : formattedValue < 1000 ? 3 : 4;
+    return formattedValue.toPrecision(precision);
   }
 }

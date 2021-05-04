@@ -644,12 +644,17 @@ describe('BuildsOptimizer', () => {
       expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('10.2k / 13.3k');
     });
 
+    it('should format number with 2 significant numbers if less than 100', () => {
+      appStore.dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: { computed: 98, total: 101 } }));
+
+      expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('98 / 101');
+    });
+
     it('should format number with 4 significant numbers if formatted value is higher or equal 1000', () => {
       appStore.dispatch(updateBuildsComputationProgressAction({ buildsComputationProgress: { computed: 10180, total: 1130000000 } }));
 
       expect(buildsOptimizer.getBuildsComputationProgress()).toEqual('10.2k / 1130M');
     });
-
     afterEach(() => {
       appStoreUnsubscribe();
     });
