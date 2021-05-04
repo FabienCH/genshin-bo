@@ -84,9 +84,11 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
 
   const doesExternalFilterPass = (node: RowNode) => BuildFilter.filterBuilds(refBuildFilters.current, node.data);
 
+  const buildsCount = gridApi.current ? gridApi.current.getDisplayedRowCount() : 0;
+
   return (
     <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
-      <span className={classes.buildsCount}>builds: {gridApi.current?.getDisplayedRowCount()}</span>
+      <span className={classes.buildsCount}>builds: {buildsCount}</span>
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}
