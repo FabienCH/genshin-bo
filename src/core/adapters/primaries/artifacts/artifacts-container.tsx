@@ -2,13 +2,26 @@ import { Component, ReactElement } from 'react';
 import { ArtifactsDI } from '../../../di/artifacts-di';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { ArtifactView } from '../../../domain/models/artifact-view';
-import { Container } from '@material-ui/core';
+import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import ArtifactsImport from './components/artifacts-import';
 import ArtifactsImportGuide from './components/artifacts-import-guide';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
 import { ArtifactsImporter } from '../../../usescases/artifacts-importer';
 import { connect } from 'react-redux';
 import { ImportInfos } from '../../redux/artifacts/artifacts-reducer';
+import Button from '@material-ui/core/Button';
+import GetAppIcon from '@material-ui/icons/GetApp';
+
+const styles = createStyles({
+  exportButton: {
+    marginBottom: 10,
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  getAppIcon: {
+    marginRight: 5,
+  },
+});
 
 type State = {
   artifactsImporter: ArtifactsImporter;
@@ -18,7 +31,11 @@ type State = {
   video?: File;
 };
 
-type ArtifactsContainerProps = { artifacts: ArtifactView[]; isImportRunning: boolean; importInfos: ImportInfos };
+interface ArtifactsContainerProps extends WithStyles<typeof styles> {
+  artifacts: ArtifactView[];
+  isImportRunning: boolean;
+  importInfos: ImportInfos;
+}
 
 class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   constructor(props: ArtifactsContainerProps) {
@@ -34,6 +51,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     this.importArtifacts = this.importArtifacts.bind(this);
     this.cancelImport = this.cancelImport.bind(this);
     this.overrideArtifactsChange = this.overrideArtifactsChange.bind(this);
+    this.exportArtifacts = this.exportArtifacts.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
   }
 
@@ -68,12 +86,16 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     }));
   }
 
+  exportArtifacts(): void {
+    ArtifactsDI.getArtifactsExporter().exportAsJsonFile();
+  }
+
   onGridReady(params: GridReadyEvent): void {
     params.api.sizeColumnsToFit();
   }
 
   render(): ReactElement {
-    const { artifacts, isImportRunning, importInfos } = this.props;
+    const { artifacts, isImportRunning, importInfos, classes } = this.props;
     const nbThreadsOptions = Array.from(Array(this.state.maxNbOfWorkers), (_, i) => i + 1);
 
     const defaultColDef: ColDef = {
@@ -136,17 +158,24 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           cancelImport={this.cancelImport}
           overrideArtifactsChanged={this.overrideArtifactsChange}
         ></ArtifactsImport>
-        <Container style={{ height: 750, width: '100%' }} className="ag-theme-material">
-          <AgGridReact rowData={artifacts} defaultColDef={defaultColDef} columnDefs={columnDefs} onGridReady={this.onGridReady}>
-            <AgGridColumn field="type"></AgGridColumn>
-            <AgGridColumn field="level"></AgGridColumn>
-            <AgGridColumn field="set"></AgGridColumn>
-            <AgGridColumn field="mainStat"></AgGridColumn>
-            <AgGridColumn field="subStat1"></AgGridColumn>
-            <AgGridColumn field="subStat2"></AgGridColumn>
-            <AgGridColumn field="subStat3"></AgGridColumn>
-            <AgGridColumn field="subStat4"></AgGridColumn>
-          </AgGridReact>
+        <Container>
+          <div className={classes.exportButton}>
+            <Button color="primary" onClick={this.exportArtifacts}>
+              <GetAppIcon className={classes.getAppIcon}></GetAppIcon>Export Artifacts
+            </Button>
+          </div>
+          <div style={{ height: 750, width: '100%' }} className="ag-theme-material">
+            <AgGridReact rowData={artifacts} defaultColDef={defaultColDef} columnDefs={columnDefs} onGridReady={this.onGridReady}>
+              <AgGridColumn field="type"></AgGridColumn>
+              <AgGridColumn field="level"></AgGridColumn>
+              <AgGridColumn field="set"></AgGridColumn>
+              <AgGridColumn field="mainStat"></AgGridColumn>
+              <AgGridColumn field="subStat1"></AgGridColumn>
+              <AgGridColumn field="subStat2"></AgGridColumn>
+              <AgGridColumn field="subStat3"></AgGridColumn>
+              <AgGridColumn field="subStat4"></AgGridColumn>
+            </AgGridReact>
+          </div>
         </Container>
       </section>
     );
@@ -161,4 +190,4 @@ const mapStateToProps = () => {
   };
 };
 
-export default connect(mapStateToProps)(ArtifactsContainer);
+export default connect(mapStateToProps)(withStyles(styles)(ArtifactsContainer));

@@ -1,4 +1,5 @@
 import ArtifactsContainer from './artifacts-container';
+import ArtifactsImport from './components/artifacts-import';
 import { AgGridReact } from 'ag-grid-react';
 import { mount, ReactWrapper } from 'enzyme';
 import { ArtifactsDI } from '../../../di/artifacts-di';
@@ -27,6 +28,7 @@ describe('Artifacts container', () => {
   let artifactsImporterSpy: jest.SpyInstance;
 
   beforeEach(() => {
+    window.URL.createObjectURL = () => '';
     ArtifactsDI.registerRepository();
     ArtifactsDI.registerOcrWorker();
     artifactsImporterSpy = jest.spyOn(ArtifactsDI.getArtifactsImporter(), 'importFromVideo').mockImplementation(async () => undefined);
@@ -48,7 +50,7 @@ describe('Artifacts container', () => {
   it('should import artifacts and not override currents ones', async () => {
     const file = new File([], 'filename');
     wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
-    wrapper.find(Button).last().simulate('click');
+    wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
     await waitFor(() => {
       expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, false);
@@ -62,7 +64,7 @@ describe('Artifacts container', () => {
       .find(Checkbox)
       .find('input')
       .simulate('change', { target: { name: '', checked: true } });
-    wrapper.find(Button).last().simulate('click');
+    wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
     await waitFor(() => {
       expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, true);
