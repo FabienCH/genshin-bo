@@ -10,6 +10,13 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { importInfos, isArtifactsImportRunning } from '../adapters/redux/artifacts/artifacts-selectors';
 import { ImportInfos } from '../adapters/redux/artifacts/artifacts-reducer';
+import { ArtifactData } from '../domain/models/artifact-data';
+import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
+
+export interface JsonImportResults {
+  artifacts: ArtifactData[];
+  inError: number;
+}
 
 export class ArtifactsImporter {
   private readonly allFramesRetrieve: Subject<void> = new Subject();
@@ -30,6 +37,28 @@ export class ArtifactsImporter {
           this.allFramesRetrieve.next();
         }
       });
+  }
+
+  public getArtifactsFromJson(artifactsJson: string): JsonImportResults {
+    const initialImportInfos = { artifacts: [], inError: 0 };
+    try {
+      const artifactsData: ArtifactData[] = JSON.parse(artifactsJson);
+      if (!Array.isArray(artifactsData)) {
+        return initialImportInfos;
+      }
+
+      return artifactsData.reduce((jsonImportInfos: JsonImportResults, artifactData: ArtifactData) => {
+        try {
+          ArtifactMapper.mapDataToArtifact(artifactData);
+          jsonImportInfos.artifacts.push(artifactData);
+        } catch (_) {
+          jsonImportInfos.inError++;
+        }
+        return jsonImportInfos;
+      }, initialImportInfos);
+    } catch (_) {
+      return initialImportInfos;
+    }
   }
 
   public getMaxWorkers(): number {

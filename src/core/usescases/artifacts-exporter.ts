@@ -5,7 +5,7 @@ export class ArtifactsExporter {
   constructor(private readonly artifactsRepository: ArtifactsRepository) {}
 
   public exportAsJsonFile(): void {
-    const artifacts = JSON.stringify(this.artifactsRepository.getAll());
+    const artifacts = this.artifactsRepository.getAll();
     const blob = new Blob([JSON.stringify(artifacts)], { type: 'application/json' });
     this.downloadFile(blob);
   }

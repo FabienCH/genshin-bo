@@ -14,6 +14,14 @@ import { VideoToFrames } from '../domain/mappers/video-to-frames';
 import { Subject, from, interval } from 'rxjs';
 import { skip, take, map, filter } from 'rxjs/operators';
 import { ArtifactsImporter } from './artifacts-importer';
+import {
+  artifactsJsonData,
+  artifactsJsonString,
+  invalidArtifactsJsonData,
+  invalidArtifactsJsonString,
+  malformedArtifactsArrayJsonString,
+  notArtifactsArrayJsonString,
+} from '../../test/artifacts-from-json';
 
 describe('ArtifactsImporter', () => {
   const artifactsStateChangesSub: Subject<ArtifactData[]> = new Subject();
@@ -99,6 +107,27 @@ describe('ArtifactsImporter', () => {
       });
 
       artifactsImporter.importFromVideo(new File([], 'filename'), 1, true);
+    });
+  });
+
+  describe('getArtifactsFromJson', () => {
+    it('should get 14 found artifacts and 0 in error from the json file', () => {
+      expect(artifactsImporter.getArtifactsFromJson(artifactsJsonString)).toEqual({ artifacts: artifactsJsonData, inError: 0 });
+    });
+
+    it('should get 12 found artifacts and 2 in error from invalid json file', () => {
+      expect(artifactsImporter.getArtifactsFromJson(invalidArtifactsJsonString)).toEqual({
+        artifacts: invalidArtifactsJsonData,
+        inError: 2,
+      });
+    });
+
+    it('should get 0 found artifacts and 0 in error from malformed json file', () => {
+      expect(artifactsImporter.getArtifactsFromJson(malformedArtifactsArrayJsonString)).toEqual({ artifacts: [], inError: 0 });
+    });
+
+    it('should get 0 found artifacts and 0 in error from json file that does not contains an array', () => {
+      expect(artifactsImporter.getArtifactsFromJson(notArtifactsArrayJsonString)).toEqual({ artifacts: [], inError: 0 });
     });
   });
 
