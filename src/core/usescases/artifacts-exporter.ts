@@ -1,3 +1,4 @@
+import { isArtifactsImportRunning, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { ArtifactsRepository } from '../domain/artifacts-repository';
 
 export class ArtifactsExporter {
@@ -7,6 +8,10 @@ export class ArtifactsExporter {
     const artifacts = JSON.stringify(this.artifactsRepository.getAll());
     const blob = new Blob([JSON.stringify(artifacts)], { type: 'application/json' });
     this.downloadFile(blob);
+  }
+
+  public canExportArtifacts(): boolean {
+    return selectAllArtifacts().length > 0 && !isArtifactsImportRunning();
   }
 
   private downloadFile(blob: Blob): void {

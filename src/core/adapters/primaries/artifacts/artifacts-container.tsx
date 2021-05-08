@@ -35,6 +35,7 @@ interface ArtifactsContainerProps extends WithStyles<typeof styles> {
   artifacts: ArtifactView[];
   isImportRunning: boolean;
   importInfos: ImportInfos;
+  canExportArtifact: boolean;
 }
 
 class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
@@ -95,7 +96,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   }
 
   render(): ReactElement {
-    const { artifacts, isImportRunning, importInfos, classes } = this.props;
+    const { artifacts, isImportRunning, importInfos, canExportArtifact, classes } = this.props;
     const nbThreadsOptions = Array.from(Array(this.state.maxNbOfWorkers), (_, i) => i + 1);
 
     const defaultColDef: ColDef = {
@@ -160,7 +161,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
         ></ArtifactsImport>
         <Container>
           <div className={classes.exportButton}>
-            <Button color="primary" onClick={this.exportArtifacts}>
+            <Button color="primary" disabled={!canExportArtifact} onClick={this.exportArtifacts}>
               <GetAppIcon className={classes.getAppIcon}></GetAppIcon>Export Artifacts
             </Button>
           </div>
@@ -187,6 +188,7 @@ const mapStateToProps = () => {
     artifacts: ArtifactsDI.artifactsHandler.getAll(),
     isImportRunning: ArtifactsDI.getArtifactsImporter().isImportRunning(),
     importInfos: ArtifactsDI.getArtifactsImporter().geImportInfos(),
+    canExportArtifact: ArtifactsDI.getArtifactsExporter().canExportArtifacts(),
   };
 };
 
