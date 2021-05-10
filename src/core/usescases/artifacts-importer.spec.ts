@@ -111,23 +111,46 @@ describe('ArtifactsImporter', () => {
   });
 
   describe('getArtifactsFromJson', () => {
-    it('should get 14 found artifacts and 0 in error from the json file', () => {
-      expect(artifactsImporter.getArtifactsFromJson(artifactsJsonString)).toEqual({ artifacts: artifactsJsonData, inError: 0 });
-    });
+    const setFile = (jsonString: string): File => new File([jsonString], 'filename.json', { type: 'application/json' });
 
-    it('should get 12 found artifacts and 2 in error from invalid json file', () => {
-      expect(artifactsImporter.getArtifactsFromJson(invalidArtifactsJsonString)).toEqual({
-        artifacts: invalidArtifactsJsonData,
-        inError: 2,
+    it('should get 14 found artifacts and 0 in error from the json file', async () => {
+      const file = setFile(artifactsJsonString);
+      mockBlobText(file);
+
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: artifactsJsonData,
+        artifactsInError: 0,
       });
     });
 
-    it('should get 0 found artifacts and 0 in error from malformed json file', () => {
-      expect(artifactsImporter.getArtifactsFromJson(malformedArtifactsArrayJsonString)).toEqual({ artifacts: [], inError: 0 });
+    it('should get 12 found artifacts and 2 in error from invalid json file', async () => {
+      const file = setFile(invalidArtifactsJsonString);
+      mockBlobText(file);
+
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: invalidArtifactsJsonData,
+        artifactsInError: 2,
+      });
     });
 
-    it('should get 0 found artifacts and 0 in error from json file that does not contains an array', () => {
-      expect(artifactsImporter.getArtifactsFromJson(notArtifactsArrayJsonString)).toEqual({ artifacts: [], inError: 0 });
+    it('should get 0 found artifacts and 0 in error from malformed json file', async () => {
+      const file = setFile(malformedArtifactsArrayJsonString);
+      mockBlobText(file);
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: [],
+        artifactsInError: 0,
+        fileError: 'Could not fin any artifacts.',
+      });
+    });
+
+    it('should get 0 found artifacts and 0 in error from json file that does not contains an array', async () => {
+      const file = setFile(notArtifactsArrayJsonString);
+      mockBlobText(file);
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: [],
+        artifactsInError: 0,
+        fileError: 'Could not fin any artifacts.',
+      });
     });
   });
 
@@ -206,4 +229,20 @@ function getArtifactsWithoutId(artifactsData: ArtifactData[]) {
     const { id, ...artifact } = artifactItem;
     return artifact;
   });
+}
+
+function mockBlobText(file: File) {
+  Blob.prototype.text = async (): Promise<string> => {
+    return new Promise((resolve: (text: string) => void, reject: (error: string) => void) => {
+      const reader = new FileReader();
+      try {
+        reader.onload = (_) => {
+          resolve(`${reader.result}`);
+        };
+        reader.readAsText(file);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
 }

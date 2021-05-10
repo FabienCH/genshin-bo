@@ -1,6 +1,7 @@
 import { defaultBuildArtifactsData } from '../../test/artifacts-data-mock';
 import { defaultArtifactsViews } from '../../test/artifacts-views-mock';
 import { deleteAllArtifactsAction, loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
+import { selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { ArtifactType } from '../domain/entities/artifact';
@@ -429,6 +430,51 @@ describe('ArtifactsHandler.addArtifact', () => {
         },
       };
       expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('main stat can not be the same as one of the substats');
+    });
+  });
+
+  describe('Adding multiple artifacts', () => {
+    it('should save artifacts and override current ones', () => {
+      const artifactsValues = [
+        {
+          id: '20',
+          type: ArtifactType.flower,
+          set: SetNames.gladiatorsFinale,
+          level: 2,
+          mainStatType: FlowerArtifact.mainStat,
+          subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
+        },
+        {
+          id: '21',
+          type: ArtifactType.sands,
+          set: SetNames.thundersoother,
+          level: 3,
+          mainStatType: MainStats.percentHp,
+          subStats: {
+            [SubStats.flatAtk]: 5,
+            [SubStats.percentDef]: 6,
+            [SubStats.critRate]: 3.5,
+            [SubStats.percentAtk]: 7,
+          },
+        },
+        {
+          id: '22',
+          type: ArtifactType.circlet,
+          set: SetNames.thundersoother,
+          level: 4,
+          mainStatType: MainStats.percentDef,
+          subStats: {
+            [SubStats.flatAtk]: 5,
+            [SubStats.percentHp]: 6,
+            [SubStats.critRate]: 3.5,
+            [SubStats.percentAtk]: 9,
+          },
+        },
+      ];
+
+      artifactsHandler.addManyFromJson(artifactsValues);
+
+      expect(artifactsValues).toEqual(selectAllArtifacts());
     });
   });
 });

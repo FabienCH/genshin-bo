@@ -15,7 +15,8 @@ import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 
 export interface JsonImportResults {
   artifacts: ArtifactData[];
-  inError: number;
+  artifactsInError: number;
+  fileError?: string;
 }
 
 export class ArtifactsImporter {
@@ -39,26 +40,43 @@ export class ArtifactsImporter {
       });
   }
 
-  public getArtifactsFromJson(artifactsJson: string): JsonImportResults {
-    const initialImportInfos = { artifacts: [], inError: 0 };
-    try {
-      const artifactsData: ArtifactData[] = JSON.parse(artifactsJson);
-      if (!Array.isArray(artifactsData)) {
-        return initialImportInfos;
-      }
+  public async getArtifactsFromJson(jsonFile: File): Promise<JsonImportResults> {
+    const extension = jsonFile.name.substring(jsonFile.name.lastIndexOf('.') + 1);
+    const initialImportResults: JsonImportResults = { artifacts: [], artifactsInError: 0 };
+    const noArtifactMessage = 'Could not fin any artifacts.';
+    const resultsWithErrorMessage = (jsonImportResults: JsonImportResults, errorMessage: string): JsonImportResults => ({
+      ...jsonImportResults,
+      fileError: errorMessage,
+    });
 
-      return artifactsData.reduce((jsonImportInfos: JsonImportResults, artifactData: ArtifactData) => {
-        try {
-          ArtifactMapper.mapDataToArtifact(artifactData);
-          jsonImportInfos.artifacts.push(artifactData);
-        } catch (_) {
-          jsonImportInfos.inError++;
+    if (extension === 'json' && jsonFile.type === 'application/json') {
+      try {
+        const artifactsData: ArtifactData[] = JSON.parse(await jsonFile.text());
+        if (!Array.isArray(artifactsData)) {
+          return resultsWithErrorMessage(initialImportResults, noArtifactMessage);
         }
-        return jsonImportInfos;
-      }, initialImportInfos);
-    } catch (_) {
-      return initialImportInfos;
+        return this.setArtifactsToResults(artifactsData, initialImportResults);
+      } catch (_) {
+        return resultsWithErrorMessage(initialImportResults, noArtifactMessage);
+      }
+    } else {
+      return resultsWithErrorMessage(initialImportResults, 'Invalid file format.');
     }
+  }
+
+  private setArtifactsToResults(
+    artifactsData: ArtifactData[],
+    initialImportInfos: JsonImportResults,
+  ): JsonImportResults | PromiseLike<JsonImportResults> {
+    return artifactsData.reduce((jsonImportInfos: JsonImportResults, artifactData: ArtifactData) => {
+      try {
+        ArtifactMapper.mapDataToArtifact(artifactData);
+        jsonImportInfos.artifacts.push(artifactData);
+      } catch (_) {
+        jsonImportInfos.artifactsInError++;
+      }
+      return jsonImportInfos;
+    }, initialImportInfos);
   }
 
   public getMaxWorkers(): number {

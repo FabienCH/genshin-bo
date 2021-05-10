@@ -2,7 +2,12 @@ import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { Artifact } from '../domain/entities/artifact';
 import { ArtifactView } from '../domain/models/artifact-view';
 import { isArtifactsStateInitialized, selectAllArtifacts, selectArtifactById } from '../adapters/redux/artifacts/artifacts-selectors';
-import { addOneArtifactAction, loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
+import {
+  addManyArtifactAction,
+  addOneArtifactAction,
+  deleteAllArtifactsAction,
+  loadArtifactsActions,
+} from '../adapters/redux/artifacts/artifacts-action';
 import { appStore } from '../adapters/redux/store';
 import { ArtifactData } from '../domain/models/artifact-data';
 
@@ -28,5 +33,13 @@ export class ArtifactsHandler {
   public addOne(artifactData: ArtifactData): void {
     ArtifactMapper.mapDataToArtifact(artifactData);
     appStore.dispatch(addOneArtifactAction(artifactData));
+  }
+
+  public addManyFromJson(artifactsData: ArtifactData[]): void {
+    appStore.dispatch(deleteAllArtifactsAction());
+    artifactsData.forEach((artifactData) => {
+      ArtifactMapper.mapDataToArtifact(artifactData);
+    });
+    appStore.dispatch(addManyArtifactAction(artifactsData));
   }
 }
