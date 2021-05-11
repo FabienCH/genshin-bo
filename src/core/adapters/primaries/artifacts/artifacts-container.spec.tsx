@@ -5,9 +5,11 @@ import { mount, ReactWrapper } from 'enzyme';
 import { ArtifactsDI } from '../../../di/artifacts-di';
 import { appStore } from '../../redux/store';
 import { Provider } from 'react-redux';
-import { waitFor } from '@testing-library/react';
+import { queryByTestId, waitFor } from '@testing-library/react';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import { artifactsJsonString } from '../../../../test/artifacts-from-json';
+import { mockBlobText } from '../../../../test/blob-text-mock';
 
 const ensureGridApiHasBeenSet = (wrapper: AgGridReact) => {
   return new Promise((resolve) => {
@@ -68,6 +70,30 @@ describe('Artifacts container', () => {
 
     await waitFor(() => {
       expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, true);
+    });
+  });
+
+  it('should not display artifacts import from json modal when user import a non json file', async () => {
+    const file = new File([''], 'filename', { type: 'text/plain' });
+    mockBlobText(file);
+
+    wrapper.find('#upload-json').simulate('change', { target: { name: '', files: [file] } });
+
+    await waitFor(() => {
+      const dialogBox = queryByTestId(document.body, 'json-import-modal');
+      expect(dialogBox).toBeFalsy();
+    });
+  });
+
+  it('should display artifacts import from json modal when user import a json file', async () => {
+    const file = new File([artifactsJsonString], 'filename.json', { type: 'application/json' });
+    mockBlobText(file);
+
+    wrapper.find('#upload-json').simulate('change', { target: { name: '', files: [file] } });
+
+    await waitFor(() => {
+      const dialogBox = queryByTestId(document.body, 'json-import-modal');
+      expect(dialogBox?.innerHTML.includes('You are about to import 14 artifacts')).toBeTruthy();
     });
   });
 });

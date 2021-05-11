@@ -22,6 +22,7 @@ import {
   malformedArtifactsArrayJsonString,
   notArtifactsArrayJsonString,
 } from '../../test/artifacts-from-json';
+import { mockBlobText } from '../../test/blob-text-mock';
 
 describe('ArtifactsImporter', () => {
   const artifactsStateChangesSub: Subject<ArtifactData[]> = new Subject();
@@ -229,20 +230,4 @@ function getArtifactsWithoutId(artifactsData: ArtifactData[]) {
     const { id, ...artifact } = artifactItem;
     return artifact;
   });
-}
-
-function mockBlobText(file: File) {
-  Blob.prototype.text = async (): Promise<string> => {
-    return new Promise((resolve: (text: string) => void, reject: (error: string) => void) => {
-      const reader = new FileReader();
-      try {
-        reader.onload = (_) => {
-          resolve(`${reader.result}`);
-        };
-        reader.readAsText(file);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  };
 }

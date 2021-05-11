@@ -96,7 +96,6 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
 
   async jsonFileChange(jsonFile: File): Promise<void> {
     const jsonImportResults = await this.state.artifactsImporter.getArtifactsFromJson(jsonFile);
-    console.log('jsonImportResults', jsonImportResults);
     if (jsonImportResults.artifacts.length > 0) {
       this.setState((state) => ({
         ...state,
@@ -235,11 +234,11 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           </Alert>
         </Snackbar>
         <Dialog
+          data-testid="json-import-modal"
           open={!!this.state.jsonImportResults}
           maxWidth="sm"
           onClose={this.handleDialogClose}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
+          aria-labelledby="json-import-modal"
         >
           {this.state.jsonImportResults ? (
             <ArtifactsJsonImport
