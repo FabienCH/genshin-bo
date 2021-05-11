@@ -2,25 +2,26 @@ import { Component, ReactElement } from 'react';
 import { ArtifactsDI } from '../../../di/artifacts-di';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { ArtifactView } from '../../../domain/models/artifact-view';
-import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { Container, createStyles, WithStyles, withStyles } from '@material-ui/core';
 import ArtifactsImport from './components/artifacts-import';
 import ArtifactsImportGuide from './components/artifacts-import-guide';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
-import { ArtifactsImporter } from '../../../usescases/artifacts-importer';
+import { ArtifactsImporter, JsonImportResults } from '../../../usescases/artifacts-importer';
 import { connect } from 'react-redux';
 import { ImportInfos } from '../../redux/artifacts/artifacts-reducer';
-import Button from '@material-ui/core/Button';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import ArtifactsImportExportButtons from './components/artifacts-import-export-buttons';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import Dialog from '@material-ui/core/Dialog';
+import ArtifactsJsonImport from './components/artifacts-json-import';
 
 const styles = createStyles({
-  exportButton: {
-    marginBottom: 10,
+  actionsContainer: {
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
-  getAppIcon: {
-    marginRight: 5,
-  },
+  artifactsCount: { marginBottom: 5 },
 });
 
 type State = {
@@ -29,6 +30,8 @@ type State = {
   nbOfThreads: number;
   maxNbOfWorkers: number;
   video?: File;
+  jsonImportResults?: JsonImportResults;
+  jsonFileErrorMessage?: string;
 };
 
 interface ArtifactsContainerProps extends WithStyles<typeof styles> {
@@ -49,11 +52,15 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     };
     this.videoFileChange = this.videoFileChange.bind(this);
     this.nbThreadsChange = this.nbThreadsChange.bind(this);
-    this.importArtifacts = this.importArtifacts.bind(this);
+    this.importArtifactsFromVideo = this.importArtifactsFromVideo.bind(this);
     this.cancelImport = this.cancelImport.bind(this);
     this.overrideArtifactsChange = this.overrideArtifactsChange.bind(this);
+    this.jsonFileChange = this.jsonFileChange.bind(this);
     this.exportArtifacts = this.exportArtifacts.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
+    this.handleJsonFileAlertClose = this.handleJsonFileAlertClose.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handleImportFromJson = this.handleImportFromJson.bind(this);
   }
 
   videoFileChange(video: File): void {
@@ -70,7 +77,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     }));
   }
 
-  importArtifacts(): void {
+  importArtifactsFromVideo(): void {
     if (this.state.video) {
       this.state.artifactsImporter.importFromVideo(this.state.video, this.state.nbOfThreads, this.state.overrideCurrentArtifacts);
     }
@@ -87,12 +94,51 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     }));
   }
 
+  async jsonFileChange(jsonFile: File): Promise<void> {
+    const jsonImportResults = await this.state.artifactsImporter.getArtifactsFromJson(jsonFile);
+    console.log('jsonImportResults', jsonImportResults);
+    if (jsonImportResults.artifacts.length > 0) {
+      this.setState((state) => ({
+        ...state,
+        jsonImportResults,
+      }));
+    }
+
+    if (jsonImportResults.fileError) {
+      this.setState((state) => ({
+        ...state,
+        jsonFileErrorMessage: jsonImportResults.fileError,
+      }));
+    }
+  }
+
   exportArtifacts(): void {
     ArtifactsDI.getArtifactsExporter().exportAsJsonFile();
   }
 
   onGridReady(params: GridReadyEvent): void {
     params.api.sizeColumnsToFit();
+  }
+
+  handleJsonFileAlertClose(): void {
+    this.setState((state) => ({
+      ...state,
+      jsonFileErrorMessage: undefined,
+    }));
+  }
+
+  handleDialogClose(): void {
+    this.setState((state) => ({
+      ...state,
+      jsonImportResults: undefined,
+    }));
+  }
+
+  handleImportFromJson(): void {
+    if (this.state.jsonImportResults) {
+      ArtifactsDI.artifactsHandler.addManyFromJson(this.state.jsonImportResults.artifacts);
+    }
+    this.handleDialogClose();
   }
 
   render(): ReactElement {
@@ -143,6 +189,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
         width: 170,
       },
     ];
+
     return (
       <section>
         <h2>Import Artifacts</h2>
@@ -155,15 +202,19 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           nbOfThreads={this.state.nbOfThreads}
           fileChanged={this.videoFileChange}
           nbThreadsChanged={this.nbThreadsChange}
-          importArtifacts={this.importArtifacts}
+          importArtifacts={this.importArtifactsFromVideo}
           cancelImport={this.cancelImport}
           overrideArtifactsChanged={this.overrideArtifactsChange}
         ></ArtifactsImport>
         <Container>
-          <div className={classes.exportButton}>
-            <Button color="primary" disabled={!canExportArtifact} onClick={this.exportArtifacts}>
-              <GetAppIcon className={classes.getAppIcon}></GetAppIcon>Export Artifacts
-            </Button>
+          <div className={classes.actionsContainer}>
+            <ArtifactsImportExportButtons
+              canImportArtifact={!isImportRunning}
+              canExportArtifact={canExportArtifact}
+              jsonFileChange={this.jsonFileChange}
+              exportArtifacts={this.exportArtifacts}
+            ></ArtifactsImportExportButtons>
+            <span className={classes.artifactsCount}>artifacts: {artifacts.length}</span>
           </div>
           <div style={{ height: 750, width: '100%' }} className="ag-theme-material">
             <AgGridReact rowData={artifacts} defaultColDef={defaultColDef} columnDefs={columnDefs} onGridReady={this.onGridReady}>
@@ -178,6 +229,26 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
             </AgGridReact>
           </div>
         </Container>
+        <Snackbar open={!!this.state.jsonFileErrorMessage} autoHideDuration={5000} onClose={this.handleJsonFileAlertClose}>
+          <Alert onClose={this.handleJsonFileAlertClose} severity="error">
+            {this.state.jsonFileErrorMessage} Please import a previously exported JSON file.
+          </Alert>
+        </Snackbar>
+        <Dialog
+          open={!!this.state.jsonImportResults}
+          maxWidth="sm"
+          onClose={this.handleDialogClose}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          {this.state.jsonImportResults ? (
+            <ArtifactsJsonImport
+              importResults={this.state.jsonImportResults}
+              onClose={this.handleDialogClose}
+              onImport={this.handleImportFromJson}
+            ></ArtifactsJsonImport>
+          ) : null}
+        </Dialog>
       </section>
     );
   }
