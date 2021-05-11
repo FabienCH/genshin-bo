@@ -1,28 +1,13 @@
 import { Fragment, ReactElement } from 'react';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import { JsonImportResults } from '../../../../usescases/artifacts-importer';
 import Button from '@material-ui/core/Button';
+import DialogContainer from '../../shared/dialog-container';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
-    appBar: {
-      position: 'sticky',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
     errorMessage: {
       color: palette.error.light,
-    },
-    title: {
-      paddingLeft: 12,
-    },
-    modalContent: {
-      padding: 20,
-      textAlign: 'center',
     },
     buttonsContainer: {
       display: 'flex',
@@ -49,14 +34,8 @@ function ArtifactsJsonImport(props: ArtifactsJsonImportProps): ReactElement {
   };
 
   return (
-    <Fragment>
-      <AppBar className={classes.appBar}>
-        <h3 className={classes.title}>Artifacts Import</h3>
-        <IconButton color="inherit" onClick={handleClose} aria-label="close">
-          <CloseIcon />
-        </IconButton>
-      </AppBar>
-      <section className={classes.modalContent}>
+    <DialogContainer title="Artifacts Import" onClose={handleClose}>
+      <Fragment>
         {importResults.artifactsInError ? (
           <p className={classes.errorMessage}>{importResults.artifactsInError} artifact(s) contains error(s) and won't be imported.</p>
         ) : null}
@@ -74,8 +53,8 @@ function ArtifactsJsonImport(props: ArtifactsJsonImportProps): ReactElement {
             Yes
           </Button>
         </div>
-      </section>
-    </Fragment>
+      </Fragment>
+    </DialogContainer>
   );
 }
 
