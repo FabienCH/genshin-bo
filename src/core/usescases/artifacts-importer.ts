@@ -55,7 +55,7 @@ export class ArtifactsImporter {
         if (!Array.isArray(artifactsData)) {
           return resultsWithErrorMessage(initialImportResults, noArtifactMessage);
         }
-        return this.setArtifactsToResults(artifactsData, initialImportResults);
+        return this.getImportResults(artifactsData, initialImportResults);
       } catch (_) {
         return resultsWithErrorMessage(initialImportResults, noArtifactMessage);
       }
@@ -64,7 +64,7 @@ export class ArtifactsImporter {
     }
   }
 
-  private setArtifactsToResults(
+  private getImportResults(
     artifactsData: ArtifactData[],
     initialImportInfos: JsonImportResults,
   ): JsonImportResults | PromiseLike<JsonImportResults> {

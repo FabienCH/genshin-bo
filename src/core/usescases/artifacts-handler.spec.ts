@@ -433,7 +433,7 @@ describe('ArtifactsHandler.addArtifact', () => {
     });
   });
 
-  describe('Adding multiple artifacts', () => {
+  describe('Importing multiple artifacts from a json file', () => {
     it('should save artifacts and override current ones', () => {
       const artifactsValues = [
         {
