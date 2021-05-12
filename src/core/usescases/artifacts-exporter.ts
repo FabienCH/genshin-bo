@@ -1,11 +1,8 @@
 import { isArtifactsImportRunning, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
-import { ArtifactsRepository } from '../domain/artifacts-repository';
 
 export class ArtifactsExporter {
-  constructor(private readonly artifactsRepository: ArtifactsRepository) {}
-
   public exportAsJsonFile(): void {
-    const artifacts = this.artifactsRepository.getAll();
+    const artifacts = selectAllArtifacts();
     const blob = new Blob([JSON.stringify(artifacts)], { type: 'application/json' });
     this.downloadFile(blob);
   }

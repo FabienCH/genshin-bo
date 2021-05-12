@@ -71,6 +71,6 @@ export abstract class ArtifactsDI {
   }
 
   public static getArtifactsExporter(): ArtifactsExporter {
-    return new ArtifactsExporter(ArtifactsDI.getRepository());
+    return new ArtifactsExporter();
   }
 }
