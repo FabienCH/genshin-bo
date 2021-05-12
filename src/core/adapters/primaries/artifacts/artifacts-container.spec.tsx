@@ -1,12 +1,15 @@
 import ArtifactsContainer from './artifacts-container';
+import ArtifactsImport from './components/artifacts-import';
 import { AgGridReact } from 'ag-grid-react';
 import { mount, ReactWrapper } from 'enzyme';
 import { ArtifactsDI } from '../../../di/artifacts-di';
 import { appStore } from '../../redux/store';
 import { Provider } from 'react-redux';
-import { waitFor } from '@testing-library/react';
+import { queryByTestId, waitFor } from '@testing-library/react';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import { artifactsJsonString } from '../../../../test/artifacts-from-json';
+import { mockBlobText } from '../../../../test/blob-text-mock';
 
 const ensureGridApiHasBeenSet = (wrapper: AgGridReact) => {
   return new Promise((resolve) => {
@@ -27,6 +30,7 @@ describe('Artifacts container', () => {
   let artifactsImporterSpy: jest.SpyInstance;
 
   beforeEach(() => {
+    window.URL.createObjectURL = () => '';
     ArtifactsDI.registerRepository();
     ArtifactsDI.registerOcrWorker();
     artifactsImporterSpy = jest.spyOn(ArtifactsDI.getArtifactsImporter(), 'importFromVideo').mockImplementation(async () => undefined);
@@ -48,7 +52,7 @@ describe('Artifacts container', () => {
   it('should import artifacts and not override currents ones', async () => {
     const file = new File([], 'filename');
     wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
-    wrapper.find(Button).last().simulate('click');
+    wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
     await waitFor(() => {
       expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, false);
@@ -62,10 +66,34 @@ describe('Artifacts container', () => {
       .find(Checkbox)
       .find('input')
       .simulate('change', { target: { name: '', checked: true } });
-    wrapper.find(Button).last().simulate('click');
+    wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
     await waitFor(() => {
       expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, true);
+    });
+  });
+
+  it('should not display artifacts import from json modal when user import a non json file', async () => {
+    const file = new File([''], 'filename', { type: 'text/plain' });
+    mockBlobText(file);
+
+    wrapper.find('#upload-json').simulate('change', { target: { name: '', files: [file] } });
+
+    await waitFor(() => {
+      const dialogBox = queryByTestId(document.body, 'json-import-modal');
+      expect(dialogBox).toBeFalsy();
+    });
+  });
+
+  it('should display artifacts import from json modal when user import a json file', async () => {
+    const file = new File([artifactsJsonString], 'filename.json', { type: 'application/json' });
+    mockBlobText(file);
+
+    wrapper.find('#upload-json').simulate('change', { target: { name: '', files: [file] } });
+
+    await waitFor(() => {
+      const dialogBox = queryByTestId(document.body, 'json-import-modal');
+      expect(dialogBox?.innerHTML.includes('You are about to import 14 artifacts')).toBeTruthy();
     });
   });
 });

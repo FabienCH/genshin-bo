@@ -8,6 +8,8 @@ export const addAllArtifactsAction = createAction<ArtifactData[]>('[Entities/Art
 
 export const addOneArtifactAction = createAction<ArtifactData>('[Entities/Artifacts] Add One Artifact');
 
+export const addManyArtifactAction = createAction<ArtifactData[]>('[Entities/Artifacts] Add Many Artifacts');
+
 export const saveAllArtifactsAction = createAction('[Entities/Artifacts] Save All Artifacts');
 
 export const deleteAllArtifactsAction = createAction('[Entities/Artifacts] Delete All Artifacts');
@@ -23,6 +25,7 @@ export const runOcrOnImageAction = createAction<FrameData>('[Entities/Artifacts]
 export type ArtifactsActionTypes =
   | typeof addAllArtifactsAction
   | typeof addOneArtifactAction
+  | typeof addManyArtifactAction
   | typeof runOcrOnImageAction
   | typeof saveAllArtifactsAction
   | typeof deleteAllArtifactsAction

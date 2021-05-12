@@ -2,6 +2,7 @@ import { createEntityAdapter, createReducer, EntityState } from '@reduxjs/toolki
 import { ArtifactData } from '../../../domain/models/artifact-data';
 import {
   addAllArtifactsAction,
+  addManyArtifactAction,
   addOneArtifactAction,
   deleteAllArtifactsAction,
   importArtifactsDoneAction,
@@ -53,6 +54,7 @@ export const artifactsReducer = createReducer(initialState, (builder) => {
         action.payload,
       ),
     }))
+    .addCase(addManyArtifactAction, (state, action) => artifactsAdapter.addMany(state, action.payload))
     .addCase(deleteAllArtifactsAction, (state) => artifactsAdapter.removeAll(state))
     .addCase(importArtifactsFromVideoAction, (state) => ({
       ...state,

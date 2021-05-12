@@ -7,6 +7,7 @@ import { ArtifactsHandler } from '../usescases/artifacts-handler';
 import { ArtifactsImporter } from '../usescases/artifacts-importer';
 import { LocalStorageArtifactsRepository } from '../adapters/secondaries/local-storage-artifacts-repository';
 import { ArtifactImageOcr } from '../domain/artifact-images-ocr';
+import { ArtifactsExporter } from '../usescases/artifacts-exporter';
 
 export abstract class ArtifactsDI {
   public static artifactsHandler: ArtifactsHandler;
@@ -67,5 +68,9 @@ export abstract class ArtifactsDI {
       return ArtifactsDI.artifactImageOcr;
     }
     throw new Error('Artifacts OCR worker is not registered.');
+  }
+
+  public static getArtifactsExporter(): ArtifactsExporter {
+    return new ArtifactsExporter();
   }
 }

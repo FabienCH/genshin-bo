@@ -1,29 +1,15 @@
 import { Fragment, ReactElement } from 'react';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 import { Theme } from '@material-ui/core';
 import ImportGuideTable, { Row } from './import-guide-table';
 import outputTab from '../../../../../assets/import-guide-img/output-tab.jpg';
 import resolution from '../../../../../assets/import-guide-img/resolution.jpg';
 import source from '../../../../../assets/import-guide-img/source.jpg';
 import cropFilter from '../../../../../assets/import-guide-img/crop-filter.jpg';
+import DialogContainer from '../../shared/dialog-container';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
-    appBar: {
-      position: 'sticky',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    title: {
-      paddingLeft: 12,
-    },
-    modalContent: {
-      padding: 20,
-    },
     link: {
       color: palette.primary.main,
       textDecoration: 'none',
@@ -74,14 +60,8 @@ function ImportGuide(props: ImportGuideProps): ReactElement {
   ];
 
   return (
-    <Fragment>
-      <AppBar className={classes.appBar}>
-        <h3 className={classes.title}>Artifacts Import Guide</h3>
-        <IconButton color="inherit" onClick={handleClose} aria-label="close">
-          <CloseIcon />
-        </IconButton>
-      </AppBar>
-      <section className={classes.modalContent}>
+    <DialogContainer title="Artifacts Import Guide" onClose={handleClose}>
+      <Fragment>
         <h4>Prerequisites</h4>
         <ul>
           <li>
@@ -145,8 +125,8 @@ function ImportGuide(props: ImportGuideProps): ReactElement {
           You can do it fast, recording at 10 FPS means that a frame is captured every 100ms. Once you’re done, just press you Stop
           Recording hotkey, your video should look like the demo video.
         </p>
-      </section>
-    </Fragment>
+      </Fragment>
+    </DialogContainer>
   );
 }
 

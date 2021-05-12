@@ -14,6 +14,15 @@ import { VideoToFrames } from '../domain/mappers/video-to-frames';
 import { Subject, from, interval } from 'rxjs';
 import { skip, take, map, filter } from 'rxjs/operators';
 import { ArtifactsImporter } from './artifacts-importer';
+import {
+  artifactsJsonData,
+  artifactsJsonString,
+  invalidArtifactsJsonData,
+  invalidArtifactsJsonString,
+  malformedArtifactsArrayJsonString,
+  notArtifactsArrayJsonString,
+} from '../../test/artifacts-from-json';
+import { mockBlobText } from '../../test/blob-text-mock';
 
 describe('ArtifactsImporter', () => {
   const artifactsStateChangesSub: Subject<ArtifactData[]> = new Subject();
@@ -99,6 +108,50 @@ describe('ArtifactsImporter', () => {
       });
 
       artifactsImporter.importFromVideo(new File([], 'filename'), 1, true);
+    });
+  });
+
+  describe('getArtifactsFromJson', () => {
+    const setFile = (jsonString: string): File => new File([jsonString], 'filename.json', { type: 'application/json' });
+
+    it('should get 14 found artifacts and 0 in error from the json file', async () => {
+      const file = setFile(artifactsJsonString);
+      mockBlobText(file);
+
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: artifactsJsonData,
+        artifactsInError: 0,
+      });
+    });
+
+    it('should get 12 found artifacts and 2 in error from invalid json file', async () => {
+      const file = setFile(invalidArtifactsJsonString);
+      mockBlobText(file);
+
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: invalidArtifactsJsonData,
+        artifactsInError: 2,
+      });
+    });
+
+    it('should get 0 found artifacts and 0 in error from malformed json file', async () => {
+      const file = setFile(malformedArtifactsArrayJsonString);
+      mockBlobText(file);
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: [],
+        artifactsInError: 0,
+        fileError: 'Could not fin any artifacts.',
+      });
+    });
+
+    it('should get 0 found artifacts and 0 in error from json file that does not contains an array', async () => {
+      const file = setFile(notArtifactsArrayJsonString);
+      mockBlobText(file);
+      expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
+        artifacts: [],
+        artifactsInError: 0,
+        fileError: 'Could not fin any artifacts.',
+      });
     });
   });
 

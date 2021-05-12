@@ -8,6 +8,7 @@ import {
   saveAllArtifactsAction,
   importArtifactsDoneAction,
   incrementArtifactsInError,
+  addManyArtifactAction,
 } from './artifacts-action';
 import { Middleware } from '@reduxjs/toolkit';
 import { AppState } from '../reducer';
@@ -42,6 +43,11 @@ export const artifactsMiddleware: Middleware<void, AppState> = ({ dispatch }) =>
     }
     case saveAllArtifactsAction.type: {
       ArtifactsDI.getRepository().addMany(selectAllArtifacts());
+      next(action);
+      break;
+    }
+    case addManyArtifactAction.type: {
+      ArtifactsDI.getRepository().addMany(action.payload);
       next(action);
       break;
     }
