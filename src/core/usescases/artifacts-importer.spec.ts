@@ -111,7 +111,7 @@ describe('ArtifactsImporter', () => {
     });
   });
 
-  describe('getArtifactsFromJson', () => {
+  fdescribe('getArtifactsFromJson', () => {
     const setFile = (jsonString: string): File => new File([jsonString], 'filename.json', { type: 'application/json' });
 
     it('should get 14 found artifacts and 0 in error from the json file', async () => {
@@ -124,7 +124,7 @@ describe('ArtifactsImporter', () => {
       });
     });
 
-    it('should get 12 found artifacts and 2 in error from invalid json file', async () => {
+    fit('should get 12 found artifacts and 2 in error from invalid json file', async () => {
       const file = setFile(invalidArtifactsJsonString);
       mockBlobText(file);
 

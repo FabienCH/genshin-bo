@@ -10,11 +10,35 @@ import { ArtifactView } from '../models/artifact-view';
 import { ArtifactStatsValues } from '../models/main-statistics';
 import { StringFormatter } from './string-formatter';
 import { v4 as uuidv4 } from 'uuid';
+import { ArtifactValidator } from '../artifacts-validator';
+import { ArtifactValidationError } from '../artifact-validation-error';
 
 export abstract class ArtifactMapper {
-  public static mapDataToView(artifactData: ArtifactData): ArtifactView {
+  private static artifactValidator: ArtifactValidator = new ArtifactValidator();
+
+  public static mapDataToArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): Artifact | ArtifactValidationError {
+    if (!this.artifactValidator.isArtifactValid(artifactData)) {
+      return this.artifactValidator.getErrors();
+    }
+    switch (artifactData.type) {
+      case 'flower':
+        return ArtifactMapper.newFlowerArtifact(artifactData, mainValueFromOcr);
+      case 'plume':
+        return ArtifactMapper.newPlumeArtifact(artifactData, mainValueFromOcr);
+      case 'sands':
+        return ArtifactMapper.newSandsArtifact(artifactData, mainValueFromOcr);
+      case 'goblet':
+        return ArtifactMapper.newGobletArtifact(artifactData, mainValueFromOcr);
+      case 'circlet':
+        return ArtifactMapper.newCircletArtifact(artifactData, mainValueFromOcr);
+      default:
+        return new ArtifactValidationError(['incorrect artifact type']);
+    }
+  }
+
+  public static mapDataToView(artifactData: ArtifactData): ArtifactView | ArtifactValidationError {
     const artifact = ArtifactMapper.mapDataToArtifact(artifactData);
-    return ArtifactMapper.mapArtifactToView(artifact);
+    return artifact instanceof Artifact ? ArtifactMapper.mapArtifactToView(artifact) : artifact;
   }
 
   public static mapArtifactToView(artifact: Artifact): ArtifactView {
@@ -33,23 +57,6 @@ export abstract class ArtifactMapper {
     };
   }
 
-  public static mapDataToArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): Artifact {
-    switch (artifactData.type) {
-      case 'flower':
-        return ArtifactMapper.newFlowerArtifact(artifactData, mainValueFromOcr);
-      case 'plume':
-        return ArtifactMapper.newPlumeArtifact(artifactData, mainValueFromOcr);
-      case 'sands':
-        return ArtifactMapper.newSandsArtifact(artifactData, mainValueFromOcr);
-      case 'goblet':
-        return ArtifactMapper.newGobletArtifact(artifactData, mainValueFromOcr);
-      case 'circlet':
-        return ArtifactMapper.newCircletArtifact(artifactData, mainValueFromOcr);
-      default:
-        throw new Error('incorrect artifact type');
-    }
-  }
-
   public static mapOcrDataToArtifactData(ocrArtifactData: OcrArtifactData): ArtifactData {
     const { type, set, level, mainStatType, subStats, mainStatValue } = ocrArtifactData;
     if (type != null && set != null && level != null && mainStatType != null && subStats != null) {
@@ -57,11 +64,11 @@ export abstract class ArtifactMapper {
       ArtifactMapper.mapDataToArtifact({ id: uuidv4(), type, set, level, mainStatType, subStats }, mainStatValue);
       return artifactData;
     }
-    throw new Error(
+    throw new ArtifactValidationError([
       `missing artifact data (type:${type}, set:${set}, level:${level}, mainStatType:${mainStatType}, subStats:${JSON.stringify(
         subStats,
       )})`,
-    );
+    ]);
   }
 
   public static mapAllDataToAllArtifactsByType(artifactsData: ArtifactData[]): AllArtifacts {

@@ -74,20 +74,6 @@ export abstract class Artifact {
     mainStatType: MainStatTypes,
     mainStatValueFromOcr?: number,
   ) {
-    if (Object.keys(subStats).length < 3) {
-      throw new Error('an artifact can not have less than 3 substats');
-    }
-    if (level > 3 && Object.keys(subStats).length === 3) {
-      throw new Error('an artifact with level higher than 3 must have 4 substats');
-    }
-    if (Object.keys(subStats).length > 4) {
-      throw new Error('an artifact can not have more than 4 substats');
-    }
-
-    if (Object.keys(subStats).find((subStat) => subStat === mainStatType)) {
-      throw new Error('main stat can not be the same as one of the substats');
-    }
-
     const mainStat = this.getMainStat(mainStatType, level);
     const mainStatValue = Object.values(mainStat)[0];
     if (mainStatValueFromOcr && mainStatValue !== mainStatValueFromOcr) {

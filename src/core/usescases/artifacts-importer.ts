@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { importInfos, isArtifactsImportRunning } from '../adapters/redux/artifacts/artifacts-selectors';
 import { ImportInfos } from '../adapters/redux/artifacts/artifacts-reducer';
 import { ArtifactData } from '../domain/models/artifact-data';
-import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
+import { ArtifactValidator } from '../domain/artifacts-validator';
 
 export interface JsonImportResults {
   artifacts: ArtifactData[];
@@ -21,6 +21,7 @@ export interface JsonImportResults {
 
 export class ArtifactsImporter {
   private readonly allFramesRetrieve: Subject<void> = new Subject();
+  private readonly artifactValidator: ArtifactValidator = new ArtifactValidator();
 
   public async importFromVideo(video: File, nbOfWorkers: number, overrideCurrentArtifacts = false): Promise<void> {
     appStore.dispatch(importArtifactsFromVideoAction());
@@ -69,10 +70,9 @@ export class ArtifactsImporter {
     initialImportInfos: JsonImportResults,
   ): JsonImportResults | PromiseLike<JsonImportResults> {
     return artifactsData.reduce((jsonImportInfos: JsonImportResults, artifactData: ArtifactData) => {
-      try {
-        ArtifactMapper.mapDataToArtifact(artifactData);
+      if (this.artifactValidator.isArtifactValid(artifactData)) {
         jsonImportInfos.artifacts.push(artifactData);
-      } catch (_) {
+      } else {
         jsonImportInfos.artifactsInError++;
       }
       return jsonImportInfos;

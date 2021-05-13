@@ -4,6 +4,7 @@ import { deleteAllArtifactsAction, loadArtifactsActions } from '../adapters/redu
 import { selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
 import { ArtifactsDI } from '../di/artifacts-di';
+import { ArtifactValidationError } from '../domain/artifact-validation-error';
 import { ArtifactType } from '../domain/entities/artifact';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
@@ -77,7 +78,7 @@ describe('ArtifactsHandler.addArtifact', () => {
     });
 
     it('should failed if it does not exist', () => {
-      expect(() => artifactsHandler.getById('20')).toThrowError('artifact with id 20 not found');
+      expect(artifactsHandler.getById('20')).toEqual(new Error('artifact with id 20 not found'));
     });
   });
 
@@ -96,7 +97,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       expect(addedArtifact).toEqual(
         new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
       );
-      expect(addedArtifact.mainStat).toEqual({ [MainStats.flatHp]: 1123 });
+      expect(addedArtifact).toHaveProperty('mainStat', { [MainStats.flatHp]: 1123 });
     });
   });
 
@@ -120,7 +121,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       expect(addedArtifact).toEqual(
         new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
       );
-      expect(addedArtifact.mainStat).toEqual({ [MainStats.flatAtk]: 152 });
+      expect(addedArtifact).toHaveProperty('mainStat', { [MainStats.flatAtk]: 152 });
     });
   });
 
@@ -388,7 +389,9 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.critDmg]: 5.2,
         },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('an artifact can not have more than 4 substats');
+      expect(artifactsHandler.addOne(artifactValues)).toEqual(
+        new ArtifactValidationError(['an artifact can not have more than 4 substats']),
+      );
     });
 
     it('should failed if it has les than 3 substats', () => {
@@ -400,7 +403,9 @@ describe('ArtifactsHandler.addArtifact', () => {
         mainStatType: FlowerArtifact.mainStat,
         subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6 },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('an artifact can not have less than 3 substats');
+      expect(artifactsHandler.addOne(artifactValues)).toEqual(
+        new ArtifactValidationError(['an artifact can not have less than 3 substats']),
+      );
     });
 
     it('should failed if it has 3 substats and level higher than 3', () => {
@@ -410,9 +415,11 @@ describe('ArtifactsHandler.addArtifact', () => {
         set: SetNames.gladiatorsFinale,
         level: 4,
         mainStatType: PlumeArtifact.mainStat,
-        subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
+        subStats: { [SubStats.percentAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('an artifact with level higher than 3 must have 4 substat');
+      expect(artifactsHandler.addOne(artifactValues)).toEqual(
+        new ArtifactValidationError(['an artifact with level higher than 3 must have 4 substats']),
+      );
     });
 
     it('should failed if 1 of the substats is the same than the main stat', () => {
@@ -429,7 +436,9 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.energyRecharge]: 3.5,
         },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('main stat can not be the same as one of the substats');
+      expect(artifactsHandler.addOne(artifactValues)).toEqual(
+        new ArtifactValidationError(['main stat can not be the same as one of the substats']),
+      );
     });
   });
 
