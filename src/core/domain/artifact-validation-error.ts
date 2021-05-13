@@ -8,4 +8,8 @@ export class ArtifactValidationError extends Error {
   public addMessage(message: string): void {
     this.messages.push(message);
   }
+
+  public getMessages(): string[] {
+    return this.messages;
+  }
 }

@@ -111,7 +111,7 @@ describe('ArtifactsImporter', () => {
     });
   });
 
-  fdescribe('getArtifactsFromJson', () => {
+  describe('getArtifactsFromJson', () => {
     const setFile = (jsonString: string): File => new File([jsonString], 'filename.json', { type: 'application/json' });
 
     it('should get 14 found artifacts and 0 in error from the json file', async () => {
@@ -124,7 +124,7 @@ describe('ArtifactsImporter', () => {
       });
     });
 
-    fit('should get 12 found artifacts and 2 in error from invalid json file', async () => {
+    it('should get 12 found artifacts and 2 in error from invalid json file', async () => {
       const file = setFile(invalidArtifactsJsonString);
       mockBlobText(file);
 
@@ -140,7 +140,7 @@ describe('ArtifactsImporter', () => {
       expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
         artifacts: [],
         artifactsInError: 0,
-        fileError: 'Could not fin any artifacts.',
+        fileError: 'JSON file not properly formatted.',
       });
     });
 
@@ -150,7 +150,7 @@ describe('ArtifactsImporter', () => {
       expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
         artifacts: [],
         artifactsInError: 0,
-        fileError: 'Could not fin any artifacts.',
+        fileError: 'JSON file not properly formatted.',
       });
     });
   });

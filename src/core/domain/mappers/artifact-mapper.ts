@@ -5,7 +5,7 @@ import { GobletArtifact } from '../entities/goblet-artifact';
 import { PlumeArtifact } from '../entities/plume-artifact';
 import { SandsArtifact } from '../entities/sands-artifact';
 import { AllArtifacts } from '../models/all-artifacts';
-import { ArtifactData, OcrArtifactData } from '../models/artifact-data';
+import { ArtifactData, NewArtifactData } from '../models/artifact-data';
 import { ArtifactView } from '../models/artifact-view';
 import { ArtifactStatsValues } from '../models/main-statistics';
 import { StringFormatter } from './string-formatter';
@@ -57,18 +57,12 @@ export abstract class ArtifactMapper {
     };
   }
 
-  public static mapOcrDataToArtifactData(ocrArtifactData: OcrArtifactData): ArtifactData {
-    const { type, set, level, mainStatType, subStats, mainStatValue } = ocrArtifactData;
-    if (type != null && set != null && level != null && mainStatType != null && subStats != null) {
-      const artifactData = { id: uuidv4(), type, set, level, mainStatType, subStats };
-      ArtifactMapper.mapDataToArtifact({ id: uuidv4(), type, set, level, mainStatType, subStats }, mainStatValue);
-      return artifactData;
+  public static mapNewDataToArtifactData(newArtifactData: Partial<NewArtifactData>): ArtifactData | ArtifactValidationError {
+    if (this.isValidNewArtifactData(newArtifactData)) {
+      const { type, set, level, mainStatType, subStats } = newArtifactData;
+      return { id: uuidv4(), type, set, level, mainStatType, subStats };
     }
-    throw new ArtifactValidationError([
-      `missing artifact data (type:${type}, set:${set}, level:${level}, mainStatType:${mainStatType}, subStats:${JSON.stringify(
-        subStats,
-      )})`,
-    ]);
+    return this.artifactValidator.getErrors();
   }
 
   public static mapAllDataToAllArtifactsByType(artifactsData: ArtifactData[]): AllArtifacts {
@@ -134,6 +128,10 @@ export abstract class ArtifactMapper {
 
   private static newFlowerArtifact(artifactData: ArtifactData, mainValueFromOcr?: number): FlowerArtifact {
     return new FlowerArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, mainValueFromOcr);
+  }
+
+  private static isValidNewArtifactData(newArtifactData: Partial<NewArtifactData>): newArtifactData is NewArtifactData {
+    return ArtifactMapper.artifactValidator.isNewArtifactValid(newArtifactData);
   }
 
   private static statToString(stat: ArtifactStatsValues): string {

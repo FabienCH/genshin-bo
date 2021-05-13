@@ -44,39 +44,20 @@ export class ArtifactsImporter {
   public async getArtifactsFromJson(jsonFile: File): Promise<JsonImportResults> {
     const extension = jsonFile.name.substring(jsonFile.name.lastIndexOf('.') + 1);
     const initialImportResults: JsonImportResults = { artifacts: [], artifactsInError: 0 };
-    const noArtifactMessage = 'Could not fin any artifacts.';
+    const malformedJsonMessage = 'JSON file not properly formatted.';
     const resultsWithErrorMessage = (jsonImportResults: JsonImportResults, errorMessage: string): JsonImportResults => ({
       ...jsonImportResults,
       fileError: errorMessage,
     });
 
     if (extension === 'json' && jsonFile.type === 'application/json') {
-      try {
-        const artifactsData: ArtifactData[] = JSON.parse(await jsonFile.text());
-        if (!Array.isArray(artifactsData)) {
-          return resultsWithErrorMessage(initialImportResults, noArtifactMessage);
-        }
-        return this.getImportResults(artifactsData, initialImportResults);
-      } catch (_) {
-        return resultsWithErrorMessage(initialImportResults, noArtifactMessage);
-      }
+      const artifactsData: ArtifactData[] = await this.parseJsonFile(jsonFile);
+      return artifactsData.length
+        ? this.getImportResults(artifactsData, initialImportResults)
+        : resultsWithErrorMessage(initialImportResults, malformedJsonMessage);
     } else {
       return resultsWithErrorMessage(initialImportResults, 'Invalid file format.');
     }
-  }
-
-  private getImportResults(
-    artifactsData: ArtifactData[],
-    initialImportInfos: JsonImportResults,
-  ): JsonImportResults | PromiseLike<JsonImportResults> {
-    return artifactsData.reduce((jsonImportInfos: JsonImportResults, artifactData: ArtifactData) => {
-      if (this.artifactValidator.isArtifactValid(artifactData)) {
-        jsonImportInfos.artifacts.push(artifactData);
-      } else {
-        jsonImportInfos.artifactsInError++;
-      }
-      return jsonImportInfos;
-    }, initialImportInfos);
   }
 
   public getMaxWorkers(): number {
@@ -94,5 +75,31 @@ export class ArtifactsImporter {
   public cancelImport(): void {
     VideoToFrames.cancel();
     ArtifactsDI.getArtifactImageOcr().cancelOcr();
+  }
+
+  private async parseJsonFile(jsonFile: File): Promise<ArtifactData[]> {
+    try {
+      const artifactsData: ArtifactData[] = JSON.parse(await jsonFile.text());
+      if (!Array.isArray(artifactsData)) {
+        return [];
+      }
+      return artifactsData;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  private getImportResults(
+    artifactsData: ArtifactData[],
+    initialImportInfos: JsonImportResults,
+  ): JsonImportResults | PromiseLike<JsonImportResults> {
+    return artifactsData.reduce((jsonImportInfos: JsonImportResults, artifactData: ArtifactData) => {
+      if (this.artifactValidator.isArtifactValid(artifactData)) {
+        jsonImportInfos.artifacts.push(artifactData);
+      } else {
+        jsonImportInfos.artifactsInError++;
+      }
+      return jsonImportInfos;
+    }, initialImportInfos);
   }
 }

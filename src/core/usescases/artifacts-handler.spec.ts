@@ -6,11 +6,9 @@ import { appStore } from '../adapters/redux/store';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { ArtifactValidationError } from '../domain/artifact-validation-error';
 import { ArtifactType } from '../domain/entities/artifact';
-import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
-import { GobletArtifact } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
-import { SandsArtifact } from '../domain/entities/sands-artifact';
+import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { AllArtifactsData, ArtifactData } from '../domain/models/artifact-data';
 import { MainStats, MainStatTypes } from '../domain/models/main-statistics';
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
@@ -60,8 +58,10 @@ describe('ArtifactsHandler.addArtifact', () => {
     it('should succeed if it exists', () => {
       const artifactValues = {
         id: '1',
+        type: ArtifactType.flower,
         set: SetNames.thunderingFury,
         level: 8,
+        mainStatType: FlowerArtifact.mainStat,
         subStats: {
           [SubStats.energyRecharge]: 3,
           [SubStats.percentHp]: 6,
@@ -71,10 +71,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       };
 
       const expectedArtifact = artifactsHandler.getById('1');
-
-      expect(expectedArtifact).toEqual(
-        new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
-      );
+      expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
     });
 
     it('should failed if it does not exist', () => {
@@ -94,10 +91,9 @@ describe('ArtifactsHandler.addArtifact', () => {
       };
       artifactsHandler.addOne(artifactValues);
       const addedArtifact = artifactsHandler.getById(artifactValues.id);
-      expect(addedArtifact).toEqual(
-        new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
-      );
-      expect(addedArtifact).toHaveProperty('mainStat', { [MainStats.flatHp]: 1123 });
+
+      expect(addedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
+      expect(addedArtifact).toHaveProperty('mainStat', '1123 HP');
     });
   });
 
@@ -116,12 +112,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.elementalMastery]: 8,
         },
       };
+
       artifactsHandler.addOne(artifactValues);
       const addedArtifact = artifactsHandler.getById(artifactValues.id);
-      expect(addedArtifact).toEqual(
-        new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
-      );
-      expect(addedArtifact).toHaveProperty('mainStat', { [MainStats.flatAtk]: 152 });
+
+      expect(addedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
+      expect(addedArtifact).toHaveProperty('mainStat', '152 ATK');
     });
   });
 
@@ -169,17 +165,9 @@ describe('ArtifactsHandler.addArtifact', () => {
         artifactsHandler.addOne(artifactValues);
       });
 
-      artifactsValues.forEach((artifactsValue) => {
-        const expectedArtifact = artifactsHandler.getById(artifactsValue.id);
-        expect(expectedArtifact).toEqual(
-          new SandsArtifact(
-            artifactsValue.id,
-            artifactsValue.set,
-            artifactsValue.subStats,
-            artifactsValue.level,
-            artifactsValue.mainStatType,
-          ),
-        );
+      artifactsValues.forEach((artifactValues) => {
+        const expectedArtifact = artifactsHandler.getById(artifactValues.id);
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
     });
   });
@@ -232,17 +220,9 @@ describe('ArtifactsHandler.addArtifact', () => {
       artifactsValues.forEach((artifactValues) => {
         artifactsHandler.addOne(artifactValues);
       });
-      artifactsValues.forEach((artifactsValue) => {
-        const expectedArtifact = artifactsHandler.getById(artifactsValue.id);
-        expect(expectedArtifact).toEqual(
-          new GobletArtifact(
-            artifactsValue.id,
-            artifactsValue.set,
-            artifactsValue.subStats,
-            artifactsValue.level,
-            artifactsValue.mainStatType,
-          ),
-        );
+      artifactsValues.forEach((artifactValues) => {
+        const expectedArtifact = artifactsHandler.getById(artifactValues.id);
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
     });
   });
@@ -301,17 +281,9 @@ describe('ArtifactsHandler.addArtifact', () => {
       artifactsValues.forEach((artifactValues) => {
         artifactsHandler.addOne(artifactValues);
       });
-      artifactsValues.forEach((artifactsValue) => {
-        const expectedArtifact = artifactsHandler.getById(artifactsValue.id);
-        expect(expectedArtifact).toEqual(
-          new CircletArtifact(
-            artifactsValue.id,
-            artifactsValue.set,
-            artifactsValue.subStats,
-            artifactsValue.level,
-            artifactsValue.mainStatType,
-          ),
-        );
+      artifactsValues.forEach((artifactValues) => {
+        const expectedArtifact = artifactsHandler.getById(artifactValues.id);
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
     });
   });
@@ -353,7 +325,7 @@ describe('ArtifactsHandler.addArtifact', () => {
 
       artifactsValues.forEach((artifactValues) => {
         const expectedArtifact = artifactsHandler.getById(artifactValues.id);
-        expect(expectedArtifact).toBeTruthy();
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
     });
 

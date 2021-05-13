@@ -6,13 +6,20 @@ import { SandsArtifactData } from './sands-artifact-data';
 import { SetNames } from './sets-with-effects';
 import { SubStatsValues } from './sub-statistics';
 
-export interface ArtifactData {
-  id: string;
+export interface BaseArtifactData {
   type: ArtifactType;
   set: SetNames;
   level: number;
   mainStatType: MainStatTypes;
   subStats: SubStatsValues;
+}
+
+export interface NewArtifactData extends BaseArtifactData {
+  mainStatValue?: number;
+}
+
+export interface ArtifactData extends BaseArtifactData {
+  id: string;
 }
 
 export interface AllArtifactsData {
@@ -21,13 +28,4 @@ export interface AllArtifactsData {
   sands: SandsArtifactData[];
   goblets: GobletArtifactData[];
   circlets: CircletArtifactData[];
-}
-
-export interface OcrArtifactData {
-  type?: ArtifactType;
-  set?: SetNames;
-  level?: number;
-  mainStatType?: MainStatTypes;
-  mainStatValue?: number;
-  subStats?: SubStatsValues;
 }

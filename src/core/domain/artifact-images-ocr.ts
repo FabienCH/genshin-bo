@@ -4,6 +4,7 @@ import { OcrWorkerHandler } from './artifact-ocr-worker-handler';
 import { ArtifactData } from './models/artifact-data';
 import { OcrResultsParser } from './ocr-results-parser';
 import { ArtifactMapper } from './mappers/artifact-mapper';
+import { ArtifactValidationError } from './artifact-validation-error';
 
 export class ArtifactImageOcr {
   private previousImage!: Jimp;
@@ -76,14 +77,12 @@ export class ArtifactImageOcr {
 
   private async runOcrRecognize(imageForOcr: Buffer): Promise<ArtifactData | undefined> {
     const ocrResults = await this.ocrWorker.recognize(imageForOcr);
-
     const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults);
-    try {
-      return ArtifactMapper.mapOcrDataToArtifactData(parsedOcrResults);
-    } catch (error) {
-      console.log('error while parsing artifact', error.message);
-      return undefined;
+    const artifactData = ArtifactMapper.mapNewDataToArtifactData(parsedOcrResults);
+    if (!(artifactData instanceof ArtifactValidationError)) {
+      return artifactData;
     }
+    console.log('error while parsing artifact', artifactData.getMessages());
   }
 
   private areAllImagesProcessed(isLast: boolean): boolean {
