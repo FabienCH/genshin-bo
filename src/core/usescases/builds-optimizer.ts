@@ -8,7 +8,7 @@ import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-acti
 import { CharactersRepository } from '../domain/characters-repository';
 import { Weapon, WeaponView } from '../domain/models/weapon';
 import { WeaponsRepository } from '../domain/weapons-repository';
-import { runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
+import { cancelOptimizationAction, runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
 import { buildsComputationProgress, buildsLimitReached, isOptimizationRunning } from '../adapters/redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../di/builds-optimizer-di';
 import { SetFilter } from '../domain/build-filter';
@@ -56,6 +56,10 @@ export class BuildsOptimizer {
     const total = this.formatNumberWithSuffix(buildsComputationProgressValues.total);
 
     return `${computed} / ${total}`;
+  }
+
+  public cancelOptimization(): void {
+    appStore.dispatch(cancelOptimizationAction());
   }
 
   public isOptimizationRunning(): boolean {

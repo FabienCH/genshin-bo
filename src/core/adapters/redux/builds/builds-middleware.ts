@@ -2,6 +2,7 @@ import {
   addBuildsAction,
   buildsLimitReachedAction,
   buildsOptimizationDoneAction,
+  cancelOptimizationAction,
   removeAllBuildsAction,
   runBuildsOptimizerAction,
   updateBuildsComputationProgressAction,
@@ -37,6 +38,7 @@ export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (n
       next(action);
       break;
     }
+    case cancelOptimizationAction.type:
     case buildsLimitReachedAction.type:
     case buildsOptimizationDoneAction.type: {
       BuildsOptimizerDI.terminateBcWorker();

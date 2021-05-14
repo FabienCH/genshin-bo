@@ -724,16 +724,26 @@ describe('BuildsOptimizer', () => {
 
       expect(buildsOptimizer.isBuildsCombinationsLimitReached(defaultArtifactsFilters)).toBeTruthy();
     });
+
+    it('should not reach the limit with 10 billions builds combinations', () => {
+      const lessThan10BillionsBuildsArtifactsData: AllArtifactsData = {
+        ...moreThan10BillionsBuildsArtifactsData,
+        flowers: moreThan10BillionsBuildsArtifactsData.flowers.slice(0, 99),
+      };
+      loadArtifacts(lessThan10BillionsBuildsArtifactsData);
+
+      expect(buildsOptimizer.isBuildsCombinationsLimitReached(defaultArtifactsFilters)).toBeFalsy();
+    });
   });
 
-  it('should reach the limit with 10 billions builds combinations', () => {
-    const lessThan10BillionsBuildsArtifactsData: AllArtifactsData = {
-      ...moreThan10BillionsBuildsArtifactsData,
-      flowers: moreThan10BillionsBuildsArtifactsData.flowers.slice(0, 99),
-    };
-    loadArtifacts(lessThan10BillionsBuildsArtifactsData);
+  describe('cancelOptimization', () => {
+    it('should stop a running computation', () => {
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
+      expect(buildsOptimizer.isOptimizationRunning()).toBeTruthy();
 
-    expect(buildsOptimizer.isBuildsCombinationsLimitReached(defaultArtifactsFilters)).toBeFalsy();
+      buildsOptimizer.cancelOptimization();
+      expect(buildsOptimizer.isOptimizationRunning()).toBeFalsy();
+    });
   });
 });
 

@@ -1,10 +1,11 @@
-import { createEntityAdapter, createReducer, EntityState } from '@reduxjs/toolkit';
+import { createEntityAdapter, createReducer, EntityState, isAnyOf } from '@reduxjs/toolkit';
 import { BuildsComputationProgress } from '../../../domain/builds-computation';
 import { Build } from '../../../domain/models/build';
 import {
   addBuildsAction,
   buildsLimitReachedAction,
   buildsOptimizationDoneAction,
+  cancelOptimizationAction,
   removeAllBuildsAction,
   runBuildsOptimizerAction,
   updateBuildsComputationProgressAction,
@@ -58,7 +59,7 @@ export const buildsReducer = createReducer(initialState, (builder) => {
       isOptimizationRunning: false,
       buildsLimitReached: true,
     }))
-    .addCase(buildsOptimizationDoneAction, (state) => ({
+    .addMatcher(isAnyOf(buildsOptimizationDoneAction, cancelOptimizationAction), (state) => ({
       ...state,
       isOptimizationRunning: false,
       newBuilds: [],
