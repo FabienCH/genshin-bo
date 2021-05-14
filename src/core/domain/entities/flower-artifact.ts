@@ -6,8 +6,8 @@ import { Artifact, ArtifactType } from './artifact';
 export class FlowerArtifact extends Artifact {
   public static readonly mainStat = MainStats.flatHp;
 
-  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatValueFromOcr?: number) {
-    super(id, set, subStats, level, FlowerArtifact.mainStat, mainStatValueFromOcr);
+  constructor(id: string, set: SetNames, subStats: SubStatsValues, level: number, mainStatValue: number) {
+    super(id, set, subStats, level, { [FlowerArtifact.mainStat]: mainStatValue });
   }
 
   public getType(): ArtifactType {

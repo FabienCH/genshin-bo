@@ -34,7 +34,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentAtk]: 2.9,
           },
           8,
-          MainStats.elementalMastery,
+          { [MainStats.elementalMastery]: 91 },
         ),
       ];
 
@@ -54,7 +54,7 @@ describe('Artifacts Filter', () => {
             [SubStats.critDmg]: 3,
           },
           8,
-          MainStats.cryoDmg,
+          { [MainStats.cryoDmg]: 22.8 },
         ),
       ];
 
@@ -74,7 +74,7 @@ describe('Artifacts Filter', () => {
             [SubStats.energyRecharge]: 5,
           },
           12,
-          MainStats.critRate,
+          { [MainStats.critRate]: 20.5 },
         ),
         new CircletArtifact(
           '13',
@@ -86,7 +86,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatHp]: 5,
           },
           14,
-          MainStats.critRate,
+          { [MainStats.critRate]: 23.2 },
         ),
       ];
 
@@ -115,7 +115,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatDef]: 2.9,
           },
           16,
-          MainStats.percentAtk,
+          { [MainStats.percentAtk]: 38.7 },
         ),
       ];
       const expectedGoblets = [
@@ -129,7 +129,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatHp]: 3,
           },
           15,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 45.9 },
         ),
         new GobletArtifact(
           '8',
@@ -141,7 +141,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatDef]: 3,
           },
           12,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 38.5 },
         ),
       ];
       const expectedCirclets = [
@@ -155,7 +155,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentHp]: 5,
           },
           17,
-          MainStats.healingBonus,
+          { [MainStats.healingBonus]: 31.3 },
         ),
       ];
       expect(filteredArtifacts).toEqual({ ...allArtifacts, sands: expectedSands, goblets: expectedGoblets, circlets: expectedCirclets });
@@ -176,6 +176,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentAtk]: 7,
           },
           8,
+          2342,
         ),
       ];
       const expectedPlumes = [
@@ -189,6 +190,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentDef]: 8,
           },
           12,
+          205,
         ),
       ];
       const expectedSands = [
@@ -202,7 +204,7 @@ describe('Artifacts Filter', () => {
             [SubStats.critDmg]: 2.9,
           },
           12,
-          MainStats.percentHp,
+          { [MainStats.percentHp]: 30.8 },
         ),
         new SandsArtifact(
           '5',
@@ -214,7 +216,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatDef]: 2.9,
           },
           16,
-          MainStats.percentAtk,
+          { [MainStats.percentAtk]: 38.7 },
         ),
         new SandsArtifact(
           '6',
@@ -226,7 +228,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentAtk]: 2.9,
           },
           8,
-          MainStats.elementalMastery,
+          { [MainStats.elementalMastery]: 91 },
         ),
       ];
       const expectedGoblets = [
@@ -240,7 +242,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatHp]: 3,
           },
           15,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 45.9 },
         ),
         new GobletArtifact(
           '8',
@@ -252,7 +254,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatDef]: 3,
           },
           12,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 38.5 },
         ),
         new GobletArtifact(
           '9',
@@ -264,7 +266,7 @@ describe('Artifacts Filter', () => {
             [SubStats.critDmg]: 3,
           },
           8,
-          MainStats.cryoDmg,
+          { [MainStats.cryoDmg]: 22.8 },
         ),
       ];
 
@@ -291,6 +293,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentDef]: 8,
           },
           12,
+          205,
         ),
       ];
       const expectedSands = [
@@ -304,7 +307,7 @@ describe('Artifacts Filter', () => {
             [SubStats.critDmg]: 2.9,
           },
           12,
-          MainStats.percentHp,
+          { [MainStats.percentHp]: 30.8 },
         ),
         new SandsArtifact(
           '5',
@@ -316,7 +319,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatDef]: 2.9,
           },
           16,
-          MainStats.percentAtk,
+          { [MainStats.percentAtk]: 38.7 },
         ),
       ];
       const expectedGoblets = [
@@ -330,7 +333,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatHp]: 3,
           },
           15,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 45.9 },
         ),
         new GobletArtifact(
           '8',
@@ -342,7 +345,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatDef]: 3,
           },
           12,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 38.5 },
         ),
       ];
 
@@ -371,6 +374,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentDef]: 8,
           },
           12,
+          205,
         ),
       ];
       const expectedSands = [
@@ -384,7 +388,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatDef]: 2.9,
           },
           16,
-          MainStats.percentAtk,
+          { [MainStats.percentAtk]: 38.7 },
         ),
         new SandsArtifact(
           '6',
@@ -396,7 +400,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentAtk]: 2.9,
           },
           8,
-          MainStats.elementalMastery,
+          { [MainStats.elementalMastery]: 91 },
         ),
       ];
       const expectedGoblets = [
@@ -410,7 +414,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatHp]: 3,
           },
           15,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 45.9 },
         ),
         new GobletArtifact(
           '9',
@@ -422,7 +426,7 @@ describe('Artifacts Filter', () => {
             [SubStats.critDmg]: 3,
           },
           8,
-          MainStats.cryoDmg,
+          { [MainStats.cryoDmg]: 22.8 },
         ),
       ];
       const expectedCirclets = [
@@ -436,7 +440,7 @@ describe('Artifacts Filter', () => {
             [SubStats.energyRecharge]: 5,
           },
           12,
-          MainStats.critRate,
+          { [MainStats.critRate]: 20.5 },
         ),
       ];
 
@@ -462,6 +466,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentDef]: 8,
           },
           12,
+          205,
         ),
       ];
       const expectedSands = [
@@ -475,7 +480,7 @@ describe('Artifacts Filter', () => {
             [SubStats.critDmg]: 2.9,
           },
           12,
-          MainStats.percentHp,
+          { [MainStats.percentHp]: 30.8 },
         ),
         new SandsArtifact(
           '6',
@@ -487,7 +492,7 @@ describe('Artifacts Filter', () => {
             [SubStats.percentAtk]: 2.9,
           },
           8,
-          MainStats.elementalMastery,
+          { [MainStats.elementalMastery]: 91 },
         ),
       ];
       const expectedGoblets = [
@@ -501,7 +506,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatHp]: 3,
           },
           15,
-          MainStats.percentDef,
+          { [MainStats.percentDef]: 45.9 },
         ),
         new GobletArtifact(
           '9',
@@ -513,7 +518,7 @@ describe('Artifacts Filter', () => {
             [SubStats.critDmg]: 3,
           },
           8,
-          MainStats.cryoDmg,
+          { [MainStats.cryoDmg]: 22.8 },
         ),
       ];
       const expectedCirclets = [
@@ -527,7 +532,7 @@ describe('Artifacts Filter', () => {
             [SubStats.energyRecharge]: 5,
           },
           12,
-          MainStats.critRate,
+          { [MainStats.critRate]: 20.5 },
         ),
         new CircletArtifact(
           '13',
@@ -539,7 +544,7 @@ describe('Artifacts Filter', () => {
             [SubStats.flatHp]: 5,
           },
           14,
-          MainStats.critRate,
+          { [MainStats.critRate]: 23.2 },
         ),
       ];
       expect(filteredArtifacts).toEqual({
@@ -570,6 +575,7 @@ describe('Artifacts Filter', () => {
           [SubStats.percentAtk]: 7,
         },
         8,
+        2342,
       ),
     ];
     const expectedPlumes = [
@@ -583,6 +589,7 @@ describe('Artifacts Filter', () => {
           [SubStats.percentDef]: 8,
         },
         12,
+        205,
       ),
     ];
     const expectedSands = [
@@ -596,7 +603,7 @@ describe('Artifacts Filter', () => {
           [SubStats.critDmg]: 2.9,
         },
         12,
-        MainStats.percentHp,
+        { [MainStats.percentHp]: 30.8 },
       ),
     ];
     const expectedGoblets = [
@@ -610,7 +617,7 @@ describe('Artifacts Filter', () => {
           [SubStats.flatHp]: 3,
         },
         15,
-        MainStats.percentDef,
+        { [MainStats.percentDef]: 45.9 },
       ),
       new GobletArtifact(
         '8',
@@ -622,7 +629,7 @@ describe('Artifacts Filter', () => {
           [SubStats.flatDef]: 3,
         },
         12,
-        MainStats.percentDef,
+        { [MainStats.percentDef]: 38.5 },
       ),
     ];
     const expectedCirclets = [
@@ -636,7 +643,7 @@ describe('Artifacts Filter', () => {
           [SubStats.percentHp]: 5,
         },
         17,
-        MainStats.healingBonus,
+        { [MainStats.healingBonus]: 31.3 },
       ),
     ];
     expect(filteredArtifacts).toEqual({

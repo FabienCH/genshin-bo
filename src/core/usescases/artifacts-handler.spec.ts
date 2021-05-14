@@ -10,7 +10,7 @@ import { FlowerArtifact } from '../domain/entities/flower-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { AllArtifactsData, ArtifactData } from '../domain/models/artifact-data';
-import { MainStats, MainStatTypes } from '../domain/models/main-statistics';
+import { MainStats } from '../domain/models/main-statistics';
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStats } from '../domain/models/sub-statistics';
@@ -327,23 +327,6 @@ describe('ArtifactsHandler.addArtifact', () => {
         const expectedArtifact = artifactsHandler.getById(artifactValues.id);
         expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
-    });
-
-    it('should failed if no values are found for main stat', () => {
-      const artifactValues = {
-        id: '1',
-        type: ArtifactType.sands,
-        set: SetNames.gladiatorsFinale,
-        level: 4,
-        mainStatType: 'notExistingMainStat' as MainStatTypes,
-        subStats: {
-          [SubStats.flatAtk]: 5,
-          [SubStats.critRate]: 3.5,
-          [SubStats.percentHp]: 8,
-          [SubStats.critDmg]: 5.2,
-        },
-      };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('could not find values for main stat notExistingMainStat');
     });
 
     it('should failed if it has more than 4 substat', () => {

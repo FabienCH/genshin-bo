@@ -9,14 +9,15 @@ export class ArtifactValidator {
     if (!artifactData.id) {
       this.errorMessages.push('an artifact must have an id');
     }
-    this.validateNewArtifact(artifactData);
+    this.validateArtifact(artifactData);
 
     return this.errorMessages.length === 0;
   }
 
-  public isNewArtifactValid(newArtifactData: Partial<NewArtifactData>): boolean {
+  public isNewArtifactValid(newArtifactData: Partial<NewArtifactData>, mainStatValue: number, mainValueFromOcr?: number): boolean {
     this.errorMessages = [];
-    this.validateNewArtifact(newArtifactData);
+    this.validateArtifact(newArtifactData);
+    this.validateMainStatValue(newArtifactData, mainStatValue, mainValueFromOcr);
 
     return this.errorMessages.length === 0;
   }
@@ -25,7 +26,7 @@ export class ArtifactValidator {
     return new ArtifactValidationError(this.errorMessages);
   }
 
-  private validateNewArtifact(newArtifactData: Partial<NewArtifactData>) {
+  private validateArtifact(newArtifactData: Partial<NewArtifactData>) {
     this.validateMandatoryAttributes(newArtifactData);
     this.validateArtifactStats(newArtifactData);
   }
@@ -33,6 +34,7 @@ export class ArtifactValidator {
   private validateArtifactStats(artifactData: Partial<BaseArtifactData>) {
     const { subStats, level, mainStatType } = artifactData;
     const subStatsKeys = subStats ? Object.keys(subStats) : [];
+
     if (subStatsKeys.length < 3) {
       this.errorMessages.push('an artifact can not have less than 3 substats');
     }
@@ -49,15 +51,15 @@ export class ArtifactValidator {
 
   private validateMandatoryAttributes(newArtifactData: Partial<NewArtifactData>) {
     const { type, set, level, mainStatType, subStats } = newArtifactData;
-
     const missingStats = [];
+
     if (!type) {
       missingStats.push('type');
     }
     if (!set) {
       missingStats.push('set');
     }
-    if (!level) {
+    if (level == null) {
       missingStats.push('level');
     }
     if (!mainStatType) {
@@ -67,7 +69,18 @@ export class ArtifactValidator {
       missingStats.push('sub stats');
     }
     if (missingStats.length) {
-      this.errorMessages.push(`missing artifact data :${missingStats.join(', ')}`);
+      this.errorMessages.push(`missing artifact data: ${missingStats.join(', ')}.`);
+    }
+  }
+
+  private validateMainStatValue(artifactData: Partial<NewArtifactData>, mainStatValue: number, mainValueFromOcr?: number) {
+    const { level, mainStatType } = artifactData;
+
+    if (!mainStatValue) {
+      this.errorMessages.push(`could not find values for main stat ${mainStatType} at level ${level}.`);
+    }
+    if (mainValueFromOcr && mainStatValue !== mainValueFromOcr) {
+      this.errorMessages.push(`inconsistent main stat value, value from level is ${mainStatValue}`);
     }
   }
 }
