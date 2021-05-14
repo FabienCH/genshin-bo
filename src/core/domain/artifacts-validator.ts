@@ -1,5 +1,12 @@
 import { ArtifactValidationError } from './artifact-validation-error';
+import { ArtifactType } from './entities/artifact';
+import { FlowerArtifact } from './entities/flower-artifact';
+import { PlumeArtifact } from './entities/plume-artifact';
 import { ArtifactData, BaseArtifactData, NewArtifactData } from './models/artifact-data';
+import { circletMainStats } from './models/circlet-artifact-data';
+import { gobletMainStats } from './models/goblet-artifact-data';
+import { MainStatTypes } from './models/main-statistics';
+import { sandsMainStats } from './models/sands-artifact-data';
 
 export class ArtifactValidator {
   private errorMessages!: string[];
@@ -29,6 +36,7 @@ export class ArtifactValidator {
   private validateArtifact(newArtifactData: Partial<NewArtifactData>) {
     this.validateMandatoryAttributes(newArtifactData);
     this.validateArtifactStats(newArtifactData);
+    this.validateArtifactMainStat(newArtifactData.mainStatType, newArtifactData.type);
   }
 
   private validateArtifactStats(artifactData: Partial<BaseArtifactData>) {
@@ -73,6 +81,12 @@ export class ArtifactValidator {
     }
   }
 
+  private validateArtifactMainStat(mainStatType?: MainStatTypes, artifactType?: ArtifactType) {
+    if (!mainStatType || !artifactType || !this.isArtifactMainStatValid(mainStatType, artifactType)) {
+      this.errorMessages.push(`an artifact of type ${artifactType} can not have ${mainStatType} as main stat.`);
+    }
+  }
+
   private validateMainStatValue(artifactData: Partial<NewArtifactData>, mainStatValue: number, mainValueFromOcr?: number) {
     const { level, mainStatType } = artifactData;
 
@@ -81,6 +95,23 @@ export class ArtifactValidator {
     }
     if (mainValueFromOcr && mainStatValue !== mainValueFromOcr) {
       this.errorMessages.push(`inconsistent main stat value, value from level is ${mainStatValue}`);
+    }
+  }
+
+  private isArtifactMainStatValid(mainStatType: MainStatTypes, artifactType: ArtifactType): boolean {
+    switch (artifactType) {
+      case 'flower':
+        return mainStatType === FlowerArtifact.mainStat;
+      case 'plume':
+        return mainStatType === PlumeArtifact.mainStat;
+      case 'sands':
+        return !!sandsMainStats.find((sandMainStat) => sandMainStat === mainStatType);
+      case 'goblet':
+        return !!gobletMainStats.find((gobletMainStat) => gobletMainStat === mainStatType);
+      case 'circlet':
+        return !!circletMainStats.find((circletMainStat) => circletMainStat === mainStatType);
+      default:
+        return false;
     }
   }
 }

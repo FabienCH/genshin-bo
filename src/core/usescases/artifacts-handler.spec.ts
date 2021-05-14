@@ -11,7 +11,6 @@ import { PlumeArtifact } from '../domain/entities/plume-artifact';
 import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { AllArtifactsData, ArtifactData } from '../domain/models/artifact-data';
 import { MainStats } from '../domain/models/main-statistics';
-import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
@@ -152,12 +151,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         },
         {
           id: '24',
-          mainStatType: 'elementalMastery' as SandsMainStatType,
+          mainStatType: MainStats.elementalMastery,
           ...commonValues,
         },
         {
           id: '25',
-          mainStatType: MainStats.elementalMastery,
+          mainStatType: MainStats.energyRecharge,
           ...commonValues,
         },
       ];
@@ -169,6 +168,18 @@ describe('ArtifactsHandler.addArtifact', () => {
         const expectedArtifact = artifactsHandler.getById(artifactValues.id);
         expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
+    });
+
+    it('should failed with invalid main stat', () => {
+      const artifactValues = {
+        id: '21',
+        mainStatType: MainStats.healingBonus,
+        ...commonValues,
+      };
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact of type sands can not have healingBonus as main stat.']);
     });
   });
 
@@ -224,6 +235,18 @@ describe('ArtifactsHandler.addArtifact', () => {
         const expectedArtifact = artifactsHandler.getById(artifactValues.id);
         expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
+    });
+
+    it('should failed with invalid main stat', () => {
+      const artifactValues = {
+        id: '21',
+        mainStatType: MainStats.critDmg,
+        ...commonValues,
+      };
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact of type goblet can not have critDmg as main stat.']);
     });
   });
 
@@ -285,6 +308,18 @@ describe('ArtifactsHandler.addArtifact', () => {
         const expectedArtifact = artifactsHandler.getById(artifactValues.id);
         expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
+    });
+
+    it('should failed with invalid main stat', () => {
+      const artifactValues = {
+        id: '21',
+        mainStatType: MainStats.geoDmg,
+        ...commonValues,
+      };
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact of type circlet can not have geoDmg as main stat.']);
     });
   });
 
