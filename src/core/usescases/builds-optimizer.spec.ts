@@ -27,6 +27,8 @@ import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-acti
 import { AllArtifactsData } from '../domain/models/artifact-data';
 import { ArtifactsFilters } from './artifacts-filter';
 import { updateBuildsComputationProgressAction } from '../adapters/redux/builds/builds-action';
+import { BuildArtifactParams } from '../domain/models/build';
+import { ArtifactType } from '../domain/entities/artifact';
 
 describe('BuildsOptimizer', () => {
   let buildsOptimizer: BuildsOptimizer;
@@ -46,6 +48,14 @@ describe('BuildsOptimizer', () => {
     [CharacterStats.atk]: 0,
     [CharacterStats.def]: 0,
   };
+
+  const defaultBuildArtifactsParams: BuildArtifactParams[] = [
+    { id: '0', type: ArtifactType.flower },
+    { id: '1', type: ArtifactType.plume },
+    { id: '2', type: ArtifactType.sands },
+    { id: '3', type: ArtifactType.goblet },
+    { id: '4', type: ArtifactType.circlet },
+  ];
 
   beforeEach(() => {
     loadArtifacts(defaultBuildArtifactsData);
@@ -75,7 +85,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.energyRecharge]: 100,
               [CharacterStats.powerfulShield]: 35,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -99,7 +109,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.physicalDmg]: 64.5,
               [CharacterStats.powerfulShield]: 35,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -125,7 +135,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.powerfulShield]: 35,
               [CharacterStats.physicalDmg]: 64.5,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -149,7 +159,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.powerfulShield]: 35,
               [CharacterStats.physicalDmg]: 64.5,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -173,7 +183,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.electroDmg]: 15,
               [CharacterStats.physicalDmg]: 64.5,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -198,7 +208,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.physicalDmg]: 64.5,
               [CharacterStats.pyroRes]: 40,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -224,7 +234,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.powerfulShield]: 35,
               [CharacterStats.pyroRes]: 40,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -246,7 +256,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.energyRecharge]: 120,
               [CharacterStats.pyroDmg]: 7,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -268,7 +278,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.energyRecharge]: 120,
               [CharacterStats.pyroDmg]: 7,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -289,7 +299,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.pyroDmg]: 7,
               [CharacterStats.physicalDmg]: 64.5,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -312,7 +322,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.pyroDmg]: 7,
               [CharacterStats.geoDmg]: 14.4,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -334,7 +344,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.energyRecharge]: 170.5,
               [CharacterStats.pyroDmg]: 7,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -356,7 +366,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.pyroDmg]: 7,
               [CharacterStats.physicalDmg]: 30,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -378,7 +388,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.pyroDmg]: 7,
               [CharacterStats.physicalDmg]: 30,
             },
-            artifactIds: ['0', '1', '2', '3', '4'],
+            buildArtifactsParams: defaultBuildArtifactsParams,
           },
         ]);
       });
@@ -404,7 +414,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.physicalDmg]: 64.5,
             [CharacterStats.pyroRes]: 40,
           },
-          artifactIds: ['0', '2', '4', '5', '7'],
+          buildArtifactsParams: [
+            { id: '0', type: ArtifactType.flower },
+            { id: '2', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '5', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
         {
           stats: {
@@ -420,7 +436,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.physicalDmg]: 64.5,
             [CharacterStats.cryoDmg]: 22.8,
           },
-          artifactIds: ['0', '2', '4', '6', '7'],
+          buildArtifactsParams: [
+            { id: '0', type: ArtifactType.flower },
+            { id: '2', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '6', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
         {
           stats: {
@@ -435,7 +457,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.pyroRes]: 40,
             [CharacterStats.physicalDmg]: 64.5,
           },
-          artifactIds: ['0', '3', '4', '5', '7'],
+          buildArtifactsParams: [
+            { id: '0', type: ArtifactType.flower },
+            { id: '3', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '5', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
         {
           stats: {
@@ -450,7 +478,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.cryoDmg]: 37.8,
             [CharacterStats.physicalDmg]: 64.5,
           },
-          artifactIds: ['0', '3', '4', '6', '7'],
+          buildArtifactsParams: [
+            { id: '0', type: ArtifactType.flower },
+            { id: '3', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '6', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
         {
           stats: {
@@ -466,7 +500,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.electroDmg]: 15,
             [CharacterStats.physicalDmg]: 64.5,
           },
-          artifactIds: ['1', '2', '4', '5', '7'],
+          buildArtifactsParams: [
+            { id: '1', type: ArtifactType.flower },
+            { id: '2', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '5', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
         {
           stats: {
@@ -483,7 +523,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.cryoDmg]: 22.8,
             [CharacterStats.physicalDmg]: 64.5,
           },
-          artifactIds: ['1', '2', '4', '6', '7'],
+          buildArtifactsParams: [
+            { id: '1', type: ArtifactType.flower },
+            { id: '2', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '6', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
         {
           stats: {
@@ -498,7 +544,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.electroDmg]: 15,
             [CharacterStats.physicalDmg]: 64.5,
           },
-          artifactIds: ['1', '3', '4', '5', '7'],
+          buildArtifactsParams: [
+            { id: '1', type: ArtifactType.flower },
+            { id: '3', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '5', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
         {
           stats: {
@@ -514,7 +566,13 @@ describe('BuildsOptimizer', () => {
             [CharacterStats.cryoDmg]: 37.8,
             [CharacterStats.physicalDmg]: 64.5,
           },
-          artifactIds: ['1', '3', '4', '6', '7'],
+          buildArtifactsParams: [
+            { id: '1', type: ArtifactType.flower },
+            { id: '3', type: ArtifactType.plume },
+            { id: '4', type: ArtifactType.sands },
+            { id: '6', type: ArtifactType.goblet },
+            { id: '7', type: ArtifactType.circlet },
+          ],
         },
       ]);
     });
