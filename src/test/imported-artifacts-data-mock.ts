@@ -1,5 +1,5 @@
 import { ArtifactType } from '../core/domain/entities/artifact';
-import { OcrArtifactData } from '../core/domain/models/artifact-data';
+import { NewArtifactData } from '../core/domain/models/artifact-data';
 import { MainStats } from '../core/domain/models/main-statistics';
 import { SetNames } from '../core/domain/models/sets-with-effects';
 import { SubStats } from '../core/domain/models/sub-statistics';
@@ -31,7 +31,7 @@ export const importedArtifactDataMock = [
   },
 ];
 
-export const properlyImportedArtifactMock: OcrArtifactData[] = [
+export const properlyImportedArtifactMock: NewArtifactData[] = [
   {
     type: ArtifactType.circlet,
     set: SetNames.wanderersTroupe,
@@ -124,7 +124,7 @@ export const properlyImportedArtifactMock: OcrArtifactData[] = [
   },
 ];
 
-export const misrecognizedMainImportedArtifactMock: OcrArtifactData[] = [
+export const misrecognizedMainImportedArtifactMock: NewArtifactData[] = [
   {
     type: ArtifactType.circlet,
     set: SetNames.wanderersTroupe,
@@ -191,7 +191,7 @@ export const misrecognizedMainImportedArtifactMock: OcrArtifactData[] = [
   },
 ];
 
-export const misrecognizedSubsImportedArtifactMock: OcrArtifactData[] = [
+export const misrecognizedSubsImportedArtifactMock: NewArtifactData[] = [
   {
     type: ArtifactType.goblet,
     set: SetNames.archaicPetra,

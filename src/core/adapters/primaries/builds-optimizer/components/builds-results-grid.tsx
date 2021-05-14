@@ -7,7 +7,6 @@ import { ColDef, GridApi, GridReadyEvent, RowNode } from 'ag-grid-community';
 import { BuildFilter } from '../../../../domain/build-filter';
 import { BuildArtifactsCellRenderer } from './build-artifacts-cell-renderer';
 import { Build } from '../../../../domain/models/build';
-import { ArtifactData } from '../../../../domain/models/artifact-data';
 import React from 'react';
 
 const styles = createStyles({
@@ -29,7 +28,7 @@ interface BuildsResultsGridProps extends WithStyles<typeof styles> {
   newBuilds: Build[];
   buildFilters: Partial<CharacterStatsValues>;
   columnDefs: ColDef[];
-  onMouseEnterArtifact: (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  onMouseEnterArtifact: (artifactId: string, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
   onMouseLeaveArtifact: () => void;
 }
 
@@ -40,7 +39,7 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
   const [newBuilds, setNewBuilds] = useState(props.newBuilds);
   const [initialBuilds, setInitialBuilds] = useState(props.initialBuilds);
 
-  const getRowData = (builds: Build[]) => builds.map((build) => ({ ...build.stats, artifactIds: build.artifactIds }));
+  const getRowData = (builds: Build[]) => builds.map((build) => ({ ...build.stats, buildArtifactsParams: build.buildArtifactsParams }));
 
   React.useEffect(() => {
     if (props.initialBuilds.length === 0 && props.newBuilds.length === 0) {
@@ -105,7 +104,7 @@ function BuildsResultsGrid(props: BuildsResultsGridProps): ReactElement {
         isExternalFilterPresent={isExternalFilterPresent}
         doesExternalFilterPass={doesExternalFilterPass}
       >
-        <AgGridColumn field="artifactIds"></AgGridColumn>
+        <AgGridColumn field="buildArtifactsParams"></AgGridColumn>
         <AgGridColumn field="hp"></AgGridColumn>
         <AgGridColumn field="atk"></AgGridColumn>
         <AgGridColumn field="def"></AgGridColumn>

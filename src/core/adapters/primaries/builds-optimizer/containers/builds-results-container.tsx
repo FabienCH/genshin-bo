@@ -7,10 +7,9 @@ import { Build } from '../../../../domain/models/build';
 import { ColDef } from 'ag-grid-community';
 import ArtifactPopover from '../components/artifact-popover';
 import React from 'react';
-import { ArtifactMapper } from '../../../../domain/mappers/artifact-mapper';
-import { ArtifactData } from '../../../../domain/models/artifact-data';
 import { ArtifactView } from '../../../../domain/models/artifact-view';
 import WarningMessage from '../../shared/warning-message';
+import { ArtifactsDI } from '../../../../di/artifacts-di';
 
 const styles = createStyles({
   infoContainer: {
@@ -37,9 +36,12 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
   const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
   const [currentArtifact, setCurrentArtifact] = React.useState<ArtifactView | null>(null);
 
-  const handlePopoverOpen = (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const handlePopoverOpen = (artifactId: string, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);
-    setCurrentArtifact(ArtifactMapper.mapDataToView(artifactData));
+    const artifact = ArtifactsDI.artifactsHandler.getById(artifactId);
+    if (!(artifact instanceof Error)) {
+      setCurrentArtifact(artifact);
+    }
   };
 
   const handlePopoverClose = () => {
@@ -49,7 +51,7 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
 
   let columnDefs: ColDef[] = [
     {
-      field: 'artifactIds',
+      field: 'buildArtifactsParams',
       headerName: 'Artifacts',
       cellRenderer: 'buildArtifactsCellRenderer',
       width: 150,

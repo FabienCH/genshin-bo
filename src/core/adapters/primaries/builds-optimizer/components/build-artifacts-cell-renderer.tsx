@@ -1,15 +1,15 @@
 import { ReactElement } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { selectArtifactById } from '../../../redux/artifacts/artifacts-selectors';
 import { ICellRendererParams } from 'ag-grid-community';
 import React from 'react';
-import { ArtifactData } from '../../../../domain/models/artifact-data';
+import { BuildArtifactParams } from '../../../../domain/models/build';
 
-type BuildArtifactsCellProps = ICellRendererParams;
+interface BuildArtifactsCellProps extends ICellRendererParams {
+  value: BuildArtifactParams[];
+}
 
 export function BuildArtifactsCellRenderer(props: BuildArtifactsCellProps): ReactElement {
-  const artifactIds = props.value as string[];
-  const artifacts = artifactIds.map((id) => selectArtifactById(id));
+  const buildArtifactsParams = props.value;
 
   const iconsData = {
     flower: {
@@ -39,8 +39,8 @@ export function BuildArtifactsCellRenderer(props: BuildArtifactsCellProps): Reac
     },
   };
 
-  const handlePopoverOpen = (artifactData: ArtifactData, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
-    props.context.onMouseEnterArtifact(artifactData, event);
+  const handlePopoverOpen = (artifactId: string, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    props.context.onMouseEnterArtifact(artifactId, event);
   };
 
   const handlePopoverClose = () => {
@@ -56,22 +56,18 @@ export function BuildArtifactsCellRenderer(props: BuildArtifactsCellProps): Reac
         top: '10px',
       }}
     >
-      {artifacts
-        .filter((artifact) => !!artifact)
-        .map((artifact) =>
-          artifact ? (
-            <SvgIcon
-              key={artifact.id}
-              color="secondary"
-              fontSize="small"
-              viewBox={iconsData[artifact.type].viewBox}
-              onMouseEnter={(e) => handlePopoverOpen(artifact, e)}
-              onMouseLeave={handlePopoverClose}
-            >
-              <path d={iconsData[artifact.type].d} />
-            </SvgIcon>
-          ) : null,
-        )}
+      {buildArtifactsParams.map((artifactParams) => (
+        <SvgIcon
+          key={artifactParams.id}
+          color="secondary"
+          fontSize="small"
+          viewBox={iconsData[artifactParams.type].viewBox}
+          onMouseEnter={(e) => handlePopoverOpen(artifactParams.id, e)}
+          onMouseLeave={handlePopoverClose}
+        >
+          <path d={iconsData[artifactParams.type].d} />
+        </SvgIcon>
+      ))}
     </div>
   );
 }

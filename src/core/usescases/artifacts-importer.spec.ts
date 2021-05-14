@@ -36,7 +36,7 @@ describe('ArtifactsImporter', () => {
     ArtifactsDI.registerOcrWorker();
     ArtifactsDI.registerRepository();
     ocrWorkerHandler = ArtifactsDI.getOcrWorkerHandler();
-    artifactsImporter = new ArtifactsImporter();
+    artifactsImporter = ArtifactsDI.getArtifactsImporter();
     ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
     videoToFramesSpy = jest.spyOn(VideoToFrames, 'getFrames');
     appStoreUnsubscribe = appStore.subscribe(() => {
@@ -140,7 +140,7 @@ describe('ArtifactsImporter', () => {
       expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
         artifacts: [],
         artifactsInError: 0,
-        fileError: 'Could not fin any artifacts.',
+        fileError: 'JSON file not properly formatted.',
       });
     });
 
@@ -150,7 +150,7 @@ describe('ArtifactsImporter', () => {
       expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
         artifacts: [],
         artifactsInError: 0,
-        fileError: 'Could not fin any artifacts.',
+        fileError: 'JSON file not properly formatted.',
       });
     });
   });

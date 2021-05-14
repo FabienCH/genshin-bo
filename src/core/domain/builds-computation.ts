@@ -99,8 +99,8 @@ export class BuildsComputation {
   private computeBuildStats(artifactsToCompute: Artifact[]) {
     const buildStats = this.statsComputation.computeStats({ ...this.baseStats }, this.characterBonusStat, artifactsToCompute);
     if (BuildFilter.filterBuilds(this.statsFilter, buildStats)) {
-      const artifactIds = artifactsToCompute.map((artifact) => artifact.id);
-      this.builds.push({ id: uuidv4(), stats: buildStats, artifactIds });
+      const buildArtifactsParams = artifactsToCompute.map((artifact) => ({ id: artifact.id, type: artifact.getType() }));
+      this.builds.push({ id: uuidv4(), stats: buildStats, buildArtifactsParams });
       this.buildsMatchingFilters++;
     }
   }

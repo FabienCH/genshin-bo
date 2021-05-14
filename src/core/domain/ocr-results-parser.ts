@@ -1,6 +1,6 @@
 import { ArtifactType } from './entities/artifact';
 import { StringFormatter } from './mappers/string-formatter';
-import { OcrArtifactData } from './models/artifact-data';
+import { NewArtifactData } from './models/artifact-data';
 import { MainStats } from './models/main-statistics';
 import { SetNames } from './models/sets-with-effects';
 import { SubStats, SubStatsValues } from './models/sub-statistics';
@@ -9,7 +9,7 @@ export class OcrResultsParser {
   private readonly maxStatWords: number = 2;
   private readonly flatOrPercentStats: string[] = ['atk', 'def', 'hp'];
 
-  public parseToArtifactData(ocrResults: string[]): OcrArtifactData {
+  public parseToArtifactData(ocrResults: string[]): Partial<NewArtifactData> {
     const noNewLineCharOcrResults = ocrResults.map((line) => line.replace(/\n/g, ''));
     let type = Object.values(ArtifactType).find((type) => noNewLineCharOcrResults[1].toLowerCase().includes(type));
     if (!type) {

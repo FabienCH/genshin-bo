@@ -4,15 +4,13 @@ import { deleteAllArtifactsAction, loadArtifactsActions } from '../adapters/redu
 import { selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
 import { ArtifactsDI } from '../di/artifacts-di';
+import { ArtifactValidationError } from '../domain/artifact-validation-error';
 import { ArtifactType } from '../domain/entities/artifact';
-import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
-import { GobletArtifact } from '../domain/entities/goblet-artifact';
 import { PlumeArtifact } from '../domain/entities/plume-artifact';
-import { SandsArtifact } from '../domain/entities/sands-artifact';
+import { ArtifactMapper } from '../domain/mappers/artifact-mapper';
 import { AllArtifactsData, ArtifactData } from '../domain/models/artifact-data';
-import { MainStats, MainStatTypes } from '../domain/models/main-statistics';
-import { SandsMainStatType } from '../domain/models/sands-artifact-data';
+import { MainStats } from '../domain/models/main-statistics';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { SubStats } from '../domain/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
@@ -59,8 +57,10 @@ describe('ArtifactsHandler.addArtifact', () => {
     it('should succeed if it exists', () => {
       const artifactValues = {
         id: '1',
+        type: ArtifactType.flower,
         set: SetNames.thunderingFury,
         level: 8,
+        mainStatType: FlowerArtifact.mainStat,
         subStats: {
           [SubStats.energyRecharge]: 3,
           [SubStats.percentHp]: 6,
@@ -70,14 +70,11 @@ describe('ArtifactsHandler.addArtifact', () => {
       };
 
       const expectedArtifact = artifactsHandler.getById('1');
-
-      expect(expectedArtifact).toEqual(
-        new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
-      );
+      expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
     });
 
     it('should failed if it does not exist', () => {
-      expect(() => artifactsHandler.getById('20')).toThrowError('artifact with id 20 not found');
+      expect(artifactsHandler.getById('20')).toEqual(new Error('artifact with id 20 not found'));
     });
   });
 
@@ -93,10 +90,9 @@ describe('ArtifactsHandler.addArtifact', () => {
       };
       artifactsHandler.addOne(artifactValues);
       const addedArtifact = artifactsHandler.getById(artifactValues.id);
-      expect(addedArtifact).toEqual(
-        new FlowerArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
-      );
-      expect(addedArtifact.mainStat).toEqual({ [MainStats.flatHp]: 1123 });
+
+      expect(addedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
+      expect(addedArtifact).toHaveProperty('mainStat', '1123 HP');
     });
   });
 
@@ -115,12 +111,12 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.elementalMastery]: 8,
         },
       };
+
       artifactsHandler.addOne(artifactValues);
       const addedArtifact = artifactsHandler.getById(artifactValues.id);
-      expect(addedArtifact).toEqual(
-        new PlumeArtifact(artifactValues.id, artifactValues.set, artifactValues.subStats, artifactValues.level),
-      );
-      expect(addedArtifact.mainStat).toEqual({ [MainStats.flatAtk]: 152 });
+
+      expect(addedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
+      expect(addedArtifact).toHaveProperty('mainStat', '152 ATK');
     });
   });
 
@@ -155,12 +151,12 @@ describe('ArtifactsHandler.addArtifact', () => {
         },
         {
           id: '24',
-          mainStatType: 'elementalMastery' as SandsMainStatType,
+          mainStatType: MainStats.elementalMastery,
           ...commonValues,
         },
         {
           id: '25',
-          mainStatType: MainStats.elementalMastery,
+          mainStatType: MainStats.energyRecharge,
           ...commonValues,
         },
       ];
@@ -168,18 +164,23 @@ describe('ArtifactsHandler.addArtifact', () => {
         artifactsHandler.addOne(artifactValues);
       });
 
-      artifactsValues.forEach((artifactsValue) => {
-        const expectedArtifact = artifactsHandler.getById(artifactsValue.id);
-        expect(expectedArtifact).toEqual(
-          new SandsArtifact(
-            artifactsValue.id,
-            artifactsValue.set,
-            artifactsValue.subStats,
-            artifactsValue.level,
-            artifactsValue.mainStatType,
-          ),
-        );
+      artifactsValues.forEach((artifactValues) => {
+        const expectedArtifact = artifactsHandler.getById(artifactValues.id);
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
+    });
+
+    it('should failed with invalid main stat', () => {
+      const artifactValues = {
+        id: '21',
+        mainStatType: MainStats.healingBonus,
+        ...commonValues,
+      };
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact of type sands can not have healingBonus as main stat.']);
     });
   });
 
@@ -231,18 +232,23 @@ describe('ArtifactsHandler.addArtifact', () => {
       artifactsValues.forEach((artifactValues) => {
         artifactsHandler.addOne(artifactValues);
       });
-      artifactsValues.forEach((artifactsValue) => {
-        const expectedArtifact = artifactsHandler.getById(artifactsValue.id);
-        expect(expectedArtifact).toEqual(
-          new GobletArtifact(
-            artifactsValue.id,
-            artifactsValue.set,
-            artifactsValue.subStats,
-            artifactsValue.level,
-            artifactsValue.mainStatType,
-          ),
-        );
+      artifactsValues.forEach((artifactValues) => {
+        const expectedArtifact = artifactsHandler.getById(artifactValues.id);
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
+    });
+
+    it('should failed with invalid main stat', () => {
+      const artifactValues = {
+        id: '21',
+        mainStatType: MainStats.critDmg,
+        ...commonValues,
+      };
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact of type goblet can not have critDmg as main stat.']);
     });
   });
 
@@ -300,18 +306,23 @@ describe('ArtifactsHandler.addArtifact', () => {
       artifactsValues.forEach((artifactValues) => {
         artifactsHandler.addOne(artifactValues);
       });
-      artifactsValues.forEach((artifactsValue) => {
-        const expectedArtifact = artifactsHandler.getById(artifactsValue.id);
-        expect(expectedArtifact).toEqual(
-          new CircletArtifact(
-            artifactsValue.id,
-            artifactsValue.set,
-            artifactsValue.subStats,
-            artifactsValue.level,
-            artifactsValue.mainStatType,
-          ),
-        );
+      artifactsValues.forEach((artifactValues) => {
+        const expectedArtifact = artifactsHandler.getById(artifactValues.id);
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
+    });
+
+    it('should failed with invalid main stat', () => {
+      const artifactValues = {
+        id: '21',
+        mainStatType: MainStats.geoDmg,
+        ...commonValues,
+      };
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact of type circlet can not have geoDmg as main stat.']);
     });
   });
 
@@ -352,25 +363,8 @@ describe('ArtifactsHandler.addArtifact', () => {
 
       artifactsValues.forEach((artifactValues) => {
         const expectedArtifact = artifactsHandler.getById(artifactValues.id);
-        expect(expectedArtifact).toBeTruthy();
+        expect(expectedArtifact).toEqual(ArtifactMapper.mapDataToView(artifactValues));
       });
-    });
-
-    it('should failed if no values are found for main stat', () => {
-      const artifactValues = {
-        id: '1',
-        type: ArtifactType.sands,
-        set: SetNames.gladiatorsFinale,
-        level: 4,
-        mainStatType: 'notExistingMainStat' as MainStatTypes,
-        subStats: {
-          [SubStats.flatAtk]: 5,
-          [SubStats.critRate]: 3.5,
-          [SubStats.percentHp]: 8,
-          [SubStats.critDmg]: 5.2,
-        },
-      };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('could not find values for main stat notExistingMainStat');
     });
 
     it('should failed if it has more than 4 substat', () => {
@@ -388,7 +382,11 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.critDmg]: 5.2,
         },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('an artifact can not have more than 4 substats');
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact can not have more than 4 substats']);
     });
 
     it('should failed if it has les than 3 substats', () => {
@@ -400,7 +398,11 @@ describe('ArtifactsHandler.addArtifact', () => {
         mainStatType: FlowerArtifact.mainStat,
         subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6 },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('an artifact can not have less than 3 substats');
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact can not have less than 3 substats']);
     });
 
     it('should failed if it has 3 substats and level higher than 3', () => {
@@ -410,9 +412,13 @@ describe('ArtifactsHandler.addArtifact', () => {
         set: SetNames.gladiatorsFinale,
         level: 4,
         mainStatType: PlumeArtifact.mainStat,
-        subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
+        subStats: { [SubStats.percentAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('an artifact with level higher than 3 must have 4 substat');
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact with level higher than 3 must have 4 substats']);
     });
 
     it('should failed if 1 of the substats is the same than the main stat', () => {
@@ -429,7 +435,10 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.energyRecharge]: 3.5,
         },
       };
-      expect(() => artifactsHandler.addOne(artifactValues)).toThrowError('main stat can not be the same as one of the substats');
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['main stat can not be the same as one of the substats']);
     });
   });
 
