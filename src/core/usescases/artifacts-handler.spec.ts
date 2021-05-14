@@ -178,6 +178,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       };
 
       const validationError = artifactsHandler.addOne(artifactValues);
+
       expect(validationError instanceof ArtifactValidationError).toBeTruthy();
       expect(validationError).toHaveProperty('messages', ['an artifact of type sands can not have healingBonus as main stat.']);
     });
@@ -245,6 +246,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       };
 
       const validationError = artifactsHandler.addOne(artifactValues);
+
       expect(validationError instanceof ArtifactValidationError).toBeTruthy();
       expect(validationError).toHaveProperty('messages', ['an artifact of type goblet can not have critDmg as main stat.']);
     });
@@ -318,6 +320,7 @@ describe('ArtifactsHandler.addArtifact', () => {
       };
 
       const validationError = artifactsHandler.addOne(artifactValues);
+
       expect(validationError instanceof ArtifactValidationError).toBeTruthy();
       expect(validationError).toHaveProperty('messages', ['an artifact of type circlet can not have geoDmg as main stat.']);
     });
@@ -379,9 +382,11 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.critDmg]: 5.2,
         },
       };
-      expect(artifactsHandler.addOne(artifactValues)).toEqual(
-        new ArtifactValidationError(['an artifact can not have more than 4 substats']),
-      );
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact can not have more than 4 substats']);
     });
 
     it('should failed if it has les than 3 substats', () => {
@@ -393,9 +398,11 @@ describe('ArtifactsHandler.addArtifact', () => {
         mainStatType: FlowerArtifact.mainStat,
         subStats: { [SubStats.flatAtk]: 5, [SubStats.percentDef]: 6 },
       };
-      expect(artifactsHandler.addOne(artifactValues)).toEqual(
-        new ArtifactValidationError(['an artifact can not have less than 3 substats']),
-      );
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact can not have less than 3 substats']);
     });
 
     it('should failed if it has 3 substats and level higher than 3', () => {
@@ -407,9 +414,11 @@ describe('ArtifactsHandler.addArtifact', () => {
         mainStatType: PlumeArtifact.mainStat,
         subStats: { [SubStats.percentAtk]: 5, [SubStats.percentDef]: 6, [SubStats.critRate]: 3.5 },
       };
-      expect(artifactsHandler.addOne(artifactValues)).toEqual(
-        new ArtifactValidationError(['an artifact with level higher than 3 must have 4 substats']),
-      );
+
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['an artifact with level higher than 3 must have 4 substats']);
     });
 
     it('should failed if 1 of the substats is the same than the main stat', () => {
@@ -426,9 +435,10 @@ describe('ArtifactsHandler.addArtifact', () => {
           [SubStats.energyRecharge]: 3.5,
         },
       };
-      expect(artifactsHandler.addOne(artifactValues)).toEqual(
-        new ArtifactValidationError(['main stat can not be the same as one of the substats']),
-      );
+      const validationError = artifactsHandler.addOne(artifactValues);
+
+      expect(validationError instanceof ArtifactValidationError).toBeTruthy();
+      expect(validationError).toHaveProperty('messages', ['main stat can not be the same as one of the substats']);
     });
   });
 
