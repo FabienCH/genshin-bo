@@ -21,7 +21,8 @@ export interface JsonImportResults {
 
 export class ArtifactsImporter {
   private readonly allFramesRetrieve: Subject<void> = new Subject();
-  private readonly artifactValidator: ArtifactValidator = new ArtifactValidator();
+
+  constructor(private readonly artifactValidator: ArtifactValidator) {}
 
   public async importFromVideo(video: File, nbOfWorkers: number, overrideCurrentArtifacts = false): Promise<void> {
     appStore.dispatch(importArtifactsFromVideoAction());

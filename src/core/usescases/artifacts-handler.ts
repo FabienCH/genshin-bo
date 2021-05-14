@@ -13,7 +13,7 @@ import { ArtifactValidator } from '../domain/artifacts-validator';
 import { ArtifactValidationError } from '../domain/artifact-validation-error';
 
 export class ArtifactsHandler {
-  constructor(private readonly artifactValidator: ArtifactValidator = new ArtifactValidator()) {
+  constructor(private readonly artifactValidator: ArtifactValidator) {
     if (!isArtifactsStateInitialized()) {
       appStore.dispatch(loadArtifactsActions());
     }

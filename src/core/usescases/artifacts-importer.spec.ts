@@ -36,7 +36,7 @@ describe('ArtifactsImporter', () => {
     ArtifactsDI.registerOcrWorker();
     ArtifactsDI.registerRepository();
     ocrWorkerHandler = ArtifactsDI.getOcrWorkerHandler();
-    artifactsImporter = new ArtifactsImporter();
+    artifactsImporter = ArtifactsDI.getArtifactsImporter();
     ocrWorkerSpy = jest.spyOn(ocrWorkerHandler, 'recognize');
     videoToFramesSpy = jest.spyOn(VideoToFrames, 'getFrames');
     appStoreUnsubscribe = appStore.subscribe(() => {

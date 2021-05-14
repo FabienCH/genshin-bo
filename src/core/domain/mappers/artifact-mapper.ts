@@ -176,9 +176,14 @@ export abstract class ArtifactMapper {
     return ArtifactMapper.artifactValidator.isNewArtifactValid(newArtifactData, mainStatValue);
   }
 
-  private static getMainStatValue(mainStatType: MainStatTypes = MainStats.anemoDmg, level = 0): number {
+  private static getMainStatValue(mainStatType?: MainStatTypes, level?: number): number {
+    const defaultValue = 0;
+    if (!mainStatType || level == null) {
+      return defaultValue;
+    }
+
     const mainStat = ArtifactMapper.mainStatValues.find((mainStatValue) => mainStatValue.stats.includes(mainStatType));
-    return mainStat?.values[level] || 0;
+    return mainStat?.values[level] || defaultValue;
   }
 
   private static statToString(stat: ArtifactStatsValues): string {

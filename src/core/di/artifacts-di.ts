@@ -8,6 +8,7 @@ import { ArtifactsImporter } from '../usescases/artifacts-importer';
 import { LocalStorageArtifactsRepository } from '../adapters/secondaries/local-storage-artifacts-repository';
 import { ArtifactImageOcr } from '../domain/artifact-images-ocr';
 import { ArtifactsExporter } from '../usescases/artifacts-exporter';
+import { ArtifactValidator } from '../domain/artifacts-validator';
 
 export abstract class ArtifactsDI {
   public static artifactsHandler: ArtifactsHandler;
@@ -25,7 +26,7 @@ export abstract class ArtifactsDI {
       default:
         ArtifactsDI.artifactsRepository = new LocalStorageArtifactsRepository();
     }
-    ArtifactsDI.artifactsHandler = new ArtifactsHandler();
+    ArtifactsDI.artifactsHandler = new ArtifactsHandler(new ArtifactValidator());
   }
 
   public static registerOcrWorker(): void {
@@ -38,7 +39,7 @@ export abstract class ArtifactsDI {
           ArtifactsDI.ocrWorkerHandler = new ArtifactOcrWorkersHandler();
       }
     }
-    ArtifactsDI.artifactsImporter = new ArtifactsImporter();
+    ArtifactsDI.artifactsImporter = new ArtifactsImporter(new ArtifactValidator());
     ArtifactsDI.artifactImageOcr = new ArtifactImageOcr();
   }
 
