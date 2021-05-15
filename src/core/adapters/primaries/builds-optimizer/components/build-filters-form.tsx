@@ -13,7 +13,6 @@ const styles = createStyles({
   },
   div: {
     display: 'flex',
-    alignItems: 'flex-end',
   },
   textField: {
     marginRight: 30,
@@ -22,6 +21,14 @@ const styles = createStyles({
   },
   buttonsContainer: {
     flex: '250px 1 1',
+  },
+  warningMessagesContainer: {
+    flexDirection: 'column',
+  },
+  warningMessage: {
+    '&:not(:last-child)': {
+      marginBottom: 5,
+    },
   },
   buildsComputationProgress: {
     display: 'flex',
@@ -75,6 +82,7 @@ interface BuildFiltersFormProps extends WithStyles<typeof styles> {
   canRunOptimization: boolean;
   buildsCombinationsLimitReached: boolean;
   isOptimizationRunning: boolean;
+  hasLowerBuildFilter: boolean;
   buildsComputationProgress: string;
   onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number | undefined }) => void;
   onRunClick: () => void;
@@ -87,6 +95,7 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
     canRunOptimization,
     buildsCombinationsLimitReached,
     isOptimizationRunning,
+    hasLowerBuildFilter,
     buildsComputationProgress,
     classes,
   } = props;
@@ -120,7 +129,7 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
     props.onCancelClick();
   };
 
-  const displayWarning = buildsCombinationsLimitReached && !isOptimizationRunning;
+  const displayCombinationsLimitWarning = buildsCombinationsLimitReached && !isOptimizationRunning;
 
   return (
     <Container className={classes.container} maxWidth={false}>
@@ -166,9 +175,18 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
           ></RunButtons>
         </div>
       </div>
-      <div className={classes.div} style={{ justifyContent: displayWarning ? 'space-between' : ' flex-end' }}>
-        {displayWarning ? (
-          <WarningMessage message="Total builds combinations can not be higher than 10 billions, please use more restrictive artifacts filters."></WarningMessage>
+      <div className={`${classes.div} ${classes.warningMessagesContainer}`}>
+        {displayCombinationsLimitWarning ? (
+          <WarningMessage
+            className={classes.warningMessage}
+            message="Total builds combinations can not be higher than 10 billions, please use more restrictive artifacts filters."
+          ></WarningMessage>
+        ) : null}
+        {hasLowerBuildFilter ? (
+          <WarningMessage
+            className={classes.warningMessage}
+            message="You have set a filter with a lower value than the previous one. You might have to run optimization again to have all builds matching it."
+          ></WarningMessage>
         ) : null}
       </div>
     </Container>

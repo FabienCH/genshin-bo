@@ -17,14 +17,15 @@ const styles = ({ palette }: Theme) =>
   });
 
 interface WarningMessageProps extends WithStyles<typeof styles> {
+  className?: string;
   message: string;
 }
 
 function WarningMessage(props: WarningMessageProps): ReactElement {
-  const { message, classes } = props;
+  const { message, className, classes } = props;
 
   return (
-    <span className={classes.warningContainer}>
+    <span className={`${classes.warningContainer} ${className}`}>
       <WarningIcon className={classes.icon}></WarningIcon>
       {message}
     </span>

@@ -1,7 +1,7 @@
 import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../adapters/redux/store';
 import { Character, CharacterView } from '../domain/models/character';
-import { CharacterStatsValues } from '../domain/models/character-statistics';
+import { CharacterStatsValues, CharacterStatTypes } from '../domain/models/character-statistics';
 import { MainStatsValues } from '../domain/models/main-statistics';
 import { StatsComputation } from '../domain/stats-computation';
 import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
@@ -9,7 +9,12 @@ import { CharactersRepository } from '../domain/characters-repository';
 import { Weapon, WeaponView } from '../domain/models/weapon';
 import { WeaponsRepository } from '../domain/weapons-repository';
 import { cancelOptimizationAction, runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
-import { buildsComputationProgress, buildsLimitReached, isOptimizationRunning } from '../adapters/redux/builds/builds-selectors';
+import {
+  buildsComputationProgress,
+  buildsLimitReached,
+  isOptimizationRunning,
+  optimizationStatsFilter,
+} from '../adapters/redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../di/builds-optimizer-di';
 import { SetFilter } from '../domain/build-filter';
 import { ArtifactsFilters } from './artifacts-filter';
@@ -56,6 +61,20 @@ export class BuildsOptimizer {
     const total = this.formatNumberWithSuffix(buildsComputationProgressValues.total);
 
     return `${computed} / ${total}`;
+  }
+
+  public hasLowerStatsFilter(statsFilter: Partial<CharacterStatsValues>): boolean {
+    const currentOptimizationStatsFilter = optimizationStatsFilter();
+    if (!currentOptimizationStatsFilter || Object.keys(currentOptimizationStatsFilter).length === 0) {
+      return false;
+    }
+
+    return !!Object.keys(currentOptimizationStatsFilter).find((key) => {
+      const statFilterKey = key as CharacterStatTypes;
+      const filterValue = statsFilter[statFilterKey];
+      const optimFilterValue = currentOptimizationStatsFilter[statFilterKey] || 0;
+      return filterValue && filterValue < optimFilterValue;
+    });
   }
 
   public cancelOptimization(): void {

@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { BuildsComputationProgress } from '../../../domain/builds-computation';
 import { Build } from '../../../domain/models/build';
+import { CharacterStatsValues } from '../../../domain/models/character-statistics';
 import { AppState } from '../reducer';
 import { appStore } from '../store';
 import { buildsAdapter } from './builds-reducer';
@@ -17,6 +18,8 @@ const buildsLimitReachedSelector = createSelector(buildsState, (state) => state.
 
 const buildsComputationProgressSelector = createSelector(buildsState, (state) => state.buildsComputationProgress);
 
+const optimizationStatsFilterSelector = createSelector(buildsState, (state) => state.statsFilter);
+
 export const selectAllBuilds = (): Build[] => buildsSelectors.selectAll(appStore.getState());
 
 export const selectNewBuilds = (): Build[] => newBuildsSelector(appStore.getState());
@@ -27,3 +30,6 @@ export const buildsLimitReached = (): boolean => buildsLimitReachedSelector(appS
 
 export const buildsComputationProgress = (): BuildsComputationProgress | undefined =>
   buildsComputationProgressSelector(appStore.getState());
+
+export const optimizationStatsFilter = (): Partial<CharacterStatsValues> | undefined =>
+  optimizationStatsFilterSelector(appStore.getState());

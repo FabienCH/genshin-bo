@@ -1,5 +1,5 @@
 import { BuildsOptimizer } from './builds-optimizer';
-import { CharacterStats } from '../domain/models/character-statistics';
+import { CharacterStats, CharacterStatsValues } from '../domain/models/character-statistics';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
 import { CharacterView } from '../domain/models/character';
 import {
@@ -43,7 +43,7 @@ describe('BuildsOptimizer', () => {
     minArtifactLevel: 0,
   };
 
-  const defaultStatsFilter = {
+  const defaultStatsFilter: Partial<CharacterStatsValues> = {
     [CharacterStats.hp]: 0,
     [CharacterStats.atk]: 0,
     [CharacterStats.def]: 0,
@@ -743,6 +743,53 @@ describe('BuildsOptimizer', () => {
 
       buildsOptimizer.cancelOptimization();
       expect(buildsOptimizer.isOptimizationRunning()).toBeFalsy();
+    });
+  });
+
+  describe('hasLowerStatsFilter', () => {
+    const filterWhit15kHp = {
+      ...defaultStatsFilter,
+      [CharacterStats.hp]: 15000,
+    };
+
+    it('should not have lower filters if none was used in optimization', () => {
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
+
+      expect(buildsOptimizer.hasLowerStatsFilter(filterWhit15kHp)).toBeFalsy();
+    });
+
+    it('should not have lower filters if stat in filter is higher than the one used in optimization', () => {
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWhit15kHp);
+
+      expect(
+        buildsOptimizer.hasLowerStatsFilter({
+          ...filterWhit15kHp,
+          [CharacterStats.hp]: filterWhit15kHp.hp + 1,
+        }),
+      ).toBeFalsy();
+    });
+
+    it('should not have lower filters if stat in filter was not used in optimization', () => {
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWhit15kHp);
+
+      expect(
+        buildsOptimizer.hasLowerStatsFilter({
+          ...filterWhit15kHp,
+          [CharacterStats.def]: 1000,
+        }),
+      ).toBeFalsy();
+    });
+
+    it('should have lower filters if stat in filter is lower than the one used in optimization', () => {
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWhit15kHp);
+
+      expect(
+        buildsOptimizer.hasLowerStatsFilter({
+          ...defaultStatsFilter,
+          [CharacterStats.hp]: filterWhit15kHp.hp - 1,
+          [CharacterStats.def]: 1000,
+        }),
+      ).toBeTruthy();
     });
   });
 });

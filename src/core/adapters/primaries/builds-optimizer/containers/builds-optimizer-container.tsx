@@ -37,6 +37,7 @@ type State = {
   artifactsFilters: ArtifactsFiltersView;
   buildFilters: Partial<CharacterStatsValues>;
   buildsCombinationsLimitReached: boolean;
+  hasLowerBuildFilter: boolean;
 };
 
 class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
@@ -62,6 +63,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       artifactsFilters,
       buildFilters: {},
       buildsCombinationsLimitReached: this.isBuildsCombinationsLimitReached(artifactsFilters),
+      hasLowerBuildFilter: false,
     };
 
     this.handleCharacterChange = this.handleCharacterChange.bind(this);
@@ -125,6 +127,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       return {
         ...state,
         buildFilters: newBuildFilters,
+        hasLowerBuildFilter: BuildsOptimizerDI.getBuildsOptimizer().hasLowerStatsFilter(newBuildFilters),
       };
     });
   }
@@ -137,6 +140,12 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       artifactsFilters,
       this.state.buildFilters,
     );
+    this.setState((state) => {
+      return {
+        ...state,
+        hasLowerBuildFilter: BuildsOptimizerDI.getBuildsOptimizer().hasLowerStatsFilter(this.state.buildFilters),
+      };
+    });
   }
 
   cancelOptimization(): void {
@@ -168,6 +177,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
             canRunOptimization={canRunOptimization}
             buildsCombinationsLimitReached={this.state.buildsCombinationsLimitReached}
             isOptimizationRunning={isOptimizationRunning}
+            hasLowerBuildFilter={this.state.hasLowerBuildFilter}
             buildsComputationProgress={buildsComputationProgress}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
