@@ -5,6 +5,7 @@ import { CharacterView } from '../domain/models/character';
 import {
   atkGeoDmgEmBuildArtifactsData,
   bolideLavawalkerBuildArtifactsData,
+  bolideTenacityOfTheMillelithBuildArtifactsData,
   defaultBuildArtifactsData,
   defPhyDmgAtkBuildArtifactsData,
   gladiatorThunderingBuildArtifactsData,
@@ -208,6 +209,30 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.powerfulShield]: 35,
               [CharacterStats.physicalDmg]: 64.5,
               [CharacterStats.pyroRes]: 40,
+            },
+            buildArtifactsParams: defaultBuildArtifactsParams,
+          },
+        ]);
+      });
+
+      it('with bolide and tenacityOfTheMillelith sets effects', () => {
+        loadArtifacts(bolideTenacityOfTheMillelithBuildArtifactsData);
+
+        buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
+
+        expect(getBuildsWithoutId()).toEqual([
+          {
+            stats: {
+              [CharacterStats.hp]: 19052,
+              [CharacterStats.atk]: 985,
+              [CharacterStats.critRate]: 16.6,
+              [CharacterStats.energyRecharge]: 103,
+              [CharacterStats.def]: 1097,
+              [CharacterStats.elementalMastery]: 7,
+              [CharacterStats.healingBonus]: 31.3,
+              [CharacterStats.critDmg]: 63.2,
+              [CharacterStats.powerfulShield]: 35,
+              [CharacterStats.physicalDmg]: 64.5,
             },
             buildArtifactsParams: defaultBuildArtifactsParams,
           },

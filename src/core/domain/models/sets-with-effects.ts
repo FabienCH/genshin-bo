@@ -15,6 +15,7 @@ export enum SetNames {
   blizzardStrayer = 'blizzardStrayer',
   archaicPetra = 'archaicPetra',
   bloodstainedChivalry = 'bloodstainedChivalry',
+  tenacityOfTheMillelith = 'tenacityOfTheMillelith',
 }
 
 export interface SetWithEffect {
