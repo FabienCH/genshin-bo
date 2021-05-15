@@ -53,6 +53,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       mainsStats: {},
       focusStats: [],
       minArtifactLevel: 0,
+      hasFourSubs: false,
     };
 
     this.state = {

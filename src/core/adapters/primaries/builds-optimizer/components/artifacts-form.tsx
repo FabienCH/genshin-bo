@@ -15,13 +15,15 @@ interface ArtifactsFormProps extends WithStyles<typeof styles> {
   focusStats: ArtifactStatsTypes[];
   minLevel: number;
   mainsStats: ArtifactsMainStats;
+  hasFourSubs: boolean;
   onFocusStatsChange: (focusStats: ArtifactStatsTypes[]) => void;
   onMinLevelChange: (minLevel: number) => void;
   onMainsStatsChange: (mainsStats: ArtifactsMainStats) => void;
+  onHasFourSubsChange: (hasFourSubs: boolean) => void;
 }
 
 function ArtifactsForm(props: ArtifactsFormProps): ReactElement {
-  const { focusStats, minLevel, mainsStats, classes } = props;
+  const { focusStats, minLevel, mainsStats, hasFourSubs, classes } = props;
 
   const handleFocusStatsChange = (focusStats: ArtifactStatsTypes[]): void => {
     props.onFocusStatsChange(focusStats);
@@ -35,6 +37,10 @@ function ArtifactsForm(props: ArtifactsFormProps): ReactElement {
     props.onMainsStatsChange(mainsStats);
   };
 
+  const handleHasFourSubsChange = (hasFourSubs: boolean): void => {
+    props.onHasFourSubsChange(hasFourSubs);
+  };
+
   return (
     <Container>
       <h4 className={classes.title}>Artifacts Filters</h4>
@@ -43,8 +49,10 @@ function ArtifactsForm(props: ArtifactsFormProps): ReactElement {
         <ArtifactsOptionsForm
           focusStats={focusStats}
           minLevel={minLevel}
+          hasFourSubs={hasFourSubs}
           onFocusStatsChange={handleFocusStatsChange}
           onMinLevelChange={handleMinLevelChange}
+          onHasFourSubsChange={handleHasFourSubsChange}
         ></ArtifactsOptionsForm>
       </div>
     </Container>

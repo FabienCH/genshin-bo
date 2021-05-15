@@ -5,10 +5,18 @@ import { artifactStats, ArtifactStatsTypes } from '../../../../domain/models/mai
 import { StringFormatter } from '../../../../domain/mappers/string-formatter';
 import FormSelect from '../../shared/form-select';
 import HelpIconTooltip from '../../shared/help-icon-tooltip';
+import Switch from '@material-ui/core/Switch';
 
 const styles = createStyles({
+  levelSubsContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   levelSelect: {
     width: 100,
+  },
+  fourSubsLabel: {
+    paddingLeft: 12,
   },
   focusStatsLabel: {
     marginBottom: 5,
@@ -43,14 +51,16 @@ const getStyles = (stat: ArtifactStatsTypes, focusStats: ArtifactStatsTypes[], t
 interface ArtifactsOptionsFormProps extends WithStyles<typeof styles> {
   focusStats: ArtifactStatsTypes[];
   minLevel: number;
+  hasFourSubs: boolean;
   onFocusStatsChange: (focusStats: ArtifactStatsTypes[]) => void;
   onMinLevelChange: (minLevel: number) => void;
+  onHasFourSubsChange: (hasFourSubs: boolean) => void;
 }
 
 function ArtifactsOptionsForm(props: ArtifactsOptionsFormProps): ReactElement {
   const levels = Array.from(Array(21), (_, i) => i);
   const theme = useTheme();
-  const { focusStats, minLevel, classes } = props;
+  const { focusStats, minLevel, hasFourSubs, classes } = props;
 
   const handleFocusStatsChange = (
     event: ChangeEvent<{
@@ -65,6 +75,10 @@ function ArtifactsOptionsForm(props: ArtifactsOptionsFormProps): ReactElement {
     props.onMinLevelChange(value);
   };
 
+  const handleFourSubsChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    props.onHasFourSubsChange(event.target.checked);
+  };
+
   const tooltip = (
     <div>
       You should leave this empty if you don't have too much builds results.
@@ -75,9 +89,17 @@ function ArtifactsOptionsForm(props: ArtifactsOptionsFormProps): ReactElement {
   );
   return (
     <div>
-      <Box className={classes.levelSelect}>
-        <FormSelect label="Artifacts level" options={levels} selectedValue={minLevel} onChange={handleMinLevelChange}></FormSelect>
-      </Box>
+      <div className={classes.levelSubsContainer}>
+        <Box className={classes.levelSelect}>
+          <FormSelect label="Artifacts level" options={levels} selectedValue={minLevel} onChange={handleMinLevelChange}></FormSelect>
+        </Box>
+        <Box>
+          <InputLabel htmlFor="four-subs" className={classes.fourSubsLabel}>
+            4 subs stats only
+          </InputLabel>
+          <Switch id="four-subs" checked={hasFourSubs} onChange={handleFourSubsChange} name="forSubs" color="primary" />
+        </Box>
+      </div>
       <InputLabel id="focus-stats-label" className={classes.focusStatsLabel} shrink={false}>
         Focus stats
         <HelpIconTooltip tooltipText={tooltip}></HelpIconTooltip>
