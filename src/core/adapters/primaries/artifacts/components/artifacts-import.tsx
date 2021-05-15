@@ -5,8 +5,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Container, createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 import { ImportInfos } from '../../../redux/artifacts/artifacts-reducer';
 import ArtifactsImportInfos from './artifacts-import-infos';
-import ImportButtons from './import-buttons';
 import FormSelect from '../../shared/form-select';
+import RunButtons from '../../shared/run-buttons';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
@@ -122,12 +122,13 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
             artifactsInError={importInfos.artifactsInError}
           ></ArtifactsImportInfos>
         ) : null}
-        <ImportButtons
-          video={video}
-          isImportRunning={isImportRunning}
-          importArtifactsClicked={importArtifacts}
-          cancelImportClicked={cancelImport}
-        ></ImportButtons>
+        <RunButtons
+          runButtonLabel="Import Artifacts"
+          canRun={!!video}
+          isRunning={isImportRunning}
+          runClicked={importArtifacts}
+          cancelClicked={cancelImport}
+        ></RunButtons>
       </div>
     </Container>
   );

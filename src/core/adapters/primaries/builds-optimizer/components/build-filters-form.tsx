@@ -1,9 +1,10 @@
 import { ChangeEvent, Fragment, ReactElement } from 'react';
-import { Box, Button, Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { Box, Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
 import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
 import FormSelect from '../../shared/form-select';
 import WarningMessage from '../../shared/warning-message';
 import BuildFiltersTextFieldProps from './build-filters-text-field';
+import RunButtons from '../../shared/run-buttons';
 
 const styles = createStyles({
   container: {
@@ -12,20 +13,22 @@ const styles = createStyles({
   },
   div: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   textField: {
     marginRight: 30,
     display: 'flex',
     flex: '170px 0 1',
   },
-  buildsComputationProgress: {
-    marginRight: 20,
-    fontSize: '1rem',
+  buttonsContainer: {
+    flex: '250px 1 1',
   },
-  runButton: {
-    width: 120,
-    alignSelf: 'flex-end',
+  buildsComputationProgress: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginRight: 5,
+    marginBottom: 10,
+    fontSize: '1rem',
   },
 });
 
@@ -69,16 +72,24 @@ const selectedListedStats: { stat: CharacterStatTypes; value: number | undefined
 
 interface BuildFiltersFormProps extends WithStyles<typeof styles> {
   buildFilters: Partial<CharacterStatsValues>;
-  disableButton: boolean;
+  canRunOptimization: boolean;
   buildsCombinationsLimitReached: boolean;
   isOptimizationRunning: boolean;
   buildsComputationProgress: string;
   onBuildFiltersChange: (event: { stat: CharacterStatTypes; value: number | undefined }) => void;
   onRunClick: () => void;
+  onCancelClick: () => void;
 }
 
 function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
-  const { buildFilters, disableButton, buildsCombinationsLimitReached, isOptimizationRunning, buildsComputationProgress, classes } = props;
+  const {
+    buildFilters,
+    canRunOptimization,
+    buildsCombinationsLimitReached,
+    isOptimizationRunning,
+    buildsComputationProgress,
+    classes,
+  } = props;
 
   const parseValue = (value: unknown): number | undefined => {
     const intValue = parseInt(`${value}`);
@@ -103,6 +114,10 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
 
   const handleRunClick = (): void => {
     props.onRunClick();
+  };
+
+  const handleCancelClick = (): void => {
+    props.onCancelClick();
   };
 
   const displayWarning = buildsCombinationsLimitReached && !isOptimizationRunning;
@@ -140,15 +155,21 @@ function BuildFiltersForm(props: BuildFiltersFormProps): ReactElement {
             </Fragment>
           );
         })}
+        <div className={classes.buttonsContainer}>
+          <span className={classes.buildsComputationProgress}>{buildsComputationProgress}</span>
+          <RunButtons
+            runButtonLabel="Run"
+            canRun={canRunOptimization}
+            isRunning={isOptimizationRunning}
+            runClicked={handleRunClick}
+            cancelClicked={handleCancelClick}
+          ></RunButtons>
+        </div>
       </div>
       <div className={classes.div} style={{ justifyContent: displayWarning ? 'space-between' : ' flex-end' }}>
         {displayWarning ? (
           <WarningMessage message="Total builds combinations can not be higher than 10 billions, please use more restrictive artifacts filters."></WarningMessage>
         ) : null}
-        <span className={classes.buildsComputationProgress}>{buildsComputationProgress}</span>
-        <Button className={classes.runButton} variant="contained" color="primary" disabled={disableButton} onClick={handleRunClick}>
-          Run
-        </Button>
       </div>
     </Container>
   );

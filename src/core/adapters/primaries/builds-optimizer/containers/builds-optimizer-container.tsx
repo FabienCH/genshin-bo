@@ -139,9 +139,13 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     );
   }
 
+  cancelOptimization(): void {
+    BuildsOptimizerDI.getBuildsOptimizer().cancelOptimization();
+  }
+
   render(): ReactElement {
     const { classes, initialBuilds, newBuilds, isBuildsLimitReached, isOptimizationRunning, buildsComputationProgress } = this.props;
-    const disableButton = this.state.artifactsFilters.focusStats.length === 1 || this.state.buildsCombinationsLimitReached;
+    const canRunOptimization = this.state.artifactsFilters.focusStats.length !== 1 && !this.state.buildsCombinationsLimitReached;
 
     return (
       <section>
@@ -161,12 +165,13 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
           <h3>Build Filters</h3>
           <BuildFiltersForm
             buildFilters={this.state.buildFilters}
-            disableButton={disableButton}
+            canRunOptimization={canRunOptimization}
             buildsCombinationsLimitReached={this.state.buildsCombinationsLimitReached}
             isOptimizationRunning={isOptimizationRunning}
             buildsComputationProgress={buildsComputationProgress}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
+            onCancelClick={this.cancelOptimization}
           ></BuildFiltersForm>
         </form>
         <BuildsResultsContainer
