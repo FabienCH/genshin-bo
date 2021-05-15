@@ -8,11 +8,9 @@ const styles = createStyles({
     justifyContent: 'flex-end',
   },
   runButton: {
-    display: 'block',
     minWidth: 100,
   },
   cancelButton: {
-    display: 'block',
     marginRight: 20,
   },
 });

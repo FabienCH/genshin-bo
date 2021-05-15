@@ -747,7 +747,7 @@ describe('BuildsOptimizer', () => {
   });
 
   describe('hasLowerStatsFilter', () => {
-    const filterWhit15kHp = {
+    const filterWith15kHp = {
       ...defaultStatsFilter,
       [CharacterStats.hp]: 15000,
     };
@@ -755,38 +755,38 @@ describe('BuildsOptimizer', () => {
     it('should not have lower filters if none was used in optimization', () => {
       buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, {});
 
-      expect(buildsOptimizer.hasLowerStatsFilter(filterWhit15kHp)).toBeFalsy();
+      expect(buildsOptimizer.hasLowerStatsFilter(filterWith15kHp)).toBeFalsy();
     });
 
     it('should not have lower filters if stat in filter is higher than the one used in optimization', () => {
-      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWhit15kHp);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWith15kHp);
 
       expect(
         buildsOptimizer.hasLowerStatsFilter({
-          ...filterWhit15kHp,
-          [CharacterStats.hp]: filterWhit15kHp.hp + 1,
+          ...filterWith15kHp,
+          [CharacterStats.hp]: filterWith15kHp.hp + 1,
         }),
       ).toBeFalsy();
     });
 
     it('should not have lower filters if stat in filter was not used in optimization', () => {
-      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWhit15kHp);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWith15kHp);
 
       expect(
         buildsOptimizer.hasLowerStatsFilter({
-          ...filterWhit15kHp,
+          ...filterWith15kHp,
           [CharacterStats.def]: 1000,
         }),
       ).toBeFalsy();
     });
 
     it('should have lower filters if stat in filter is lower than the one used in optimization', () => {
-      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWhit15kHp);
+      buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, filterWith15kHp);
 
       expect(
         buildsOptimizer.hasLowerStatsFilter({
           ...defaultStatsFilter,
-          [CharacterStats.hp]: filterWhit15kHp.hp - 1,
+          [CharacterStats.hp]: filterWith15kHp.hp - 1,
           [CharacterStats.def]: 1000,
         }),
       ).toBeTruthy();
