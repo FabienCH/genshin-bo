@@ -25,8 +25,8 @@ export abstract class Artifact {
     this.mainStat = mainStat;
   }
 
-  public matchFilters(minLevel = 0, focusStats: ArtifactStatsTypes[]): boolean {
-    return this.level >= minLevel && this.filterByFocusStats(focusStats);
+  public matchFilters(minLevel = 0, focusStats: ArtifactStatsTypes[], hasFourSubs: boolean): boolean {
+    return this.level >= minLevel && this.filterByFocusStats(focusStats) && this.filterByNbOfSubs(hasFourSubs);
   }
 
   public abstract getType(): ArtifactType;
@@ -38,5 +38,9 @@ export abstract class Artifact {
         focusStats.includes(artifactStats as SubStats | MainStats),
       )
     );
+  }
+
+  private filterByNbOfSubs(hasFourSubs: boolean): boolean {
+    return !hasFourSubs || Object.values(this.subStats).length >= 4;
   }
 }

@@ -21,6 +21,7 @@ const styles = createStyles({
   },
   buttonsContainer: {
     flex: '250px 1 1',
+    alignSelf: 'flex-end',
   },
   warningMessagesContainer: {
     flexDirection: 'column',

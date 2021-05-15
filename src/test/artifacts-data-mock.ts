@@ -7272,3 +7272,116 @@ export const moreThan10BillionsBuildsArtifactsData: AllArtifactsData = {
     },
   ],
 } as AllArtifactsData;
+
+export const artifactsDataWith3Or4Subs: AllArtifactsData = {
+  flowers: [
+    {
+      id: '0',
+      type: ArtifactType.flower,
+      set: SetNames.lavawalker,
+      level: 2,
+      mainStatType: FlowerArtifact.mainStat,
+      subStats: {
+        [SubStats.flatAtk]: 5,
+        [SubStats.critRate]: 3.2,
+        [SubStats.critDmg]: 3.2,
+      },
+    },
+    {
+      id: '1',
+      type: ArtifactType.flower,
+      set: SetNames.thunderingFury,
+      level: 7,
+      mainStatType: FlowerArtifact.mainStat,
+      subStats: {
+        [SubStats.energyRecharge]: 3,
+        [SubStats.percentHp]: 6,
+        [SubStats.critDmg]: 3.9,
+        [SubStats.percentAtk]: 7,
+      },
+    },
+  ],
+  plumes: [
+    {
+      id: '2',
+      type: ArtifactType.plume,
+      set: SetNames.retracingBolide,
+      level: 7,
+      mainStatType: PlumeArtifact.mainStat,
+      subStats: {
+        [SubStats.energyRecharge]: 4,
+        [SubStats.flatDef]: 7,
+        [SubStats.critRate]: 2.7,
+        [SubStats.critDmg]: 5,
+      },
+    },
+    {
+      id: '3',
+      type: ArtifactType.plume,
+      set: SetNames.blizzardStrayer,
+      level: 1,
+      mainStatType: PlumeArtifact.mainStat,
+      subStats: {
+        [SubStats.percentAtk]: 5,
+        [SubStats.flatDef]: 6,
+        [SubStats.percentDef]: 8,
+      },
+    },
+  ],
+  sands: [
+    {
+      id: '4',
+      type: ArtifactType.sands,
+      set: SetNames.thunderingFury,
+      level: 1,
+      mainStatType: MainStats.percentHp as SandsMainStatType,
+      subStats: {
+        [SubStats.percentDef]: 6,
+        [SubStats.elementalMastery]: 7,
+        [SubStats.critRate]: 3.2,
+        [SubStats.critDmg]: 2.9,
+      },
+    },
+  ],
+  goblets: [
+    {
+      id: '5',
+      type: ArtifactType.goblet,
+      set: SetNames.lavawalker,
+      level: 0,
+      mainStatType: MainStats.percentDef as GobletMainStatType,
+      subStats: {
+        [SubStats.critRate]: 2.5,
+        [SubStats.percentHp]: 5.2,
+        [SubStats.flatHp]: 3,
+      },
+    },
+    {
+      id: '6',
+      type: ArtifactType.goblet,
+      set: SetNames.blizzardStrayer,
+      level: 8,
+      mainStatType: MainStats.cryoDmg as GobletMainStatType,
+      subStats: {
+        [SubStats.elementalMastery]: 4,
+        [SubStats.percentHp]: 5.2,
+        [SubStats.percentAtk]: 4,
+        [SubStats.critDmg]: 3,
+      },
+    },
+  ],
+  circlets: [
+    {
+      id: '7',
+      type: ArtifactType.circlet,
+      set: SetNames.retracingBolide,
+      level: 1,
+      mainStatType: MainStats.healingBonus as CircletMainStatType,
+      subStats: {
+        [SubStats.flatAtk]: 4,
+        [SubStats.critDmg]: 3.2,
+        [SubStats.percentHp]: 5,
+      },
+    },
+  ],
+};

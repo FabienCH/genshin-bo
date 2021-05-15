@@ -105,6 +105,13 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
     });
   };
 
+  const handleHasFourSubsChange = (hasFourSubs: boolean): void => {
+    props.onArtifactsFiltersChange({
+      ...artifactsFilters,
+      hasFourSubs,
+    });
+  };
+
   return (
     <div className={classes.buildSetup}>
       <CharacterForm
@@ -128,9 +135,11 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
         mainsStats={artifactsFilters.mainsStats}
         focusStats={artifactsFilters.focusStats}
         minLevel={artifactsFilters.minArtifactLevel}
+        hasFourSubs={artifactsFilters.hasFourSubs}
         onMainsStatsChange={handleMainsStatsChange}
         onFocusStatsChange={handleFocusStatsChange}
         onMinLevelChange={handleMinLevelChange}
+        onHasFourSubsChange={handleHasFourSubsChange}
       ></ArtifactsForm>
     </div>
   );
