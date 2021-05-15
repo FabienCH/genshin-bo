@@ -7,9 +7,14 @@ export class SandsArtifact extends Artifact {
     return ArtifactType.sands;
   }
 
-  public matchFiltersWithMain(minLevel: number, focusStats: ArtifactStatsTypes[], mainStat?: SandsMainStatType): boolean {
+  public matchFiltersWithMain(
+    minLevel: number,
+    focusStats: ArtifactStatsTypes[],
+    hasFourSubs: boolean,
+    mainStat?: SandsMainStatType,
+  ): boolean {
     const focusAndMainStats = focusStats && mainStat ? [...focusStats, mainStat] : focusStats;
     const mainStatMatchFilter = !mainStat || Object.keys(this.mainStat)[0] === mainStat;
-    return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats);
+    return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats, hasFourSubs);
   }
 }

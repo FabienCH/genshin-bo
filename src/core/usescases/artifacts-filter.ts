@@ -5,20 +5,20 @@ import { ArtifactsMainStats, ArtifactStatsTypes } from '../domain/models/main-st
 import { SandsMainStatType } from '../domain/models/sands-artifact-data';
 import { SetNames } from '../domain/models/sets-with-effects';
 
-export interface ArtifactsFiltersView {
-  currentSets: { [index: number]: SetNames };
+interface BaseArtifactFilters {
   setPieces: 2 | 4;
   mainsStats: ArtifactsMainStats;
   focusStats: ArtifactStatsTypes[];
   minArtifactLevel: number;
+  hasFourSubs: boolean;
 }
 
-export interface ArtifactsFilters {
+export interface ArtifactsFiltersView extends BaseArtifactFilters {
+  currentSets: { [index: number]: SetNames };
+}
+
+export interface ArtifactsFilters extends BaseArtifactFilters {
   currentSets: SetNames[];
-  setPieces: 2 | 4;
-  mainsStats: ArtifactsMainStats;
-  focusStats: ArtifactStatsTypes[];
-  minArtifactLevel: number;
 }
 
 export abstract class ArtifactsFilter {
@@ -27,15 +27,16 @@ export abstract class ArtifactsFilter {
     mainStats: { sandsMain?: SandsMainStatType; gobletMain?: GobletMainStatType; circletMain?: CircletMainStatType },
     minLevel: number,
     focusStats: ArtifactStatsTypes[],
+    hasFourSubs = false,
   ): AllArtifacts {
     const { flowers, plumes, sands, goblets, circlets } = artifacts;
 
     return {
-      flowers: flowers.filter((artifact) => artifact.matchFilters(minLevel, focusStats)),
-      plumes: plumes.filter((artifact) => artifact.matchFilters(minLevel, focusStats)),
-      sands: sands.filter((artifact) => artifact.matchFiltersWithMain(minLevel, focusStats, mainStats.sandsMain)),
-      goblets: goblets.filter((artifact) => artifact.matchFiltersWithMain(minLevel, focusStats, mainStats.gobletMain)),
-      circlets: circlets.filter((artifact) => artifact.matchFiltersWithMain(minLevel, focusStats, mainStats.circletMain)),
+      flowers: flowers.filter((artifact) => artifact.matchFilters(minLevel, focusStats, hasFourSubs)),
+      plumes: plumes.filter((artifact) => artifact.matchFilters(minLevel, focusStats, hasFourSubs)),
+      sands: sands.filter((artifact) => artifact.matchFiltersWithMain(minLevel, focusStats, hasFourSubs, mainStats.sandsMain)),
+      goblets: goblets.filter((artifact) => artifact.matchFiltersWithMain(minLevel, focusStats, hasFourSubs, mainStats.gobletMain)),
+      circlets: circlets.filter((artifact) => artifact.matchFiltersWithMain(minLevel, focusStats, hasFourSubs, mainStats.circletMain)),
     };
   }
 }

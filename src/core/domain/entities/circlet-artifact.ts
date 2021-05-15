@@ -7,9 +7,14 @@ export class CircletArtifact extends Artifact {
     return ArtifactType.circlet;
   }
 
-  public matchFiltersWithMain(minLevel: number, focusStats: ArtifactStatsTypes[], mainStat?: CircletMainStatType): boolean {
+  public matchFiltersWithMain(
+    minLevel: number,
+    focusStats: ArtifactStatsTypes[],
+    hasFourSubs: boolean,
+    mainStat?: CircletMainStatType,
+  ): boolean {
     const focusAndMainStats = focusStats && mainStat ? [...focusStats, mainStat] : focusStats;
     const mainStatMatchFilter = !mainStat || Object.keys(this.mainStat)[0] === mainStat;
-    return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats);
+    return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats, hasFourSubs);
   }
 }

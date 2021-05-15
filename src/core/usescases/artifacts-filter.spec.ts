@@ -1,3 +1,4 @@
+import { artifactsDataWith3Or4Subs } from '../../test/artifacts-data-mock';
 import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
 import { CircletArtifact } from '../domain/entities/circlet-artifact';
 import { FlowerArtifact } from '../domain/entities/flower-artifact';
@@ -553,6 +554,82 @@ describe('Artifacts Filter', () => {
         sands: expectedSands,
         goblets: expectedGoblets,
         circlets: expectedCirclets,
+      });
+    });
+  });
+
+  describe('filter artifacts that must have 4 sub stats', () => {
+    beforeEach(() => {
+      const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository(artifactsDataWith3Or4Subs);
+      allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(artifactsRepository.getAll());
+    });
+
+    it('with artifacts that have percent atk', () => {
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [], true);
+
+      const expectedFlowers = [
+        new FlowerArtifact(
+          '1',
+          SetNames.thunderingFury,
+          {
+            [SubStats.energyRecharge]: 3,
+            [SubStats.percentHp]: 6,
+            [SubStats.critDmg]: 3.9,
+            [SubStats.percentAtk]: 7,
+          },
+          7,
+          2139,
+        ),
+      ];
+      const expectedPlumes = [
+        new PlumeArtifact(
+          '2',
+          SetNames.retracingBolide,
+          {
+            [SubStats.energyRecharge]: 4,
+            [SubStats.flatDef]: 7,
+            [SubStats.critRate]: 2.7,
+            [SubStats.critDmg]: 5,
+          },
+          7,
+          139,
+        ),
+      ];
+      const expectedSands = [
+        new SandsArtifact(
+          '4',
+          SetNames.thunderingFury,
+          {
+            [SubStats.percentDef]: 6,
+            [SubStats.elementalMastery]: 7,
+            [SubStats.critRate]: 3.2,
+            [SubStats.critDmg]: 2.9,
+          },
+          1,
+          { [MainStats.percentHp]: 9.0 },
+        ),
+      ];
+      const expectedGoblets = [
+        new GobletArtifact(
+          '6',
+          SetNames.blizzardStrayer,
+          {
+            [SubStats.elementalMastery]: 4,
+            [SubStats.percentHp]: 5.2,
+            [SubStats.percentAtk]: 4,
+            [SubStats.critDmg]: 3,
+          },
+          8,
+          { [MainStats.cryoDmg]: 22.8 },
+        ),
+      ];
+
+      expect(filteredArtifacts).toEqual({
+        flowers: expectedFlowers,
+        plumes: expectedPlumes,
+        sands: expectedSands,
+        goblets: expectedGoblets,
+        circlets: [],
       });
     });
   });

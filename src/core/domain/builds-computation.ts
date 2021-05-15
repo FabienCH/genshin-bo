@@ -106,10 +106,10 @@ export class BuildsComputation {
   }
 
   private setAllArtifacts(artifactsFilters: ArtifactsFilters, artifacts: ArtifactData[]): void {
-    const { mainsStats, minArtifactLevel, focusStats } = artifactsFilters;
+    const { mainsStats, minArtifactLevel, focusStats, hasFourSubs } = artifactsFilters;
 
     const allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(artifacts);
-    this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainsStats, minArtifactLevel, focusStats));
+    this.allArtifacts = Object.values(ArtifactsFilter.filterArtifacts(allArtifacts, mainsStats, minArtifactLevel, focusStats, hasFourSubs));
   }
 
   private initBuildsProgressCounters(): void {

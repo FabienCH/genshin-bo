@@ -7,9 +7,14 @@ export class GobletArtifact extends Artifact {
     return ArtifactType.goblet;
   }
 
-  public matchFiltersWithMain(minLevel: number, focusStats: ArtifactStatsTypes[], mainStat?: GobletMainStatType): boolean {
+  public matchFiltersWithMain(
+    minLevel: number,
+    focusStats: ArtifactStatsTypes[],
+    hasFourSubs: boolean,
+    mainStat?: GobletMainStatType,
+  ): boolean {
     const focusAndMainStats = focusStats && mainStat ? [...focusStats, mainStat] : focusStats;
     const mainStatMatchFilter = !mainStat || Object.keys(this.mainStat)[0] === mainStat;
-    return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats);
+    return mainStatMatchFilter && this.matchFilters(minLevel, focusAndMainStats, hasFourSubs);
   }
 }

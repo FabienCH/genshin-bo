@@ -41,6 +41,7 @@ describe('BuildsOptimizer', () => {
     mainsStats: {},
     focusStats: [],
     minArtifactLevel: 0,
+    hasFourSubs: false,
   };
 
   const defaultStatsFilter: Partial<CharacterStatsValues> = {
