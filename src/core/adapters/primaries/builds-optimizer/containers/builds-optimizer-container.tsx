@@ -37,6 +37,7 @@ type State = {
   artifactsFilters: ArtifactsFiltersView;
   buildFilters: Partial<CharacterStatsValues>;
   buildsCombinationsLimitReached: boolean;
+  hasLowerBuildFilter: boolean;
 };
 
 class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
@@ -62,6 +63,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       artifactsFilters,
       buildFilters: {},
       buildsCombinationsLimitReached: this.isBuildsCombinationsLimitReached(artifactsFilters),
+      hasLowerBuildFilter: false,
     };
 
     this.handleCharacterChange = this.handleCharacterChange.bind(this);
@@ -125,6 +127,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       return {
         ...state,
         buildFilters: newBuildFilters,
+        hasLowerBuildFilter: BuildsOptimizerDI.getBuildsOptimizer().hasLowerStatsFilter(newBuildFilters),
       };
     });
   }
@@ -137,11 +140,21 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       artifactsFilters,
       this.state.buildFilters,
     );
+    this.setState((state) => {
+      return {
+        ...state,
+        hasLowerBuildFilter: BuildsOptimizerDI.getBuildsOptimizer().hasLowerStatsFilter(this.state.buildFilters),
+      };
+    });
+  }
+
+  cancelOptimization(): void {
+    BuildsOptimizerDI.getBuildsOptimizer().cancelOptimization();
   }
 
   render(): ReactElement {
     const { classes, initialBuilds, newBuilds, isBuildsLimitReached, isOptimizationRunning, buildsComputationProgress } = this.props;
-    const disableButton = this.state.artifactsFilters.focusStats.length === 1 || this.state.buildsCombinationsLimitReached;
+    const canRunOptimization = this.state.artifactsFilters.focusStats.length !== 1 && !this.state.buildsCombinationsLimitReached;
 
     return (
       <section>
@@ -161,12 +174,14 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
           <h3>Build Filters</h3>
           <BuildFiltersForm
             buildFilters={this.state.buildFilters}
-            disableButton={disableButton}
+            canRunOptimization={canRunOptimization}
             buildsCombinationsLimitReached={this.state.buildsCombinationsLimitReached}
             isOptimizationRunning={isOptimizationRunning}
+            hasLowerBuildFilter={this.state.hasLowerBuildFilter}
             buildsComputationProgress={buildsComputationProgress}
             onBuildFiltersChange={this.handleBuildFiltersChange}
             onRunClick={this.runOptimization}
+            onCancelClick={this.cancelOptimization}
           ></BuildFiltersForm>
         </form>
         <BuildsResultsContainer

@@ -1,10 +1,12 @@
-import { createEntityAdapter, createReducer, EntityState } from '@reduxjs/toolkit';
+import { createEntityAdapter, createReducer, EntityState, isAnyOf } from '@reduxjs/toolkit';
 import { BuildsComputationProgress } from '../../../domain/builds-computation';
 import { Build } from '../../../domain/models/build';
+import { CharacterStatsValues } from '../../../domain/models/character-statistics';
 import {
   addBuildsAction,
   buildsLimitReachedAction,
   buildsOptimizationDoneAction,
+  cancelOptimizationAction,
   removeAllBuildsAction,
   runBuildsOptimizerAction,
   updateBuildsComputationProgressAction,
@@ -14,6 +16,7 @@ export interface BuildsState extends EntityState<Build> {
   newBuilds: Build[];
   isOptimizationRunning: boolean;
   buildsLimitReached: boolean;
+  statsFilter?: Partial<CharacterStatsValues>;
   buildsComputationProgress?: BuildsComputationProgress;
 }
 
@@ -43,8 +46,9 @@ export const buildsReducer = createReducer(initialState, (builder) => {
         buildsComputationProgress: undefined,
       }),
     )
-    .addCase(runBuildsOptimizerAction, (state) => ({
+    .addCase(runBuildsOptimizerAction, (state, { payload }) => ({
       ...state,
+      statsFilter: payload.statsFilter,
       isOptimizationRunning: true,
     }))
     .addCase(updateBuildsComputationProgressAction, (state, { payload }) => ({
@@ -58,7 +62,7 @@ export const buildsReducer = createReducer(initialState, (builder) => {
       isOptimizationRunning: false,
       buildsLimitReached: true,
     }))
-    .addCase(buildsOptimizationDoneAction, (state) => ({
+    .addMatcher(isAnyOf(buildsOptimizationDoneAction, cancelOptimizationAction), (state) => ({
       ...state,
       isOptimizationRunning: false,
       newBuilds: [],

@@ -18,6 +18,8 @@ export const runBuildsOptimizerAction = createAction<{
   statsFilter: Partial<CharacterStatsValues>;
 }>('[Entities/Builds] Run Builds Optimizer');
 
+export const cancelOptimizationAction = createAction('[Entities/Builds] Cancel Builds Optimizer');
+
 export const updateBuildsComputationProgressAction = createAction<{ buildsComputationProgress: BuildsComputationProgress }>(
   '[Entities/Builds] Update Builds Progress',
 );
@@ -30,6 +32,7 @@ export type BuildsActionTypes =
   | typeof addBuildsAction
   | typeof removeAllBuildsAction
   | typeof runBuildsOptimizerAction
+  | typeof cancelOptimizationAction
   | typeof updateBuildsComputationProgressAction
   | typeof buildsLimitReachedAction
   | typeof buildsOptimizationDoneAction;
