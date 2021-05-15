@@ -23,7 +23,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by main stat should set possible builds', () => {
     it('with sand having elementalMastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { sandsMain: MainStats.elementalMastery }, 0, []);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { sandsMain: MainStats.elementalMastery }, 0, [], false);
       const expectedSands = [
         new GobletArtifact(
           '6',
@@ -43,7 +43,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with goblet having cryoDmg', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { gobletMain: MainStats.cryoDmg }, 0, []);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { gobletMain: MainStats.cryoDmg }, 0, [], false);
       const expectedGoblets = [
         new GobletArtifact(
           '9',
@@ -63,7 +63,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with circlet having critRate', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { circletMain: MainStats.critRate }, 0, []);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, { circletMain: MainStats.critRate }, 0, [], false);
       const expectedCirclets = [
         new CircletArtifact(
           '12',
@@ -104,6 +104,7 @@ describe('Artifacts Filter', () => {
         },
         0,
         [],
+        false,
       );
       const expectedSands = [
         new SandsArtifact(
@@ -165,7 +166,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by min level should set possible builds', () => {
     it('with artifacts higher or equal to 8', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 8, []);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 8, [], false);
       const expectedFlowers = [
         new FlowerArtifact(
           '1',
@@ -281,7 +282,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts higher or equal to 12', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 12, []);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 12, [], false);
 
       const expectedPlumes = [
         new PlumeArtifact(
@@ -362,7 +363,7 @@ describe('Artifacts Filter', () => {
 
   describe('filter artifacts by focused stats should set possible builds', () => {
     it('with artifacts that have percent atk', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [SubStats.percentAtk]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [SubStats.percentAtk], false);
 
       const expectedPlumes = [
         new PlumeArtifact(
@@ -455,7 +456,7 @@ describe('Artifacts Filter', () => {
     });
 
     it('with artifacts that have at least flat hp or elemental mastery', () => {
-      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [SubStats.flatHp, SubStats.elementalMastery]);
+      const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [SubStats.flatHp, SubStats.elementalMastery], false);
       const expectedPlumes = [
         new PlumeArtifact(
           '3',
@@ -558,13 +559,13 @@ describe('Artifacts Filter', () => {
     });
   });
 
-  describe('filter artifacts that must have 4 sub stats', () => {
+  describe('filter artifacts by number of sub stats', () => {
     beforeEach(() => {
       const artifactsRepository: InMemoryArtifactsRepository = new InMemoryArtifactsRepository(artifactsDataWith3Or4Subs);
       allArtifacts = ArtifactMapper.mapAllDataToAllArtifactsByType(artifactsRepository.getAll());
     });
 
-    it('with artifacts that have percent atk', () => {
+    it('should filter artifacts that have 4 subs stats', () => {
       const filteredArtifacts = ArtifactsFilter.filterArtifacts(allArtifacts, {}, 0, [], true);
 
       const expectedFlowers = [
@@ -640,6 +641,7 @@ describe('Artifacts Filter', () => {
       { sandsMain: MainStats.percentHp, gobletMain: MainStats.percentDef, circletMain: MainStats.healingBonus },
       8,
       [SubStats.flatHp, SubStats.elementalMastery],
+      false,
     );
     const expectedFlowers = [
       new FlowerArtifact(

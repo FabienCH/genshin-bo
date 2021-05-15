@@ -27,7 +27,7 @@ export abstract class ArtifactsFilter {
     mainStats: { sandsMain?: SandsMainStatType; gobletMain?: GobletMainStatType; circletMain?: CircletMainStatType },
     minLevel: number,
     focusStats: ArtifactStatsTypes[],
-    hasFourSubs = false,
+    hasFourSubs: boolean,
   ): AllArtifacts {
     const { flowers, plumes, sands, goblets, circlets } = artifacts;
 
