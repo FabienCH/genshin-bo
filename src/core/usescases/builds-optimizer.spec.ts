@@ -5,7 +5,6 @@ import { CharacterView } from '../domain/models/character';
 import {
   atkGeoDmgEmBuildArtifactsData,
   bolideLavawalkerBuildArtifactsData,
-  bolideTenacityOfTheMillelithBuildArtifactsData,
   defaultBuildArtifactsData,
   defPhyDmgAtkBuildArtifactsData,
   gladiatorThunderingBuildArtifactsData,
@@ -14,6 +13,7 @@ import {
   moreThan1000BuildsArtifactsData,
   moreThan10BillionsBuildsArtifactsData,
   multipleArtifactsBuildArtifactsData,
+  paleFlameTenacityOfTheMillelithBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
 import { SetNames } from '../domain/models/sets-with-effects';
 import { ArtifactsDI } from '../di/artifacts-di';
@@ -215,8 +215,8 @@ describe('BuildsOptimizer', () => {
         ]);
       });
 
-      it('with bolide and tenacityOfTheMillelith sets effects', () => {
-        loadArtifacts(bolideTenacityOfTheMillelithBuildArtifactsData);
+      it('with paleFlame and tenacityOfTheMillelith sets effects', () => {
+        loadArtifacts(paleFlameTenacityOfTheMillelithBuildArtifactsData);
 
         buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
 
@@ -231,8 +231,7 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.elementalMastery]: 7,
               [CharacterStats.healingBonus]: 31.3,
               [CharacterStats.critDmg]: 63.2,
-              [CharacterStats.powerfulShield]: 35,
-              [CharacterStats.physicalDmg]: 64.5,
+              [CharacterStats.physicalDmg]: 89.5,
             },
             buildArtifactsParams: defaultBuildArtifactsParams,
           },

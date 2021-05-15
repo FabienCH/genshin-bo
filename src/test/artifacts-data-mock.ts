@@ -518,7 +518,7 @@ export const bolideLavawalkerBuildArtifactsData: AllArtifactsData = {
   ],
 };
 
-export const bolideTenacityOfTheMillelithBuildArtifactsData: AllArtifactsData = {
+export const paleFlameTenacityOfTheMillelithBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {
       id: '0',
@@ -538,7 +538,7 @@ export const bolideTenacityOfTheMillelithBuildArtifactsData: AllArtifactsData = 
     {
       id: '1',
       type: ArtifactType.plume,
-      set: SetNames.retracingBolide,
+      set: SetNames.paleFlame,
       level: 7,
       mainStatType: PlumeArtifact.mainStat,
       subStats: {
@@ -553,7 +553,7 @@ export const bolideTenacityOfTheMillelithBuildArtifactsData: AllArtifactsData = 
     {
       id: '2',
       type: ArtifactType.sands,
-      set: SetNames.thunderingFury,
+      set: SetNames.paleFlame,
       level: 12,
       mainStatType: MainStats.percentHp as SandsMainStatType,
       subStats: {
