@@ -1,3 +1,4 @@
+import { mockHTMLVideoElement } from '../../test/htmlVideoElementMock';
 import { VideoValidator } from './video-validator';
 
 describe('VideoValidator', () => {
@@ -45,23 +46,3 @@ describe('VideoValidator', () => {
     });
   });
 });
-
-function mockHTMLVideoElement(width: number, height: number) {
-  Object.defineProperty(HTMLVideoElement.prototype, 'videoWidth', {
-    configurable: true,
-    value: width,
-  });
-  Object.defineProperty(HTMLVideoElement.prototype, 'videoHeight', {
-    configurable: true,
-    value: height,
-  });
-
-  Object.defineProperty(HTMLVideoElement.prototype, 'load', {
-    configurable: true,
-    get() {
-      return () => {
-        this.dispatchEvent(new Event('loadeddata'));
-      };
-    },
-  });
-}

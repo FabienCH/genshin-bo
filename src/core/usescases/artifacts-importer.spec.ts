@@ -142,7 +142,7 @@ describe('ArtifactsImporter', () => {
       expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
         artifacts: [],
         artifactsInError: 0,
-        fileError: 'JSON file not properly formatted.',
+        fileError: 'JSON file not properly formatted. Please import a previously exported JSON file.',
       });
     });
 
@@ -152,7 +152,7 @@ describe('ArtifactsImporter', () => {
       expect(await artifactsImporter.getArtifactsFromJson(file)).toEqual({
         artifacts: [],
         artifactsInError: 0,
-        fileError: 'JSON file not properly formatted.',
+        fileError: 'JSON file not properly formatted. Please import a previously exported JSON file.',
       });
     });
   });

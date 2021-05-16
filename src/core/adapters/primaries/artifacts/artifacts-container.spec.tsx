@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import { artifactsJsonString } from '../../../../test/artifacts-from-json';
 import { mockBlobText } from '../../../../test/blob-text-mock';
+import { mockHTMLVideoElement } from '../../../../test/htmlVideoElementMock';
 
 const ensureGridApiHasBeenSet = (wrapper: AgGridReact) => {
   return new Promise((resolve) => {
@@ -31,6 +32,7 @@ describe('Artifacts container', () => {
 
   beforeEach(() => {
     window.URL.createObjectURL = () => '';
+    mockHTMLVideoElement(570, 1000);
     ArtifactsDI.registerRepository();
     ArtifactsDI.registerOcrWorker();
     artifactsImporterSpy = jest.spyOn(ArtifactsDI.getArtifactsImporter(), 'importFromVideo').mockImplementation(async () => undefined);
@@ -50,25 +52,27 @@ describe('Artifacts container', () => {
   });
 
   it('should import artifacts and not override currents ones', async () => {
-    const file = new File([], 'filename');
+    const file = new File([], 'filename.mp4', { type: 'video/mp4' });
     wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
-    wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
     await waitFor(() => {
+      wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
+
       expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, false);
     });
   });
 
   it('should import artifacts and override currents ones', async () => {
-    const file = new File([], 'filename');
+    const file = new File([], 'filename.mp4', { type: 'video/mp4' });
     wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
     wrapper
       .find(Checkbox)
       .find('input')
       .simulate('change', { target: { name: '', checked: true } });
-    wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
     await waitFor(() => {
+      wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
+
       expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, true);
     });
   });
