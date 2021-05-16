@@ -28,6 +28,7 @@ import { xiangling } from '../adapters/secondaries/characters-stats/xiangling';
 import { xiao } from '../adapters/secondaries/characters-stats/xiao';
 import { xingqiu } from '../adapters/secondaries/characters-stats/xingqiu';
 import { xinyan } from '../adapters/secondaries/characters-stats/xinyan';
+import { yanfei } from '../adapters/secondaries/characters-stats/yanfei';
 import { zhongli } from '../adapters/secondaries/characters-stats/zhongli';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
 import { ExistingCharacters } from '../domain/models/character';
@@ -66,6 +67,7 @@ describe('CharactersHandler', () => {
     xiao,
     xingqiu,
     xinyan,
+    yanfei,
     zhongli,
   ];
   beforeEach(() => {

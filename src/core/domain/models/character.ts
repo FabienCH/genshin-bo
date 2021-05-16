@@ -33,6 +33,7 @@ export type ExistingCharacters =
   | 'xiao'
   | 'xingqiu'
   | 'xinyan'
+  | 'yanfei'
   | 'zhongli';
 
 export type Character = {

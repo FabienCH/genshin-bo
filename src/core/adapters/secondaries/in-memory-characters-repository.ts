@@ -34,6 +34,7 @@ import { Levels } from '../../domain/models/levels';
 import { xiao } from './characters-stats/xiao';
 import { huTao } from './characters-stats/hu-tao';
 import { rosaria } from './characters-stats/rosaria';
+import { yanfei } from './characters-stats/yanfei';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly charactersStats: CharacterWithStats[];
@@ -70,6 +71,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       xiao,
       xingqiu,
       xinyan,
+      yanfei,
       zhongli,
     ];
   }

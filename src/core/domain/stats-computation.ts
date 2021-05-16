@@ -20,6 +20,8 @@ export class StatsComputation {
     { name: SetNames.blizzardStrayer, stat: SetStats.cryoDmg, value: 15 },
     { name: SetNames.archaicPetra, stat: SetStats.geoDmg, value: 15 },
     { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
+    { name: SetNames.tenacityOfTheMillelith, stat: SetStats.percentHp, value: 20 },
+    { name: SetNames.paleFlame, stat: SetStats.physicalDmg, value: 25 },
   ];
 
   public computeStats(
