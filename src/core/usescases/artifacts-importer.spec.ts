@@ -45,6 +45,8 @@ describe('ArtifactsImporter', () => {
   });
 
   describe('importFromVideo', () => {
+    const file = new File([], 'filename.mp4', { type: 'video/mp4' });
+
     it('should add artifacts contained in each images to stored artifacts', (done) => {
       videoToFramesSpy.mockReturnValue(
         from([
@@ -67,7 +69,7 @@ describe('ArtifactsImporter', () => {
           done();
         });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'), 1);
+      artifactsImporter.importFromVideo(file, 1);
     });
 
     it('should override stored artifact with artifacts contained in each images', (done) => {
@@ -90,7 +92,7 @@ describe('ArtifactsImporter', () => {
           done();
         });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'), 1, true);
+      artifactsImporter.importFromVideo(file, 1, true);
     });
 
     it('should filter duplicated artifacts images and add artifacts', (done) => {
@@ -107,7 +109,7 @@ describe('ArtifactsImporter', () => {
         done();
       });
 
-      artifactsImporter.importFromVideo(new File([], 'filename'), 1, true);
+      artifactsImporter.importFromVideo(file, 1, true);
     });
   });
 

@@ -50,6 +50,7 @@ function ArtifactsImportExportButtons(props: ArtifactsImportExportButtonsProps):
           id="upload-json"
           name="upload-json"
           type="file"
+          accept="application/json"
           disabled={!canImportArtifact}
           onChange={handleFileChange}
         />
