@@ -45,7 +45,8 @@ export class ArtifactsImporter {
   public async getArtifactsFromJson(jsonFile: File): Promise<JsonImportResults> {
     const extension = jsonFile.name.substring(jsonFile.name.lastIndexOf('.') + 1);
     const initialImportResults: JsonImportResults = { artifacts: [], artifactsInError: 0 };
-    const malformedJsonMessage = 'JSON file not properly formatted.';
+    const suffixMessage = 'Please import a previously exported JSON file.';
+    const malformedJsonMessage = `JSON file not properly formatted. ${suffixMessage}`;
     const resultsWithErrorMessage = (jsonImportResults: JsonImportResults, errorMessage: string): JsonImportResults => ({
       ...jsonImportResults,
       fileError: errorMessage,
@@ -57,7 +58,7 @@ export class ArtifactsImporter {
         ? this.getImportResults(artifactsData, initialImportResults)
         : resultsWithErrorMessage(initialImportResults, malformedJsonMessage);
     } else {
-      return resultsWithErrorMessage(initialImportResults, 'Invalid file format.');
+      return resultsWithErrorMessage(initialImportResults, `Invalid file format. ${suffixMessage}`);
     }
   }
 

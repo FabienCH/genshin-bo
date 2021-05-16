@@ -13,7 +13,7 @@ export class VideoValidator {
     const extension = videoFile.name.substring(videoFile.name.lastIndexOf('.') + 1);
     const isTypeValid = extension === 'mp4' && videoFile.type === 'video/mp4';
     this.errorMessage = isTypeValid ? undefined : 'Invalid file format. Please import an mp4 video.';
-    console.log('validateType this.errorMessage', this.errorMessage);
+
     return extension === 'mp4' && videoFile.type === 'video/mp4';
   }
 
@@ -28,8 +28,6 @@ export class VideoValidator {
         this.errorMessage = isRatioValid
           ? undefined
           : 'Invalid video ratio (width / height), it should be between 0.56 and 0.60. Please checkout the artifacts import guide.';
-
-        console.log('isRatioValid this.errorMessage', this.errorMessage);
 
         resolve(isRatioValid);
       });

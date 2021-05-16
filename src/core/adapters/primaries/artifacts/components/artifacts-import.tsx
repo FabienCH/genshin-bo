@@ -57,6 +57,7 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
       props.fileChanged(event.target.files[0]);
+      event.target.value = '';
     }
   };
 
