@@ -57,6 +57,7 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
       props.fileChanged(event.target.files[0]);
+      event.target.value = '';
     }
   };
 
@@ -91,7 +92,14 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
     <Container className={classes.container}>
       <div className={classes.importFlex}>
         <label className={classes.uploadVideo} htmlFor="upload-video">
-          <input className={classes.uploadVideoInput} id="upload-video" name="upload-video" type="file" onChange={handleFileChange} />
+          <input
+            className={classes.uploadVideoInput}
+            id="upload-video"
+            name="upload-video"
+            type="file"
+            accept="video/mp4"
+            onChange={handleFileChange}
+          />
 
           <Button color="primary" variant="contained" component="span">
             Upload video

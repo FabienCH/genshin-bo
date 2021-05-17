@@ -31,7 +31,7 @@ type State = {
   maxNbOfWorkers: number;
   video?: File;
   jsonImportResults?: JsonImportResults;
-  jsonFileErrorMessage?: string;
+  errorMessage?: string;
 };
 
 interface ArtifactsContainerProps extends WithStyles<typeof styles> {
@@ -58,16 +58,24 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     this.jsonFileChange = this.jsonFileChange.bind(this);
     this.exportArtifacts = this.exportArtifacts.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
-    this.handleJsonFileAlertClose = this.handleJsonFileAlertClose.bind(this);
+    this.handleAlertClose = this.handleAlertClose.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
     this.handleImportFromJson = this.handleImportFromJson.bind(this);
   }
 
-  videoFileChange(video: File): void {
-    this.setState((state) => ({
-      ...state,
-      video,
-    }));
+  async videoFileChange(video: File): Promise<void> {
+    const videoValidator = ArtifactsDI.getVideoValidator();
+    if (await videoValidator.isVideoValid(video)) {
+      this.setState((state) => ({
+        ...state,
+        video,
+      }));
+    } else {
+      this.setState((state) => ({
+        ...state,
+        errorMessage: videoValidator.getError(),
+      }));
+    }
   }
 
   nbThreadsChange(nbOfThreads: number): void {
@@ -106,7 +114,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     if (jsonImportResults.fileError) {
       this.setState((state) => ({
         ...state,
-        jsonFileErrorMessage: jsonImportResults.fileError,
+        errorMessage: jsonImportResults.fileError,
       }));
     }
   }
@@ -119,10 +127,10 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     params.api.sizeColumnsToFit();
   }
 
-  handleJsonFileAlertClose(): void {
+  handleAlertClose(): void {
     this.setState((state) => ({
       ...state,
-      jsonFileErrorMessage: undefined,
+      errorMessage: undefined,
     }));
   }
 
@@ -228,9 +236,9 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
             </AgGridReact>
           </div>
         </Container>
-        <Snackbar open={!!this.state.jsonFileErrorMessage} autoHideDuration={5000} onClose={this.handleJsonFileAlertClose}>
-          <Alert onClose={this.handleJsonFileAlertClose} severity="error">
-            {this.state.jsonFileErrorMessage} Please import a previously exported JSON file.
+        <Snackbar open={!!this.state.errorMessage} autoHideDuration={7000} onClose={this.handleAlertClose}>
+          <Alert onClose={this.handleAlertClose} severity="error">
+            {this.state.errorMessage}
           </Alert>
         </Snackbar>
         <Dialog

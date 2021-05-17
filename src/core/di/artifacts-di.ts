@@ -9,6 +9,7 @@ import { LocalStorageArtifactsRepository } from '../adapters/secondaries/local-s
 import { ArtifactImageOcr } from '../domain/artifact-images-ocr';
 import { ArtifactsExporter } from '../usescases/artifacts-exporter';
 import { ArtifactValidator } from '../domain/artifacts-validator';
+import { VideoValidator } from '../usescases/video-validator';
 
 export abstract class ArtifactsDI {
   public static artifactsHandler: ArtifactsHandler;
@@ -73,5 +74,9 @@ export abstract class ArtifactsDI {
 
   public static getArtifactsExporter(): ArtifactsExporter {
     return new ArtifactsExporter();
+  }
+
+  public static getVideoValidator(): VideoValidator {
+    return new VideoValidator();
   }
 }
