@@ -1,15 +1,15 @@
 import { Fragment, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
+import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/builds-optimizer/models/character-statistics';
 import InfoIcon from '@material-ui/icons/Info';
 import BuildsResultsGrid from '../components/builds-results-grid';
-import { Build } from '../../../../domain/models/build';
+import { Build } from '../../../../domain/builds-optimizer/models/build';
 import { ColDef } from 'ag-grid-community';
 import ArtifactPopover from '../components/artifact-popover';
 import React from 'react';
-import { ArtifactView } from '../../../../domain/artifacts/models/artifact-view';
 import WarningMessage from '../../shared/warning-message';
 import { ArtifactsDI } from '../../../../di/artifacts-di';
+import { ArtifactView } from '../../../../domain/artifacts/models/artifact-view';
 
 const styles = createStyles({
   infoContainer: {

@@ -1,18 +1,18 @@
 import { Component, ReactElement } from 'react';
 import { CharactersDI } from '../../../../di/characters-di';
 import { WeaponsDI } from '../../../../di/weapons-di';
-import { CharacterView, ExistingCharacters } from '../../../../domain/models/character';
-import { Levels } from '../../../../domain/models/levels';
+import { CharacterView, ExistingCharacters } from '../../../../domain/builds-optimizer/models/character';
+import { Levels } from '../../../../domain/builds-optimizer/models/levels';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
+import { CharacterStatsValues, CharacterStatTypes } from '../../../../domain/builds-optimizer/models/character-statistics';
 import BuildFiltersForm from '../components/build-filters-form';
 import BuildsResultsContainer from './builds-results-container';
 import BuildsSetupContainer from './builds-setup-container';
 import { connect } from 'react-redux';
-import { Build } from '../../../../domain/models/build';
+import { Build } from '../../../../domain/builds-optimizer/models/build';
 import { selectAllBuilds, selectNewBuilds } from '../../../redux/builds/builds-selectors';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
-import { WeaponView } from '../../../../domain/models/weapon';
+import { WeaponView } from '../../../../domain/builds-optimizer/models/weapon';
 import { ArtifactsFiltersView } from '../../../../usescases/artifacts/artifacts-filter';
 
 const styles = createStyles({

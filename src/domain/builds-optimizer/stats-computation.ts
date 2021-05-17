@@ -1,9 +1,9 @@
-import { Artifact } from './artifacts/entities/artifact';
-import { AllBuildStatTypes, CharacterStatsValues, CharacterStatTypes, allBuildStats, CharacterStats } from './models/character-statistics';
-import { ArtifactStatsTypes, ArtifactStatsValues, MainStatsValues, MainStats, MainStatTypes } from './artifacts/models/main-statistics';
-import { SetStats, SetStatTypes, SetStatsValues } from './artifacts/models/set-statistics';
-import { SetNames, SetWithEffect } from './artifacts/models/sets-with-effects';
-import { SubStats } from './artifacts/models/sub-statistics';
+import { Artifact } from '../artifacts/entities/artifact';
+import { MainStatsValues, ArtifactStatsValues, MainStats, MainStatTypes, ArtifactStatsTypes } from '../artifacts/models/main-statistics';
+import { SetStats, SetStatsValues, SetStatTypes } from '../artifacts/models/set-statistics';
+import { SetWithEffect, SetNames } from '../artifacts/models/sets-with-effects';
+import { SubStats } from '../artifacts/models/sub-statistics';
+import { CharacterStatsValues, CharacterStatTypes, CharacterStats, AllBuildStatTypes, allBuildStats } from './models/character-statistics';
 
 export class StatsComputation {
   private readonly setsWithEffects: SetWithEffect[] = [

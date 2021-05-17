@@ -10,8 +10,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { importInfos, isArtifactsImportRunning } from '../../adapters/redux/artifacts/artifacts-selectors';
 import { ImportInfos } from '../../adapters/redux/artifacts/artifacts-reducer';
-import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 import { ArtifactValidator } from '../../domain/artifacts/artifacts-validator';
+import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 
 export interface JsonImportResults {
   artifacts: ArtifactData[];

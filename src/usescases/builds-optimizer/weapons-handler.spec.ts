@@ -1,11 +1,10 @@
-import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
-import { allBows } from '../adapters/secondaries/weapons-stats/bows';
-import { allCatalysts } from '../adapters/secondaries/weapons-stats/catalysts';
-import { allClaymores } from '../adapters/secondaries/weapons-stats/claymores';
-import { allPolearms } from '../adapters/secondaries/weapons-stats/polearms';
-import { allSwords } from '../adapters/secondaries/weapons-stats/swords';
-import { WeaponStats } from '../adapters/secondaries/weapons-stats/weapon-stats-type';
-
+import { InMemoryWeaponsRepository } from '../../adapters/secondaries/in-memory-weapons-repository';
+import { allBows } from '../../adapters/secondaries/weapons-stats/bows';
+import { allCatalysts } from '../../adapters/secondaries/weapons-stats/catalysts';
+import { allClaymores } from '../../adapters/secondaries/weapons-stats/claymores';
+import { allPolearms } from '../../adapters/secondaries/weapons-stats/polearms';
+import { allSwords } from '../../adapters/secondaries/weapons-stats/swords';
+import { WeaponStats } from '../../adapters/secondaries/weapons-stats/weapon-stats-type';
 import { WeaponsHandler } from './weapons-handler';
 
 describe('getWeaponsNames', () => {

@@ -1,6 +1,6 @@
 import { ChangeEvent, Fragment, ReactElement } from 'react';
 import { Box, Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../../domain/models/character-statistics';
+import { CharacterStats, CharacterStatsValues, CharacterStatTypes } from '../../../../domain/builds-optimizer/models/character-statistics';
 import FormSelect from '../../shared/form-select';
 import WarningMessage from '../../shared/warning-message';
 import BuildFiltersTextFieldProps from './build-filters-text-field';

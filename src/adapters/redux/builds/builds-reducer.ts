@@ -1,7 +1,7 @@
 import { createEntityAdapter, createReducer, EntityState, isAnyOf } from '@reduxjs/toolkit';
-import { BuildsComputationProgress } from '../../../domain/builds-computation';
-import { Build } from '../../../domain/models/build';
-import { CharacterStatsValues } from '../../../domain/models/character-statistics';
+import { BuildsComputationProgress } from '../../../domain/builds-optimizer/builds-computation';
+import { Build } from '../../../domain/builds-optimizer/models/build';
+import { CharacterStatsValues } from '../../../domain/builds-optimizer/models/character-statistics';
 import {
   addBuildsAction,
   buildsLimitReachedAction,

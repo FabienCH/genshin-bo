@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/artifacts/models/main-statistics';
 import ArtifactsMainSelects from './artifacts-main-selects';
 import ArtifactsOptionsForm from './artifacts-options-form';
+import { ArtifactStatsTypes, ArtifactsMainStats } from '../../../../domain/artifacts/models/main-statistics';
 
 const styles = createStyles({
   title: { marginTop: 0 },

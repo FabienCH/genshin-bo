@@ -1,4 +1,4 @@
-import { ArtifactType } from '../artifacts/entities/artifact';
+import { ArtifactType } from '../../artifacts/entities/artifact';
 import { CharacterStatsValues } from './character-statistics';
 
 export interface BuildArtifactParams {

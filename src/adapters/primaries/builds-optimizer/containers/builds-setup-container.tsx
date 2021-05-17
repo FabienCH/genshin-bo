@@ -4,14 +4,14 @@ import CharacterForm from '../components/character-form';
 import SetsForm from '../components/sets-form';
 import ArtifactsForm from '../components/artifacts-form';
 import { BuildsOptimizerDI } from '../../../../di/builds-optimizer-di';
-import { ExistingCharacters, CharacterView } from '../../../../domain/models/character';
-import { ArtifactsMainStats, ArtifactStatsTypes } from '../../../../domain/artifacts/models/main-statistics';
-import { SetNames } from '../../../../domain/artifacts/models/sets-with-effects';
-import { WeaponView } from '../../../../domain/models/weapon';
-import { Levels } from '../../../../domain/models/levels';
+import { ExistingCharacters, CharacterView } from '../../../../domain/builds-optimizer/models/character';
+import { WeaponView } from '../../../../domain/builds-optimizer/models/weapon';
+import { Levels } from '../../../../domain/builds-optimizer/models/levels';
 import React from 'react';
 import { ArtifactsFiltersView } from '../../../../usescases/artifacts/artifacts-filter';
-import { SelectOption } from '../../../../usescases/builds-forms-handler';
+import { SetNames } from '../../../../domain/artifacts/models/sets-with-effects';
+import { ArtifactStatsTypes, ArtifactsMainStats } from '../../../../domain/artifacts/models/main-statistics';
+import { SelectOption } from '../../../../usescases/builds-optimizer/builds-forms-handler';
 
 const styles = createStyles({
   buildSetup: {

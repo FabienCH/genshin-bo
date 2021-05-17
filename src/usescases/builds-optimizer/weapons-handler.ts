@@ -1,6 +1,6 @@
-import { Levels } from '../domain/models/levels';
-import { WeaponType, WeaponView } from '../domain/models/weapon';
-import { WeaponsRepository } from '../domain/weapons-repository';
+import { Levels } from '../../domain/builds-optimizer/models/levels';
+import { WeaponType, WeaponView } from '../../domain/builds-optimizer/models/weapon';
+import { WeaponsRepository } from '../../domain/builds-optimizer/weapons-repository';
 
 export class WeaponsHandler {
   constructor(private readonly weaponsRepository: WeaponsRepository) {}

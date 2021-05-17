@@ -1,6 +1,6 @@
-import { MainStats } from '../artifacts/models/main-statistics';
-import { SetStats } from '../artifacts/models/set-statistics';
-import { SubStats } from '../artifacts/models/sub-statistics';
+import { MainStats } from '../../artifacts/models/main-statistics';
+import { SetStats } from '../../artifacts/models/set-statistics';
+import { SubStats } from '../../artifacts/models/sub-statistics';
 
 export enum CharacterStats {
   hp = 'hp',

@@ -3,7 +3,7 @@ import { InputLabel, Select, MenuItem, FormControl, createStyles, withStyles, Wi
 import Tooltip from '@material-ui/core/Tooltip';
 import { StringFormatter } from '../../../domain/mappers/string-formatter';
 import HelpIconTooltip from './help-icon-tooltip';
-import { SelectOption } from '../../../usescases/builds-forms-handler';
+import { SelectOption } from '../../../usescases/builds-optimizer/builds-forms-handler';
 
 const styles = createStyles({
   container: {

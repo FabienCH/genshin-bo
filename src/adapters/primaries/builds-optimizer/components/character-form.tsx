@@ -1,10 +1,10 @@
 import { createStyles, withStyles, WithStyles, Box, Container } from '@material-ui/core';
-import { Levels } from '../../../../domain/models/levels';
-import { CharacterView, ExistingCharacters } from '../../../../domain/models/character';
+import { Levels } from '../../../../domain/builds-optimizer/models/levels';
+import { CharacterView, ExistingCharacters } from '../../../../domain/builds-optimizer/models/character';
 import FormSelect from '../../shared/form-select';
 import { ReactElement } from 'react';
-import { WeaponView } from '../../../../domain/models/weapon';
-import { SelectOption } from '../../../../usescases/builds-forms-handler';
+import { WeaponView } from '../../../../domain/builds-optimizer/models/weapon';
+import { SelectOption } from '../../../../usescases/builds-optimizer/builds-forms-handler';
 
 const styles = createStyles({
   div: {

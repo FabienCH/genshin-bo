@@ -1,6 +1,6 @@
-import { Artifact } from './artifacts/entities/artifact';
+import { Artifact } from '../artifacts/entities/artifact';
+import { SetNames } from '../artifacts/models/sets-with-effects';
 import { CharacterStatsValues, CharacterStats } from './models/character-statistics';
-import { SetNames } from './artifacts/models/sets-with-effects';
 
 export interface SetFilter {
   setNames: SetNames[];

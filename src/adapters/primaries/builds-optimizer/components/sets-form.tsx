@@ -1,12 +1,12 @@
 import { ChangeEvent, ReactElement } from 'react';
 import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
-import { SetNames } from '../../../../domain/artifacts/models/sets-with-effects';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import SetsSelects from './sets-selects';
+import { SetNames } from '../../../../domain/artifacts/models/sets-with-effects';
 
 const styles = createStyles({
   container: {

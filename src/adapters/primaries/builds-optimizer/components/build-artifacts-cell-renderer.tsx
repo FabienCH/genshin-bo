@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { ICellRendererParams } from 'ag-grid-community';
 import React from 'react';
-import { BuildArtifactParams } from '../../../../domain/models/build';
+import { BuildArtifactParams } from '../../../../domain/builds-optimizer/models/build';
 
 interface BuildArtifactsCellProps extends ICellRendererParams {
   value: BuildArtifactParams[];

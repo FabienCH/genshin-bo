@@ -1,9 +1,9 @@
 import { createAction } from '@reduxjs/toolkit';
-import { BuildsComputationProgress } from '../../../domain/builds-computation';
 import { ArtifactData } from '../../../domain/artifacts/models/artifact-data';
-import { Build } from '../../../domain/models/build';
-import { CharacterStatsValues } from '../../../domain/models/character-statistics';
 import { MainStatsValues } from '../../../domain/artifacts/models/main-statistics';
+import { BuildsComputationProgress } from '../../../domain/builds-optimizer/builds-computation';
+import { Build } from '../../../domain/builds-optimizer/models/build';
+import { CharacterStatsValues } from '../../../domain/builds-optimizer/models/character-statistics';
 import { ArtifactsFilters } from '../../../usescases/artifacts/artifacts-filter';
 
 export const addBuildsAction = createAction<Build[]>('[Entities/Builds] Add Builds');

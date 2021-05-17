@@ -1,35 +1,35 @@
-import { BuildsOptimizer } from './builds-optimizer';
-import { CharacterStats, CharacterStatsValues } from '../domain/models/character-statistics';
-import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
-import { CharacterView } from '../domain/models/character';
+import { Unsubscribe } from '@reduxjs/toolkit';
+import { loadArtifactsActions } from '../../adapters/redux/artifacts/artifacts-action';
+import { updateBuildsComputationProgressAction } from '../../adapters/redux/builds/builds-action';
+import { selectAllBuilds, buildsComputationProgress, buildsLimitReached } from '../../adapters/redux/builds/builds-selectors';
+import { appStore } from '../../adapters/redux/store';
+import { InMemoryCharactersRepository } from '../../adapters/secondaries/in-memory-characters-repository';
+import { InMemoryWeaponsRepository } from '../../adapters/secondaries/in-memory-weapons-repository';
+import { ArtifactsDI } from '../../di/artifacts-di';
+import { ArtifactType } from '../../domain/artifacts/entities/artifact';
+import { AllArtifactsData } from '../../domain/artifacts/models/artifact-data';
+import { SetNames } from '../../domain/artifacts/models/sets-with-effects';
+import { BuildArtifactParams } from '../../domain/builds-optimizer/models/build';
+import { CharacterView } from '../../domain/builds-optimizer/models/character';
+import { CharacterStatsValues, CharacterStats } from '../../domain/builds-optimizer/models/character-statistics';
+import { WeaponView } from '../../domain/builds-optimizer/models/weapon';
 import {
-  atkGeoDmgEmBuildArtifactsData,
-  bolideLavawalkerBuildArtifactsData,
   defaultBuildArtifactsData,
   defPhyDmgAtkBuildArtifactsData,
-  gladiatorThunderingBuildArtifactsData,
+  atkGeoDmgEmBuildArtifactsData,
   lvl134820BuildArtifactsData,
   lvl27121517BuildArtifactsData,
+  gladiatorThunderingBuildArtifactsData,
+  bolideLavawalkerBuildArtifactsData,
+  paleFlameTenacityOfTheMillelithBuildArtifactsData,
+  multipleArtifactsBuildArtifactsData,
   moreThan1000BuildsArtifactsData,
   moreThan10BillionsBuildsArtifactsData,
-  multipleArtifactsBuildArtifactsData,
-  paleFlameTenacityOfTheMillelithBuildArtifactsData,
-} from '../test/artifacts-data-mock';
-import { SetNames } from '../domain/artifacts/models/sets-with-effects';
-import { ArtifactsDI } from '../di/artifacts-di';
-import { buildsComputationProgress, buildsLimitReached, selectAllBuilds } from '../adapters/redux/builds/builds-selectors';
-import { WeaponView } from '../domain/models/weapon';
-import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
-import { appStore } from '../adapters/redux/store';
+} from '../../test/artifacts-data-mock';
+import { ArtifactsFilters } from '../artifacts/artifacts-filter';
+import { BuildsOptimizer } from './builds-optimizer';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Unsubscribe } from '@reduxjs/toolkit';
-import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
-import { AllArtifactsData } from '../domain/artifacts/models/artifact-data';
-import { ArtifactsFilters } from './artifacts/artifacts-filter';
-import { updateBuildsComputationProgressAction } from '../adapters/redux/builds/builds-action';
-import { BuildArtifactParams } from '../domain/models/build';
-import { ArtifactType } from '../domain/artifacts/entities/artifact';
 
 describe('BuildsOptimizer', () => {
   let buildsOptimizer: BuildsOptimizer;

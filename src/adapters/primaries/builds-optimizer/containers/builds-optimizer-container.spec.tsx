@@ -1,11 +1,9 @@
-import { CharactersHandler } from '../../../../usescases/characters-handler';
-import { WeaponsHandler } from '../../../../usescases/weapons-handler';
 import { InMemoryCharactersRepository } from '../../../secondaries/in-memory-characters-repository';
 import { InMemoryWeaponsRepository } from '../../../secondaries/in-memory-weapons-repository';
 import BuildsOptimizerContainer from './builds-optimizer-container';
 import FormSelect from '../../shared/form-select';
 import { mount, ReactWrapper } from 'enzyme';
-import { ExistingCharacters } from '../../../../domain/models/character';
+import { ExistingCharacters } from '../../../../domain/builds-optimizer/models/character';
 import SetsForm from '../components/sets-form';
 import ArtifactsForm from '../components/artifacts-form';
 import { Button, Chip } from '@material-ui/core';
@@ -16,6 +14,8 @@ import { AgGridReact } from 'ag-grid-react';
 import { ArtifactsDI } from '../../../../di/artifacts-di';
 import { appStore } from '../../../redux/store';
 import { Provider } from 'react-redux';
+import { CharactersHandler } from '../../../../usescases/builds-optimizer/characters-handler';
+import { WeaponsHandler } from '../../../../usescases/builds-optimizer/weapons-handler';
 
 describe('Builds Optimizer container', () => {
   let wrapper: ReactWrapper;

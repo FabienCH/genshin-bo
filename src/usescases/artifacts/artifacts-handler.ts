@@ -1,5 +1,4 @@
 import { ArtifactMapper } from '../../domain/artifacts/mappers/artifact-mapper';
-import { ArtifactView } from '../../domain/artifacts/models/artifact-view';
 import { isArtifactsStateInitialized, selectAllArtifacts, selectArtifactById } from '../../adapters/redux/artifacts/artifacts-selectors';
 import {
   addManyArtifactAction,
@@ -8,9 +7,10 @@ import {
   loadArtifactsActions,
 } from '../../adapters/redux/artifacts/artifacts-action';
 import { appStore } from '../../adapters/redux/store';
-import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 import { ArtifactValidator } from '../../domain/artifacts/artifacts-validator';
 import { ArtifactValidationError } from '../../domain/artifacts/artifact-validation-error';
+import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
+import { ArtifactView } from '../../domain/artifacts/models/artifact-view';
 
 export class ArtifactsHandler {
   constructor(private readonly artifactValidator: ArtifactValidator) {

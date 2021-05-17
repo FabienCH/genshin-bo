@@ -1,11 +1,11 @@
 import { ChangeEvent, ReactElement } from 'react';
 import { createStyles, withStyles, WithStyles, InputLabel, Select, Input, Chip, useTheme, MenuItem, Theme, Box } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
-import { artifactStats, ArtifactStatsTypes } from '../../../../domain/artifacts/models/main-statistics';
 import { StringFormatter } from '../../../../domain/mappers/string-formatter';
 import FormSelect from '../../shared/form-select';
 import HelpIconTooltip from '../../shared/help-icon-tooltip';
 import Switch from '@material-ui/core/Switch';
+import { ArtifactStatsTypes, artifactStats } from '../../../../domain/artifacts/models/main-statistics';
 
 const styles = createStyles({
   levelSubsContainer: {

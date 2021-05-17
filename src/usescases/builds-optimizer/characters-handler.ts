@@ -1,6 +1,6 @@
-import { CharactersRepository } from '../domain/characters-repository';
-import { Character, CharacterView, ExistingCharacters } from '../domain/models/character';
-import { Levels } from '../domain/models/levels';
+import { CharactersRepository } from '../../domain/builds-optimizer/characters-repository';
+import { ExistingCharacters, CharacterView, Character } from '../../domain/builds-optimizer/models/character';
+import { Levels } from '../../domain/builds-optimizer/models/levels';
 
 export class CharactersHandler {
   constructor(private readonly charactersRepository: CharactersRepository) {}

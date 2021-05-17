@@ -1,10 +1,10 @@
 import { BcWorkerMock } from '../test/builds-computation-worker-mock';
 import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
 import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
-import { BuildsComputation } from '../domain/builds-computation';
-import BuildsComputationWorker, { BcWorker } from '../domain/worker/builds-computation.worker';
-import { BuildsFormsHandler } from '../usescases/builds-forms-handler';
-import { BuildsOptimizer } from '../usescases/builds-optimizer';
+import BuildsComputationWorker, { BcWorker } from '../domain/builds-optimizer/worker/builds-computation.worker';
+import { BuildsComputation } from '../domain/builds-optimizer/builds-computation';
+import { BuildsFormsHandler } from '../usescases/builds-optimizer/builds-forms-handler';
+import { BuildsOptimizer } from '../usescases/builds-optimizer/builds-optimizer';
 
 export abstract class BuildsOptimizerDI {
   public static buildsFormsHandler = new BuildsFormsHandler(new InMemoryWeaponsRepository());

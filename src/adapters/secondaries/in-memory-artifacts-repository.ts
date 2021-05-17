@@ -1,14 +1,14 @@
-import { AllArtifactsData, ArtifactData } from '../../domain/artifacts/models/artifact-data';
+import { ArtifactsRepository } from '../../domain/artifacts/artifacts-repository';
+import { FlowerArtifact } from '../../domain/artifacts/entities/flower-artifact';
+import { PlumeArtifact } from '../../domain/artifacts/entities/plume-artifact';
+import { ArtifactType } from '../../domain/artifacts/entities/artifact';
+import { ArtifactData, AllArtifactsData } from '../../domain/artifacts/models/artifact-data';
 import { CircletArtifactData } from '../../domain/artifacts/models/circlet-artifact-data';
 import { GobletArtifactData } from '../../domain/artifacts/models/goblet-artifact-data';
 import { MainStats } from '../../domain/artifacts/models/main-statistics';
 import { SandsArtifactData } from '../../domain/artifacts/models/sands-artifact-data';
 import { SetNames } from '../../domain/artifacts/models/sets-with-effects';
 import { SubStats } from '../../domain/artifacts/models/sub-statistics';
-import { ArtifactsRepository } from '../../domain/artifacts/artifacts-repository';
-import { FlowerArtifact } from '../../domain/artifacts/entities/flower-artifact';
-import { PlumeArtifact } from '../../domain/artifacts/entities/plume-artifact';
-import { ArtifactType } from '../../domain/artifacts/entities/artifact';
 
 export class InMemoryArtifactsRepository implements ArtifactsRepository {
   private flowerArtifactsData: ArtifactData[] = [

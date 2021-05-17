@@ -10,8 +10,8 @@ import {
 import { BuildsOptimizerDI } from '../../../di/builds-optimizer-di';
 import { Middleware } from '@reduxjs/toolkit';
 import { AppState } from '../reducer';
-import { BuildsComputation } from '../../../domain/builds-computation';
 import { selectAllBuilds } from './builds-selectors';
+import { BuildsComputation } from '../../../domain/builds-optimizer/builds-computation';
 
 export const buildsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (next) => (action) => {
   switch (action.type) {

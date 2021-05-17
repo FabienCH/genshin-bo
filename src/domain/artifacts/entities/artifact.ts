@@ -1,7 +1,6 @@
-import { ArtifactStatsTypes, MainStat, MainStats } from '../models/main-statistics';
+import { MainStat, ArtifactStatsTypes, MainStats } from '../models/main-statistics';
 import { SetNames } from '../models/sets-with-effects';
-import { SubStats, SubStatsValues } from '../models/sub-statistics';
-
+import { SubStatsValues, SubStats } from '../models/sub-statistics';
 export enum ArtifactType {
   flower = 'flower',
   plume = 'plume',

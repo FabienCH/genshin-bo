@@ -2,9 +2,9 @@ import { ReactElement } from 'react';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import FormSelect from '../../shared/form-select';
 import { CircletMainStatType, circletMainStats } from '../../../../domain/artifacts/models/circlet-artifact-data';
-import { SandsMainStatType, sandsMainStats } from '../../../../domain/artifacts/models/sands-artifact-data';
-import { gobletMainStats, GobletMainStatType } from '../../../../domain/artifacts/models/goblet-artifact-data';
+import { GobletMainStatType, gobletMainStats } from '../../../../domain/artifacts/models/goblet-artifact-data';
 import { ArtifactsMainStats } from '../../../../domain/artifacts/models/main-statistics';
+import { SandsMainStatType, sandsMainStats } from '../../../../domain/artifacts/models/sands-artifact-data';
 
 const styles = createStyles({
   mainStatDiv: {

@@ -1,23 +1,23 @@
-import { isArtifactsStateInitialized, selectAllArtifacts } from '../adapters/redux/artifacts/artifacts-selectors';
-import { appStore } from '../adapters/redux/store';
-import { Character, CharacterView } from '../domain/models/character';
-import { CharacterStatsValues, CharacterStatTypes } from '../domain/models/character-statistics';
-import { MainStatsValues } from '../domain/artifacts/models/main-statistics';
-import { StatsComputation } from '../domain/stats-computation';
-import { loadArtifactsActions } from '../adapters/redux/artifacts/artifacts-action';
-import { CharactersRepository } from '../domain/characters-repository';
-import { Weapon, WeaponView } from '../domain/models/weapon';
-import { WeaponsRepository } from '../domain/weapons-repository';
-import { cancelOptimizationAction, runBuildsOptimizerAction } from '../adapters/redux/builds/builds-action';
+import { loadArtifactsActions } from '../../adapters/redux/artifacts/artifacts-action';
+import { isArtifactsStateInitialized, selectAllArtifacts } from '../../adapters/redux/artifacts/artifacts-selectors';
+import { runBuildsOptimizerAction, cancelOptimizationAction } from '../../adapters/redux/builds/builds-action';
 import {
   buildsComputationProgress,
-  buildsLimitReached,
-  isOptimizationRunning,
   optimizationStatsFilter,
-} from '../adapters/redux/builds/builds-selectors';
-import { BuildsOptimizerDI } from '../di/builds-optimizer-di';
-import { SetFilter } from '../domain/build-filter';
-import { ArtifactsFilters } from './artifacts/artifacts-filter';
+  isOptimizationRunning,
+  buildsLimitReached,
+} from '../../adapters/redux/builds/builds-selectors';
+import { appStore } from '../../adapters/redux/store';
+import { BuildsOptimizerDI } from '../../di/builds-optimizer-di';
+import { MainStatsValues } from '../../domain/artifacts/models/main-statistics';
+import { SetFilter } from '../../domain/builds-optimizer/build-filter';
+import { CharactersRepository } from '../../domain/builds-optimizer/characters-repository';
+import { CharacterView, Character } from '../../domain/builds-optimizer/models/character';
+import { CharacterStatsValues, CharacterStatTypes } from '../../domain/builds-optimizer/models/character-statistics';
+import { WeaponView, Weapon } from '../../domain/builds-optimizer/models/weapon';
+import { StatsComputation } from '../../domain/builds-optimizer/stats-computation';
+import { WeaponsRepository } from '../../domain/builds-optimizer/weapons-repository';
+import { ArtifactsFilters } from '../artifacts/artifacts-filter';
 
 export class BuildsOptimizer {
   constructor(private readonly charactersRepository: CharactersRepository, private readonly weaponsRepository: WeaponsRepository) {

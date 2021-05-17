@@ -1,14 +1,14 @@
 import { Subject, from, Observable } from 'rxjs';
-import { StatsComputation } from './stats-computation';
-import { BuildFilter, SetFilter } from './build-filter';
-import { Artifact } from './artifacts/entities/artifact';
-import { CharacterStatsValues } from './models/character-statistics';
-import { MainStatsValues } from './artifacts/models/main-statistics';
+import { ArtifactsFilters, ArtifactsFilter } from '../../usescases/artifacts/artifacts-filter';
+import { Artifact } from '../artifacts/entities/artifact';
+import { ArtifactMapper } from '../artifacts/mappers/artifact-mapper';
+import { ArtifactData } from '../artifacts/models/artifact-data';
+import { MainStatsValues } from '../artifacts/models/main-statistics';
+import { SetFilter, BuildFilter } from './build-filter';
 import { Build } from './models/build';
+import { CharacterStatsValues } from './models/character-statistics';
+import { StatsComputation } from './stats-computation';
 import { v4 as uuidv4 } from 'uuid';
-import { ArtifactsFilter, ArtifactsFilters } from '../usescases/artifacts/artifacts-filter';
-import { ArtifactMapper } from './artifacts/mappers/artifact-mapper';
-import { ArtifactData } from './artifacts/models/artifact-data';
 
 export interface BuildsComputationProgress {
   computed: number;

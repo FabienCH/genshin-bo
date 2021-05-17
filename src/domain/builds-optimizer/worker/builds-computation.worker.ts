@@ -1,8 +1,8 @@
-import { ArtifactsFilters } from '../../usescases/artifacts/artifacts-filter';
+import { ArtifactsFilters } from '../../../usescases/artifacts/artifacts-filter';
 import { BuildsComputation, BuildsResults } from '../builds-computation';
-import { ArtifactData } from '../artifacts/models/artifact-data';
+import { ArtifactData } from '../../artifacts/models/artifact-data';
 import { CharacterStatsValues } from '../models/character-statistics';
-import { MainStatsValues } from '../artifacts/models/main-statistics';
+import { MainStatsValues } from '../../artifacts/models/main-statistics';
 
 export type BcMessage = {
   allArtifacts: ArtifactData[];
