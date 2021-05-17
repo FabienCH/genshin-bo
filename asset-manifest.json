@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "https://fabiench.github.io/genshin-bo/static/css/main.95412a33.chunk.css",
-    "main.js": "https://fabiench.github.io/genshin-bo/static/js/main.cb334ed7.chunk.js",
-    "main.js.map": "https://fabiench.github.io/genshin-bo/static/js/main.cb334ed7.chunk.js.map",
+    "main.js": "https://fabiench.github.io/genshin-bo/static/js/main.632a88d2.chunk.js",
+    "main.js.map": "https://fabiench.github.io/genshin-bo/static/js/main.632a88d2.chunk.js.map",
     "runtime-main.js": "https://fabiench.github.io/genshin-bo/static/js/runtime-main.b988a3b1.js",
     "runtime-main.js.map": "https://fabiench.github.io/genshin-bo/static/js/runtime-main.b988a3b1.js.map",
-    "static/js/2.a5b39e6e.chunk.js": "https://fabiench.github.io/genshin-bo/static/js/2.a5b39e6e.chunk.js",
-    "static/js/2.a5b39e6e.chunk.js.map": "https://fabiench.github.io/genshin-bo/static/js/2.a5b39e6e.chunk.js.map",
+    "static/js/2.5d041b75.chunk.js": "https://fabiench.github.io/genshin-bo/static/js/2.5d041b75.chunk.js",
+    "static/js/2.5d041b75.chunk.js.map": "https://fabiench.github.io/genshin-bo/static/js/2.5d041b75.chunk.js.map",
     "static/js/3.28a7bb90.chunk.js": "https://fabiench.github.io/genshin-bo/static/js/3.28a7bb90.chunk.js",
     "static/js/3.28a7bb90.chunk.js.map": "https://fabiench.github.io/genshin-bo/static/js/3.28a7bb90.chunk.js.map",
     "index.html": "https://fabiench.github.io/genshin-bo/index.html",
     "static/css/main.95412a33.chunk.css.map": "https://fabiench.github.io/genshin-bo/static/css/main.95412a33.chunk.css.map",
-    "static/js/2.a5b39e6e.chunk.js.LICENSE.txt": "https://fabiench.github.io/genshin-bo/static/js/2.a5b39e6e.chunk.js.LICENSE.txt",
+    "static/js/2.5d041b75.chunk.js.LICENSE.txt": "https://fabiench.github.io/genshin-bo/static/js/2.5d041b75.chunk.js.LICENSE.txt",
     "static/js/builds-computation.worker.47df1e24.js": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.47df1e24.js",
     "static/js/builds-computation.worker.47df1e24.js.LICENSE.txt": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.47df1e24.js.LICENSE.txt",
     "static/js/builds-computation.worker.47df1e24.js.map": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.47df1e24.js.map",
@@ -23,8 +23,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.b988a3b1.js",
-    "static/js/2.a5b39e6e.chunk.js",
+    "static/js/2.5d041b75.chunk.js",
     "static/css/main.95412a33.chunk.css",
-    "static/js/main.cb334ed7.chunk.js"
+    "static/js/main.632a88d2.chunk.js"
   ]
 }
