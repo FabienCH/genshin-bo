@@ -15,8 +15,8 @@ coverage:
 flags:
   adapters:
     paths:
-      - src/core/adapters
+      - src/adapters
   domain:
     paths:
-      - src/core/domain
-      - src/core/usescases
+      - src/domain
+      - src/usescases

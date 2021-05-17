@@ -9,12 +9,12 @@
   "mutate": [
     "src/**/*.ts",
     "!src/**/*.spec.ts",
-    "!src/core/adapters/secondaries/weapons-stats/bows/*",
-    "!src/core/adapters/secondaries/weapons-stats/catalysts/*",
-    "!src/core/adapters/secondaries/weapons-stats/claymores/*",
-    "!src/core/adapters/secondaries/weapons-stats/polearms/*",
-    "!src/core/adapters/secondaries/weapons-stats/swords/*",
-    "!src/core/adapters/secondaries/characters-stats/*.ts",
-    "src/core/adapters/secondaries/characters-stats/character-stats-type.ts"
+    "!src/adapters/secondaries/builds-optimizer/weapons-stats/bows/*",
+    "!src/adapters/secondaries/builds-optimizer/weapons-stats/catalysts/*",
+    "!src/adapters/secondaries/builds-optimizer/weapons-stats/claymores/*",
+    "!src/adapters/secondaries/builds-optimizer/weapons-stats/polearms/*",
+    "!src/adapters/secondaries/builds-optimizer/weapons-stats/swords/*",
+    "!src/adapters/secondaries/builds-optimizer/characters-stats/*.ts",
+    "src/adapters/secondaries/builds-optimizer/characters-stats/character-stats-type.ts"
   ]
 }
