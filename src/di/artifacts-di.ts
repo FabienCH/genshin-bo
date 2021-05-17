@@ -1,11 +1,11 @@
 import { OcrWorkerHandlerMock } from '../test/artifacts-ocr-worker-mock';
-import { InMemoryArtifactsRepository } from '../adapters/secondaries/in-memory-artifacts-repository';
+import { InMemoryArtifactsRepository } from '../adapters/secondaries/artifacts/in-memory-artifacts-repository';
 import { ArtifactsRepository } from '../domain/artifacts/artifacts-repository';
 import { AllArtifactsData } from '../domain/artifacts/models/artifact-data';
 import { ArtifactOcrWorkersHandler, OcrWorkerHandler } from '../domain/artifacts/artifact-ocr-worker-handler';
 import { ArtifactsHandler } from '../usescases/artifacts/artifacts-handler';
 import { ArtifactsImporter } from '../usescases/artifacts/artifacts-importer';
-import { LocalStorageArtifactsRepository } from '../adapters/secondaries/local-storage-artifacts-repository';
+import { LocalStorageArtifactsRepository } from '../adapters/secondaries/artifacts/local-storage-artifacts-repository';
 import { ArtifactImageOcr } from '../domain/artifacts/artifact-images-ocr';
 import { ArtifactsExporter } from '../usescases/artifacts/artifacts-exporter';
 import { ArtifactValidator } from '../domain/artifacts/artifacts-validator';

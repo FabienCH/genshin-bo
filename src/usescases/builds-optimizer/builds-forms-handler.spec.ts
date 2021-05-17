@@ -1,4 +1,4 @@
-import { InMemoryWeaponsRepository } from '../../adapters/secondaries/in-memory-weapons-repository';
+import { InMemoryWeaponsRepository } from '../../adapters/secondaries/builds-optimizer/in-memory-weapons-repository';
 import { Levels } from '../../domain/builds-optimizer/models/levels';
 import { BuildsFormsHandler, SelectOption } from './builds-forms-handler';
 

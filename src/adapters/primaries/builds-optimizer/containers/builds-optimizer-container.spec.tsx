@@ -1,5 +1,5 @@
-import { InMemoryCharactersRepository } from '../../../secondaries/in-memory-characters-repository';
-import { InMemoryWeaponsRepository } from '../../../secondaries/in-memory-weapons-repository';
+import { InMemoryCharactersRepository } from '../../../secondaries/builds-optimizer/in-memory-characters-repository';
+import { InMemoryWeaponsRepository } from '../../../secondaries/builds-optimizer/in-memory-weapons-repository';
 import BuildsOptimizerContainer from './builds-optimizer-container';
 import FormSelect from '../../shared/form-select';
 import { mount, ReactWrapper } from 'enzyme';

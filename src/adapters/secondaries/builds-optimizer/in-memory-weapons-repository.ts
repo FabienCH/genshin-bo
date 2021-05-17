@@ -1,5 +1,5 @@
-import { Weapon } from '../../domain/builds-optimizer/models/weapon';
-import { Levels } from '../../domain/builds-optimizer/models/levels';
+import { Weapon } from '../../../domain/builds-optimizer/models/weapon';
+import { Levels } from '../../../domain/builds-optimizer/models/levels';
 
 import { allBows } from './weapons-stats/bows';
 import { allCatalysts } from './weapons-stats/catalysts';
@@ -7,7 +7,7 @@ import { allClaymores } from './weapons-stats/claymores';
 import { allPolearms } from './weapons-stats/polearms';
 import { allSwords } from './weapons-stats/swords';
 import { WeaponStats } from './weapons-stats/weapon-stats-type';
-import { WeaponsRepository } from '../../domain/builds-optimizer/weapons-repository';
+import { WeaponsRepository } from '../../../domain/builds-optimizer/weapons-repository';
 
 export class InMemoryWeaponsRepository implements WeaponsRepository {
   private readonly weaponsStats: WeaponStats[];

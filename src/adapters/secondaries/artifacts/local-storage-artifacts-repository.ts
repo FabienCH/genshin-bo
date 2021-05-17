@@ -1,5 +1,5 @@
-import { ArtifactsRepository } from '../../domain/artifacts/artifacts-repository';
-import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
+import { ArtifactsRepository } from '../../../domain/artifacts/artifacts-repository';
+import { ArtifactData } from '../../../domain/artifacts/models/artifact-data';
 
 export class LocalStorageArtifactsRepository implements ArtifactsRepository {
   private readonly artifactsKey = 'artifacts';

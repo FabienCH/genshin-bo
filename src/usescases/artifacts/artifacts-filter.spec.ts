@@ -1,5 +1,5 @@
 import { artifactsDataWith3Or4Subs } from '../../test/artifacts-data-mock';
-import { InMemoryArtifactsRepository } from '../../adapters/secondaries/in-memory-artifacts-repository';
+import { InMemoryArtifactsRepository } from '../../adapters/secondaries/artifacts/in-memory-artifacts-repository';
 import { CircletArtifact } from '../../domain/artifacts/entities/circlet-artifact';
 import { FlowerArtifact } from '../../domain/artifacts/entities/flower-artifact';
 import { GobletArtifact } from '../../domain/artifacts/entities/goblet-artifact';

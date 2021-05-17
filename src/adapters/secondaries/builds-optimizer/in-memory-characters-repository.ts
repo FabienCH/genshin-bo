@@ -1,5 +1,5 @@
-import { CharacterBuilder } from '../../domain/builds-optimizer/models/character-builder';
-import { ExistingCharacters, Character } from '../../domain/builds-optimizer/models/character';
+import { CharacterBuilder } from '../../../domain/builds-optimizer/models/character-builder';
+import { ExistingCharacters, Character } from '../../../domain/builds-optimizer/models/character';
 import { amber } from './characters-stats/amber';
 import { CharacterWithStats } from './characters-stats/character-stats-type';
 import { razor } from './characters-stats/razor';
@@ -29,12 +29,12 @@ import { xiangling } from './characters-stats/xiangling';
 import { xingqiu } from './characters-stats/xingqiu';
 import { xinyan } from './characters-stats/xinyan';
 import { zhongli } from './characters-stats/zhongli';
-import { Levels } from '../../domain/builds-optimizer/models/levels';
+import { Levels } from '../../../domain/builds-optimizer/models/levels';
 import { xiao } from './characters-stats/xiao';
 import { huTao } from './characters-stats/hu-tao';
 import { rosaria } from './characters-stats/rosaria';
 import { yanfei } from './characters-stats/yanfei';
-import { CharactersRepository } from '../../domain/builds-optimizer/characters-repository';
+import { CharactersRepository } from '../../../domain/builds-optimizer/characters-repository';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly charactersStats: CharacterWithStats[];

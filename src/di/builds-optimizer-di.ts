@@ -1,6 +1,6 @@
 import { BcWorkerMock } from '../test/builds-computation-worker-mock';
-import { InMemoryCharactersRepository } from '../adapters/secondaries/in-memory-characters-repository';
-import { InMemoryWeaponsRepository } from '../adapters/secondaries/in-memory-weapons-repository';
+import { InMemoryCharactersRepository } from '../adapters/secondaries/builds-optimizer/in-memory-characters-repository';
+import { InMemoryWeaponsRepository } from '../adapters/secondaries/builds-optimizer/in-memory-weapons-repository';
 import BuildsComputationWorker, { BcWorker } from '../domain/builds-optimizer/worker/builds-computation.worker';
 import { BuildsComputation } from '../domain/builds-optimizer/builds-computation';
 import { BuildsFormsHandler } from '../usescases/builds-optimizer/builds-forms-handler';

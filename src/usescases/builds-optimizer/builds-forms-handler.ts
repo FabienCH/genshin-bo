@@ -1,4 +1,4 @@
-import { WeaponLevels } from '../../adapters/secondaries/weapons-stats/weapon-stats-type';
+import { WeaponLevels } from '../../adapters/secondaries/builds-optimizer/weapons-stats/weapon-stats-type';
 import { Levels } from '../../domain/builds-optimizer/models/levels';
 import { WeaponsRepository } from '../../domain/builds-optimizer/weapons-repository';
 

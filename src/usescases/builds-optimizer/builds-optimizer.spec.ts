@@ -3,8 +3,8 @@ import { loadArtifactsActions } from '../../adapters/redux/artifacts/artifacts-a
 import { updateBuildsComputationProgressAction } from '../../adapters/redux/builds/builds-action';
 import { selectAllBuilds, buildsComputationProgress, buildsLimitReached } from '../../adapters/redux/builds/builds-selectors';
 import { appStore } from '../../adapters/redux/store';
-import { InMemoryCharactersRepository } from '../../adapters/secondaries/in-memory-characters-repository';
-import { InMemoryWeaponsRepository } from '../../adapters/secondaries/in-memory-weapons-repository';
+import { InMemoryCharactersRepository } from '../../adapters/secondaries/builds-optimizer/in-memory-characters-repository';
+import { InMemoryWeaponsRepository } from '../../adapters/secondaries/builds-optimizer/in-memory-weapons-repository';
 import { ArtifactsDI } from '../../di/artifacts-di';
 import { ArtifactType } from '../../domain/artifacts/entities/artifact';
 import { AllArtifactsData } from '../../domain/artifacts/models/artifact-data';
