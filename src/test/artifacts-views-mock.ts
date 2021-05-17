@@ -1,4 +1,4 @@
-import { ArtifactView } from '../core/domain/models/artifact-view';
+import { ArtifactView } from '../domain/artifacts/models/artifact-view';
 
 export const defaultArtifactsViews: ArtifactView[] = [
   {

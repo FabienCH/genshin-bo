@@ -2,10 +2,10 @@ import { ReactElement, Component } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { theme } from './theme';
-import GboHeader from '../core/adapters/primaries/layout/header';
-import { MainContainer } from '../core/adapters/primaries/layout/main-container';
-import { ArtifactsDI } from '../core/di/artifacts-di';
-import { appStore } from '../core/adapters/redux/store';
+import GboHeader from '../adapters/primaries/layout/header';
+import { MainContainer } from '../adapters/primaries/layout/main-container';
+import { ArtifactsDI } from '../di/artifacts-di';
+import { appStore } from '../adapters/redux/store';
 import { Provider } from 'react-redux';
 
 type AppState = {

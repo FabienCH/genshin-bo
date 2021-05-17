@@ -1,13 +1,13 @@
-import { SandsMainStatType } from '../core/domain/models/sands-artifact-data';
-import { MainStats } from '../core/domain/models/main-statistics';
-import { SetNames } from '../core/domain/models/sets-with-effects';
-import { SubStats } from '../core/domain/models/sub-statistics';
-import { GobletMainStatType } from '../core/domain/models/goblet-artifact-data';
-import { CircletMainStatType } from '../core/domain/models/circlet-artifact-data';
-import { AllArtifactsData } from '../core/domain/models/artifact-data';
-import { FlowerArtifact } from '../core/domain/entities/flower-artifact';
-import { PlumeArtifact } from '../core/domain/entities/plume-artifact';
-import { ArtifactType } from '../core/domain/entities/artifact';
+import { ArtifactType } from '../domain/artifacts/entities/artifact';
+import { FlowerArtifact } from '../domain/artifacts/entities/flower-artifact';
+import { PlumeArtifact } from '../domain/artifacts/entities/plume-artifact';
+import { AllArtifactsData } from '../domain/artifacts/models/artifact-data';
+import { CircletMainStatType } from '../domain/artifacts/models/circlet-artifact-data';
+import { GobletMainStatType } from '../domain/artifacts/models/goblet-artifact-data';
+import { MainStats } from '../domain/artifacts/models/main-statistics';
+import { SandsMainStatType } from '../domain/artifacts/models/sands-artifact-data';
+import { SetNames } from '../domain/artifacts/models/sets-with-effects';
+import { SubStats } from '../domain/artifacts/models/sub-statistics';
 
 export const defaultBuildArtifactsData: AllArtifactsData = {
   flowers: [
