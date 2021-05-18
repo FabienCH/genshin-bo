@@ -1,5 +1,5 @@
-import { BuildsComputation, BuildsResults } from '../core/domain/builds-computation';
-import { BcMessage } from '../core/domain/worker/builds-computation.worker';
+import { BuildsComputation, BuildsResults } from '../domain/builds-optimizer/builds-computation';
+import { BcMessage } from '../domain/builds-optimizer/worker/builds-computation.worker';
 
 export class BcWorkerMock {
   public onmessage: (ev: { data: { buildsResults: BuildsResults } }) => any;

@@ -1,8 +1,8 @@
-import { ArtifactType } from '../core/domain/entities/artifact';
-import { NewArtifactData } from '../core/domain/models/artifact-data';
-import { MainStats } from '../core/domain/models/main-statistics';
-import { SetNames } from '../core/domain/models/sets-with-effects';
-import { SubStats } from '../core/domain/models/sub-statistics';
+import { ArtifactType } from '../domain/artifacts/entities/artifact';
+import { NewArtifactData } from '../domain/artifacts/models/artifact-data';
+import { MainStats } from '../domain/artifacts/models/main-statistics';
+import { SetNames } from '../domain/artifacts/models/sets-with-effects';
+import { SubStats } from '../domain/artifacts/models/sub-statistics';
 
 export const importedArtifactDataMock = [
   {

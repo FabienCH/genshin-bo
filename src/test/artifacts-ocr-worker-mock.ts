@@ -1,4 +1,4 @@
-import { OcrWorkerHandler } from '../core/domain/artifact-ocr-worker-handler';
+import { OcrWorkerHandler } from '../domain/artifacts/artifact-ocr-worker-handler';
 import { ocrResultsMock } from './ocr-results-mock';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
