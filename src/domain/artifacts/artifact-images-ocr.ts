@@ -38,15 +38,18 @@ export class ArtifactImageOcr {
     });
   }
 
-  public async runArtifactOcrFromImage(imageData: {
-    frame: string;
-    isLast: boolean;
-  }): Promise<{ artifact?: ArtifactData; inError: boolean; isDone: boolean }> {
+  public async runArtifactOcrFromImage(
+    imageData: {
+      frame: string;
+      isLast: boolean;
+    },
+    fixOcrErrors: boolean,
+  ): Promise<{ artifact?: ArtifactData; inError: boolean; isDone: boolean }> {
     this.recognizingImagesCount++;
     let artifact: ArtifactData | undefined;
     const imageForOcr = await this.getImageForOcr(imageData.frame);
     if (imageForOcr.length) {
-      artifact = await this.runOcrRecognize(imageForOcr);
+      artifact = await this.runOcrRecognize(imageForOcr, fixOcrErrors);
     }
 
     const isDone = this.areAllImagesProcessed(imageData.isLast) || this.cancelImport;
@@ -75,9 +78,9 @@ export class ArtifactImageOcr {
     return Buffer.from([]);
   }
 
-  private async runOcrRecognize(imageForOcr: Buffer): Promise<ArtifactData | undefined> {
+  private async runOcrRecognize(imageForOcr: Buffer, fixOcrErrors: boolean): Promise<ArtifactData | undefined> {
     const ocrResults = await this.ocrWorker.recognize(imageForOcr);
-    const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults);
+    const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults, fixOcrErrors);
     const artifactData = ArtifactMapper.mapNewDataToArtifactData(parsedOcrResults);
     if (!(artifactData instanceof ArtifactValidationError)) {
       return artifactData;

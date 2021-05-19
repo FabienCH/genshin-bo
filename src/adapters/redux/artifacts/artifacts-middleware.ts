@@ -17,7 +17,8 @@ import { selectAllArtifacts } from './artifacts-selectors';
 export const artifactsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (next) => async (action) => {
   switch (action.type) {
     case runOcrOnImageAction.type: {
-      const ocrResults = await ArtifactsDI.getArtifactImageOcr().runArtifactOcrFromImage(action.payload);
+      const { frameData, fixOcrErrors } = action.payload;
+      const ocrResults = await ArtifactsDI.getArtifactImageOcr().runArtifactOcrFromImage(frameData, fixOcrErrors);
       if (ocrResults.artifact) {
         dispatch(addOneArtifactAction(ocrResults.artifact));
       }
