@@ -315,3 +315,17 @@ export const ocrResultsWith2LinesNameMock = [
   'Viridescent Venerer:\n',
   '+ Equipped: Venti\n',
 ];
+
+export const fixableStringsOcrResultsMock = [
+  'In Remembrance of Viridescent\n',
+  'Sonds of Eon\n',
+  '4TK\n',
+  '30.8%\n',
+  '+12\n\n',
+  '. CRIT Rate+7.0%\n',
+  '. CRIT DNG+7.05%\n',
+  '. Elenmental Masterg+37\n',
+  '. ATK+37\n',
+  'Viridescemt Venener:\n',
+  '+ Equipped: Venti\n',
+];

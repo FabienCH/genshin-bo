@@ -1,6 +1,6 @@
 import {
   artifactWith2LinesNameMock,
-  artifactWithWrongTypeMock,
+  artifactWithFixableOcrResultsMock,
   misrecognizedMainImportedArtifactMock,
   misrecognizedSubsImportedArtifactMock,
   properlyImportedArtifactMock,
@@ -10,7 +10,7 @@ import {
   ocrResultsWith2LinesNameMock,
   wrongMainValuesOcrResultsMock,
   wrongSubsOcrResultsMock,
-  wrongTypeOcrResultsMock,
+  fixableStringsOcrResultsMock,
 } from '../../test/ocr-results-mock';
 import { OcrResultsParser } from './ocr-results-parser';
 
@@ -43,7 +43,7 @@ describe('OcrResultsParser', () => {
     expect(ocrResultsParser.parseToArtifactData(ocrResultsWith2LinesNameMock, false)).toEqual(artifactWith2LinesNameMock);
   });
 
-  it('should parse an artifact with wrong type if fix ocr errors', () => {
-    expect(ocrResultsParser.parseToArtifactData(wrongTypeOcrResultsMock, true)).toEqual(artifactWithWrongTypeMock);
+  it('should parse and fix error of an artifact with wrong type, set and stats types', () => {
+    expect(ocrResultsParser.parseToArtifactData(fixableStringsOcrResultsMock, true)).toEqual(artifactWithFixableOcrResultsMock);
   });
 });

@@ -82,10 +82,11 @@ export class ArtifactImageOcr {
     const ocrResults = await this.ocrWorker.recognize(imageForOcr);
     const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults, fixOcrErrors);
     const artifactData = ArtifactMapper.mapNewDataToArtifactData(parsedOcrResults);
+
     if (!(artifactData instanceof ArtifactValidationError)) {
       return artifactData;
     }
-    console.log('error while parsing artifact', artifactData.getMessages());
+    console.error('error while parsing artifact', artifactData.getMessages());
   }
 
   private areAllImagesProcessed(isLast: boolean): boolean {

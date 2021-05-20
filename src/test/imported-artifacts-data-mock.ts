@@ -296,3 +296,17 @@ export const artifactWith2LinesNameMock = {
     [SubStats.flatAtk]: 37,
   },
 };
+
+export const artifactWithFixableOcrResultsMock = {
+  type: ArtifactType.sands,
+  set: SetNames.viridescentVenerer,
+  level: 12,
+  mainStatType: MainStats.percentAtk,
+  mainStatValue: 30.8,
+  subStats: {
+    [SubStats.critRate]: 7.0,
+    [SubStats.critDmg]: 7.0,
+    [SubStats.elementalMastery]: 37,
+    [SubStats.flatAtk]: 37,
+  },
+};
