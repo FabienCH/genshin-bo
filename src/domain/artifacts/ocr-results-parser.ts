@@ -29,71 +29,56 @@ export class OcrResultsParser {
     };
   }
 
-  private parseArtifactType(fixOcrErrors: boolean) {
-    let type = this.findMatchingArtifactType();
-    if (!type && fixOcrErrors) {
-      type = this.findMatchingArtifactType(fixOcrErrors);
-    }
-    return type;
+  private parseArtifactType(fixOcrErrors: boolean): ArtifactType | undefined {
+    const type = this.findMatchingArtifactType();
+    return type || !fixOcrErrors ? type : this.findMatchingArtifactType(fixOcrErrors);
   }
 
   private findMatchingArtifactType(fixOcrErrors?: boolean) {
-    const matchingFn = (lineIndex: 1 | 2, type: string) =>
-      fixOcrErrors ? this.partiallyMatchStrings(this.lowerCaseType(lineIndex), type) : this.lowerCaseType(lineIndex) === type;
+    const artifactTypes: ArtifactType[] = Object.values(ArtifactType);
+    const getTypeCandidate = (lineIndex: 1 | 2): string => this.ocrResults[lineIndex].split(' ')[0];
+    const findType = (lineIndex: 1 | 2) => this.findStringInArray(getTypeCandidate(lineIndex), artifactTypes, fixOcrErrors);
 
-    const findType = (lineIndex: 1 | 2) => Object.values(ArtifactType).find((type) => matchingFn(lineIndex, type));
-
-    let type = findType(1);
-    if (!type) {
-      type = findType(2);
-      if (type) {
+    const typeAtIndex1 = findType(1);
+    if (!typeAtIndex1) {
+      const typeAtIndex2 = findType(2);
+      if (typeAtIndex2) {
         this.ocrResults.shift();
       }
+      return typeAtIndex2;
     }
-    return type;
-  }
-  private lowerCaseType(lineIndex: 1 | 2): string {
-    return this.ocrResults[lineIndex].split(' ')[0].toLowerCase();
+    return typeAtIndex1;
   }
 
-  private parseSet(subStats: SubStatsValues, fixOcrErrors: boolean) {
+  private parseSet(subStats: SubStatsValues, fixOcrErrors: boolean): SetNames | undefined {
+    const setNames: SetNames[] = Object.values(SetNames);
     const ocrSetIndex = Object.values(subStats).length === 4 ? 9 : 8;
-    const ocrSet = this.ocrResults[ocrSetIndex].replace(/ |'/g, '').toLowerCase();
+    const ocrSet = this.ocrResults[ocrSetIndex].replace(/ |'/g, '');
+    const set = this.findStringInArray(ocrSet, setNames);
 
-    let set = Object.values(SetNames).find((setName) => {
-      return ocrSet.includes(setName.toLowerCase());
-    });
-
-    if (!set && fixOcrErrors) {
-      set = Object.values(SetNames).find((setName) => {
-        return this.partiallyMatchStrings(ocrSet, setName.toLowerCase());
-      });
-    }
-    return set;
+    return set || !fixOcrErrors ? set : this.findStringInArray(ocrSet, setNames, fixOcrErrors);
   }
 
   private parseMainStatType(type: ArtifactType | undefined, fixOcrErrors: boolean): MainStats | undefined {
-    const mainWords = this.ocrResults[2].toLowerCase().split(' ');
-    if (this.flatOrPercentStats.includes(mainWords[0])) {
-      const artifactHasFlatMain = type === ArtifactType.flower || type === ArtifactType.plume;
-      mainWords.unshift(artifactHasFlatMain ? 'flat' : 'percent');
+    const mainStatTypes: MainStats[] = Object.values(MainStats);
+    const mainStatWords = this.ocrResults[2].toLowerCase().split(' ');
+    const artifactHasFlatMain = type === ArtifactType.flower || type === ArtifactType.plume;
+    if (this.flatOrPercentStats.includes(mainStatWords[0])) {
+      mainStatWords.unshift(artifactHasFlatMain ? 'flat' : 'percent');
     }
 
-    let parsedMainStat = mainWords
+    let parsedMainStat = mainStatWords
       .filter((_, i) => i < this.maxStatWords)
       .map((mainWord, i) => (i > 0 ? StringFormatter.upperCaseFirstChar(mainWord) : mainWord))
       .join('')
       .replace(/ /g, '');
 
-    const mainStatTypes = Object.values(MainStats);
-    let mainStatType = mainStatTypes.find((mainStat) => mainStat === parsedMainStat);
-
+    const mainStatType = this.findStringInArray(parsedMainStat, mainStatTypes);
     if (!mainStatType && fixOcrErrors) {
       if (parsedMainStat.length <= 3) {
-        const artifactHasFlatMain = type === ArtifactType.flower || type === ArtifactType.plume;
         parsedMainStat = `${artifactHasFlatMain ? 'flat' : 'percent'}${parsedMainStat}`;
       }
-      mainStatType = mainStatTypes.find((mainStat) => this.partiallyMatchStrings(parsedMainStat, mainStat));
+      return this.findStringInArray(parsedMainStat, mainStatTypes, fixOcrErrors);
     }
 
     return mainStatType;
@@ -107,8 +92,8 @@ export class OcrResultsParser {
 
   private parseSubsStats(fixOcrErrors: boolean): SubStatsValues {
     const ocrSubsStats = [this.ocrResults[5], this.ocrResults[6], this.ocrResults[7], this.ocrResults[8]];
-    const typeValueSplitedSubsStats = ocrSubsStats.map((ocrSubStat) => ocrSubStat.toLowerCase().replace(/ /g, '').split('+'));
-    return typeValueSplitedSubsStats.reduce((subsStatsAcc, ocrSubStat) => {
+    const splitedSubsStats = ocrSubsStats.map((ocrSubStat) => ocrSubStat.toLowerCase().replace(/ /g, '').split('+'));
+    return splitedSubsStats.reduce((subsStatsAcc, ocrSubStat) => {
       const isPercent = !!ocrSubStat[1] && (ocrSubStat[1].includes('.') || ocrSubStat[1].includes('%'));
       const subStatType = this.parseSubStatType(ocrSubStat[0], isPercent, fixOcrErrors);
 
@@ -121,25 +106,22 @@ export class OcrResultsParser {
   }
 
   private parseSubStatType(ocrSubStatType: string, isPercent: boolean, fixOcrErrors: boolean): SubStats | undefined {
+    const subStatsTypes: SubStats[] = Object.values(SubStats);
     let subStatTypePrefix = '';
     if (this.flatOrPercentStats.find((stat) => ocrSubStatType.includes(stat))) {
       subStatTypePrefix = isPercent ? 'percent' : 'flat';
     }
-
-    let subStatType = Object.values(SubStats).find((subStat) => {
-      const parsedSubStatType = `${subStatTypePrefix}${ocrSubStatType}`;
-      return parsedSubStatType.includes(subStat.toLowerCase());
-    });
+    const parsedSubStatType = `${subStatTypePrefix}${ocrSubStatType}`;
+    const subStatType = this.findStringInArray(parsedSubStatType, subStatsTypes);
 
     if (!subStatType && fixOcrErrors) {
       if (ocrSubStatType.length <= 3) {
         subStatTypePrefix = isPercent ? 'percent' : 'flat';
       }
-      subStatType = Object.values(SubStats).find((subStat) => {
-        const parsedSubStatType = `${subStatTypePrefix}${ocrSubStatType}`;
-        return this.partiallyMatchStrings(parsedSubStatType, subStat.toLowerCase());
-      });
+      const parsedSubStatType = `${subStatTypePrefix}${ocrSubStatType}`;
+      return this.findStringInArray(parsedSubStatType, subStatsTypes, fixOcrErrors);
     }
+
     return subStatType;
   }
 
@@ -149,13 +131,26 @@ export class OcrResultsParser {
     return isPercent ? Math.trunc(parseFloat(ocrMainStatValue) * 10) / 10 : parseInt(ocrMainStatValue);
   }
 
+  private findStringInArray<T extends string>(stringToFind: string, inputStrings: T[], fixOcrErrors?: boolean): T | undefined {
+    const lowercaseStrToFind = stringToFind.toLowerCase();
+    return fixOcrErrors
+      ? inputStrings.find((string) => this.partiallyMatchStrings(lowercaseStrToFind, string.toLowerCase()))
+      : inputStrings.find((string) => string.toLowerCase() === lowercaseStrToFind);
+  }
+
   private partiallyMatchStrings(inputString: string, stringToMatch: string): boolean {
     if (Math.abs(inputString.length - stringToMatch.length) > 1) {
       return false;
     }
     const matchingPercent = inputString.length <= 4 ? 75 : 80;
+    const matchingChars = this.findMatchingChars(inputString, stringToMatch);
+
+    return (matchingChars * 100) / inputString.length >= matchingPercent;
+  }
+
+  private findMatchingChars(inputString: string, stringToMatch: string): number {
     const splittedInputString = inputString.split('');
-    const matchingChars = stringToMatch.split('').reduce((matchingChars, char, index) => {
+    return stringToMatch.split('').reduce((matchingChars, char, index) => {
       if (char === splittedInputString[index]) {
         matchingChars++;
       } else if (splittedInputString.length > stringToMatch.length) {
@@ -163,7 +158,5 @@ export class OcrResultsParser {
       }
       return matchingChars;
     }, 0);
-
-    return (matchingChars * 100) / inputString.length >= matchingPercent;
   }
 }
