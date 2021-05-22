@@ -99,8 +99,11 @@ function ImportGuide(props: ImportGuideProps): ReactElement {
         <p>Also set the FPS to 10, this is more than enough, having a low FPS will reduce the import duration</p>
         <img className={classes.img} src={resolution} alt="resolution settings" />
         <p>In the Hotkeys tab, you can also configure Start and Stop Recording hotkeys.</p>
-        <h5>Settings (right bottom button)</h5>
-        <p>Under Source, click on “+” and add a Windows Capture</p>
+        <h5>Configure source</h5>
+        <p>
+          First, launch Genshin Impact. Once it's done, under Source, click on “+”, add a Windows Capture, click Ok and make sure the
+          Windows is set to GenshinImpact.exe.
+        </p>
         <img className={classes.img} src={source} alt="source settings" />
         <p>
           The right click on your source and click Filters. At the bottom click on “+”, add a Crop/Pad filter and set the values from the
