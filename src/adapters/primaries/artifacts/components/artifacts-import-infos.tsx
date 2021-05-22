@@ -3,8 +3,12 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
     importInfos: {
-      margin: '0 10px',
+      margin: '5px 30px 0 10px',
     },
     artifactsInError: {
       color: palette.error.light,
@@ -20,7 +24,7 @@ interface ArtifactsImportInfosProps extends WithStyles<typeof styles> {
 function ArtifactsImportInfos(props: ArtifactsImportInfosProps): ReactElement {
   const { foundFrames, importedArtifacts, artifactsInError, classes } = props;
   return (
-    <div>
+    <div className={classes.container}>
       <span className={classes.importInfos}>Found frames: {foundFrames}</span>
       <span className={classes.importInfos}>Imported artifacts: {importedArtifacts}</span>
       <span className={artifactsInError > 0 ? classes.importInfos + ' ' + classes.artifactsInError : classes.importInfos}>
