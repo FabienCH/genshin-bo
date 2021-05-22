@@ -283,6 +283,7 @@ export const misrecognizedSubsImportedArtifactMock: NewArtifactData[] = [
     },
   },
 ];
+
 export const artifactWith2LinesNameMock = {
   type: ArtifactType.flower,
   set: SetNames.viridescentVenerer,
@@ -308,5 +309,18 @@ export const artifactWithFixableOcrResultsMock = {
     [SubStats.critDmg]: 7.0,
     [SubStats.elementalMastery]: 37,
     [SubStats.flatAtk]: 37,
+  },
+};
+
+export const artifactWithFixableMainOcrResultsMock = {
+  type: ArtifactType.goblet,
+  set: SetNames.bloodstainedChivalry,
+  level: 0,
+  mainStatType: MainStats.percentDef,
+  subStats: {
+    [SubStats.elementalMastery]: 23,
+    [SubStats.flatDef]: 23,
+    [SubStats.percentHp]: 4.1,
+    [SubStats.flatAtk]: 19,
   },
 };

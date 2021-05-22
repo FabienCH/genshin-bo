@@ -24,7 +24,7 @@ export class ArtifactsImporter {
 
   constructor(private readonly artifactValidator: ArtifactValidator) {}
 
-  public async importFromVideo(video: File, nbOfWorkers: number, overrideCurrentArtifacts = false): Promise<void> {
+  public async importFromVideo(video: File, nbOfWorkers: number, overrideCurrentArtifacts = false, fixOcrErrors = false): Promise<void> {
     appStore.dispatch(importArtifactsFromVideoAction());
     await ArtifactsDI.getArtifactImageOcr().initializeOcr(nbOfWorkers);
 
@@ -35,7 +35,7 @@ export class ArtifactsImporter {
     VideoToFrames.getFrames(video, 10)
       .pipe(takeUntil(this.allFramesRetrieve))
       .subscribe((frameData) => {
-        appStore.dispatch(runOcrOnImageAction(frameData));
+        appStore.dispatch(runOcrOnImageAction({ frameData, fixOcrErrors }));
         if (frameData.isLast) {
           this.allFramesRetrieve.next();
         }

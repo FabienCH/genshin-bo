@@ -5,7 +5,7 @@ import artifact0 from '../../test/artifact0.jpg';
 import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
 import artifactWithError from '../../test/artifact-error.jpg';
-import { importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
+import { artifactWithFixableMainOcrResultsMock, importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
 import { selectAllArtifacts } from '../../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../../adapters/redux/store';
 import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
@@ -23,6 +23,7 @@ import {
   notArtifactsArrayJsonString,
 } from '../../test/artifacts-from-json';
 import { mockBlobText } from '../../test/blob-text-mock';
+import { wrongMainValueOcrResultsMock } from '../../test/ocr-results-mock';
 
 describe('ArtifactsImporter', () => {
   const artifactsStateChangesSub: Subject<ArtifactData[]> = new Subject();
@@ -110,6 +111,17 @@ describe('ArtifactsImporter', () => {
       });
 
       artifactsImporter.importFromVideo(file, 1, true);
+    });
+
+    it('should fix imported artifact main stat value', (done) => {
+      videoToFramesSpy.mockReturnValue(from([{ frame: artifact0, isLast: true }]));
+      ocrWorkerSpy.mockReturnValue(wrongMainValueOcrResultsMock);
+      artifactsStateChangesSub.pipe(skip(3), take(1)).subscribe((artifactsData) => {
+        expect(getArtifactsWithoutId(artifactsData)).toEqual([artifactWithFixableMainOcrResultsMock]);
+        done();
+      });
+
+      artifactsImporter.importFromVideo(file, 1, true, true);
     });
   });
 

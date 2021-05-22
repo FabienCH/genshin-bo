@@ -329,3 +329,18 @@ export const fixableStringsOcrResultsMock = [
   'Viridescemt Venener:\n',
   '+ Equipped: Venti\n',
 ];
+
+export const wrongMainValueOcrResultsMock = [
+  "Bloodstained Chevalier's Goblet\n",
+  'Goblet of Eonothem\n',
+  'DEF\n',
+  '0.7%\n',
+  '+0\n',
+  '. Elemental Mastery+23\n',
+  '. DEF+23\n',
+  ' HP+4.14\n',
+  ' . ATK+19\n',
+  'Bloodstained Chivalry:\n',
+  'the Bloodstained Knight. Its\n',
+  'exterior has been stained as black\n',
+];

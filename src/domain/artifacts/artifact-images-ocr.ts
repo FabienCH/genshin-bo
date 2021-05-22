@@ -81,11 +81,12 @@ export class ArtifactImageOcr {
   private async runOcrRecognize(imageForOcr: Buffer, fixOcrErrors: boolean): Promise<ArtifactData | undefined> {
     const ocrResults = await this.ocrWorker.recognize(imageForOcr);
     const parsedOcrResults = this.ocrResultsParser.parseToArtifactData(ocrResults, fixOcrErrors);
-    const artifactData = ArtifactMapper.mapNewDataToArtifactData(parsedOcrResults);
+    const artifactData = ArtifactMapper.mapOcrDataToArtifactData(parsedOcrResults, fixOcrErrors);
 
     if (!(artifactData instanceof ArtifactValidationError)) {
       return artifactData;
     }
+
     console.error('error while parsing artifact', artifactData.getMessages());
   }
 

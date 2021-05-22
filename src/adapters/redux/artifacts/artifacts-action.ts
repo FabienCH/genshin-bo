@@ -20,7 +20,7 @@ export const incrementArtifactsInError = createAction('[Entities/Artifacts] Incr
 
 export const importArtifactsDoneAction = createAction('[Entities/Artifacts] Import Artifacts Done');
 
-export const runOcrOnImageAction = createAction<FrameData>('[Entities/Artifacts] Run OCR On Image');
+export const runOcrOnImageAction = createAction<{ frameData: FrameData; fixOcrErrors: boolean }>('[Entities/Artifacts] Run OCR On Image');
 
 export type ArtifactsActionTypes =
   | typeof addAllArtifactsAction
