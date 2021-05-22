@@ -108,8 +108,11 @@ export abstract class ArtifactMapper {
     };
   }
 
-  public static mapNewDataToArtifactData(newArtifactData: Partial<NewArtifactData>): ArtifactData | ArtifactValidationError {
-    if (this.isValidNewArtifactData(newArtifactData)) {
+  public static mapOcrDataToArtifactData(
+    newArtifactData: Partial<NewArtifactData>,
+    fixMainStatValue: boolean,
+  ): ArtifactData | ArtifactValidationError {
+    if (this.isValidNewArtifactData(newArtifactData, fixMainStatValue)) {
       const { type, set, level, mainStatType, subStats } = newArtifactData;
       return { id: uuidv4(), type, set, level, mainStatType, subStats };
     }
@@ -170,10 +173,16 @@ export abstract class ArtifactMapper {
     return new FlowerArtifact(artifactData.id, artifactData.set, artifactData.subStats, artifactData.level, mainStatValue);
   }
 
-  private static isValidNewArtifactData(newArtifactData: Partial<NewArtifactData>): newArtifactData is NewArtifactData {
+  private static isValidNewArtifactData(
+    newArtifactData: Partial<NewArtifactData>,
+    fixOcrErrors: boolean,
+  ): newArtifactData is NewArtifactData {
     const mainStatValue = ArtifactMapper.getMainStatValue(newArtifactData.mainStatType, newArtifactData.level);
+    const newArtifactIsValid = ArtifactMapper.artifactValidator.isNewArtifactValid(newArtifactData, mainStatValue);
 
-    return ArtifactMapper.artifactValidator.isNewArtifactValid(newArtifactData, mainStatValue);
+    return newArtifactIsValid || !fixOcrErrors
+      ? newArtifactIsValid
+      : ArtifactMapper.artifactValidator.isNewArtifactValid({ ...newArtifactData, mainStatValue }, mainStatValue);
   }
 
   private static getMainStatValue(mainStatType?: MainStatTypes, level?: number): number {

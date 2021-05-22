@@ -5,14 +5,14 @@ import artifact0 from '../../test/artifact0.jpg';
 import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
 import artifactWithError from '../../test/artifact-error.jpg';
-import { importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
-import { selectAllArtifacts } from '../../adapters/redux/artifacts/artifacts-selectors';
+import { artifactWithFixableMainOcrResultsMock, importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
+import { isArtifactsImportRunning, selectAllArtifacts } from '../../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../../adapters/redux/store';
 import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { VideoToFrames } from '../../domain/artifacts/mappers/video-to-frames';
 import { Subject, from, interval } from 'rxjs';
-import { skip, take, map, filter } from 'rxjs/operators';
+import { take, map, delay, filter } from 'rxjs/operators';
 import { ArtifactsImporter } from './artifacts-importer';
 import {
   artifactsJsonData,
@@ -23,6 +23,7 @@ import {
   notArtifactsArrayJsonString,
 } from '../../test/artifacts-from-json';
 import { mockBlobText } from '../../test/blob-text-mock';
+import { wrongMainValueOcrResultsMock } from '../../test/ocr-results-mock';
 
 describe('ArtifactsImporter', () => {
   const artifactsStateChangesSub: Subject<ArtifactData[]> = new Subject();
@@ -57,7 +58,7 @@ describe('ArtifactsImporter', () => {
 
       artifactsStateChangesSub
         .pipe(
-          filter((artifactsData) => artifactsData.length === 16),
+          filter(() => !isArtifactsImportRunning()),
           take(1),
         )
         .subscribe((artifactsData) => {
@@ -82,7 +83,7 @@ describe('ArtifactsImporter', () => {
 
       artifactsStateChangesSub
         .pipe(
-          filter((artifactsData) => artifactsData.length === 2),
+          filter(() => !isArtifactsImportRunning()),
           take(1),
         )
         .subscribe((artifactsData) => {
@@ -103,13 +104,34 @@ describe('ArtifactsImporter', () => {
         ]),
       );
 
-      artifactsStateChangesSub.pipe(skip(4), take(1)).subscribe((artifactsData) => {
-        expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
-        expect(getArtifactsWithoutId(artifactsData)).toEqual([importedArtifactDataMock[0]]);
-        done();
-      });
+      artifactsStateChangesSub
+        .pipe(
+          filter(() => !isArtifactsImportRunning()),
+          take(1),
+        )
+        .subscribe((artifactsData) => {
+          expect(ocrWorkerSpy).toHaveBeenCalledWith(artifactsOcrImagesMock[0]);
+          expect(getArtifactsWithoutId(artifactsData)).toEqual([importedArtifactDataMock[0]]);
+          done();
+        });
 
       artifactsImporter.importFromVideo(file, 1, true);
+    });
+
+    it('should fix imported artifact main stat value', async (done) => {
+      videoToFramesSpy.mockReturnValue(from([{ frame: artifact0, isLast: true }]));
+      ocrWorkerSpy.mockReturnValueOnce(Promise.resolve(wrongMainValueOcrResultsMock));
+      artifactsStateChangesSub
+        .pipe(
+          filter(() => !isArtifactsImportRunning()),
+          take(1),
+        )
+        .subscribe((artifactsData) => {
+          expect(getArtifactsWithoutId(artifactsData)).toEqual([artifactWithFixableMainOcrResultsMock]);
+          done();
+        });
+
+      artifactsImporter.importFromVideo(file, 1, true, true);
     });
   });
 
@@ -213,13 +235,19 @@ describe('ArtifactsImporter', () => {
       ];
       videoToFramesSpy.mockReturnValue(interval(10).pipe(map((val) => frames[val])));
 
-      artifactsStateChangesSub.pipe(skip(9), take(1)).subscribe(() => {
-        expect(artifactsImporter.geImportInfos()).toEqual({ foundFrames: 4, importedArtifacts: 2, artifactsInError: 1 });
-        done();
-      });
+      artifactsStateChangesSub
+        .pipe(
+          filter(() => !isArtifactsImportRunning()),
+          delay(10),
+          take(1),
+        )
+        .subscribe(() => {
+          expect(artifactsImporter.geImportInfos()).toEqual({ foundFrames: 4, importedArtifacts: 2, artifactsInError: 1 });
+          done();
+        });
 
       artifactsImporter.importFromVideo(new File([], 'filename'), 1);
-    }, 10000);
+    }, 12000);
   });
 
   afterEach(() => {

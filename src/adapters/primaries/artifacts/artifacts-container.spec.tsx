@@ -58,7 +58,7 @@ describe('Artifacts container', () => {
     await waitFor(() => {
       wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
-      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, false);
+      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, false, false);
     });
   });
 
@@ -67,13 +67,31 @@ describe('Artifacts container', () => {
     wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
     wrapper
       .find(Checkbox)
+      .first()
       .find('input')
       .simulate('change', { target: { name: '', checked: true } });
 
     await waitFor(() => {
       wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
 
-      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, true);
+      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, true, false);
+    });
+  });
+
+  it('should import artifacts with fix ocr errors enabled', async () => {
+    const file = new File([], 'filename.mp4', { type: 'video/mp4' });
+    wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
+
+    wrapper
+      .find(Checkbox)
+      .last()
+      .find('input')
+      .simulate('change', { target: { name: '', checked: true } });
+
+    await waitFor(() => {
+      wrapper.find(ArtifactsImport).find(Button).last().simulate('click');
+
+      expect(artifactsImporterSpy).toHaveBeenCalledWith(file, 1, false, true);
     });
   });
 

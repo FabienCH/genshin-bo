@@ -21,10 +21,10 @@ export class ArtifactValidator {
     return this.errorMessages.length === 0;
   }
 
-  public isNewArtifactValid(newArtifactData: Partial<NewArtifactData>, mainStatValue: number, mainValueFromOcr?: number): boolean {
+  public isNewArtifactValid(newArtifactData: Partial<NewArtifactData>, mainStatValue: number): boolean {
     this.errorMessages = [];
     this.validateArtifact(newArtifactData);
-    this.validateMainStatValue(newArtifactData, mainStatValue, mainValueFromOcr);
+    this.validateMainStatValue(newArtifactData, mainStatValue);
 
     return this.errorMessages.length === 0;
   }
@@ -87,13 +87,13 @@ export class ArtifactValidator {
     }
   }
 
-  private validateMainStatValue(artifactData: Partial<NewArtifactData>, mainStatValue: number, mainValueFromOcr?: number) {
+  private validateMainStatValue(artifactData: Partial<NewArtifactData>, mainStatValue: number) {
     const { level, mainStatType } = artifactData;
 
     if (!mainStatValue) {
       this.errorMessages.push(`could not find values for main stat ${mainStatType} at level ${level}.`);
     }
-    if (mainValueFromOcr && mainStatValue !== mainValueFromOcr) {
+    if (mainStatValue !== artifactData.mainStatValue) {
       this.errorMessages.push(`inconsistent main stat value, value from level is ${mainStatValue}`);
     }
   }

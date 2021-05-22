@@ -27,6 +27,7 @@ const styles = createStyles({
 type State = {
   artifactsImporter: ArtifactsImporter;
   overrideCurrentArtifacts: boolean;
+  fixOcrErrors: boolean;
   nbOfThreads: number;
   maxNbOfWorkers: number;
   video?: File;
@@ -47,6 +48,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     this.state = {
       artifactsImporter: ArtifactsDI.getArtifactsImporter(),
       overrideCurrentArtifacts: false,
+      fixOcrErrors: false,
       nbOfThreads: ArtifactsDI.getArtifactsImporter().getMaxWorkers(),
       maxNbOfWorkers: ArtifactsDI.getArtifactsImporter().getMaxWorkers(),
     };
@@ -55,6 +57,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     this.importArtifactsFromVideo = this.importArtifactsFromVideo.bind(this);
     this.cancelImport = this.cancelImport.bind(this);
     this.overrideArtifactsChange = this.overrideArtifactsChange.bind(this);
+    this.fixOcrErrorsChange = this.fixOcrErrorsChange.bind(this);
     this.jsonFileChange = this.jsonFileChange.bind(this);
     this.exportArtifacts = this.exportArtifacts.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
@@ -86,8 +89,9 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   }
 
   importArtifactsFromVideo(): void {
-    if (this.state.video) {
-      this.state.artifactsImporter.importFromVideo(this.state.video, this.state.nbOfThreads, this.state.overrideCurrentArtifacts);
+    const { video, nbOfThreads, overrideCurrentArtifacts, fixOcrErrors } = this.state;
+    if (video) {
+      this.state.artifactsImporter.importFromVideo(video, nbOfThreads, overrideCurrentArtifacts, fixOcrErrors);
     }
   }
 
@@ -99,6 +103,13 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
     this.setState((state) => ({
       ...state,
       overrideCurrentArtifacts: checked,
+    }));
+  }
+
+  fixOcrErrorsChange(checked: boolean): void {
+    this.setState((state) => ({
+      ...state,
+      fixOcrErrors: checked,
     }));
   }
 
@@ -212,6 +223,7 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           importArtifacts={this.importArtifactsFromVideo}
           cancelImport={this.cancelImport}
           overrideArtifactsChanged={this.overrideArtifactsChange}
+          fixOcrErrorsChanged={this.fixOcrErrorsChange}
         ></ArtifactsImport>
         <Container>
           <div className={classes.actionsContainer}>
