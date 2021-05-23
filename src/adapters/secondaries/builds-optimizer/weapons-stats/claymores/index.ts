@@ -13,6 +13,7 @@ import { serpentSpine } from './serpent-spine';
 import { skyriderGreatsword } from './skyrider-greatsword';
 import { skywardPride } from './skyward-pride';
 import { snowTombedStarsilver } from './snow-tombed-starsilver';
+import { songofBrokenPines } from './song-of-broken-pines';
 import { theBell } from './the-bell';
 import { theUnforged } from './the-unforged';
 import { whiteIronGreatsword } from './white-iron-greatsword';
@@ -40,4 +41,5 @@ export const allClaymores = [
   prototypeArchaic,
   whiteIronGreatsword,
   bloodtaintedGreatsword,
+  songofBrokenPines,
 ];
