@@ -62,7 +62,7 @@ function PcImportGuide(props: PcImportGuideProps): ReactElement {
         table.
       </p>
       <img className={classes.img} src={cropFilter} alt="crop filter settings" />
-      <p>Configuration is now done, you’re ready to start recording</p>
+      <p>Configuration is now done, if you open your artifacts inventory, the OBS preview should exactly fit the selected artifact.</p>
 
       <h4>Recording</h4>
       <div className={classes.notesContainer}>
