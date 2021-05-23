@@ -11,6 +11,7 @@ export type ExistingCharacters =
   | 'chongyun'
   | 'diluc'
   | 'diona'
+  | 'eula'
   | 'fischl'
   | 'ganyu'
   | 'huTao'

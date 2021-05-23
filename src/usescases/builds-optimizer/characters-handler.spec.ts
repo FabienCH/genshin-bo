@@ -6,6 +6,7 @@ import { bennett } from '../../adapters/secondaries/builds-optimizer/characters-
 import { chongyun } from '../../adapters/secondaries/builds-optimizer/characters-stats/chongyun';
 import { diluc } from '../../adapters/secondaries/builds-optimizer/characters-stats/diluc';
 import { diona } from '../../adapters/secondaries/builds-optimizer/characters-stats/diona';
+import { eula } from '../../adapters/secondaries/builds-optimizer/characters-stats/eula';
 import { fischl } from '../../adapters/secondaries/builds-optimizer/characters-stats/fischl';
 import { ganyu } from '../../adapters/secondaries/builds-optimizer/characters-stats/ganyu';
 import { huTao } from '../../adapters/secondaries/builds-optimizer/characters-stats/hu-tao';
@@ -45,6 +46,7 @@ describe('CharactersHandler', () => {
     chongyun,
     diluc,
     diona,
+    eula,
     fischl,
     ganyu,
     huTao,

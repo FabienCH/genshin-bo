@@ -35,6 +35,7 @@ import { huTao } from './characters-stats/hu-tao';
 import { rosaria } from './characters-stats/rosaria';
 import { yanfei } from './characters-stats/yanfei';
 import { CharactersRepository } from '../../../domain/builds-optimizer/characters-repository';
+import { eula } from './characters-stats/eula';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly charactersStats: CharacterWithStats[];
@@ -49,6 +50,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       chongyun,
       diluc,
       diona,
+      eula,
       fischl,
       ganyu,
       huTao,
