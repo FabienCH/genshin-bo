@@ -45,10 +45,10 @@ function Ps4ImportGuide(props: Ps4ImportGuideProps): ReactElement {
         <p>You can only import 5 starts artifacts.</p>
       </div>
       <p>
-        To record your artifacts, open your artifacts inventory, start your recording and select each artifacts you want to import as fast
-        as you can (we will set the video FPS to 10 later, which means 100 ms per artifacts is enough). Once it's done, stop the recording.
+        To record your artifacts, open your artifacts inventory, start your recording and select each artifacts you want to import. You can
+        do it fast, we will set the video FPS to 10 later, which means 100 ms per artifacts is enough. Once it's done, stop the recording.
       </p>
-      <h5>Editing the video</h5>
+      <h4>Editing the video</h4>
       <p>
         You have recorded a full screen video, you now needs to crop it to keep just the artifact window. We'll see how to do it with
         Avidemux to feel free to use any other video editor if you want.
@@ -66,7 +66,7 @@ function Ps4ImportGuide(props: Ps4ImportGuideProps): ReactElement {
         1920 and Height to 1080.
         <br />
         Finally, add a Crop filter. You have to set values around 1294 for left, 137 for right and 121 for top and bottom. The most
-        important is to have a size of 488 x 838. In my case the video I used had a resolution of 2560 x 1440 so I had to set 1294 - 139 -
+        important is to have a size of 488 x 838. In my case the video I used had a resolution of 2560 x 1440 so I had to set 1294 - 138 -
         122 - 120. In the end, you should have something like this.
       </p>
       <img className={classes.img} src={avidemuxFilters} alt="avidemux-filters" />
