@@ -51,6 +51,11 @@ export const theme = createMuiTheme({
         },
       },
     },
+    MuiAccordion: {
+      root: {
+        backgroundColor: 'rgba(43, 52, 59, 0.38)',
+      },
+    },
     MuiFormControl: {
       root: {
         marginBottom: 20,

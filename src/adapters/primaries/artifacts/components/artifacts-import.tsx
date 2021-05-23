@@ -108,10 +108,10 @@ function ArtifactsImport(props: ArtifactsImportProps): ReactElement {
 
   const fixOcrTooltip = (
     <div>
-      Unrecognized main stat value will be determined from the artifact's level.
+      Misrecognized main stat value will be determined from the artifact's level.
       <br />
-      Unrecognized artifact type, stats type or set will be fixed if more than 80% of the characters are matching an existing artifact type,
-      stats type or set.
+      Misrecognized artifact type, stats type or set will be fixed if more than 80% of the characters are matching an existing artifact
+      type, stats type or set.
     </div>
   );
 
