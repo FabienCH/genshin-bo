@@ -12,20 +12,24 @@ import {
 } from './artifacts-action';
 import { Middleware } from '@reduxjs/toolkit';
 import { AppState } from '../reducer';
-import { selectAllArtifacts } from './artifacts-selectors';
+import { selectAllArtifacts, selectLastAddedArtifact } from './artifacts-selectors';
+import { isEqual, omit } from 'lodash';
 
 export const artifactsMiddleware: Middleware<void, AppState> = ({ dispatch }) => (next) => async (action) => {
   switch (action.type) {
     case runOcrOnImageAction.type: {
       const { frameData, fixOcrErrors } = action.payload;
-      const ocrResults = await ArtifactsDI.getArtifactImageOcr().runArtifactOcrFromImage(frameData, fixOcrErrors);
-      if (ocrResults.artifact) {
-        dispatch(addOneArtifactAction(ocrResults.artifact));
+      const { artifact, inError, isDone } = await ArtifactsDI.getArtifactImageOcr().runArtifactOcrFromImage(frameData, fixOcrErrors);
+      const lastAddedArtifact = selectLastAddedArtifact();
+      const isDuplicate = isEqual(omit(lastAddedArtifact, ['id']), omit(artifact, ['id']));
+
+      if (artifact && !isDuplicate) {
+        dispatch(addOneArtifactAction(artifact));
       }
-      if (ocrResults.inError) {
+      if (inError) {
         dispatch(incrementArtifactsInError());
       }
-      if (ocrResults.isDone) {
+      if (isDone) {
         dispatch(importArtifactsDoneAction());
       }
       next(action);

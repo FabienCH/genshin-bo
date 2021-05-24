@@ -21,6 +21,7 @@ export interface ArtifactsState extends EntityState<ArtifactData> {
   isInitialized: boolean;
   isImportRunning: boolean;
   importInfos: ImportInfos;
+  lastAddedArtifact?: ArtifactData;
 }
 
 export const artifactsAdapter = createEntityAdapter<ArtifactData>();
@@ -29,6 +30,7 @@ const initialState: ArtifactsState = artifactsAdapter.getInitialState({
   isInitialized: false,
   isImportRunning: false,
   importInfos: { foundFrames: 0, importedArtifacts: 0, artifactsInError: 0 },
+  lastAddedArtifact: undefined,
 });
 
 export const artifactsReducer = createReducer(initialState, (builder) => {
@@ -50,6 +52,7 @@ export const artifactsReducer = createReducer(initialState, (builder) => {
             ...state.importInfos,
             importedArtifacts: state.importInfos.importedArtifacts + 1,
           },
+          lastAddedArtifact: action.payload,
         },
         action.payload,
       ),
@@ -60,6 +63,7 @@ export const artifactsReducer = createReducer(initialState, (builder) => {
       ...state,
       isImportRunning: true,
       importInfos: { foundFrames: 0, importedArtifacts: 0, artifactsInError: 0 },
+      lastAddedArtifact: undefined,
     }))
     .addCase(incrementArtifactsInError, (state) => ({
       ...state,
