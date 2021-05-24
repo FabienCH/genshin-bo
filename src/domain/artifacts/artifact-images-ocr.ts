@@ -46,36 +46,32 @@ export class ArtifactImageOcr {
     fixOcrErrors: boolean,
   ): Promise<{ artifact?: ArtifactData; inError: boolean; isDone: boolean }> {
     this.recognizingImagesCount++;
-    let artifact: ArtifactData | undefined;
     const imageForOcr = await this.getImageForOcr(imageData.frame);
-    if (imageForOcr.length) {
-      artifact = await this.runOcrRecognize(imageForOcr, fixOcrErrors);
-    }
-
+    const artifact = imageForOcr ? await this.runOcrRecognize(imageForOcr, fixOcrErrors) : undefined;
     const isDone = this.areAllImagesProcessed(imageData.isLast) || this.cancelImport;
     if (isDone) {
       this.ocrWorker.terminate();
     }
-    return { artifact, inError: !!imageForOcr.length && !artifact, isDone };
+
+    return { artifact, inError: !!imageForOcr && !artifact, isDone };
   }
 
   public cancelOcr(): void {
     this.cancelImport = true;
   }
 
-  private async getImageForOcr(image: string): Promise<Buffer> {
+  private async getImageForOcr(image: string): Promise<Buffer | undefined> {
     if (!image) {
-      return Buffer.from([]);
+      return;
     }
+
     const jimpImage = await Jimp.create(image);
-    const framesForOcr = await this.transformForOcr(jimpImage);
-
-    if (!this.previousImage || Jimp.diff(framesForOcr, this.previousImage, 0.01).percent > 0.003) {
-      this.previousImage = framesForOcr;
-
-      return await framesForOcr.getBufferAsync(Jimp.MIME_PNG);
+    const imageForDiff = jimpImage.threshold({ max: 150 }).invert().threshold({ max: 115 });
+    if (!this.previousImage || Jimp.diff(imageForDiff, this.previousImage, 0.01).percent > 0.002) {
+      this.previousImage = imageForDiff;
+      const imageForOcr = await this.transformForOcr(await Jimp.create(image));
+      return await imageForOcr.getBufferAsync(Jimp.MIME_PNG);
     }
-    return Buffer.from([]);
   }
 
   private async runOcrRecognize(imageForOcr: Buffer, fixOcrErrors: boolean): Promise<ArtifactData | undefined> {

@@ -8,6 +8,8 @@ const artifactsState = (state: AppState) => state.artifacts;
 
 const artifactsSelectors = artifactsAdapter.getSelectors(artifactsState);
 
+const lastAddedArtifactSelector = createSelector(artifactsState, (state) => state.lastAddedArtifact);
+
 const isArtifactsInitializedSelector = createSelector(artifactsState, (state) => state.isInitialized);
 
 const isArtifactsImportRunningSelector = createSelector(artifactsState, (state) => state.isImportRunning);
@@ -15,6 +17,8 @@ const isArtifactsImportRunningSelector = createSelector(artifactsState, (state) 
 const importInfosSelector = createSelector(artifactsState, (state) => state.importInfos);
 
 export const selectAllArtifacts = (): ArtifactData[] => artifactsSelectors.selectAll(appStore.getState());
+
+export const selectLastAddedArtifact = (): ArtifactData | undefined => lastAddedArtifactSelector(appStore.getState());
 
 export const selectArtifactById = (id: string): ArtifactData | undefined => artifactsSelectors.selectById(appStore.getState(), id);
 
