@@ -1,4 +1,5 @@
 import { Artifact } from '../artifacts/entities/artifact';
+import { ArtifactMapper } from '../artifacts/mappers/artifact-mapper';
 import { MainStatsValues, ArtifactStatsValues, MainStats, MainStatTypes, ArtifactStatsTypes } from '../artifacts/models/main-statistics';
 import { SetStats, SetStatsValues, SetStatTypes } from '../artifacts/models/set-statistics';
 import { SetWithEffect, SetNames } from '../artifacts/models/sets-with-effects';
@@ -28,8 +29,9 @@ export class StatsComputation {
     baseStats: CharacterStatsValues,
     characterBonusStat: MainStatsValues,
     artifactsToCompute: Artifact[],
+    artifactLevelUp?: 16 | 20,
   ): CharacterStatsValues {
-    const artifactsStats = this.computeArtifactsStats(artifactsToCompute);
+    const artifactsStats = this.computeArtifactsStats(artifactsToCompute, artifactLevelUp);
     const setsStats = this.computeSetsStats(artifactsToCompute);
     const allStatsKeys = Object.keys({
       ...characterBonusStat,
@@ -51,10 +53,15 @@ export class StatsComputation {
     }, 0);
   }
 
-  private computeArtifactsStats(artifacts: Artifact[]): ArtifactStatsValues {
+  private computeArtifactsStats(artifacts: Artifact[], artifactLevelUp?: 16 | 20): ArtifactStatsValues {
     return artifacts.reduce((buildStats, artifact: Artifact) => {
       const mainStatKey: MainStats = Object.keys(artifact.mainStat)[0] as MainStats;
-      buildStats[mainStatKey] = this.addStats([buildStats[mainStatKey], artifact.mainStat[mainStatKey]]);
+      const mainStatValue =
+        artifactLevelUp && artifactLevelUp > artifact.level
+          ? ArtifactMapper.getMainStatValue(mainStatKey, artifactLevelUp)
+          : artifact.mainStat[mainStatKey];
+
+      buildStats[mainStatKey] = this.addStats([buildStats[mainStatKey], mainStatValue]);
       (Object.keys(artifact.subStats) as SubStats[]).forEach((subStatKey) => {
         buildStats[subStatKey] = this.addStats([buildStats[subStatKey], artifact.subStats[subStatKey]]);
       });

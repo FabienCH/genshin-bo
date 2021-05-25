@@ -8,13 +8,13 @@ export class BcWorkerMock {
     this.onmessage = () => {};
   }
   public postMessage(message: BcMessage, _?: PostMessageOptions | undefined): void {
-    const { allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter } = message;
+    const { allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter, artifactLevelUp } = message;
     const buildsComputation = new BuildsComputation();
 
     buildsComputation.getNewBuilds().subscribe((buildsResults) => {
       this.onmessage({ data: { buildsResults } });
     });
-    buildsComputation.computeBuilds(allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter);
+    buildsComputation.computeBuilds(allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter, artifactLevelUp);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

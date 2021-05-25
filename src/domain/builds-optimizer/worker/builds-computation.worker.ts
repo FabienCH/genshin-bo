@@ -10,6 +10,7 @@ export type BcMessage = {
   characterBonusStat: MainStatsValues;
   artifactsFilters: ArtifactsFilters;
   statsFilter: Partial<CharacterStatsValues>;
+  artifactLevelUp?: 16 | 20;
 };
 
 export interface BcWorker {
@@ -26,11 +27,11 @@ type BcMessageEvent = MessageEvent<BcMessage>;
 
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('message', ({ data }: BcMessageEvent) => {
-  const { allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter } = data;
+  const { allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter, artifactLevelUp } = data;
   const buildsComputation = new BuildsComputation();
 
   buildsComputation.getNewBuilds().subscribe((buildsResults) => {
     self.postMessage({ buildsResults });
   });
-  buildsComputation.computeBuilds(allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter);
+  buildsComputation.computeBuilds(allArtifacts, baseStats, characterBonusStat, artifactsFilters, statsFilter, artifactLevelUp);
 });

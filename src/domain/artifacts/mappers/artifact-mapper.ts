@@ -185,7 +185,7 @@ export abstract class ArtifactMapper {
       : ArtifactMapper.artifactValidator.isNewArtifactValid({ ...newArtifactData, mainStatValue }, mainStatValue);
   }
 
-  private static getMainStatValue(mainStatType?: MainStatTypes, level?: number): number {
+  public static getMainStatValue(mainStatType?: MainStatTypes, level?: number): number {
     const defaultValue = 0;
     if (!mainStatType || level == null) {
       return defaultValue;
