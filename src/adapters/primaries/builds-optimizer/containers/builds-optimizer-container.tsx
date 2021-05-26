@@ -197,6 +197,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
             onCancelClick={this.cancelOptimization}
           ></BuildFiltersForm>
         </form>
+        artifactLevelUp : {this.state.artifactLevelUp}
         <BuildsResultsContainer
           initialBuilds={initialBuilds}
           newBuilds={newBuilds}

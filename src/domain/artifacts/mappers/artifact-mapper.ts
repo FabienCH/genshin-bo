@@ -87,14 +87,15 @@ export abstract class ArtifactMapper {
     }
   }
 
-  public static mapDataToView(artifactData: ArtifactData): ArtifactView | ArtifactValidationError {
+  public static mapDataToView(artifactData: ArtifactData, artifactLevelUp?: 16 | 20): ArtifactView | ArtifactValidationError {
     const artifact = ArtifactMapper.mapDataToArtifact(artifactData);
-    return artifact instanceof Artifact ? ArtifactMapper.mapArtifactToView(artifact) : artifact;
+    return artifact instanceof Artifact ? ArtifactMapper.mapArtifactToView(artifact, artifactLevelUp) : artifact;
   }
 
-  public static mapArtifactToView(artifact: Artifact): ArtifactView {
+  public static mapArtifactToView(artifact: Artifact, artifactLevelUp?: 16 | 20): ArtifactView {
     const subValues = Object.values(artifact.subStats);
     const subStats = Object.keys(artifact.subStats).map((key, index) => ({ [key]: subValues[index] }));
+
     return {
       id: artifact.id,
       type: StringFormatter.upperCaseFirstChar(artifact.getType()),
@@ -105,6 +106,7 @@ export abstract class ArtifactMapper {
       subStat2: ArtifactMapper.statToString(subStats[1]),
       subStat3: ArtifactMapper.statToString(subStats[2]),
       subStat4: subStats[3] ? ArtifactMapper.statToString(subStats[3]) : '-',
+      uppedValues: ArtifactMapper.getUppedValues(artifact, artifactLevelUp),
     };
   }
 
@@ -183,6 +185,28 @@ export abstract class ArtifactMapper {
     return newArtifactIsValid || !fixOcrErrors
       ? newArtifactIsValid
       : ArtifactMapper.artifactValidator.isNewArtifactValid({ ...newArtifactData, mainStatValue }, mainStatValue);
+  }
+
+  public static getUppedValues(
+    artifact: Artifact,
+    artifactLevelUp?: 16 | 20,
+  ):
+    | {
+        level: number;
+        mainStat: string;
+      }
+    | undefined {
+    if (!artifactLevelUp || artifactLevelUp <= artifact.level) {
+      return;
+    }
+    const mainStatType = Object.keys(artifact.mainStat)[0] as MainStatTypes;
+    const mainStatValue = ArtifactMapper.getMainStatValue(mainStatType, artifactLevelUp);
+    const valueSuffix = mainStatType.includes('flat') || mainStatType === 'elementalMastery' ? '' : '%';
+
+    return {
+      level: artifactLevelUp,
+      mainStat: `${mainStatValue}${valueSuffix}`,
+    };
   }
 
   public static getMainStatValue(mainStatType?: MainStatTypes, level?: number): number {

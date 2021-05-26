@@ -20,6 +20,8 @@ const buildsComputationProgressSelector = createSelector(buildsState, (state) =>
 
 const optimizationStatsFilterSelector = createSelector(buildsState, (state) => state.statsFilter);
 
+const artifactLevelUpSelector = createSelector(buildsState, (state) => state.artifactLevelUp);
+
 export const selectAllBuilds = (): Build[] => buildsSelectors.selectAll(appStore.getState());
 
 export const selectNewBuilds = (): Build[] => newBuildsSelector(appStore.getState());
@@ -33,3 +35,5 @@ export const buildsComputationProgress = (): BuildsComputationProgress | undefin
 
 export const optimizationStatsFilter = (): Partial<CharacterStatsValues> | undefined =>
   optimizationStatsFilterSelector(appStore.getState());
+
+export const artifactLevelUp = (): 16 | 20 | undefined => artifactLevelUpSelector(appStore.getState());
