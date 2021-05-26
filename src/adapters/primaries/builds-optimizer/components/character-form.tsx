@@ -1,18 +1,17 @@
-import { createStyles, withStyles, WithStyles, Box, Container } from '@material-ui/core';
+import { createStyles, withStyles, WithStyles, Box } from '@material-ui/core';
 import { Levels } from '../../../../domain/builds-optimizer/models/levels';
 import { CharacterView, ExistingCharacters } from '../../../../domain/builds-optimizer/models/character';
 import FormSelect from '../../shared/form-select';
-import { ReactElement } from 'react';
+import { Fragment, ReactElement } from 'react';
 import { WeaponView } from '../../../../domain/builds-optimizer/models/weapon';
 import { SelectOption } from '../../../../usescases/builds-optimizer/builds-forms-handler';
 
 const styles = createStyles({
   div: {
     display: 'flex',
-    justifyContent: 'space-between',
   },
   leftSelect: {
-    marginRight: 30,
+    marginRight: '7%',
     width: 220,
   },
   rightSelect: {
@@ -50,7 +49,7 @@ function CharacterForm(props: CharacterFormProps): ReactElement {
   };
 
   return (
-    <Container>
+    <Fragment>
       <div className={classes.div}>
         <Box className={classes.leftSelect}>
           <FormSelect
@@ -87,7 +86,7 @@ function CharacterForm(props: CharacterFormProps): ReactElement {
           ></FormSelect>
         </Box>
       </div>
-    </Container>
+    </Fragment>
   );
 }
 

@@ -38,6 +38,7 @@ type State = {
   buildFilters: Partial<CharacterStatsValues>;
   buildsCombinationsLimitReached: boolean;
   hasLowerBuildFilter: boolean;
+  artifactLevelUp?: 16 | 20;
 };
 
 class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
@@ -70,6 +71,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     this.handleCharacterChange = this.handleCharacterChange.bind(this);
     this.handleWeaponChange = this.handleWeaponChange.bind(this);
     this.handleArtifactsFiltersChange = this.handleArtifactsFiltersChange.bind(this);
+    this.handleArtifactLevelUpChange = this.handleArtifactLevelUpChange.bind(this);
     this.handleBuildFiltersChange = this.handleBuildFiltersChange.bind(this);
     this.runOptimization = this.runOptimization.bind(this);
   }
@@ -117,6 +119,13 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
     }));
   }
 
+  handleArtifactLevelUpChange(artifactLevelUp?: 16 | 20): void {
+    this.setState((state) => ({
+      ...state,
+      artifactLevelUp,
+    }));
+  }
+
   handleBuildFiltersChange(event: { stat: CharacterStatTypes; value: number | undefined }): void {
     this.setState((state) => {
       const buildFilters = state.buildFilters;
@@ -140,6 +149,7 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
       this.state.currentWeapon,
       artifactsFilters,
       this.state.buildFilters,
+      this.state.artifactLevelUp,
     );
     this.setState((state) => {
       return {
@@ -168,9 +178,11 @@ class BuildsOptimizerContainer extends Component<BuildsOptimizerProps, State> {
             currentCharacter={this.state.currentCharacter}
             currentWeapon={this.state.currentWeapon}
             artifactsFilters={this.state.artifactsFilters}
+            artifactLevelUp={this.state.artifactLevelUp}
             onCharacterChange={this.handleCharacterChange}
             onWeaponChange={this.handleWeaponChange}
             onArtifactsFiltersChange={this.handleArtifactsFiltersChange}
+            onArtifactLevelUpChange={this.handleArtifactLevelUpChange}
           ></BuildsSetupContainer>
           <h3>Build Filters</h3>
           <BuildFiltersForm
