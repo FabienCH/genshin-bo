@@ -201,7 +201,7 @@ export abstract class ArtifactMapper {
     }
     const mainStatType = Object.keys(artifact.mainStat)[0] as MainStatTypes;
     const mainStatValue = ArtifactMapper.getMainStatValue(mainStatType, artifactLevelUp);
-    const valueSuffix = mainStatType.includes('flat') || mainStatType === 'elementalMastery' ? '' : '%';
+    const valueSuffix = ArtifactMapper.getStatValueSuffix(mainStatType);
 
     return {
       level: artifactLevelUp,
@@ -222,9 +222,13 @@ export abstract class ArtifactMapper {
   private static statToString(stat: ArtifactStatsValues): string {
     const statKey = Object.keys(stat)[0];
     const statName = this.statKeyToStatName(statKey);
-    const valueSuffix = statKey.includes('flat') || statKey === 'elementalMastery' ? '' : '%';
+    const valueSuffix = ArtifactMapper.getStatValueSuffix(statKey);
 
     return `${Object.values(stat)[0]}${valueSuffix} ${statName}`;
+  }
+
+  private static getStatValueSuffix(statKey: string): string {
+    return statKey.includes('flat') || statKey === 'elementalMastery' ? '' : '%';
   }
 
   private static statKeyToStatName(statKey: string): string {
