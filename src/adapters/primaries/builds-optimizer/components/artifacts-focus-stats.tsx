@@ -10,7 +10,6 @@ const styles = createStyles({
   focusStatsLabel: {
     marginBottom: 5,
   },
-
   formControl: {
     minWidth: 200,
     maxWidth: 380,

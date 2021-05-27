@@ -18,11 +18,11 @@ const styles = ({ palette }: Theme) =>
     mainStat: {
       fontSize: 18,
     },
-    mainStatValue: {
+    uppedMainStat: {
       color: palette.secondary.light,
       fontWeight: 500,
     },
-    level: {
+    uppedLevel: {
       color: palette.secondary.light,
       fontWeight: 500,
     },
@@ -64,10 +64,10 @@ function ArtifactPopover(props: ArtifactPopoverProps): ReactElement {
           <br />
           <span className={classes.mainStat}>
             {artifact.mainStat}
-            {artifact.uppedValues ? <span className={classes.mainStatValue}> ({artifact.uppedValues.mainStat})</span> : null}
+            {artifact.uppedValues ? <span className={classes.uppedMainStat}> ({artifact.uppedValues.mainStat})</span> : null}
           </span>
-          <br />+ {artifact.level} {artifact.uppedValues ? <span className={classes.level}> (+ {artifact.uppedValues.level})</span> : null}{' '}
-          <br />
+          <br />+ {artifact.level}
+          {artifact.uppedValues ? <span className={classes.uppedLevel}> (+ {artifact.uppedValues.level})</span> : null} <br />
           <ul className={classes.subStats}>
             <li>{artifact.subStat1}</li>
             <li>{artifact.subStat2}</li>

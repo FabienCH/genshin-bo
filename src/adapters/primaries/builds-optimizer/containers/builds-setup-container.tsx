@@ -54,6 +54,13 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
     return currentSets;
   };
 
+  const emitArtifactsFilterChange = (changes: Partial<ArtifactsFiltersView>): void => {
+    props.onArtifactsFiltersChange({
+      ...artifactsFilters,
+      ...changes,
+    });
+  };
+
   const [weaponsLevels, setWeaponsLevels] = React.useState(getWeaponLevelsOptions(currentWeapon.name));
 
   const handleCharacterNameChange = (name: ExistingCharacters): void => {
@@ -76,51 +83,31 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
   const handleSetNameChange = (event: { value: SetNames; setIndex: number }): void => {
     const currentSets = getUpdatedCurrentSets(event.value == null, event.setIndex);
     const newCurrentSets = event.value == null ? currentSets : { ...currentSets, [event.setIndex]: event.value };
-
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      currentSets: newCurrentSets,
-    });
+    emitArtifactsFilterChange({ currentSets: newCurrentSets });
   };
 
   const handleSetPiecesChange = (setPieces: 2 | 4): void => {
     const currentSets = getUpdatedCurrentSets(setPieces === 4, 1);
 
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      setPieces,
-      currentSets,
-    });
+    emitArtifactsFilterChange({ setPieces, currentSets });
   };
 
   const handleFocusStatsChange = (focusStats: ArtifactStatsTypes[]): void => {
     if (focusStats.length <= 5) {
-      props.onArtifactsFiltersChange({
-        ...artifactsFilters,
-        focusStats,
-      });
+      emitArtifactsFilterChange({ focusStats });
     }
   };
 
   const handleMinLevelChange = (level: number): void => {
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      minArtifactLevel: level,
-    });
+    emitArtifactsFilterChange({ minArtifactLevel: level });
   };
 
   const handleMainsStatsChange = (mainsStats: ArtifactsMainStats): void => {
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      mainsStats,
-    });
+    emitArtifactsFilterChange({ mainsStats });
   };
 
   const handleHasFourSubsChange = (hasFourSubs: boolean): void => {
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      hasFourSubs,
-    });
+    emitArtifactsFilterChange({ hasFourSubs });
   };
 
   const handleArtifactLevelUpChange = (artifactLevelUp?: 16 | 20): void => {

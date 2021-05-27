@@ -23,31 +23,21 @@ function SetsSelects(props: SetsSelectsProps): ReactElement {
     props.onSetNameChange({ value, setIndex });
   };
 
-  const firstSetSelect = (
-    <div className={classes.container}>
-      <FormSelect
-        label="Set 1"
-        options={setNames}
-        selectedValue={currentSets[0]}
-        isOptional={true}
-        onChange={(e) => handleSetNameChange(e, 0)}
-      ></FormSelect>
-    </div>
-  );
-  return setPieces === 4 ? (
-    firstSetSelect
-  ) : (
+  const setsIndexes = Array.from(Array(setPieces === 2 ? 2 : 1), (_, i) => i);
+
+  return (
     <Fragment>
-      {firstSetSelect}
-      <div className={classes.container}>
-        <FormSelect
-          label="Set 2"
-          options={setNames}
-          selectedValue={currentSets[1]}
-          isOptional={true}
-          onChange={(e) => handleSetNameChange(e, 1)}
-        ></FormSelect>
-      </div>
+      {setsIndexes.map((index) => (
+        <div key={`set-${index}`} className={classes.container}>
+          <FormSelect
+            label={`Set ${index + 1}`}
+            options={setNames}
+            selectedValue={currentSets[index]}
+            isOptional={true}
+            onChange={(e) => handleSetNameChange(e, index)}
+          ></FormSelect>
+        </div>
+      ))}
     </Fragment>
   );
 }
