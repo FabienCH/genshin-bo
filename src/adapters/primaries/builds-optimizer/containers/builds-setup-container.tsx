@@ -1,5 +1,6 @@
-import { ReactElement } from 'react';
-import { createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { Fragment, ReactElement } from 'react';
+import { Container, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import CharacterForm from '../components/character-form';
 import SetsForm from '../components/sets-form';
 import ArtifactsForm from '../components/artifacts-form';
@@ -14,8 +15,16 @@ import { ArtifactStatsTypes, ArtifactsMainStats } from '../../../../domain/artif
 import { SelectOption } from '../../../../usescases/builds-optimizer/builds-forms-handler';
 
 const styles = createStyles({
-  buildSetup: {
+  container: {
     display: 'flex',
+    alignItems: 'center',
+  },
+  character: {
+    flex: '45%',
+    marginRight: 30,
+  },
+  sets: {
+    flex: '55%',
   },
 });
 
@@ -25,13 +34,15 @@ interface BuildsSetupContainerProps extends WithStyles<typeof styles> {
   currentCharacter: CharacterView;
   currentWeapon: WeaponView;
   artifactsFilters: ArtifactsFiltersView;
+  artifactLevelUp?: 16 | 20;
   onCharacterChange: (character: CharacterView) => void;
   onWeaponChange: (weapon: WeaponView) => void;
   onArtifactsFiltersChange: (artifactsFilters: ArtifactsFiltersView) => void;
+  onArtifactLevelUpChange: (artifactLevelUp?: 16 | 20) => void;
 }
 
 function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
-  const { charactersNames, weaponsNames, currentCharacter, currentWeapon, artifactsFilters, classes } = props;
+  const { charactersNames, weaponsNames, currentCharacter, currentWeapon, artifactsFilters, artifactLevelUp, classes } = props;
 
   const getWeaponLevelsOptions = (name: string): SelectOption[] => BuildsOptimizerDI.buildsFormsHandler.getWeaponLevelsOptions(name);
 
@@ -41,6 +52,13 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
       delete currentSets[index];
     }
     return currentSets;
+  };
+
+  const emitArtifactsFilterChange = (changes: Partial<ArtifactsFiltersView>): void => {
+    props.onArtifactsFiltersChange({
+      ...artifactsFilters,
+      ...changes,
+    });
   };
 
   const [weaponsLevels, setWeaponsLevels] = React.useState(getWeaponLevelsOptions(currentWeapon.name));
@@ -65,83 +83,75 @@ function BuildsSetupContainer(props: BuildsSetupContainerProps): ReactElement {
   const handleSetNameChange = (event: { value: SetNames; setIndex: number }): void => {
     const currentSets = getUpdatedCurrentSets(event.value == null, event.setIndex);
     const newCurrentSets = event.value == null ? currentSets : { ...currentSets, [event.setIndex]: event.value };
-
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      currentSets: newCurrentSets,
-    });
+    emitArtifactsFilterChange({ currentSets: newCurrentSets });
   };
 
   const handleSetPiecesChange = (setPieces: 2 | 4): void => {
     const currentSets = getUpdatedCurrentSets(setPieces === 4, 1);
 
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      setPieces,
-      currentSets,
-    });
+    emitArtifactsFilterChange({ setPieces, currentSets });
   };
 
   const handleFocusStatsChange = (focusStats: ArtifactStatsTypes[]): void => {
     if (focusStats.length <= 5) {
-      props.onArtifactsFiltersChange({
-        ...artifactsFilters,
-        focusStats,
-      });
+      emitArtifactsFilterChange({ focusStats });
     }
   };
 
   const handleMinLevelChange = (level: number): void => {
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      minArtifactLevel: level,
-    });
+    emitArtifactsFilterChange({ minArtifactLevel: level });
   };
 
   const handleMainsStatsChange = (mainsStats: ArtifactsMainStats): void => {
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      mainsStats,
-    });
+    emitArtifactsFilterChange({ mainsStats });
   };
 
   const handleHasFourSubsChange = (hasFourSubs: boolean): void => {
-    props.onArtifactsFiltersChange({
-      ...artifactsFilters,
-      hasFourSubs,
-    });
+    emitArtifactsFilterChange({ hasFourSubs });
+  };
+
+  const handleArtifactLevelUpChange = (artifactLevelUp?: 16 | 20): void => {
+    props.onArtifactLevelUpChange(artifactLevelUp);
   };
 
   return (
-    <div className={classes.buildSetup}>
-      <CharacterForm
-        charactersNames={charactersNames}
-        currentCharacter={currentCharacter}
-        weaponsNames={weaponsNames}
-        weaponsLevels={weaponsLevels}
-        currentWeapon={currentWeapon}
-        onCharacterNameChange={handleCharacterNameChange}
-        onCharacterLevelChange={handleCharacterLevelChange}
-        onWeaponNameChange={handleWeaponNameChange}
-        onWeaponLevelChange={handleWeaponLevelChange}
-      ></CharacterForm>
-      <SetsForm
-        currentSets={artifactsFilters.currentSets}
-        setPieces={artifactsFilters.setPieces}
-        onSetNameChange={handleSetNameChange}
-        onSetPiecesChange={handleSetPiecesChange}
-      ></SetsForm>
+    <Fragment>
+      <Container className={classes.container}>
+        <Box className={classes.character}>
+          <CharacterForm
+            charactersNames={charactersNames}
+            currentCharacter={currentCharacter}
+            weaponsNames={weaponsNames}
+            weaponsLevels={weaponsLevels}
+            currentWeapon={currentWeapon}
+            onCharacterNameChange={handleCharacterNameChange}
+            onCharacterLevelChange={handleCharacterLevelChange}
+            onWeaponNameChange={handleWeaponNameChange}
+            onWeaponLevelChange={handleWeaponLevelChange}
+          ></CharacterForm>
+        </Box>
+        <Box className={classes.sets}>
+          <SetsForm
+            currentSets={artifactsFilters.currentSets}
+            setPieces={artifactsFilters.setPieces}
+            onSetNameChange={handleSetNameChange}
+            onSetPiecesChange={handleSetPiecesChange}
+          ></SetsForm>
+        </Box>
+      </Container>
       <ArtifactsForm
         mainsStats={artifactsFilters.mainsStats}
         focusStats={artifactsFilters.focusStats}
         minLevel={artifactsFilters.minArtifactLevel}
         hasFourSubs={artifactsFilters.hasFourSubs}
+        artifactLevelUp={artifactLevelUp}
         onMainsStatsChange={handleMainsStatsChange}
         onFocusStatsChange={handleFocusStatsChange}
         onMinLevelChange={handleMinLevelChange}
         onHasFourSubsChange={handleHasFourSubsChange}
+        onArtifactLevelUpChange={handleArtifactLevelUpChange}
       ></ArtifactsForm>
-    </div>
+    </Fragment>
   );
 }
 

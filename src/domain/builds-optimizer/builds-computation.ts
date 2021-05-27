@@ -31,6 +31,7 @@ export class BuildsComputation {
   private characterBonusStat!: MainStatsValues;
   private setFilter!: SetFilter;
   private statsFilter!: Partial<CharacterStatsValues>;
+  private artifactLevelUp?: 16 | 20;
   private artifactsPerBuild!: number;
   private buildsComputed!: number;
   private buildsMatchingFilters!: number;
@@ -48,6 +49,7 @@ export class BuildsComputation {
     characterBonusStat: MainStatsValues,
     artifactsFilters: ArtifactsFilters,
     statsFilter: Partial<CharacterStatsValues>,
+    artifactLevelUp?: 16 | 20,
   ): void {
     const setFilter = {
       setNames: artifactsFilters.currentSets,
@@ -59,6 +61,7 @@ export class BuildsComputation {
     this.characterBonusStat = characterBonusStat;
     this.setFilter = setFilter;
     this.statsFilter = statsFilter;
+    this.artifactLevelUp = artifactLevelUp;
     this.builds = [];
     this.artifactsPerBuild = this.allArtifacts.length - 1;
     this.lastBuildsEmitPercent = 0;
@@ -97,7 +100,12 @@ export class BuildsComputation {
   }
 
   private computeBuildStats(artifactsToCompute: Artifact[]) {
-    const buildStats = this.statsComputation.computeStats({ ...this.baseStats }, this.characterBonusStat, artifactsToCompute);
+    const buildStats = this.statsComputation.computeStats(
+      { ...this.baseStats },
+      this.characterBonusStat,
+      artifactsToCompute,
+      this.artifactLevelUp,
+    );
     if (BuildFilter.filterBuilds(this.statsFilter, buildStats)) {
       const buildArtifactsParams = artifactsToCompute.map((artifact) => ({ id: artifact.id, type: artifact.getType() }));
       this.builds.push({ id: uuidv4(), stats: buildStats, buildArtifactsParams });

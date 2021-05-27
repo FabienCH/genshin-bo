@@ -417,6 +417,52 @@ describe('BuildsOptimizer', () => {
           },
         ]);
       });
+
+      it('with artifacts level up to +16', () => {
+        loadArtifacts(paleFlameTenacityOfTheMillelithBuildArtifactsData);
+
+        buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter, 16);
+
+        expect(getBuildsWithoutId()).toEqual([
+          {
+            stats: {
+              [CharacterStats.hp]: 22775,
+              [CharacterStats.atk]: 1104,
+              [CharacterStats.critRate]: 16.6,
+              [CharacterStats.energyRecharge]: 103,
+              [CharacterStats.def]: 1114,
+              [CharacterStats.elementalMastery]: 7,
+              [CharacterStats.healingBonus]: 31.3,
+              [CharacterStats.critDmg]: 63.2,
+              [CharacterStats.physicalDmg]: 89.5,
+            },
+            buildArtifactsParams: defaultBuildArtifactsParams,
+          },
+        ]);
+      });
+
+      it('with artifacts level up to +20', () => {
+        loadArtifacts(paleFlameTenacityOfTheMillelithBuildArtifactsData);
+
+        buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter, 20);
+
+        expect(getBuildsWithoutId()).toEqual([
+          {
+            stats: {
+              [CharacterStats.hp]: 24468,
+              [CharacterStats.atk]: 1157,
+              [CharacterStats.critRate]: 16.6,
+              [CharacterStats.energyRecharge]: 103,
+              [CharacterStats.def]: 1183,
+              [CharacterStats.elementalMastery]: 7,
+              [CharacterStats.healingBonus]: 35.9,
+              [CharacterStats.critDmg]: 63.2,
+              [CharacterStats.physicalDmg]: 89.5,
+            },
+            buildArtifactsParams: defaultBuildArtifactsParams,
+          },
+        ]);
+      });
     });
 
     it('should compute build stats of multiple artifacts for each type', () => {

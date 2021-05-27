@@ -16,6 +16,7 @@ export const runBuildsOptimizerAction = createAction<{
   characterBonusStat: MainStatsValues;
   artifactsFilters: ArtifactsFilters;
   statsFilter: Partial<CharacterStatsValues>;
+  artifactLevelUp?: 16 | 20;
 }>('[Entities/Builds] Run Builds Optimizer');
 
 export const cancelOptimizationAction = createAction('[Entities/Builds] Cancel Builds Optimizer');

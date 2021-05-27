@@ -17,6 +17,7 @@ export interface BuildsState extends EntityState<Build> {
   isOptimizationRunning: boolean;
   buildsLimitReached: boolean;
   statsFilter?: Partial<CharacterStatsValues>;
+  artifactLevelUp?: 16 | 20;
   buildsComputationProgress?: BuildsComputationProgress;
 }
 
@@ -49,6 +50,7 @@ export const buildsReducer = createReducer(initialState, (builder) => {
     .addCase(runBuildsOptimizerAction, (state, { payload }) => ({
       ...state,
       statsFilter: payload.statsFilter,
+      artifactLevelUp: payload.artifactLevelUp,
       isOptimizationRunning: true,
     }))
     .addCase(updateBuildsComputationProgressAction, (state, { payload }) => ({

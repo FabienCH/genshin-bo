@@ -31,6 +31,7 @@ export class BuildsOptimizer {
     weaponView: WeaponView,
     artifactsFilters: ArtifactsFilters,
     statsFilter: Partial<CharacterStatsValues>,
+    artifactLevelUp?: 16 | 20,
   ): void {
     const setFilter = {
       setNames: artifactsFilters.currentSets,
@@ -47,7 +48,14 @@ export class BuildsOptimizer {
     const characterBonusStat = this.computeBonusStats(character, weapon);
 
     appStore.dispatch(
-      runBuildsOptimizerAction({ allArtifacts: selectAllArtifacts(), baseStats, characterBonusStat, artifactsFilters, statsFilter }),
+      runBuildsOptimizerAction({
+        allArtifacts: selectAllArtifacts(),
+        baseStats,
+        characterBonusStat,
+        artifactsFilters,
+        statsFilter,
+        artifactLevelUp,
+      }),
     );
   }
 

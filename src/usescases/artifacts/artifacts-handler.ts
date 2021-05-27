@@ -11,6 +11,7 @@ import { ArtifactValidator } from '../../domain/artifacts/artifacts-validator';
 import { ArtifactValidationError } from '../../domain/artifacts/artifact-validation-error';
 import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 import { ArtifactView } from '../../domain/artifacts/models/artifact-view';
+import { artifactLevelUp } from '../../adapters/redux/builds/builds-selectors';
 
 export class ArtifactsHandler {
   constructor(private readonly artifactValidator: ArtifactValidator) {
@@ -30,7 +31,7 @@ export class ArtifactsHandler {
     if (!artifact) {
       return new Error(`artifact with id ${id} not found`);
     }
-    return ArtifactMapper.mapDataToView(artifact);
+    return ArtifactMapper.mapDataToView(artifact, artifactLevelUp());
   }
 
   public addOne(artifactData: ArtifactData): void | ArtifactValidationError {

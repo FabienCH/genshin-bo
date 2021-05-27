@@ -8,4 +8,5 @@ export interface ArtifactView {
   subStat2: string;
   subStat3: string;
   subStat4: string;
+  uppedValues?: { level: number; mainStat: string };
 }

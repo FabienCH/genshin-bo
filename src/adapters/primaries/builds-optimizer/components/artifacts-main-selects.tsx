@@ -8,8 +8,11 @@ import { SandsMainStatType, sandsMainStats } from '../../../../domain/artifacts/
 
 const styles = createStyles({
   mainStatDiv: {
-    width: 180,
-    marginRight: 30,
+    display: 'flex',
+    flex: '100%',
+    '&>:not(:first-child)': {
+      marginLeft: 30,
+    },
   },
 });
 

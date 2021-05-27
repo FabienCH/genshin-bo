@@ -16,6 +16,7 @@ const styles = createStyles({
 export interface FormSelectProps<T extends string | number> extends WithStyles<typeof styles> {
   label: string;
   options: SelectOption[] | T[];
+  selectClassName?: string;
   selectedValue?: T;
   isOptional?: boolean;
   tooltipText?: NonNullable<React.ReactNode>;
@@ -31,7 +32,7 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
     return typeof x === 'string' || typeof x === 'number';
   };
 
-  const { label, options, selectedValue, isOptional, tooltipText, classes } = props;
+  const { label, options, selectedValue, isOptional, tooltipText, selectClassName, classes } = props;
 
   const menuItems = options.map((option: SelectOption | T) => {
     const value = isTypeT(option) ? option : option.value;
@@ -69,7 +70,7 @@ function FormSelect<T extends string | number>(props: FormSelectProps<T>): React
         {tooltipText ? <HelpIconTooltip tooltipText={tooltipText}></HelpIconTooltip> : null}
       </InputLabel>
       <FormControl>
-        <Select id={selectId} value={value} defaultValue="-" onChange={handleChange}>
+        <Select id={selectId} className={selectClassName} value={value} defaultValue="-" onChange={handleChange}>
           {menuItems}
         </Select>
       </FormControl>
