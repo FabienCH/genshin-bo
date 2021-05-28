@@ -15,6 +15,7 @@
     "lint:fix": "eslint --ext js,jsx,ts,tsx --fix src",
     "build": "react-app-rewired build",
     "build:test": "env-cmd -f .env.test npm run build",
+    "build:prod": "env-cmd -f .env.production npm run build",
     "eject": "react-app-rewired eject"
   },
   "keywords": [],
