@@ -9,10 +9,13 @@
       name="description"
       content="Web site created using create-react-app"
     />
-    <title>Genshin Build Optimizer</title>
+    <title>Genshin Builds Optimizer</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <% if (process.env.NODE_ENV === 'production') { %>
+      <script defer id="fairlytics-id-ajcu6jd9k7ysd6" fairlyticskey="b85c02e5-eec5-425c-abce-587fb9400cd4" src="https://fairlytics.tech/dist/js/tag.js"></script>
+    <% } %>
   </body>
 </html>
