@@ -3,6 +3,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { theme } from './theme';
 import GboHeader from '../adapters/primaries/layout/header';
+import GboFooter from '../adapters/primaries/layout/footer';
 import { MainContainer } from '../adapters/primaries/layout/main-container';
 import { ArtifactsDI } from '../di/artifacts-di';
 import { appStore } from '../adapters/redux/store';
@@ -34,6 +35,7 @@ class App extends Component<unknown, AppState> {
           <CssBaseline />
           <GboHeader tabId={this.state.tabId} onTabChange={this.handleTabChange}></GboHeader>
           <MainContainer tabId={this.state.tabId}></MainContainer>
+          <GboFooter></GboFooter>
         </ThemeProvider>
       </Provider>
     );
