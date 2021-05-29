@@ -1,6 +1,7 @@
 import { ChangeEvent, ReactElement } from 'react';
 import logo from '../../../assets/logo.png';
 import { AppBar, Tabs, Tab, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import LinksButtons from './links-buttons';
 
 const styles = createStyles({
   header: {
@@ -15,6 +16,12 @@ const styles = createStyles({
   tab: {
     fontFamily: 'genshin-font',
     letterSpacing: '0.07em',
+  },
+  links: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 'auto',
+    justifyContent: 'flex-end',
   },
 });
 
@@ -36,6 +43,9 @@ function GboHeader(props: HeaderProps): ReactElement {
         <Tab className={classes.tab} label="Artifacts" />
         <Tab className={classes.tab} label="Builds Optimizer" />
       </Tabs>
+      <div className={classes.links}>
+        <LinksButtons></LinksButtons>
+      </div>
     </AppBar>
   );
 }
