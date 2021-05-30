@@ -32,7 +32,10 @@ jobs:
           unzip packer_1.3.1_linux_amd64.zip
           sudo apt-get update
           sudo apt-get install jq
-          sudo apt-get install python-openstackclient
+          python3 -m venv venv3
+          . ./venv3/bin/activate
+          pip install --upgrade pip
+          pip install python-openstackclient
           SOURCE_ID=`openstack image list -f json | jq -r '.[] | select(.Name == "Debian 10") | .ID'`
           FLAVOR_ID=`openstack flavor list -f json | jq -r '.[] | select(.Name == "d2-2") | .ID'`
           NETWORK_ID=`openstack network list -f json | jq -r '.[] | select(.Name == "Ext-Net") | .ID'`
