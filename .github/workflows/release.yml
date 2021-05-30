@@ -1,21 +1,47 @@
-name: Release Actions
+name: Build Release
 
 on:
-  push:
-    branches: [ test/mutation-testing* ]
+ push:
+    branches: [cicd*]
   release:
     types: [published]
+
 jobs:
-  mutation-testing:
-    name: mutation-testing
+  build:
+    name: build
     runs-on: ubuntu-latest
-    env:
-      STRYKER_TOKEN: ${{secrets.STRYKER_DASHBOARD_API_KEY}}
-      BASE_URL: "https://dashboard.stryker-mutator.io"
-      PROJECT: "github.com/FabienCH/genshin-bo"
     steps:
-      - uses: actions/checkout@master
-      - run: npm install
-      - run: npm run mutation-testing
-      - run: >
-          curl -X PUT $BASE_URL/api/reports/$PROJECT/${GITHUB_REF##*/} -H "Content-Type: application/json" -H "Host: dashboard.stryker-mutator.io" -H "X-Api-Key: $STRYKER_TOKEN" -d @reports/mutation/mutation.json
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Build
+        run: |
+          npm install
+          npm run build:prod
+  deploy:
+    needs: [build]
+    name:  deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Deploy
+        run: |
+          wget https://releases.hashicorp.com/packer/1.3.1/packer_1.3.1_linux_amd64.zip
+          unzip packer_1.3.1_linux_amd64.zip
+          apt-get update
+          apt-get install jq
+          apt-get install python-openstackclient
+          SOURCE_ID=`openstack image list -f json | jq -r '.[] | select(.Name == "Debian 10") | .ID'`
+          FLAVOR_ID=`openstack flavor list -f json | jq -r '.[] | select(.Name == "d2-2") | .ID'`
+          NETWORK_ID=`openstack network list -f json | jq -r '.[] | select(.Name == "Ext-Net") | .ID'`
+          deploy/build-packer-json.sh
+          ./packer build packer.json
+          IMAGE_ID=`openstack image list -f json | jq -r '.[] | select(.Name == "genshin-bo/${GITHUB_REF##*/}") | .ID'`
+          openstack server rebuild --image IMAGE_ID genshin-bo-front
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages
+          folder: build
