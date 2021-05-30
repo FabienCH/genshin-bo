@@ -9,4 +9,4 @@ A build optimizer for the game Genshin Impact that gives you the most efficient 
 https://fabiench.github.io/genshin-bo/
 
 ### Prod env (based on latest release)
-TBD
+https://genshin-bo.com/
