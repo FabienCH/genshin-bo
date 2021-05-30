@@ -2,7 +2,7 @@ name: Build Release
 
 on:
   push:
-    branches: [cicd*]
+    branches: [ cicd/* ]
   release:
     types: [published]
 
@@ -26,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.1
 
-      - name: Deploy
+      - name: Deploy 🚀
         run: |
           wget https://releases.hashicorp.com/packer/1.3.1/packer_1.3.1_linux_amd64.zip
           unzip packer_1.3.1_linux_amd64.zip
@@ -40,8 +40,3 @@ jobs:
           ./packer build packer.json
           IMAGE_ID=`openstack image list -f json | jq -r '.[] | select(.Name == "genshin-bo/${GITHUB_REF##*/}") | .ID'`
           openstack server rebuild --image IMAGE_ID genshin-bo-front
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.0.0
-        with:
-          branch: gh-pages
-          folder: build
