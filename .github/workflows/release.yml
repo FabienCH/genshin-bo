@@ -39,13 +39,15 @@ jobs:
           OS_AUTH_URL=${{secrets.OS_AUTH_URL}}
           OS_USERNAME=${{secrets.OS_USERNAME}}
           OS_PASSWORD=${{secrets.OS_PASSWORD}}
+          OS_TENANT_ID=${{secrets.OS_TENANT_ID}}
           OS_TENANT_NAME=${{secrets.OS_TENANT_NAME}}
-          OS_USERNAME=${{secrets.OS_USERNAME}}
+          echo OS_AUTH_URL
+          source deploy/openrc.sh
           SOURCE_ID=`openstack image list -f json | jq -r '.[] | select(.Name == "Debian 10") | .ID'`
           FLAVOR_ID=`openstack flavor list -f json | jq -r '.[] | select(.Name == "d2-2") | .ID'`
           NETWORK_ID=`openstack network list -f json | jq -r '.[] | select(.Name == "Ext-Net") | .ID'`
           chmod +x deploy/build-packer-json.sh
-          deploy/build-packer-json.sh
+          ./deploy/build-packer-json.sh
           ./packer build packer.json
           IMAGE_ID=`openstack image list -f json | jq -r '.[] | select(.Name == "genshin-bo/${GITHUB_REF##*/}") | .ID'`
           openstack server rebuild --image IMAGE_ID genshin-bo-front
