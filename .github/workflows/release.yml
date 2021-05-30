@@ -1,7 +1,7 @@
 name: Build Release
 
 on:
- push:
+  push:
     branches: [cicd*]
   release:
     types: [published]
