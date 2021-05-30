@@ -6,9 +6,9 @@ cat > packer.json <<EOF
       "username": "$OS_USERNAME",
       "password": "$OS_PASSWORD",
       "identity_endpoint": "$OS_AUTH_URL",
-      "region": "$OS_TENANT_ID",
-      "tenant_id": "GRA11",
-      "image_name": "genshin-bo/${GITHUB_REF##*/}",
+      "region": "GRA11",
+      "tenant_id": "$OS_TENANT_ID",
+      "image_name": "genshin-bo/$RELEASE_VER",
       "ssh_username": "debian",
       "source_image": "$SOURCE_ID",
       "flavor": "$FLAVOR_ID",
@@ -30,7 +30,7 @@ cat > packer.json <<EOF
       "type": "file"
     },
     {
-      "script": "/tmp/deploy/deploy.sh",
+      "script": "./deploy/deploy.sh",
       "type": "shell"
     }
   ]
