@@ -14,6 +14,7 @@ import { MainStats } from '../../domain/artifacts/models/main-statistics';
 import { SetNames } from '../../domain/artifacts/models/sets-with-effects';
 import { SubStats } from '../../domain/artifacts/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
+import { ArtifactsPresenter } from '../../adapters/primaries/artifacts/artifacts-presenter';
 
 describe('ArtifactsHandler.addArtifact', () => {
   let artifactsHandler: ArtifactsHandler;
@@ -35,16 +36,29 @@ describe('ArtifactsHandler.addArtifact', () => {
         goblets: [],
         circlets: [],
       };
-      const emptyArtifactsHandler = getArtifactsHandler(emptyArtifactsData);
+      const artifactsPresenter = new ArtifactsPresenter(
+        ArtifactsDI.getArtifactsHandler(emptyArtifactsData),
+        ArtifactsDI.getArtifactsImporter(),
+        ArtifactsDI.getArtifactsExporter(),
+        ArtifactsDI.getVideoValidator(),
+      );
+      appStore.dispatch(loadArtifactsActions());
 
-      const expectedArtifacts = emptyArtifactsHandler.getAll();
+      const expectedArtifacts = artifactsPresenter.getViewModel().artifacts;
+
       expect(expectedArtifacts).toEqual([]);
     });
 
     it('should give list of expected artifacts', () => {
-      const artifactsHandlerWithData = getArtifactsHandler(defaultBuildArtifactsData);
+      const artifactsPresenter = new ArtifactsPresenter(
+        ArtifactsDI.getArtifactsHandler(defaultBuildArtifactsData),
+        ArtifactsDI.getArtifactsImporter(),
+        ArtifactsDI.getArtifactsExporter(),
+        ArtifactsDI.getVideoValidator(),
+      );
+      appStore.dispatch(loadArtifactsActions());
 
-      const expectedArtifacts = artifactsHandlerWithData.getAll();
+      const expectedArtifacts = artifactsPresenter.getViewModel().artifacts;
 
       expect(expectedArtifacts.length).toEqual(defaultArtifactsViews.length);
       defaultArtifactsViews.forEach((artifactView, index) => {
@@ -491,5 +505,5 @@ describe('ArtifactsHandler.addArtifact', () => {
 function getArtifactsHandler(artifactsData?: AllArtifactsData) {
   ArtifactsDI.registerRepository(artifactsData);
   appStore.dispatch(loadArtifactsActions());
-  return ArtifactsDI.artifactsHandler;
+  return ArtifactsDI.getArtifactsHandler();
 }

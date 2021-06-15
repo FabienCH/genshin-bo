@@ -1,19 +1,17 @@
 import { Component, ReactElement } from 'react';
 import { ArtifactsDI } from '../../../di/artifacts-di';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import { ArtifactView } from '../../../domain/artifacts/models/artifact-view';
 import { Container, createStyles, WithStyles, withStyles } from '@material-ui/core';
 import ArtifactsImport from './components/artifacts-import';
 import ArtifactsImportGuide from './components/artifacts-import-guide';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
-import { ArtifactsImporter, JsonImportResults } from '../../../usescases/artifacts/artifacts-importer';
 import { connect } from 'react-redux';
-import { ImportInfos } from '../../redux/artifacts/artifacts-reducer';
 import ArtifactsImportExportButtons from './components/artifacts-import-export-buttons';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Dialog from '@material-ui/core/Dialog';
 import ArtifactsJsonImport from './components/artifacts-json-import';
+import { ArtifactsContainerState, ArtifactsContainerVM, ArtifactsPresenter } from './artifacts-presenter';
 
 const styles = createStyles({
   actionsContainer: {
@@ -24,144 +22,40 @@ const styles = createStyles({
   artifactsCount: { marginBottom: 5 },
 });
 
-type State = {
-  artifactsImporter: ArtifactsImporter;
-  overrideCurrentArtifacts: boolean;
-  fixOcrErrors: boolean;
-  nbOfThreads: number;
-  maxNbOfWorkers: number;
-  video?: File;
-  jsonImportResults?: JsonImportResults;
-  errorMessage?: string;
-};
+const artifactsPresenter = new ArtifactsPresenter(
+  ArtifactsDI.getArtifactsHandler(),
+  ArtifactsDI.getArtifactsImporter(),
+  ArtifactsDI.getArtifactsExporter(),
+  ArtifactsDI.getVideoValidator(),
+);
 
-interface ArtifactsContainerProps extends WithStyles<typeof styles> {
-  artifacts: ArtifactView[];
-  isImportRunning: boolean;
-  importInfos: ImportInfos;
-  canExportArtifact: boolean;
-}
+type ArtifactsContainerProps = ArtifactsContainerVM & WithStyles<typeof styles>;
 
-class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
+class ArtifactsContainer extends Component<ArtifactsContainerProps, ArtifactsContainerState> {
+  private artifactsPresenter: ArtifactsPresenter;
+
   constructor(props: ArtifactsContainerProps) {
     super(props);
-    this.state = {
-      artifactsImporter: ArtifactsDI.getArtifactsImporter(),
-      overrideCurrentArtifacts: false,
-      fixOcrErrors: false,
-      nbOfThreads: ArtifactsDI.getArtifactsImporter().getMaxWorkers(),
-      maxNbOfWorkers: ArtifactsDI.getArtifactsImporter().getMaxWorkers(),
-    };
-    this.videoFileChange = this.videoFileChange.bind(this);
-    this.nbThreadsChange = this.nbThreadsChange.bind(this);
-    this.importArtifactsFromVideo = this.importArtifactsFromVideo.bind(this);
-    this.cancelImport = this.cancelImport.bind(this);
-    this.overrideArtifactsChange = this.overrideArtifactsChange.bind(this);
-    this.fixOcrErrorsChange = this.fixOcrErrorsChange.bind(this);
-    this.jsonFileChange = this.jsonFileChange.bind(this);
-    this.exportArtifacts = this.exportArtifacts.bind(this);
+    this.artifactsPresenter = artifactsPresenter;
+    this.state = this.artifactsPresenter.getInitialState();
     this.onGridReady = this.onGridReady.bind(this);
-    this.handleAlertClose = this.handleAlertClose.bind(this);
-    this.handleDialogClose = this.handleDialogClose.bind(this);
-    this.handleImportFromJson = this.handleImportFromJson.bind(this);
   }
 
-  async videoFileChange(video: File): Promise<void> {
-    const videoValidator = ArtifactsDI.getVideoValidator();
-    if (await videoValidator.isVideoValid(video)) {
+  componentDidMount() {
+    this.artifactsPresenter.onStateUpdated((newState) => {
       this.setState((state) => ({
         ...state,
-        video,
+        ...newState,
       }));
-    } else {
-      this.setState((state) => ({
-        ...state,
-        errorMessage: videoValidator.getError(),
-      }));
-    }
-  }
-
-  nbThreadsChange(nbOfThreads: number): void {
-    this.setState((state) => ({
-      ...state,
-      nbOfThreads,
-    }));
-  }
-
-  importArtifactsFromVideo(): void {
-    const { video, nbOfThreads, overrideCurrentArtifacts, fixOcrErrors } = this.state;
-    if (video) {
-      this.state.artifactsImporter.importFromVideo(video, nbOfThreads, overrideCurrentArtifacts, fixOcrErrors);
-    }
-  }
-
-  cancelImport(): void {
-    this.state.artifactsImporter.cancelImport();
-  }
-
-  overrideArtifactsChange(checked: boolean): void {
-    this.setState((state) => ({
-      ...state,
-      overrideCurrentArtifacts: checked,
-    }));
-  }
-
-  fixOcrErrorsChange(checked: boolean): void {
-    this.setState((state) => ({
-      ...state,
-      fixOcrErrors: checked,
-    }));
-  }
-
-  async jsonFileChange(jsonFile: File): Promise<void> {
-    const jsonImportResults = await this.state.artifactsImporter.getArtifactsFromJson(jsonFile);
-    if (jsonImportResults.artifacts.length > 0) {
-      this.setState((state) => ({
-        ...state,
-        jsonImportResults,
-      }));
-    }
-
-    if (jsonImportResults.fileError) {
-      this.setState((state) => ({
-        ...state,
-        errorMessage: jsonImportResults.fileError,
-      }));
-    }
-  }
-
-  exportArtifacts(): void {
-    ArtifactsDI.getArtifactsExporter().exportAsJsonFile();
+    });
   }
 
   onGridReady(params: GridReadyEvent): void {
     params.api.sizeColumnsToFit();
   }
 
-  handleAlertClose(): void {
-    this.setState((state) => ({
-      ...state,
-      errorMessage: undefined,
-    }));
-  }
-
-  handleDialogClose(): void {
-    this.setState((state) => ({
-      ...state,
-      jsonImportResults: undefined,
-    }));
-  }
-
-  handleImportFromJson(): void {
-    if (this.state.jsonImportResults) {
-      ArtifactsDI.artifactsHandler.addManyFromJson(this.state.jsonImportResults.artifacts);
-    }
-    this.handleDialogClose();
-  }
-
   render(): ReactElement {
     const { artifacts, isImportRunning, importInfos, canExportArtifact, classes } = this.props;
-    const nbThreadsOptions = Array.from(Array(this.state.maxNbOfWorkers), (_, i) => i + 1);
 
     const defaultColDef: ColDef = {
       resizable: true,
@@ -216,22 +110,22 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           video={this.state.video}
           isImportRunning={isImportRunning}
           importInfos={importInfos}
-          nbThreadsOptions={nbThreadsOptions}
+          nbThreadsOptions={this.state.nbThreadsOptions}
           nbOfThreads={this.state.nbOfThreads}
-          fileChanged={this.videoFileChange}
-          nbThreadsChanged={this.nbThreadsChange}
-          importArtifacts={this.importArtifactsFromVideo}
-          cancelImport={this.cancelImport}
-          overrideArtifactsChanged={this.overrideArtifactsChange}
-          fixOcrErrorsChanged={this.fixOcrErrorsChange}
+          fileChanged={this.artifactsPresenter.videoFileChange.bind(this.artifactsPresenter)}
+          nbThreadsChanged={this.artifactsPresenter.nbThreadsChange.bind(this.artifactsPresenter)}
+          importArtifacts={this.artifactsPresenter.importArtifactsFromVideo.bind(this.artifactsPresenter)}
+          cancelImport={this.artifactsPresenter.cancelImport.bind(this.artifactsPresenter)}
+          overrideArtifactsChanged={this.artifactsPresenter.overrideArtifactsChange.bind(this.artifactsPresenter)}
+          fixOcrErrorsChanged={this.artifactsPresenter.fixOcrErrorsChange.bind(this.artifactsPresenter)}
         ></ArtifactsImport>
         <Container>
           <div className={classes.actionsContainer}>
             <ArtifactsImportExportButtons
               canImportArtifact={!isImportRunning}
               canExportArtifact={canExportArtifact}
-              jsonFileChange={this.jsonFileChange}
-              exportArtifacts={this.exportArtifacts}
+              jsonFileChange={this.artifactsPresenter.jsonFileChange.bind(this.artifactsPresenter)}
+              exportArtifacts={this.artifactsPresenter.exportArtifacts.bind(this.artifactsPresenter)}
             ></ArtifactsImportExportButtons>
             <span className={classes.artifactsCount}>artifacts: {artifacts.length}</span>
           </div>
@@ -248,8 +142,8 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
             </AgGridReact>
           </div>
         </Container>
-        <Snackbar open={!!this.state.errorMessage} autoHideDuration={7000} onClose={this.handleAlertClose}>
-          <Alert onClose={this.handleAlertClose} severity="error">
+        <Snackbar open={!!this.state.errorMessage} autoHideDuration={7000} onClose={this.artifactsPresenter.handleAlertClose}>
+          <Alert onClose={this.artifactsPresenter.handleAlertClose.bind(this.artifactsPresenter)} severity="error">
             {this.state.errorMessage}
           </Alert>
         </Snackbar>
@@ -257,14 +151,14 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
           data-testid="json-import-modal"
           open={!!this.state.jsonImportResults}
           maxWidth="sm"
-          onClose={this.handleDialogClose}
+          onClose={this.artifactsPresenter.handleDialogClose.bind(this.artifactsPresenter)}
           aria-labelledby="json-import-modal"
         >
           {this.state.jsonImportResults ? (
             <ArtifactsJsonImport
               importResults={this.state.jsonImportResults}
-              onClose={this.handleDialogClose}
-              onImport={this.handleImportFromJson}
+              onClose={this.artifactsPresenter.handleDialogClose.bind(this.artifactsPresenter)}
+              onImport={this.artifactsPresenter.handleImportFromJson.bind(this.artifactsPresenter)}
             ></ArtifactsJsonImport>
           ) : null}
         </Dialog>
@@ -273,13 +167,6 @@ class ArtifactsContainer extends Component<ArtifactsContainerProps, State> {
   }
 }
 
-const mapStateToProps = () => {
-  return {
-    artifacts: ArtifactsDI.artifactsHandler.getAll(),
-    isImportRunning: ArtifactsDI.getArtifactsImporter().isImportRunning(),
-    importInfos: ArtifactsDI.getArtifactsImporter().geImportInfos(),
-    canExportArtifact: ArtifactsDI.getArtifactsExporter().canExportArtifacts(),
-  };
-};
+const mapStateToProps = () => artifactsPresenter.getViewModel();
 
 export default connect(mapStateToProps)(withStyles(styles)(ArtifactsContainer));

@@ -9,7 +9,7 @@ import { ArtifactsExporter } from './artifacts-exporter';
 import artifact0 from '../../test/artifact0.jpg';
 import { from } from 'rxjs';
 import { VideoToFrames } from '../../domain/artifacts/mappers/video-to-frames';
-import { isArtifactsImportRunning } from '../../adapters/redux/artifacts/artifacts-selectors';
+import { isArtifactsImportRunning, selectAllArtifacts } from '../../adapters/redux/artifacts/artifacts-selectors';
 import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 import { artifactsJsonString } from '../../test/artifacts-from-json';
 
@@ -28,13 +28,14 @@ describe('ArtifactsExporter', () => {
   beforeEach(() => {
     window.URL.createObjectURL = () => '';
     ArtifactsDI.registerRepository();
+    appStore.dispatch(loadArtifactsActions());
     artifactsExporter = ArtifactsDI.getArtifactsExporter();
     createObjectURLSpy = jest.spyOn(window.URL, 'createObjectURL');
   });
 
   describe('exportAsJsonFile', () => {
     it('should download a json file with all saved artifacts', () => {
-      artifactsExporter.exportAsJsonFile();
+      artifactsExporter.exportAsJsonFile(selectAllArtifacts(), isArtifactsImportRunning());
 
       expect(createObjectURLSpy).toHaveBeenCalledWith(new Blob([artifactsJsonString], { type: 'application/json' }));
     });
@@ -44,7 +45,9 @@ describe('ArtifactsExporter', () => {
     it('should not allow to export artifacts if there is none', () => {
       registerArtifactRepository();
 
-      expect(artifactsExporter.canExportArtifacts()).toBeFalsy();
+      expect(() => {
+        artifactsExporter.exportAsJsonFile(selectAllArtifacts(), isArtifactsImportRunning());
+      }).toThrowError("can't export if there is no artifact.");
     });
 
     it('should not allow to export artifacts if import from OCR is running', (done) => {
@@ -57,7 +60,10 @@ describe('ArtifactsExporter', () => {
 
       artifactsImporter.importFromVideo(new File([], 'filename'), 1);
 
-      expect(artifactsExporter.canExportArtifacts()).toBeFalsy();
+      expect(() => {
+        artifactsExporter.exportAsJsonFile(selectAllArtifacts(), isArtifactsImportRunning());
+      }).toThrowError("can't export when import is running.");
+
       appStore.subscribe(() => {
         if (!isArtifactsImportRunning()) {
           done();
@@ -68,7 +74,9 @@ describe('ArtifactsExporter', () => {
     it('should allow to export artifacts if there at least one and import from OCR is not running', () => {
       registerArtifactRepository(flower);
 
-      expect(artifactsExporter.canExportArtifacts()).toBeTruthy();
+      artifactsExporter.exportAsJsonFile(selectAllArtifacts(), isArtifactsImportRunning());
+
+      expect(createObjectURLSpy).toHaveBeenCalled();
     });
   });
 

@@ -6,7 +6,7 @@ import artifact0bis from '../../test/artifact0bis.jpg';
 import artifact1 from '../../test/artifact1.jpg';
 import artifactWithError from '../../test/artifact-error.jpg';
 import { artifactWithFixableMainOcrResultsMock, importedArtifactDataMock } from '../../test/imported-artifacts-data-mock';
-import { isArtifactsImportRunning, selectAllArtifacts } from '../../adapters/redux/artifacts/artifacts-selectors';
+import { importInfos, isArtifactsImportRunning, selectAllArtifacts } from '../../adapters/redux/artifacts/artifacts-selectors';
 import { appStore } from '../../adapters/redux/store';
 import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 import { Unsubscribe } from '@reduxjs/toolkit';
@@ -191,7 +191,7 @@ describe('ArtifactsImporter', () => {
       let changeCount = 0;
       artifactsStateChangesSub.pipe(take(7)).subscribe(() => {
         const shouldImportRunning = changeCount < 6;
-        expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
+        expect(isArtifactsImportRunning()).toBe(shouldImportRunning);
         if (!shouldImportRunning) {
           done();
         }
@@ -214,7 +214,7 @@ describe('ArtifactsImporter', () => {
         }
         const shouldImportRunning = changeCount < 3;
 
-        expect(artifactsImporter.isImportRunning()).toBe(shouldImportRunning);
+        expect(isArtifactsImportRunning()).toBe(shouldImportRunning);
         if (!shouldImportRunning) {
           done();
         }
@@ -242,7 +242,7 @@ describe('ArtifactsImporter', () => {
           take(1),
         )
         .subscribe(() => {
-          expect(artifactsImporter.geImportInfos()).toEqual({ foundFrames: 4, importedArtifacts: 2, artifactsInError: 1 });
+          expect(importInfos()).toEqual({ foundFrames: 4, importedArtifacts: 2, artifactsInError: 1 });
           done();
         });
 

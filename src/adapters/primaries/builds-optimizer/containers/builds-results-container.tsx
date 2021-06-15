@@ -38,7 +38,7 @@ function BuildsResultsContainer(props: BuildsResultsContainerProps): ReactElemen
 
   const handlePopoverOpen = (artifactId: string, event: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);
-    const artifact = ArtifactsDI.artifactsHandler.getById(artifactId);
+    const artifact = ArtifactsDI.getArtifactsHandler().getById(artifactId);
     if (!(artifact instanceof Error)) {
       setCurrentArtifact(artifact);
     }

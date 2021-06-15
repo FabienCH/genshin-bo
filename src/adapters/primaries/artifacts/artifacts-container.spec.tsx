@@ -11,6 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { artifactsJsonString } from '../../../test/artifacts-from-json';
 import { mockBlobText } from '../../../test/blob-text-mock';
 import { mockHTMLVideoElement } from '../../../test/htmlVideoElementMock';
+import { ArtifactsPresenter } from './artifacts-presenter';
 
 const ensureGridApiHasBeenSet = (wrapper: AgGridReact) => {
   return new Promise((resolve) => {
@@ -35,23 +36,42 @@ describe('Artifacts container', () => {
     mockHTMLVideoElement(570, 1000);
     ArtifactsDI.registerRepository();
     ArtifactsDI.registerOcrWorker();
-    artifactsImporterSpy = jest.spyOn(ArtifactsDI.getArtifactsImporter(), 'importFromVideo').mockImplementation(async () => undefined);
     wrapper = mount(
       <Provider store={appStore}>
-        <ArtifactsContainer />
+        <ArtifactsContainer></ArtifactsContainer>
       </Provider>,
     );
+    artifactsImporterSpy = jest.spyOn(wrapper.find(ArtifactsContainer), 'artifactsPresenter').mockImplementation(async () => undefined);
+
     agGridReact = wrapper.find(AgGridReact).instance();
   });
 
   it('renders with a grid of artifacts', (done) => {
-    const artifacts = ArtifactsDI.artifactsHandler.getAll();
+    const artifactsPresenter = new ArtifactsPresenter(
+      ArtifactsDI.getArtifactsHandler(),
+      ArtifactsDI.getArtifactsImporter(),
+      ArtifactsDI.getArtifactsExporter(),
+      ArtifactsDI.getVideoValidator(),
+    );
+    const { artifacts } = artifactsPresenter.getViewModel();
     ensureGridApiHasBeenSet(agGridReact).then(() => done());
 
     expect(agGridReact.props.rowData).toEqual(artifacts);
   });
 
-  it('should import artifacts and not override currents ones', async () => {
+  fit('should import artifacts and not override currents ones', async () => {
+    //console.warn(' wrapper.find(ArtifactsContainer).getWrappingComponent() !!!!!!!!!!!!!!', wrapper.getWrappingComponent());
+    //console.warn(' wrapper.find(ArtifactsContainer).getDOMNode() !!!!!!!!!!!!!!', wrapper.getDOMNode());
+    console.warn(' wrapper.getElement() !!!!!!!!!!!!!!', wrapper.getElement());
+    console.warn(' wrapper..getElement().props !!!!!!!!!!!!!!', wrapper.getElement().props);
+    console.warn(' wrapper.instance() !!!!!!!!!!!!!!', wrapper.instance());
+    //console.warn(' wrapper.find(ArtifactsContainer).getNode() !!!!!!!!!!!!!!', wrapper.getNode());
+    console.warn(' wrapper.prop() !!!!!!!!!!!!!!', wrapper.prop('artifactsPresenter'));
+    console.warn(' wrapper.props() !!!!!!!!!!!!!!', wrapper.props());
+    //console.warn(' wrapper.find(ArtifactsContainer).state() !!!!!!!!!!!!!!', wrapper.find(ArtifactsContainer).state());
+    console.warn(' wrapper.find(ArtifactsContainer).debug() !!!!!!!!!!!!!!', wrapper.find(ArtifactsContainer).debug());
+    console.warn(' wrapper.debug() !!!!!!!!!!!!!!', wrapper.debug());
+
     const file = new File([], 'filename.mp4', { type: 'video/mp4' });
     wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
 

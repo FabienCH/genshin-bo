@@ -1,6 +1,6 @@
 import { OcrWorkerHandlerMock } from '../test/artifacts-ocr-worker-mock';
 import { InMemoryArtifactsRepository } from '../adapters/secondaries/artifacts/in-memory-artifacts-repository';
-import { ArtifactsRepository } from '../domain/artifacts/artifacts-repository';
+import { ArtifactsRepository } from '../domain/artifacts/ports/repositories/artifacts-repository';
 import { AllArtifactsData } from '../domain/artifacts/models/artifact-data';
 import { ArtifactOcrWorkersHandler, OcrWorkerHandler } from '../domain/artifacts/artifact-ocr-worker-handler';
 import { ArtifactsHandler } from '../usescases/artifacts/artifacts-handler';
@@ -12,8 +12,6 @@ import { ArtifactValidator } from '../domain/artifacts/artifacts-validator';
 import { VideoValidator } from '../usescases/artifacts/video-validator';
 
 export abstract class ArtifactsDI {
-  public static artifactsHandler: ArtifactsHandler;
-
   private static artifactsRepository: ArtifactsRepository;
   private static ocrWorkerHandler: OcrWorkerHandler;
   private static artifactsImporter: ArtifactsImporter;
@@ -27,7 +25,6 @@ export abstract class ArtifactsDI {
       default:
         ArtifactsDI.artifactsRepository = new LocalStorageArtifactsRepository();
     }
-    ArtifactsDI.artifactsHandler = new ArtifactsHandler(new ArtifactValidator());
   }
 
   public static registerOcrWorker(): void {
@@ -51,6 +48,11 @@ export abstract class ArtifactsDI {
     throw new Error('Artifacts repository is not registered.');
   }
 
+  public static getArtifactsHandler(artifactsData?: AllArtifactsData): ArtifactsHandler {
+    ArtifactsDI.registerRepository(artifactsData);
+    return new ArtifactsHandler(new ArtifactValidator());
+  }
+
   public static getOcrWorkerHandler(): OcrWorkerHandler {
     if (ArtifactsDI.ocrWorkerHandler) {
       return ArtifactsDI.ocrWorkerHandler;
@@ -59,17 +61,17 @@ export abstract class ArtifactsDI {
   }
 
   public static getArtifactsImporter(): ArtifactsImporter {
-    if (ArtifactsDI.ocrWorkerHandler && ArtifactsDI.artifactsImporter) {
-      return ArtifactsDI.artifactsImporter;
+    if (!ArtifactsDI.ocrWorkerHandler) {
+      ArtifactsDI.registerOcrWorker();
     }
-    throw new Error('Artifacts OCR worker is not registered.');
+    return ArtifactsDI.artifactsImporter;
   }
 
   public static getArtifactImageOcr(): ArtifactImageOcr {
-    if (ArtifactsDI.ocrWorkerHandler && ArtifactsDI.artifactImageOcr) {
-      return ArtifactsDI.artifactImageOcr;
+    if (!ArtifactsDI.ocrWorkerHandler) {
+      ArtifactsDI.registerOcrWorker();
     }
-    throw new Error('Artifacts OCR worker is not registered.');
+    return ArtifactsDI.artifactImageOcr;
   }
 
   public static getArtifactsExporter(): ArtifactsExporter {

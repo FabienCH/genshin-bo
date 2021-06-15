@@ -8,8 +8,6 @@ import { ArtifactsDI } from '../../di/artifacts-di';
 import { VideoToFrames } from '../../domain/artifacts/mappers/video-to-frames';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { importInfos, isArtifactsImportRunning } from '../../adapters/redux/artifacts/artifacts-selectors';
-import { ImportInfos } from '../../adapters/redux/artifacts/artifacts-reducer';
 import { ArtifactValidator } from '../../domain/artifacts/artifacts-validator';
 import { ArtifactData } from '../../domain/artifacts/models/artifact-data';
 
@@ -60,18 +58,6 @@ export class ArtifactsImporter {
     } else {
       return resultsWithErrorMessage(initialImportResults, `Invalid file format. ${suffixMessage}`);
     }
-  }
-
-  public getMaxWorkers(): number {
-    return ArtifactsDI.getOcrWorkerHandler().getMaxWorkers();
-  }
-
-  public isImportRunning(): boolean {
-    return isArtifactsImportRunning();
-  }
-
-  public geImportInfos(): ImportInfos {
-    return importInfos();
   }
 
   public cancelImport(): void {

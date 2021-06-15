@@ -1,5 +1,5 @@
 import { ArtifactMapper } from '../../domain/artifacts/mappers/artifact-mapper';
-import { isArtifactsStateInitialized, selectAllArtifacts, selectArtifactById } from '../../adapters/redux/artifacts/artifacts-selectors';
+import { isArtifactsStateInitialized, selectArtifactById } from '../../adapters/redux/artifacts/artifacts-selectors';
 import {
   addManyArtifactAction,
   addOneArtifactAction,
@@ -18,12 +18,6 @@ export class ArtifactsHandler {
     if (!isArtifactsStateInitialized()) {
       appStore.dispatch(loadArtifactsActions());
     }
-  }
-
-  public getAll(): ArtifactView[] {
-    return selectAllArtifacts()
-      .map((artifactData) => ArtifactMapper.mapDataToView(artifactData))
-      .filter(this.isArtifactView);
   }
 
   public getById(id: string): ArtifactView | Error {
@@ -48,9 +42,5 @@ export class ArtifactsHandler {
     }
     appStore.dispatch(deleteAllArtifactsAction());
     appStore.dispatch(addManyArtifactAction(artifactsData));
-  }
-
-  private isArtifactView(artifact: ArtifactView | ArtifactValidationError): artifact is ArtifactView {
-    return !(artifact instanceof ArtifactValidationError);
   }
 }
