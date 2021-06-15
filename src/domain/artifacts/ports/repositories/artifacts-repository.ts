@@ -1,4 +1,4 @@
-import { ArtifactData } from './models/artifact-data';
+import { ArtifactData } from '../../models/artifact-data';
 
 export interface ArtifactsRepository {
   getAll(): ArtifactData[];

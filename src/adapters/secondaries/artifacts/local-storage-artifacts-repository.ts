@@ -1,4 +1,4 @@
-import { ArtifactsRepository } from '../../../domain/artifacts/artifacts-repository';
+import { ArtifactsRepository } from '../../../domain/artifacts/ports/repositories/artifacts-repository';
 import { ArtifactData } from '../../../domain/artifacts/models/artifact-data';
 
 export class LocalStorageArtifactsRepository implements ArtifactsRepository {

@@ -1,4 +1,4 @@
-import { ArtifactsRepository } from '../../../domain/artifacts/artifacts-repository';
+import { ArtifactsRepository } from '../../../domain/artifacts/ports/repositories/artifacts-repository';
 import { FlowerArtifact } from '../../../domain/artifacts/entities/flower-artifact';
 import { PlumeArtifact } from '../../../domain/artifacts/entities/plume-artifact';
 import { ArtifactType } from '../../../domain/artifacts/entities/artifact';
