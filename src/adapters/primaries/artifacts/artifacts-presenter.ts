@@ -10,11 +10,7 @@ import { ImportInfos } from '../../redux/artifacts/artifacts-reducer';
 import { isArtifactsImportRunning, importInfos, selectAllArtifacts } from '../../redux/artifacts/artifacts-selectors';
 import { Presenter } from '../presenter';
 
-export interface ArtifactsContainerVM {
-  artifacts: ArtifactView[];
-  isImportRunning: boolean;
-  importInfos: ImportInfos;
-  canExportArtifact: boolean;
+export interface ArtifactsContainerState {
   overrideCurrentArtifacts: boolean;
   fixOcrErrors: boolean;
   nbOfThreads: number;
@@ -24,23 +20,34 @@ export interface ArtifactsContainerVM {
   errorMessage?: string;
 }
 
-export class ArtifactsPresenter extends Presenter<ArtifactsContainerVM> {
+export interface ArtifactsContainerSelectors {
+  artifacts: ArtifactView[];
+  isImportRunning: boolean;
+  importInfos: ImportInfos;
+  canExportArtifact: boolean;
+}
+
+export class ArtifactsPresenter extends Presenter<ArtifactsContainerState, ArtifactsContainerSelectors> {
   constructor(
     private artifactsHandler: ArtifactsHandler,
     private artifactsImporter: ArtifactsImporter,
     private artifactsExporter: ArtifactsExporter,
     private videoValidator: VideoValidator,
   ) {
-    super({
-      artifacts: ArtifactsPresenter.getArtifactsView(),
-      isImportRunning: isArtifactsImportRunning(),
-      importInfos: importInfos(),
-      canExportArtifact: selectAllArtifacts().length > 0 && !isArtifactsImportRunning(),
-      overrideCurrentArtifacts: false,
-      fixOcrErrors: false,
-      nbOfThreads: ArtifactsDI.getOcrWorkerHandler().getMaxWorkers(),
-      nbThreadsOptions: Array.from(Array(ArtifactsDI.getOcrWorkerHandler().getMaxWorkers()), (_, i) => i + 1),
-    });
+    super(
+      {
+        overrideCurrentArtifacts: false,
+        fixOcrErrors: false,
+        nbOfThreads: ArtifactsDI.getOcrWorkerHandler().getMaxWorkers(),
+        nbThreadsOptions: Array.from(Array(ArtifactsDI.getOcrWorkerHandler().getMaxWorkers()), (_, i) => i + 1),
+      },
+      () => ({
+        artifacts: ArtifactsPresenter.getArtifactsView(),
+        isImportRunning: isArtifactsImportRunning(),
+        importInfos: importInfos(),
+        canExportArtifact: selectAllArtifacts().length > 0 && !isArtifactsImportRunning(),
+      }),
+    );
   }
 
   public async videoFileChange(video: File): Promise<void> {
@@ -56,7 +63,7 @@ export class ArtifactsPresenter extends Presenter<ArtifactsContainerVM> {
   }
 
   public importArtifactsFromVideo(): void {
-    const { video, nbOfThreads, overrideCurrentArtifacts, fixOcrErrors } = this.viewModel;
+    const { video, nbOfThreads, overrideCurrentArtifacts, fixOcrErrors } = this.state;
     if (video) {
       this.artifactsImporter.importFromVideo(video, nbOfThreads, overrideCurrentArtifacts, fixOcrErrors);
     }
@@ -98,8 +105,8 @@ export class ArtifactsPresenter extends Presenter<ArtifactsContainerVM> {
   }
 
   public handleImportFromJson(): void {
-    if (this.viewModel.jsonImportResults) {
-      this.artifactsHandler.addManyFromJson(this.viewModel.jsonImportResults.artifacts);
+    if (this.state.jsonImportResults) {
+      this.artifactsHandler.addManyFromJson(this.state.jsonImportResults.artifacts);
     }
     this.handleDialogClose();
   }

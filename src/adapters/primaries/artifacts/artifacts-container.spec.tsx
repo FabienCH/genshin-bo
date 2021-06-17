@@ -12,6 +12,9 @@ import { artifactsJsonString } from '../../../test/artifacts-from-json';
 import { mockBlobText } from '../../../test/blob-text-mock';
 import { mockHTMLVideoElement } from '../../../test/htmlVideoElementMock';
 import { ArtifactsPresenter } from './artifacts-presenter';
+import { selectAllArtifacts } from '../../redux/artifacts/artifacts-selectors';
+import { ArtifactMapper } from '../../../domain/artifacts/mappers/artifact-mapper';
+import { ArtifactsImporter } from '../../../usescases/artifacts/artifacts-importer';
 
 const ensureGridApiHasBeenSet = (wrapper: AgGridReact) => {
   return new Promise((resolve) => {
@@ -30,48 +33,38 @@ describe('Artifacts container', () => {
   let wrapper: ReactWrapper;
   let agGridReact: AgGridReact;
   let artifactsImporterSpy: jest.SpyInstance;
+  let artifactsPresenter: ArtifactsPresenter;
+  let artifactsImporter: ArtifactsImporter;
 
   beforeEach(() => {
     window.URL.createObjectURL = () => '';
     mockHTMLVideoElement(570, 1000);
     ArtifactsDI.registerRepository();
     ArtifactsDI.registerOcrWorker();
+    artifactsImporter = ArtifactsDI.getArtifactsImporter();
+    artifactsPresenter = new ArtifactsPresenter(
+      ArtifactsDI.getArtifactsHandler(),
+      artifactsImporter,
+      ArtifactsDI.getArtifactsExporter(),
+      ArtifactsDI.getVideoValidator(),
+    );
     wrapper = mount(
       <Provider store={appStore}>
-        <ArtifactsContainer></ArtifactsContainer>
+        <ArtifactsContainer artifactsPresenter={artifactsPresenter}></ArtifactsContainer>
       </Provider>,
     );
-    artifactsImporterSpy = jest.spyOn(wrapper.find(ArtifactsContainer), 'artifactsPresenter').mockImplementation(async () => undefined);
-
+    artifactsImporterSpy = jest.spyOn(artifactsImporter, 'importFromVideo').mockImplementation(async () => undefined);
     agGridReact = wrapper.find(AgGridReact).instance();
   });
 
   it('renders with a grid of artifacts', (done) => {
-    const artifactsPresenter = new ArtifactsPresenter(
-      ArtifactsDI.getArtifactsHandler(),
-      ArtifactsDI.getArtifactsImporter(),
-      ArtifactsDI.getArtifactsExporter(),
-      ArtifactsDI.getVideoValidator(),
-    );
-    const { artifacts } = artifactsPresenter.getViewModel();
+    const artifacts = selectAllArtifacts().map((artifactData) => ArtifactMapper.mapDataToView(artifactData));
     ensureGridApiHasBeenSet(agGridReact).then(() => done());
 
     expect(agGridReact.props.rowData).toEqual(artifacts);
   });
 
-  fit('should import artifacts and not override currents ones', async () => {
-    //console.warn(' wrapper.find(ArtifactsContainer).getWrappingComponent() !!!!!!!!!!!!!!', wrapper.getWrappingComponent());
-    //console.warn(' wrapper.find(ArtifactsContainer).getDOMNode() !!!!!!!!!!!!!!', wrapper.getDOMNode());
-    console.warn(' wrapper.getElement() !!!!!!!!!!!!!!', wrapper.getElement());
-    console.warn(' wrapper..getElement().props !!!!!!!!!!!!!!', wrapper.getElement().props);
-    console.warn(' wrapper.instance() !!!!!!!!!!!!!!', wrapper.instance());
-    //console.warn(' wrapper.find(ArtifactsContainer).getNode() !!!!!!!!!!!!!!', wrapper.getNode());
-    console.warn(' wrapper.prop() !!!!!!!!!!!!!!', wrapper.prop('artifactsPresenter'));
-    console.warn(' wrapper.props() !!!!!!!!!!!!!!', wrapper.props());
-    //console.warn(' wrapper.find(ArtifactsContainer).state() !!!!!!!!!!!!!!', wrapper.find(ArtifactsContainer).state());
-    console.warn(' wrapper.find(ArtifactsContainer).debug() !!!!!!!!!!!!!!', wrapper.find(ArtifactsContainer).debug());
-    console.warn(' wrapper.debug() !!!!!!!!!!!!!!', wrapper.debug());
-
+  it('should import artifacts and not override currents ones', async () => {
     const file = new File([], 'filename.mp4', { type: 'video/mp4' });
     wrapper.find('#upload-video').simulate('change', { target: { name: '', files: [file] } });
 

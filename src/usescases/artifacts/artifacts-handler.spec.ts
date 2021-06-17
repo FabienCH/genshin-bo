@@ -14,7 +14,6 @@ import { MainStats } from '../../domain/artifacts/models/main-statistics';
 import { SetNames } from '../../domain/artifacts/models/sets-with-effects';
 import { SubStats } from '../../domain/artifacts/models/sub-statistics';
 import { ArtifactsHandler } from './artifacts-handler';
-import { ArtifactsPresenter } from '../../adapters/primaries/artifacts/artifacts-presenter';
 
 describe('ArtifactsHandler.addArtifact', () => {
   let artifactsHandler: ArtifactsHandler;
@@ -36,29 +35,19 @@ describe('ArtifactsHandler.addArtifact', () => {
         goblets: [],
         circlets: [],
       };
-      const artifactsPresenter = new ArtifactsPresenter(
-        ArtifactsDI.getArtifactsHandler(emptyArtifactsData),
-        ArtifactsDI.getArtifactsImporter(),
-        ArtifactsDI.getArtifactsExporter(),
-        ArtifactsDI.getVideoValidator(),
-      );
+      ArtifactsDI.registerRepository(emptyArtifactsData);
       appStore.dispatch(loadArtifactsActions());
 
-      const expectedArtifacts = artifactsPresenter.getViewModel().artifacts;
+      const expectedArtifacts = selectAllArtifacts().map((artifactData) => ArtifactMapper.mapDataToView(artifactData));
 
       expect(expectedArtifacts).toEqual([]);
     });
 
     it('should give list of expected artifacts', () => {
-      const artifactsPresenter = new ArtifactsPresenter(
-        ArtifactsDI.getArtifactsHandler(defaultBuildArtifactsData),
-        ArtifactsDI.getArtifactsImporter(),
-        ArtifactsDI.getArtifactsExporter(),
-        ArtifactsDI.getVideoValidator(),
-      );
+      ArtifactsDI.registerRepository(defaultBuildArtifactsData);
       appStore.dispatch(loadArtifactsActions());
 
-      const expectedArtifacts = artifactsPresenter.getViewModel().artifacts;
+      const expectedArtifacts = selectAllArtifacts().map((artifactData) => ArtifactMapper.mapDataToView(artifactData));
 
       expect(expectedArtifacts.length).toEqual(defaultArtifactsViews.length);
       defaultArtifactsViews.forEach((artifactView, index) => {

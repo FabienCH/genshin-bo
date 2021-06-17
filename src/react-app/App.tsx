@@ -5,7 +5,6 @@ import { theme } from './theme';
 import GboHeader from '../adapters/primaries/layout/header';
 import GboFooter from '../adapters/primaries/layout/footer';
 import { MainContainer } from '../adapters/primaries/layout/main-container';
-import { ArtifactsDI } from '../di/artifacts-di';
 import { appStore } from '../adapters/redux/store';
 import { Provider } from 'react-redux';
 
@@ -15,8 +14,6 @@ type AppState = {
 class App extends Component<unknown, AppState> {
   constructor(props: unknown) {
     super(props);
-    ArtifactsDI.registerRepository();
-    ArtifactsDI.registerOcrWorker();
     this.state = { tabId: 0 };
     this.handleTabChange = this.handleTabChange.bind(this);
   }

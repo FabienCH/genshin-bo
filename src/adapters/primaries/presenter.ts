@@ -1,14 +1,17 @@
 export type Subscriber<T> = (state: T) => void;
 
-export abstract class Presenter<T, U> {
-  protected initialState: T;
+export abstract class Presenter<T, S> {
   protected subscriber: Subscriber<T> | undefined;
 
-  protected constructor(protected state: T) {
-    this.initialState = state;
+  protected constructor(protected state: T, protected selectors: () => S) {}
+
+  public getLocalState(): T {
+    return this.state;
   }
 
-  public abstract getViewModel(): U;
+  public getReduxSelectors(): () => S {
+    return this.selectors;
+  }
 
   protected updateState(updates: Partial<T>): void {
     this.state = { ...this.state, ...updates };
@@ -18,9 +21,5 @@ export abstract class Presenter<T, U> {
   public onStateUpdated(subscriber: Subscriber<T>): void {
     this.subscriber = subscriber;
     this.subscriber(this.state);
-  }
-
-  public getInitialState(): T {
-    return this.initialState;
   }
 }
