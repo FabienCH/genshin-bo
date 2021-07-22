@@ -16,6 +16,7 @@ export type ExistingCharacters =
   | 'ganyu'
   | 'huTao'
   | 'jean'
+  | 'kaedeharaKazuha'
   | 'kaeya'
   | 'keqing'
   | 'klee'
