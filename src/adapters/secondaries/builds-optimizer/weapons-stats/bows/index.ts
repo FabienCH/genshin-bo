@@ -6,6 +6,7 @@ import { ebonyBow } from './ebony-bow';
 import { elegyfortheEnd } from './elegy-for-the-end';
 import { favoniusWarbow } from './favonius-warbow';
 import { messenger } from './messenger';
+import { mitternachtsWaltz } from './mitternachts-waltz';
 import { prototypeCrescent } from './prototype-crescent';
 import { ravenBow } from './raven-bow';
 import { recurveBow } from './recurve-bow';
@@ -40,4 +41,5 @@ export const allBows = [
   windblumeOde,
   messenger,
   recurveBow,
+  mitternachtsWaltz,
 ];

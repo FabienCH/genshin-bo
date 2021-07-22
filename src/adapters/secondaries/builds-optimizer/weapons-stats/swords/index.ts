@@ -5,6 +5,7 @@ import { darkIronSword } from './dark-iron-sword';
 import { favoniusSword } from './favonius-sword';
 import { festeringDesire } from './festering-desire';
 import { filletBlade } from './fillet-blade';
+import { freedomSworn } from './freedom-sworn';
 import { harbingerofDawn } from './harbinger-of-dawn';
 import { ironSting } from './iron-sting';
 import { lionsRoar } from './lions-roar';
@@ -44,4 +45,5 @@ export const allSwords = [
   skyriderSword,
   festeringDesire,
   prototypeRancour,
+  freedomSworn,
 ];

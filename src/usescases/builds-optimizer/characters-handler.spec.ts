@@ -11,6 +11,7 @@ import { fischl } from '../../adapters/secondaries/builds-optimizer/characters-s
 import { ganyu } from '../../adapters/secondaries/builds-optimizer/characters-stats/ganyu';
 import { huTao } from '../../adapters/secondaries/builds-optimizer/characters-stats/hu-tao';
 import { jean } from '../../adapters/secondaries/builds-optimizer/characters-stats/jean';
+import { kaedeharaKazuha } from '../../adapters/secondaries/builds-optimizer/characters-stats/kaedehara-kazuha';
 import { kaeya } from '../../adapters/secondaries/builds-optimizer/characters-stats/kaeya';
 import { keqing } from '../../adapters/secondaries/builds-optimizer/characters-stats/keqing';
 import { klee } from '../../adapters/secondaries/builds-optimizer/characters-stats/klee';
@@ -51,6 +52,7 @@ describe('CharactersHandler', () => {
     ganyu,
     huTao,
     jean,
+    kaedeharaKazuha,
     kaeya,
     keqing,
     klee,

@@ -1,5 +1,6 @@
 import { amberCatalyst } from './amber-catalyst';
 import { blackcliffAgate } from './blackcliff-agate';
+import { dodocoTales } from './dodoco-tales';
 import { emeraldOrb } from './emerald-orb';
 import { eyeofPerception } from './eye-of-perception';
 import { favoniusCodex } from './favonius-codex';
@@ -40,4 +41,5 @@ export const allCatalysts = [
   amberCatalyst,
   magicGuide,
   emeraldOrb,
+  dodocoTales,
 ];

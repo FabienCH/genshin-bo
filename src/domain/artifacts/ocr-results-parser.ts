@@ -126,7 +126,7 @@ export class OcrResultsParser {
   }
 
   private parseStatValue(isPercent: boolean, value: string): number {
-    const letterCleanedValue = value.replace(/[^\d|\.]/g, '');
+    const letterCleanedValue = value.replace(/[^\d|.]/g, '');
     const ocrMainStatValue = isPercent ? letterCleanedValue.replace(/\.\./g, '.') : letterCleanedValue.replace(/,/g, '');
     return isPercent ? Math.trunc(parseFloat(ocrMainStatValue) * 10) / 10 : parseInt(ocrMainStatValue);
   }

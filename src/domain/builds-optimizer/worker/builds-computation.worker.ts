@@ -14,7 +14,7 @@ export type BcMessage = {
 };
 
 export interface BcWorker {
-  onmessage: ((this: Worker, ev: MessageEvent<{ buildsResults: BuildsResults }>) => any) | null;
+  onmessage: ((this: Worker, ev: MessageEvent<{ buildsResults: BuildsResults }>) => void) | null;
   postMessage(message: BcMessage, options?: PostMessageOptions | undefined): void;
   terminate(): void;
 }

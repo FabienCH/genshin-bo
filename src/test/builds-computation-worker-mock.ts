@@ -2,7 +2,7 @@ import { BuildsComputation, BuildsResults } from '../domain/builds-optimizer/bui
 import { BcMessage } from '../domain/builds-optimizer/worker/builds-computation.worker';
 
 export class BcWorkerMock {
-  public onmessage: (ev: { data: { buildsResults: BuildsResults } }) => any;
+  public onmessage: (ev: { data: { buildsResults: BuildsResults } }) => void;
   constructor() {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.onmessage = () => {};
