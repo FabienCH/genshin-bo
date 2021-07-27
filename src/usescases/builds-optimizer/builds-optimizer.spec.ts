@@ -25,6 +25,7 @@ import {
   multipleArtifactsBuildArtifactsData,
   moreThan1000BuildsArtifactsData,
   moreThan10BillionsBuildsArtifactsData,
+  emblemOfSeveredFateShimenawasReminiscenceBuildArtifactsData,
 } from '../../test/artifacts-data-mock';
 import { ArtifactsFilters } from '../artifacts/artifacts-filter';
 import { BuildsOptimizer } from './builds-optimizer';
@@ -232,6 +233,29 @@ describe('BuildsOptimizer', () => {
               [CharacterStats.healingBonus]: 31.3,
               [CharacterStats.critDmg]: 63.2,
               [CharacterStats.physicalDmg]: 89.5,
+            },
+            buildArtifactsParams: defaultBuildArtifactsParams,
+          },
+        ]);
+      });
+
+      it('with emblemOfSeveredFate and shimenawasReminiscence sets effects', () => {
+        loadArtifacts(emblemOfSeveredFateShimenawasReminiscenceBuildArtifactsData);
+
+        buildsOptimizer.computeBuildsStats(razor, snowTombedStarsilver, defaultArtifactsFilters, defaultStatsFilter);
+
+        expect(getBuildsWithoutId()).toEqual([
+          {
+            stats: {
+              [CharacterStats.hp]: 16825,
+              [CharacterStats.atk]: 1126,
+              [CharacterStats.critRate]: 16.6,
+              [CharacterStats.energyRecharge]: 123,
+              [CharacterStats.def]: 1097,
+              [CharacterStats.elementalMastery]: 7,
+              [CharacterStats.healingBonus]: 31.3,
+              [CharacterStats.critDmg]: 63.2,
+              [CharacterStats.physicalDmg]: 64.5,
             },
             buildArtifactsParams: defaultBuildArtifactsParams,
           },

@@ -23,6 +23,8 @@ export class StatsComputation {
     { name: SetNames.bloodstainedChivalry, stat: SetStats.physicalDmg, value: 25 },
     { name: SetNames.tenacityOfTheMillelith, stat: SetStats.percentHp, value: 20 },
     { name: SetNames.paleFlame, stat: SetStats.physicalDmg, value: 25 },
+    { name: SetNames.emblemOfSeveredFate, stat: SetStats.energyRecharge, value: 20 },
+    { name: SetNames.shimenawasReminiscence, stat: SetStats.percentAtk, value: 18 },
   ];
 
   public computeStats(

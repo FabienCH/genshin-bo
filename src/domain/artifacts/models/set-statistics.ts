@@ -2,6 +2,7 @@ export enum SetStats {
   percentAtk = 'percentAtk',
   percentHp = 'percentHp',
   elementalMastery = 'elementalMastery',
+  energyRecharge = 'energyRecharge',
   healingBonus = 'healingBonus',
   pyroDmg = 'pyroDmg',
   hydroDmg = 'hydroDmg',

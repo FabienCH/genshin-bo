@@ -596,6 +596,84 @@ export const paleFlameTenacityOfTheMillelithBuildArtifactsData: AllArtifactsData
   ],
 };
 
+export const emblemOfSeveredFateShimenawasReminiscenceBuildArtifactsData: AllArtifactsData = {
+  flowers: [
+    {
+      id: '0',
+      type: ArtifactType.flower,
+      set: SetNames.shimenawasReminiscence,
+      level: 2,
+      mainStatType: FlowerArtifact.mainStat,
+      subStats: {
+        [SubStats.flatAtk]: 5,
+        [SubStats.critRate]: 3.2,
+        [SubStats.percentAtk]: 3,
+        [SubStats.critDmg]: 3.2,
+      },
+    },
+  ],
+  plumes: [
+    {
+      id: '1',
+      type: ArtifactType.plume,
+      set: SetNames.emblemOfSeveredFate,
+      level: 7,
+      mainStatType: PlumeArtifact.mainStat,
+      subStats: {
+        [SubStats.energyRecharge]: 3,
+        [SubStats.flatDef]: 7,
+        [SubStats.critRate]: 2.7,
+        [SubStats.critDmg]: 3.9,
+      },
+    },
+  ],
+  sands: [
+    {
+      id: '2',
+      type: ArtifactType.sands,
+      set: SetNames.emblemOfSeveredFate,
+      level: 12,
+      mainStatType: MainStats.percentHp as SandsMainStatType,
+      subStats: {
+        [SubStats.percentDef]: 6,
+        [SubStats.elementalMastery]: 7,
+        [SubStats.critRate]: 3.2,
+        [SubStats.critDmg]: 2.9,
+      },
+    },
+  ],
+  goblets: [
+    {
+      id: '3',
+      type: ArtifactType.goblet,
+      set: SetNames.shimenawasReminiscence,
+      level: 15,
+      mainStatType: MainStats.percentDef as GobletMainStatType,
+      subStats: {
+        [SubStats.critRate]: 2.5,
+        [SubStats.percentHp]: 5.2,
+        [SubStats.percentAtk]: 4,
+        [SubStats.flatHp]: 3,
+      },
+    },
+  ],
+  circlets: [
+    {
+      id: '4',
+      type: ArtifactType.circlet,
+      set: SetNames.retracingBolide,
+      level: 17,
+      mainStatType: MainStats.healingBonus as CircletMainStatType,
+      subStats: {
+        [SubStats.percentDef]: 4,
+        [SubStats.flatAtk]: 4,
+        [SubStats.critDmg]: 3.2,
+        [SubStats.percentHp]: 5,
+      },
+    },
+  ],
+};
+
 export const multipleArtifactsBuildArtifactsData: AllArtifactsData = {
   flowers: [
     {

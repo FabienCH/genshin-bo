@@ -17,6 +17,8 @@ export enum SetNames {
   bloodstainedChivalry = 'bloodstainedChivalry',
   tenacityOfTheMillelith = 'tenacityOfTheMillelith',
   paleFlame = 'paleFlame',
+  emblemOfSeveredFate = 'emblemOfSeveredFate',
+  shimenawasReminiscence = 'shimenawasReminiscence',
 }
 
 export interface SetWithEffect {
