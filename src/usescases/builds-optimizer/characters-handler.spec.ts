@@ -13,6 +13,7 @@ import { huTao } from '../../adapters/secondaries/builds-optimizer/characters-st
 import { jean } from '../../adapters/secondaries/builds-optimizer/characters-stats/jean';
 import { kaedeharaKazuha } from '../../adapters/secondaries/builds-optimizer/characters-stats/kaedehara-kazuha';
 import { kaeya } from '../../adapters/secondaries/builds-optimizer/characters-stats/kaeya';
+import { kamisatoAyaka } from '../../adapters/secondaries/builds-optimizer/characters-stats/kamisato-ayaka';
 import { keqing } from '../../adapters/secondaries/builds-optimizer/characters-stats/keqing';
 import { klee } from '../../adapters/secondaries/builds-optimizer/characters-stats/klee';
 import { lisa } from '../../adapters/secondaries/builds-optimizer/characters-stats/lisa';
@@ -53,6 +54,7 @@ describe('CharactersHandler', () => {
     huTao,
     jean,
     kaedeharaKazuha,
+    kamisatoAyaka,
     kaeya,
     keqing,
     klee,

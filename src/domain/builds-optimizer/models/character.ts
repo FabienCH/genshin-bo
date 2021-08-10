@@ -17,6 +17,7 @@ export type ExistingCharacters =
   | 'huTao'
   | 'jean'
   | 'kaedeharaKazuha'
+  | 'kamisatoAyaka'
   | 'kaeya'
   | 'keqing'
   | 'klee'

@@ -37,6 +37,7 @@ import { yanfei } from './characters-stats/yanfei';
 import { CharactersRepository } from '../../../domain/builds-optimizer/characters-repository';
 import { eula } from './characters-stats/eula';
 import { kaedeharaKazuha } from './characters-stats/kaedehara-kazuha';
+import { kamisatoAyaka } from './characters-stats/kamisato-ayaka';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly charactersStats: CharacterWithStats[];
@@ -57,6 +58,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       huTao,
       jean,
       kaedeharaKazuha,
+      kamisatoAyaka,
       kaeya,
       keqing,
       klee,
