@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "https://fabiench.github.io/genshin-bo/static/css/main.5ea64492.chunk.css",
-    "main.js": "https://fabiench.github.io/genshin-bo/static/js/main.cfc5b6af.chunk.js",
-    "main.js.map": "https://fabiench.github.io/genshin-bo/static/js/main.cfc5b6af.chunk.js.map",
+    "main.js": "https://fabiench.github.io/genshin-bo/static/js/main.73f965c3.chunk.js",
+    "main.js.map": "https://fabiench.github.io/genshin-bo/static/js/main.73f965c3.chunk.js.map",
     "runtime-main.js": "https://fabiench.github.io/genshin-bo/static/js/runtime-main.921efd52.js",
     "runtime-main.js.map": "https://fabiench.github.io/genshin-bo/static/js/runtime-main.921efd52.js.map",
     "static/js/2.046f0f24.chunk.js": "https://fabiench.github.io/genshin-bo/static/js/2.046f0f24.chunk.js",
@@ -29,6 +29,6 @@
     "static/js/runtime-main.921efd52.js",
     "static/js/2.046f0f24.chunk.js",
     "static/css/main.5ea64492.chunk.css",
-    "static/js/main.cfc5b6af.chunk.js"
+    "static/js/main.73f965c3.chunk.js"
   ]
 }
