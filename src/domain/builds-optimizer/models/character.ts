@@ -17,6 +17,7 @@ export type ExistingCharacters =
   | 'huTao'
   | 'jean'
   | 'kaedeharaKazuha'
+  | 'kamisatoAyaka'
   | 'kaeya'
   | 'keqing'
   | 'klee'
@@ -27,6 +28,7 @@ export type ExistingCharacters =
   | 'qiqi'
   | 'razor'
   | 'rosaria'
+  | 'sayu'
   | 'sucrose'
   | 'tartaglia'
   | 'traveler'
@@ -36,6 +38,7 @@ export type ExistingCharacters =
   | 'xingqiu'
   | 'xinyan'
   | 'yanfei'
+  | 'yoimiya'
   | 'zhongli';
 
 export type Character = {

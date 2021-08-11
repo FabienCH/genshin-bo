@@ -1,3 +1,4 @@
+import { amenomaKageuchi } from './amenoma-kageuchi';
 import { aquilaFavonia } from './aquila-favonia';
 import { blackcliffLongsword } from './blackcliff-longsword';
 import { coolSteel } from './cool-steel';
@@ -9,6 +10,7 @@ import { freedomSworn } from './freedom-sworn';
 import { harbingerofDawn } from './harbinger-of-dawn';
 import { ironSting } from './iron-sting';
 import { lionsRoar } from './lions-roar';
+import { mistsplitterReforged } from './mistsplitter-reforged';
 import { primordialJadeCutter } from './primordial-jade-cutter';
 import { prototypeRancour } from './prototype-rancour';
 import { royalLongsword } from './royal-longsword';
@@ -46,4 +48,6 @@ export const allSwords = [
   festeringDesire,
   prototypeRancour,
   freedomSworn,
+  amenomaKageuchi,
+  mistsplitterReforged,
 ];

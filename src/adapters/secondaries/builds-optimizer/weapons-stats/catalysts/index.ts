@@ -5,6 +5,7 @@ import { emeraldOrb } from './emerald-orb';
 import { eyeofPerception } from './eye-of-perception';
 import { favoniusCodex } from './favonius-codex';
 import { frostbearer } from './frostbearer';
+import { hakushinRing } from './hakushin-ring';
 import { lostPrayertotheSacredWinds } from './lost-prayer-to-the-sacred-winds';
 import { magicGuide } from './magic-guide';
 import { mappaMare } from './mappa-mare';
@@ -42,4 +43,5 @@ export const allCatalysts = [
   magicGuide,
   emeraldOrb,
   dodocoTales,
+  hakushinRing,
 ];
