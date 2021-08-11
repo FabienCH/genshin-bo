@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "https://fabiench.github.io/genshin-bo/static/css/main.5ea64492.chunk.css",
-    "main.js": "https://fabiench.github.io/genshin-bo/static/js/main.e9896919.chunk.js",
-    "main.js.map": "https://fabiench.github.io/genshin-bo/static/js/main.e9896919.chunk.js.map",
+    "main.js": "https://fabiench.github.io/genshin-bo/static/js/main.cfc5b6af.chunk.js",
+    "main.js.map": "https://fabiench.github.io/genshin-bo/static/js/main.cfc5b6af.chunk.js.map",
     "runtime-main.js": "https://fabiench.github.io/genshin-bo/static/js/runtime-main.921efd52.js",
     "runtime-main.js.map": "https://fabiench.github.io/genshin-bo/static/js/runtime-main.921efd52.js.map",
     "static/js/2.046f0f24.chunk.js": "https://fabiench.github.io/genshin-bo/static/js/2.046f0f24.chunk.js",
@@ -12,9 +12,9 @@
     "index.html": "https://fabiench.github.io/genshin-bo/index.html",
     "static/css/main.5ea64492.chunk.css.map": "https://fabiench.github.io/genshin-bo/static/css/main.5ea64492.chunk.css.map",
     "static/js/2.046f0f24.chunk.js.LICENSE.txt": "https://fabiench.github.io/genshin-bo/static/js/2.046f0f24.chunk.js.LICENSE.txt",
-    "static/js/builds-computation.worker.b2fe7403.js": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.b2fe7403.js",
-    "static/js/builds-computation.worker.b2fe7403.js.LICENSE.txt": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.b2fe7403.js.LICENSE.txt",
-    "static/js/builds-computation.worker.b2fe7403.js.map": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.b2fe7403.js.map",
+    "static/js/builds-computation.worker.82394f23.js": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.82394f23.js",
+    "static/js/builds-computation.worker.82394f23.js.LICENSE.txt": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.82394f23.js.LICENSE.txt",
+    "static/js/builds-computation.worker.82394f23.js.map": "https://fabiench.github.io/genshin-bo/static/js/builds-computation.worker.82394f23.js.map",
     "static/media/avidemux-filters.cab5a131.jpg": "https://fabiench.github.io/genshin-bo/static/media/avidemux-filters.cab5a131.jpg",
     "static/media/avidemux.044778e4.jpg": "https://fabiench.github.io/genshin-bo/static/media/avidemux.044778e4.jpg",
     "static/media/crop-filter.706c27d0.jpg": "https://fabiench.github.io/genshin-bo/static/media/crop-filter.706c27d0.jpg",
@@ -29,6 +29,6 @@
     "static/js/runtime-main.921efd52.js",
     "static/js/2.046f0f24.chunk.js",
     "static/css/main.5ea64492.chunk.css",
-    "static/js/main.e9896919.chunk.js"
+    "static/js/main.cfc5b6af.chunk.js"
   ]
 }
