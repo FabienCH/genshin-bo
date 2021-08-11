@@ -23,6 +23,7 @@ import { noelle } from '../../adapters/secondaries/builds-optimizer/characters-s
 import { qiqi } from '../../adapters/secondaries/builds-optimizer/characters-stats/qiqi';
 import { razor } from '../../adapters/secondaries/builds-optimizer/characters-stats/razor';
 import { rosaria } from '../../adapters/secondaries/builds-optimizer/characters-stats/rosaria';
+import { sayu } from '../../adapters/secondaries/builds-optimizer/characters-stats/sayu';
 import { sucrose } from '../../adapters/secondaries/builds-optimizer/characters-stats/sucrose';
 import { tartaglia } from '../../adapters/secondaries/builds-optimizer/characters-stats/tartaglia';
 import { traveler } from '../../adapters/secondaries/builds-optimizer/characters-stats/traveler';
@@ -32,6 +33,7 @@ import { xiao } from '../../adapters/secondaries/builds-optimizer/characters-sta
 import { xingqiu } from '../../adapters/secondaries/builds-optimizer/characters-stats/xingqiu';
 import { xinyan } from '../../adapters/secondaries/builds-optimizer/characters-stats/xinyan';
 import { yanfei } from '../../adapters/secondaries/builds-optimizer/characters-stats/yanfei';
+import { yoimiya } from '../../adapters/secondaries/builds-optimizer/characters-stats/yoimiya';
 import { zhongli } from '../../adapters/secondaries/builds-optimizer/characters-stats/zhongli';
 import { InMemoryCharactersRepository } from '../../adapters/secondaries/builds-optimizer/in-memory-characters-repository';
 import { ExistingCharacters } from '../../domain/builds-optimizer/models/character';
@@ -65,6 +67,7 @@ describe('CharactersHandler', () => {
     qiqi,
     razor,
     rosaria,
+    sayu,
     sucrose,
     tartaglia,
     traveler,
@@ -74,6 +77,7 @@ describe('CharactersHandler', () => {
     xingqiu,
     xinyan,
     yanfei,
+    yoimiya,
     zhongli,
   ];
   beforeEach(() => {

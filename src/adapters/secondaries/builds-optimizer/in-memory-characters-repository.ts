@@ -38,6 +38,8 @@ import { CharactersRepository } from '../../../domain/builds-optimizer/character
 import { eula } from './characters-stats/eula';
 import { kaedeharaKazuha } from './characters-stats/kaedehara-kazuha';
 import { kamisatoAyaka } from './characters-stats/kamisato-ayaka';
+import { sayu } from './characters-stats/sayu';
+import { yoimiya } from './characters-stats/yoimiya';
 
 export class InMemoryCharactersRepository implements CharactersRepository {
   private readonly charactersStats: CharacterWithStats[];
@@ -69,6 +71,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       qiqi,
       razor,
       rosaria,
+      sayu,
       sucrose,
       tartaglia,
       traveler,
@@ -78,6 +81,7 @@ export class InMemoryCharactersRepository implements CharactersRepository {
       xingqiu,
       xinyan,
       yanfei,
+      yoimiya,
       zhongli,
     ];
   }
