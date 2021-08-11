@@ -3,6 +3,7 @@ import { bloodtaintedGreatsword } from './bloodtainted-greatsword';
 import { debateClub } from './debate-club';
 import { favoniusGreatsword } from './favonius-greatsword';
 import { ferrousShadow } from './ferrous-shadow';
+import { katsuragikiriNagamasa } from './katsuragikiri-nagamasa';
 import { lithicBlade } from './lithic-blade';
 import { prototypeArchaic } from './prototype-archaic';
 import { quartz } from './quartz';
@@ -42,4 +43,5 @@ export const allClaymores = [
   whiteIronGreatsword,
   bloodtaintedGreatsword,
   songofBrokenPines,
+  katsuragikiriNagamasa,
 ];

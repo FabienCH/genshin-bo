@@ -6,6 +6,7 @@ import { dragonsBane } from './dragons-bane';
 import { dragonspineSpear } from './dragonspine-spear';
 import { favoniusLance } from './favonius-lance';
 import { halberd } from './halberd';
+import { kitainCrossSpear } from './kitain-cross-spear';
 import { lithicSpear } from './lithic-spear';
 import { primordialJadeWingedSpear } from './primordial-jade-winged-spear';
 import { prototypeStarglitter } from './prototype-starglitter';
@@ -32,4 +33,5 @@ export const allPolearms = [
   blackTassel,
   skywardSpine,
   royalSpear,
+  kitainCrossSpear,
 ];

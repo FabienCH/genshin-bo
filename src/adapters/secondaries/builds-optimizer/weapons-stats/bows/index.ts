@@ -5,6 +5,7 @@ import { compoundBow } from './compound-bow';
 import { ebonyBow } from './ebony-bow';
 import { elegyfortheEnd } from './elegy-for-the-end';
 import { favoniusWarbow } from './favonius-warbow';
+import { hamayumi } from './hamayumi';
 import { messenger } from './messenger';
 import { mitternachtsWaltz } from './mitternachts-waltz';
 import { prototypeCrescent } from './prototype-crescent';
@@ -18,6 +19,7 @@ import { skywardHarp } from './skyward-harp';
 import { slingshot } from './slingshot';
 import { theStringless } from './the-stringless';
 import { theViridescentHunt } from './the-viridescent-hunt';
+import { thunderingPulse } from './thundering-pulse';
 import { windblumeOde } from './windblume-ode';
 
 export const allBows = [
@@ -42,4 +44,6 @@ export const allBows = [
   messenger,
   recurveBow,
   mitternachtsWaltz,
+  hamayumi,
+  thunderingPulse,
 ];
