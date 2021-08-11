@@ -23,7 +23,7 @@ function GboFooter(props: FooterProps): ReactElement {
   return (
     <Paper square>
       <div className={classes.container}>
-        <span>Genshin Builds Optimizer v0.3.0 - Not affiliated with or endorsed by miHoYo - Does not use cookie</span>
+        <span>Genshin Builds Optimizer v0.3.1 - Not affiliated with or endorsed by miHoYo - Does not use cookie</span>
         <span>
           <LinksButtons size="small"></LinksButtons>
         </span>
