@@ -1,4 +1,5 @@
 import { albedo } from '../../adapters/secondaries/builds-optimizer/characters-stats/albedo';
+import { aloy } from '../../adapters/secondaries/builds-optimizer/characters-stats/aloy';
 import { amber } from '../../adapters/secondaries/builds-optimizer/characters-stats/amber';
 import { barbara } from '../../adapters/secondaries/builds-optimizer/characters-stats/barbara';
 import { beidou } from '../../adapters/secondaries/builds-optimizer/characters-stats/beidou';
@@ -16,11 +17,13 @@ import { kaeya } from '../../adapters/secondaries/builds-optimizer/characters-st
 import { kamisatoAyaka } from '../../adapters/secondaries/builds-optimizer/characters-stats/kamisato-ayaka';
 import { keqing } from '../../adapters/secondaries/builds-optimizer/characters-stats/keqing';
 import { klee } from '../../adapters/secondaries/builds-optimizer/characters-stats/klee';
+import { kujouSara } from '../../adapters/secondaries/builds-optimizer/characters-stats/kujou-sara';
 import { lisa } from '../../adapters/secondaries/builds-optimizer/characters-stats/lisa';
 import { mona } from '../../adapters/secondaries/builds-optimizer/characters-stats/mona';
 import { ningguang } from '../../adapters/secondaries/builds-optimizer/characters-stats/ningguang';
 import { noelle } from '../../adapters/secondaries/builds-optimizer/characters-stats/noelle';
 import { qiqi } from '../../adapters/secondaries/builds-optimizer/characters-stats/qiqi';
+import { raidenShogun } from '../../adapters/secondaries/builds-optimizer/characters-stats/raiden-shogun';
 import { razor } from '../../adapters/secondaries/builds-optimizer/characters-stats/razor';
 import { rosaria } from '../../adapters/secondaries/builds-optimizer/characters-stats/rosaria';
 import { sayu } from '../../adapters/secondaries/builds-optimizer/characters-stats/sayu';
@@ -43,6 +46,7 @@ describe('CharactersHandler', () => {
   let charactersHandler: CharactersHandler;
   const allCharactersWithStats = [
     albedo,
+    aloy,
     amber,
     barbara,
     beidou,
@@ -60,11 +64,13 @@ describe('CharactersHandler', () => {
     kaeya,
     keqing,
     klee,
+    kujouSara,
     lisa,
     mona,
     ningguang,
     noelle,
     qiqi,
+    raidenShogun,
     razor,
     rosaria,
     sayu,

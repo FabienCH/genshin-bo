@@ -4,6 +4,7 @@ import { WeaponType } from './weapon';
 
 export type ExistingCharacters =
   | 'albedo'
+  | 'aloy'
   | 'amber'
   | 'barbara'
   | 'beidou'
@@ -21,11 +22,13 @@ export type ExistingCharacters =
   | 'kaeya'
   | 'keqing'
   | 'klee'
+  | 'kujouSara'
   | 'lisa'
   | 'mona'
   | 'ningguang'
   | 'noelle'
   | 'qiqi'
+  | 'raidenShogun'
   | 'razor'
   | 'rosaria'
   | 'sayu'
